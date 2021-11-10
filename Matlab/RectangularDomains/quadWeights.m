@@ -42,7 +42,12 @@ elseif order == 2
     weight = zeros(M+1,1);
     
     for i = 0:(M/2-1)
-        weight([2*i+1, 2*i+2, 2*i+3])=weight([2*i+1, 2*i+2, 2*i+3])+(dtheta(2*i+1)+dtheta(2*i+2))/6*[(2-dtheta(2*i+2)/dtheta(2*i+1));(dtheta(2*i+1)+dtheta(2*i+2))^2/(dtheta(2*i+1)*dtheta(2*i+2));(2-dtheta(2*i+1)/dtheta(2*i+2))];
+        weight([2*i+1, 2*i+2, 2*i+3]) = weight([2*i+1, 2*i+2, 2*i+3]) + ...
+            (dtheta(2*i+1)+dtheta(2*i+2))/6*[ 
+                                              (2-dtheta(2*i+2)/dtheta(2*i+1)); 
+                                              (dtheta(2*i+1)+dtheta(2*i+2))^2/(dtheta(2*i+1)*dtheta(2*i+2));
+                                              (2-dtheta(2*i+1)/dtheta(2*i+2))
+                                             ];
         % Can make a little neater...
     end
     % Order 2 is Simpsons rule
