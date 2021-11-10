@@ -1,6 +1,11 @@
 function[u,xgrid,ygrid,Boundary] = sgndist_Rect(x0,x1,y0,y1,h,tolSteps)
 % Builds a larger computational domain and computes the signed distance
-% function of the rectangle on the computational domain
+% function of the rectangle on the computational domain. 
+%
+% Note: A signed distance function for a given finite domain and a point x
+% returns the shortest distance to the boundary of the domain. If the point
+% x is outside the domain, then it returns the shortest distance with a
+% negative sign.
 
 % INPUTS
 % x0,x1,y0,y1 denote the dimensions of a rectangle, expects x0<x1,y0<y1

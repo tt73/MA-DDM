@@ -2,12 +2,26 @@
 
 x0 = -1; x1 = 1; 
 y0 = -1; y1 = 1; 
-N = 2^7; h = (x1-x0)/N;
+N = 2^3; h = (x1-x0)/N;
 depth = 3; 
 % Parameters needed to generate grid
 
 [Points,Interior,Boundary,NMatSDD,CMatSDD,theta] = buildMesh_Rect(x0,x1,y0,y1,h,depth);
 % Build the mesh
+% Points - (Np x 2) arrary of node coordinates 
+% Interior - (1 x Ni) interior node indicator 
+% Boundary - (Nb x 1) boundary node indicator 
+% NMatSDD - (Ni x ?) 
+% CMatSDD - (Ni x ?)
+% theta - (? x 1) 
+Np = length(Points);
+Ni = Interior(end);
+Nb = length(Boundary);
+figure(1)
+hold on 
+scatter(Points(Interior,1),Points(Interior,2),[],'r','filled')
+scatter(Points(Boundary,1),Points(Boundary,2),[],'b','filled')
+title('Mesh Nodes - Interior vs Boundary ')
 
 order = 1;
 epsilon = h^2;
@@ -38,5 +52,7 @@ weight = quadWeights(theta,order);
 
 [uSoln, perf] = quadSolver(NMatSDD,CMatSDD,F,uBdry,epsilon,weight,h);
 % Solve with newton's method and no given initial guess. 
+
+figure(2)
 plot3(Points(:,1),Points(:,2),uSoln,'.')
 

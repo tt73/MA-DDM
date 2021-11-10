@@ -2,12 +2,12 @@ function [directions, dCount, theta] = cartStencil(depth)
 % Generate all of the search directions of a given depth in 2D
 
 % INPUTS
-% depth is the sup norm of the stencil, must be a whole number
+% *depth (positive int) is the sup norm of the stencil
 
 % OUTPUTS
-% directions is a marix of grid aligned vectors, each row is a direction
-% dCount is the number of search directions corresponding to a given depth
-% theta is a column vector of the angles corresponding to directions
+% *directions (dCount x 2) is a marix of grid aligned vectors, each row is a direction
+% *dCount (int) is the number of search directions corresponding to a given depth
+% *theta (dCount x 1) is a column vector of the angles corresponding to directions
 
 if (mod(depth,1) ~= 0) || (depth < 1)
     error('Depth must be a whole number')

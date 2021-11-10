@@ -2,7 +2,7 @@ function [Points,Interior,Boundary,NMatSDD,CMatSDD,theta] = buildMesh_Rect(x0,x1
 % Builds the discretized domain and the Neighbor,Coefficient Matrices
 
 % INPUTS
-% x0,x1,y0,y1 denote the dimensions of a rectangle
+% x0,x1,y0,y1 denote the dimensions of a rectangle 
 % h is the spatial resolution
 % depth determines the size of the stencil
 
