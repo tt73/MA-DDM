@@ -10,8 +10,10 @@ function [uPM] = poissonInit(NMatSDD,CMatSDD,F,uBdry,v1,v2)
 rho = sqrt(2*F);
 % rho is the "data" term in the poisson equation
 
-intLength = length(F); Interior = 1:intLength;
-pLength = length(uBdry)+intLength; Boundary = intLength+1:pLength;
+intLength = length(F); 
+Interior = 1:intLength;
+pLength = length(uBdry)+intLength; 
+Boundary = intLength+1:pLength;
 % Assumption on data is that the boundary is after the interior points
 
 Dvv1 = sparse(repmat(1:intLength,1,3),[NMatSDD(:,v1*3-2) NMatSDD(:,v1*3-1) NMatSDD(:,v1*3)],[CMatSDD(:,v1*3-2) CMatSDD(:,v1*3-1) CMatSDD(:,v1*3)],intLength,pLength);

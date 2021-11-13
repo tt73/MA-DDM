@@ -1,9 +1,11 @@
+addpath('Subroutines')
+
 %%% Solution to the Dirichlet Problem for MA on a square
 
 x0 = -1; x1 = 1; 
 y0 = -1; y1 = 1; 
 N = 2^3; h = (x1-x0)/N;
-depth = 3; 
+depth = 1; 
 % Parameters needed to generate grid
 
 [Points,Interior,Boundary,NMatSDD,CMatSDD,theta] = buildMesh_Rect(x0,x1,y0,y1,h,depth);
