@@ -8,7 +8,7 @@ x0 = -1; x1 = 1;
 y0 = -1; y1 = 1;
 N = 7;
 h = (x1-x0)/(N+1);
-depth = 2;        
+depth = 1;        
 overlap = 2;  
 
 [Points,Interior,Boundary,NMatSDD,CMatSDD,theta] = buildMesh_Rect(x0,x1,y0,y1,h,depth);
@@ -46,35 +46,22 @@ for i = 1:thickness
     Interface2 = [Interface2; Interface-N*(delta+i)];
 end
 
-Ni1 = length(Interior1);
-Nb1 = length(Boundary1);
-Ns1 = length(Interface1);
-Ni2 = length(Interior2);
-Nb2 = length(Boundary2);
-Ns2 = length(Interface2);
-
-% deterimine which nodes are sent
-send1 = zeros(Ns1,1);
-send2 = zeros(Ns2,1);
-for i = 1:thickness
-    
-end
 
 
 Dom1.Interior = Interior1;
 Dom1.Boundary = Boundary1;
 Dom1.Interface = Interface1;
-Dom1.Ni = Ni1;
-Dom1.Nb = Nb1;
-Dom1.Ns = Ns1;
+Dom1.Ni = length(Interior1);
+Dom1.Nb = length(Boundary1);
+Dom1.Ns = length(Interface1);
 Dom1.send = send1;
 
 Dom2.Interior = Interior2;
 Dom2.Boundary = Boundary2;
 Dom2.Interface = Interface2;
-Dom2.Ni = Ni2;
-Dom2.Nb = Nb2;
-Dom2.Ns = Ns2;
+Dom2.Ni = length(Interior2);
+Dom2.Nb = length(Boundary2);
+Dom2.Ns = length(Interface2);
 Dom2.send = send2; 
 
 
