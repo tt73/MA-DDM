@@ -2,9 +2,9 @@ function [Points,Interior,Boundary,NMatSDD,CMatSDD,theta] = buildMesh_Rect(x0,x1
 % Builds the discretized domain and the Neighbor,Coefficient Matrices
 
 % INPUTS
-% * x0,x1,y0,y1 denote the dimensions of a rectangle 
-% * h is the spatial resolution
-% * depth determines the size of the stencil
+% x0,x1,y0,y1 denote the dimensions of a rectangle
+% h is the spatial resolution
+% depth determines the size of the stencil
 
 % OUTPUTS
 % Points is a point cloud of all the points in the domain, each row is a pt
@@ -32,11 +32,12 @@ bdryTol = h^2;
 % direction. They are organized in increasing angles from 0 to 2pi. 
 % thetaTemp is the angle in radians of the corresponding direction
 
-[D,xgrid,ygrid,~] = sgndist_Rect(x0,x1,y0,y1,h,depth+1);
+[D,xgrid,ygrid,Bdry] = sgndist_Rect(x0,x1,y0,y1,h,depth+1);
 % sgndistRect takes in the parameters of a rectangle, a spatial
 % resolution, and an extension length (depth+1). It outputs an extended
 % rectangular grid (xgrid and ygrid), the signed distance field (u) and the
 % indices of the boundary. 
+% Bdry is a point cloud of subindices of points on the boundary
 
 xIndExtn = repmat((1:length(xgrid))',length(ygrid),1);
 yIndExtn = sort(repmat((1:length(ygrid))',length(xgrid),1));
@@ -50,8 +51,8 @@ PointsExtn = [repmat(xgrid',length(ygrid),1) sort(repmat(ygrid',length(xgrid),1)
 % Creating a pointcloud from the grids, the index of each point correspond
 % to the linear index in kIndExtn
 
-% kBoundary = Boundary(:,1)+(Boundary(:,2)-1)*length(xgrid);
-% % A vector of linear indices for the boundary points
+kBdryIndOld= Bdry(:,1)+(Bdry(:,2)-1)*length(xgrid);
+% A vector of linear indices for the boundary points
 
 dist = D(sub2ind(size(D),xIndExtn,yIndExtn));
 % Mapping the distance field array to a vector, again the index here
@@ -68,6 +69,10 @@ Interior = 1:length(kIntIndOld);
 % We have the interior points at the start of our main point cloud, so we
 % reindex them to start at 1 (new indices)
 
+ExactBdry = ((length(kIntIndOld)+1):(length(kIntIndOld)+length(Bdry)))';
+% New linear index of points exactly on the boundary (don't want to make
+% duplicates of these points)
+
 NMatTemp = repmat(kIntIndOld,1,dCount);
 NMatTemp = NMatTemp + repmat((direction(:,1)+direction(:,2)*length(xgrid))',length(kIntIndOld),1);
 % Create a Neighbor Matrix with the old linear indices, relation with
@@ -77,27 +82,29 @@ NMatTemp = NMatTemp + repmat((direction(:,1)+direction(:,2)*length(xgrid))',leng
 
 old2new = zeros(1,length(PointsExtn));
 old2new(kIntIndOld) = Interior;
+old2new(kBdryIndOld) = ExactBdry;
 % old2new is a vector that allows us to plug in old linear indices and get
-% the correspond new ones. For now, we want points not in the interior to
-% map to 0 so we can find them easily and replace
+% the correspond new ones. For now, we want points not in the interior or
+% exactly on the boundary to map to 0 so we can easily find them
 
 NMat = old2new(NMatTemp);
-% create a new Neighbor matrix which has 0's for boundary/exterior points
+% create a new Neighbor matrix which has 0's for points that need to be
+% projected
 
-Points = PointsExtn(kIntIndOld,:);
-% Create new point cloud where interior points are now at the proper (new)
-% linear index
+Points = PointsExtn([kIntIndOld; kBdryIndOld],:);
+% Create new point cloud where interior and exact boundary points are now 
+% at the proper (new) linear index
 
-bdry_old = find(dist<=bdryTol);
-% old linear index of points that will be on the boundary
+bdry_old = setdiff(find(dist<=bdryTol),kBdryIndOld);
+% old linear index of points that will projected onto the boundary
 
 bdryIndOld = find(ismember(NMatTemp,bdry_old)==1);
 % NMat linear indices of points that will be on the boundary
 
-Boundary = (length(Interior)+1:length(Interior)+length(bdryIndOld))';
+BoundaryProj = (length(Points)+1:length(Points)+length(bdryIndOld))';
 % the new linear indices of the new boundary points
 
-NMat(bdryIndOld) = Boundary;
+NMat(bdryIndOld) = BoundaryProj;
 % Assigning the new index to the boundary points
 
 fixBdryInd = NMatTemp(bdryIndOld);
@@ -106,9 +113,9 @@ fixBdryInd = NMatTemp(bdryIndOld);
 fixBdryPts = PointsExtn(fixBdryInd,:);
 % old coordinate points for new boundary points
 
-[~,fixIntIndTemp,~] = intersect(NMat,Boundary);
+[~,fixIntIndTemp,~] = intersect(NMat,BoundaryProj);
 [fixIntInd,~] = ind2sub(size(NMat),fixIntIndTemp);
-% (new) linear indices of interior points whose neighbor will be a new boundary
+% new linear indices of interior points whose neighbor will be a new boundary
 % point
 
 fixIntPts = Points(fixIntInd,:);
@@ -145,8 +152,10 @@ while (ErCount > 0) && (nStep < nMax)
 end
 
 
-Points(Boundary,:) = bp_new;
+Points(BoundaryProj,:) = bp_new;
 % Assign new coordinate points to new boundary points
+
+Boundary = [ExactBdry;BoundaryProj];
 
 % Since the integral has period pi (rather than 2pi), I'm going to only
 % consider the SDDs in directions from [0,pi]

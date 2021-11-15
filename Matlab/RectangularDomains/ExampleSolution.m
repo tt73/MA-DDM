@@ -19,11 +19,7 @@ depth = 1;
 Np = length(Points);
 Ni = Interior(end);
 Nb = length(Boundary);
-figure(1)
-hold on 
-scatter(Points(Interior,1),Points(Interior,2),[],'r','filled')
-scatter(Points(Boundary,1),Points(Boundary,2),[],'b','filled')
-title('Mesh Nodes - Interior vs Boundary ')
+
 
 order = 1;
 epsilon = h^2;
