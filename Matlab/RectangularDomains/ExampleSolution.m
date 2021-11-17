@@ -4,7 +4,7 @@ addpath('Subroutines')
 
 x0 = -1; x1 = 1; 
 y0 = -1; y1 = 1; 
-N = 2^3; h = (x1-x0)/N;
+N = 2^3; h = (x1-x0)/(N+1);
 depth = 1; 
 % Parameters needed to generate grid
 
@@ -13,13 +13,9 @@ depth = 1;
 % Points - (Np x 2) arrary of node coordinates 
 % Interior - (1 x Ni) interior node indicator 
 % Boundary - (Nb x 1) boundary node indicator 
-% NMatSDD - (Ni x ?) 
-% CMatSDD - (Ni x ?)
-% theta - (? x 1) 
-Np = length(Points);
-Ni = Interior(end);
-Nb = length(Boundary);
-
+% NMatSDD - (Ni x 3*Nt) indeces of stencil neighbors  
+% CMatSDD - (Ni x 3*Nt) stencil coef 
+% theta - (Nt x 1) angles of stencil directions (in radians) 
 
 order = 1;
 epsilon = h^2;
@@ -53,4 +49,3 @@ weight = quadWeights(theta,order);
 
 figure(2)
 plot3(Points(:,1),Points(:,2),uSoln,'.')
-
