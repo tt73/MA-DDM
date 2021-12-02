@@ -8,7 +8,7 @@ clear
 % Parameters needed to generate grid
 x0 = -1; x1 = 1;
 y0 = -1; y1 = 1;
-N = 2^5+1;
+N = 65;
 h = (x1-x0)/(N+1);
 
 % requirement: overlap + depth - 1 <= (N-1)/2
@@ -50,10 +50,10 @@ uBdry = DirBC(Points(Boundary,1),Points(Boundary,2));
 [Dom1, Dom2] = splitDomain(Points,Interior,Boundary,h,theta,NMatSDD,depth,overlap,0);
 
 % DDM settings
-max_iter = 50;
+max_iter = 100;
 conv_iter = max_iter;
 tol = 1e-9;
-relax = 1.5; % must be between 0 and 2, default = 1
+relax = 1.0; % must be between 0 and 2, default = 1
 
 % Initialize ddm
 u1 = zeros(size(Dom1.l2g));
@@ -67,9 +67,11 @@ F2 = contF(Points(Dom2.Interior,1),Points(Dom2.Interior,2));
 uBdry2 = DirBC(Points(Dom2.Boundary,1),Points(Dom2.Boundary,2));
 uBdry2 = [uBdry2; zeros(size(Dom2.Interface))];
 
+%% Error in the direct solution
+
 % exact solutions
-% exact1 = DirBC(Points(Dom1.Interior),Points(Dom1.Interior));
-% exact2 = DirBC(Points(Dom2.Interior),Points(Dom2.Interior));
+exact1 = DirBC(Points(Dom1.Interior,1),Points(Dom1.Interior,2));
+exact2 = DirBC(Points(Dom2.Interior,1),Points(Dom2.Interior,2));
 
 % direct solution
 direct1 = uSoln(Dom1.Interior);
@@ -79,7 +81,9 @@ direct2 = uSoln(Dom2.Interior);
 % This section can take a while to run.
 
 ress = zeros(max_iter,1);
-errs = zeros(max_iter,1);
+err_direct = zeros(max_iter,1);
+err_exact = zeros(max_iter,1);
+
 tic;
 for k = 1:max_iter
    
@@ -104,13 +108,13 @@ for k = 1:max_iter
    u2 = relax*out2 + (1-relax)*u2;
    
    % record
-   %     err1 = u1(1:Dom1.Ni)-exact1;
-   %     err2 = u2(1:Dom2.Ni)-exact2;
+   err1 = u1(1:Dom1.Ni)-exact1;
+   err2 = u2(1:Dom2.Ni)-exact2;
+   err_exact(k) = norm([err1; err2],inf);
    err1 = u1(1:Dom1.Ni)-direct1;
    err2 = u2(1:Dom2.Ni)-direct2;
-   err = norm([err1; err2],2);
+   err_direct(k) = norm([err1; err2],inf);
    ress(k) = res;
-   errs(k) = err;
 end
 t = toc;
 
@@ -145,11 +149,13 @@ title('DDM Solution')
 
 %% Residue and Error
 
-figure, hold on, title('Residue and Error')
-plot(1:conv_iter,log10(ress(1:conv_iter)),'b--')
-plot(1:conv_iter,log10(errs(1:conv_iter)),'r:')
-legend('log10(residue)','log10(err)')
+figure, hold on, title(sprintf('Error over Iteration with \n N = %d, depth = %d',N,depth))
+plot(1:conv_iter,log10(ress(1:conv_iter)),'b--','linewidth',1.5)
+plot(1:conv_iter,log10(err_direct(1:conv_iter)),'r:','linewidth',1.5)
+plot(1:conv_iter,log10(err_exact(1:conv_iter)),'m:','linewidth',1.5)
+legend('log10(residue)','log10(err direct)','log10(err exact)')
 xlabel('Iterations')
+
 
 
 %%

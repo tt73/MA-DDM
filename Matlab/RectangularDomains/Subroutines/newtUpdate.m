@@ -17,7 +17,8 @@ vCount = length(weight);
 intLength = length(F); Interior = 1:intLength;
 pLength = length(uNewt); 
 
-correction = 2*pi^2*spdiags((SDDMat(NMatSDD,CMatSDD,uNewt,vCount,epsilon).^-1*weight),0,intLength,intLength)^-3;
+spmat = spdiags((SDDMat(NMatSDD,CMatSDD,uNewt,vCount,epsilon).^-1*weight),0,intLength,intLength)^3;
+% correction = 2*pi^2*spdiags((SDDMat(NMatSDD,CMatSDD,uNewt,vCount,epsilon).^-1*weight),0,intLength,intLength)^-3;
 % correction is a term that shows up in the jacobian. Each row is to be
 % scaled by a specific value, we write as a diagon matrix for faster
 % multiplication
@@ -65,7 +66,8 @@ end
 % Can potentially make loops faster by reducing terms that need to be
 % updated, but not priority at the moment.
 
-jacobian = correction*jacobian+reg;
+jacobian = 2*pi^2*(spmat\jacobian) + reg;
+% jacobian = correction*jacobian+reg;
 % Combine all terms of jacobian
 
 resid = sparse(pi^2*((SDDMat(NMatSDD,CMatSDD,uNewt,vCount,epsilon).^(-1))*weight).^(-2)+min(min(SDDMat(NMatSDD,CMatSDD,uNewt,vCount,-Inf),epsilon),[],2)-F);
