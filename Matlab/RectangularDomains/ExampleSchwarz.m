@@ -8,18 +8,18 @@ clear
 % Parameters needed to generate grid
 x0 = -1; x1 = 1;
 y0 = -1; y1 = 1;
-N = 33;
+N = 65;
 h = (x1-x0)/(N+1);
 
 % requirement: overlap + depth - 1 <= (N-1)/2
-depth = 2;
-overlap = 4;
+depth = 3;
+overlap = 3;
 if (overlap + depth - 1 > (N-1)/2)
    error("overlap + depth exceeds mesh size")
 end
 
 % choose F
-choice = 1;
+choice = 3;
 switch(choice)
    case 1
       DirBC = @(x,y) (exp((x.^2+y.^2)/2));
@@ -47,7 +47,7 @@ weight = quadWeights(theta,order);
 % DDM settings
 max_iter = 100;
 conv_iter = max_iter;
-tol = 1e-8;
+tol = 1e-6;
 relax = 1.0; % must be between 0 and 2, default = 1
 
 % Initialize ddm
@@ -81,7 +81,7 @@ min_err = norm(exact-uSoln(Interior),inf);
 direct1 = uSoln(Dom1.Interior);
 direct2 = uSoln(Dom2.Interior);
 
-% init 
+% init with exact solution
 % u1 = DirBC(Points(Dom1.l2g,1),Points(Dom1.l2g,2));
 % u2 = DirBC(Points(Dom2.l2g,1),Points(Dom2.l2g,2));
 
@@ -105,6 +105,10 @@ for k = 1:max_iter
    % residue
    res = norm(uBdry2(end-Dom2.Ns+1:end) - out1(Dom1.send)) + ...
       norm(uBdry1(end-Dom1.Ns+1:end) - out2(Dom2.send));
+   if(k == 1)
+       res0 = res;
+   end
+   res = res/res0;
    if (res < tol)
       conv_iter = k;
       break
