@@ -8,11 +8,11 @@ clear
 % Parameters needed to generate grid
 x0 = -1; x1 = 1;
 y0 = -1; y1 = 1;
-N = 65;
+N = 33;
 h = (x1-x0)/(N+1);
 
 % requirement: overlap + depth - 1 <= (N-1)/2
-depth = 2;
+depth = 1;
 overlap = 2;
 if (overlap + depth - 1 > (N-1)/2)
    error("overlap + depth exceeds mesh size")
@@ -76,6 +76,10 @@ exact2 = DirBC(Points(Dom2.Interior,1),Points(Dom2.Interior,2));
 % direct solution
 direct1 = uSoln(Dom1.Interior);
 direct2 = uSoln(Dom2.Interior);
+
+% init 
+% u1 = DirBC(Points(Dom1.l2g,1),Points(Dom1.l2g,2));
+% u2 = DirBC(Points(Dom2.l2g,1),Points(Dom2.l2g,2));
 
 %% DDM Iteration
 % This section can take a while to run.
@@ -149,7 +153,7 @@ title('DDM Solution')
 
 %% Residue and Error
 
-figure, hold on, title(sprintf('Error over Iteration with \n N = %d, depth = %d',N,depth))
+figure, hold on, title(sprintf('Error over Iteration with \n N = %d, depth = %d, overlap = %d',N,depth,overlap))
 plot(1:conv_iter,log10(ress(1:conv_iter)),'b--','linewidth',1.5)
 plot(1:conv_iter,log10(err_direct(1:conv_iter)),'r:','linewidth',1.5)
 plot(1:conv_iter,log10(err_exact(1:conv_iter)),'m:','linewidth',1.5)
