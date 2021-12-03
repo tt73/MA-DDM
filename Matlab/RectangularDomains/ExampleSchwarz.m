@@ -8,12 +8,12 @@ clear
 % Parameters needed to generate grid
 x0 = -1; x1 = 1;
 y0 = -1; y1 = 1;
-N = 33;
+N = 65;
 h = (x1-x0)/(N+1);
 
 % requirement: overlap + depth - 1 <= (N-1)/2
 depth = 1;
-overlap = 2;
+overlap = 4;
 if (overlap + depth - 1 > (N-1)/2)
    error("overlap + depth exceeds mesh size")
 end
@@ -41,18 +41,13 @@ order = 1;
 epsilon = h^2;
 weight = quadWeights(theta,order);
 
-% solve without doing DDM
-F = contF(Points(Interior,1),Points(Interior,2));
-uBdry = DirBC(Points(Boundary,1),Points(Boundary,2));
-[uSoln, ~] = quadSolver(NMatSDD,CMatSDD,F,uBdry,epsilon,weight,h);
-
 % Call domain decomposition
 [Dom1, Dom2] = splitDomain(Points,Interior,Boundary,h,theta,NMatSDD,depth,overlap,0);
 
 % DDM settings
 max_iter = 100;
 conv_iter = max_iter;
-tol = 1e-9;
+tol = 1e-8;
 relax = 1.0; % must be between 0 and 2, default = 1
 
 % Initialize ddm
@@ -70,8 +65,17 @@ uBdry2 = [uBdry2; zeros(size(Dom2.Interface))];
 %% Error in the direct solution
 
 % exact solutions
+exact = DirBC(Points(Interior,1),Points(Interior,2));
 exact1 = DirBC(Points(Dom1.Interior,1),Points(Dom1.Interior,2));
 exact2 = DirBC(Points(Dom2.Interior,1),Points(Dom2.Interior,2));
+
+% solve without doing DDM
+F = contF(Points(Interior,1),Points(Interior,2));
+uBdry = DirBC(Points(Boundary,1),Points(Boundary,2));
+[uSoln, ~] = quadSolver(NMatSDD,CMatSDD,F,uBdry,epsilon,weight,h);
+
+% smallest possible error with DDM 
+min_err = norm(exact-uSoln(Interior),inf);
 
 % direct solution
 direct1 = uSoln(Dom1.Interior);
@@ -111,13 +115,16 @@ for k = 1:max_iter
    u1 = relax*out1 + (1-relax)*u1;
    u2 = relax*out2 + (1-relax)*u2;
    
-   % record
-   err1 = u1(1:Dom1.Ni)-exact1;
-   err2 = u2(1:Dom2.Ni)-exact2;
-   err_exact(k) = norm([err1; err2],inf);
-   err1 = u1(1:Dom1.Ni)-direct1;
-   err2 = u2(1:Dom2.Ni)-direct2;
-   err_direct(k) = norm([err1; err2],inf);
+   % compute the global DDM solution
+   u_interface = (u1(Dom1.ai) + u2(Dom2.ai))/2;
+   u_global = [u1(Dom1.oi); u_interface; u2(Dom2.oi)];
+   
+   % compute error from exact solution 
+   err_exact(k) = norm(u_global-exact,inf);
+   
+   % compute discrepancy from direct numerical solver 
+   err_direct(k) = norm(u_global-uSoln(Interior),inf);
+   
    ress(k) = res;
 end
 t = toc;
@@ -154,10 +161,11 @@ title('DDM Solution')
 %% Residue and Error
 
 figure, hold on, title(sprintf('Error over Iteration with \n N = %d, depth = %d, overlap = %d',N,depth,overlap))
-plot(1:conv_iter,log10(ress(1:conv_iter)),'b--','linewidth',1.5)
+plot(1:conv_iter,log10(ress(1:conv_iter)),'g--','linewidth',1.5)
 plot(1:conv_iter,log10(err_direct(1:conv_iter)),'r:','linewidth',1.5)
-plot(1:conv_iter,log10(err_exact(1:conv_iter)),'m:','linewidth',1.5)
-legend('log10(residue)','log10(err direct)','log10(err exact)')
+plot(1:conv_iter,log10(err_exact(1:conv_iter)),'b:','linewidth',1.5)
+yline(log10(min_err),'k--')
+legend('log10(residue)','log10(err direct)','log10(err exact)','min err')
 xlabel('Iterations')
 
 
@@ -266,8 +274,8 @@ ai2 = (1:N) + (delta-1)*N;
 send1 = zeros(Ns1,1);
 send2 = zeros(Ns2,1);
 for i = 1:depth
-   send1((1:N)+(i-1)*N) = (Ni1-N+1:Ni1)-N*(delta+i);
-   send2((1:N)+(i-1)*N) = (1:N)+N*(delta+i);
+   send1((1:N)+(i-1)*N) = (Ni1-N+1:Ni1)-N*(2*delta-i);
+   send2((1:N)+(i-1)*N) = (1:N)+N*(2*delta-i);
 end
 
 % the local-to-global index mapping
