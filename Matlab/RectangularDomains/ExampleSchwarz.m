@@ -8,7 +8,7 @@ clear
 % Parameters needed to generate grid
 x0 = -1; x1 = 1;
 y0 = -1; y1 = 1;
-N = 65;
+N = 33;
 h = (x1-x0)/(N+1);
 
 % requirement: overlap + depth - 1 <= (N-1)/2
@@ -92,7 +92,6 @@ ress = zeros(max_iter,1);
 err_direct = zeros(max_iter,1);
 err_exact = zeros(max_iter,1);
 
-tic;
 for k = 1:max_iter
    
    % prepare uBdry
@@ -127,7 +126,6 @@ for k = 1:max_iter
    
    ress(k) = res;
 end
-t = toc;
 
 %% info
 
@@ -138,7 +136,6 @@ if (conv_iter < max_iter)
 else
    disp("Conv:    hit max iterations")
 end
-fprintf('Time:    %f seconds = %d min and %d seconds.\n',t,floor(t/60),mod(t,60))
 
 %% Visualize solution
 figure, hold on, view(3)
@@ -274,8 +271,8 @@ ai2 = (1:N) + (delta-1)*N;
 send1 = zeros(Ns1,1);
 send2 = zeros(Ns2,1);
 for i = 1:depth
-   send1((1:N)+(i-1)*N) = (Ni1-N+1:Ni1)-N*(2*delta-i);
-   send2((1:N)+(i-1)*N) = (1:N)+N*(2*delta-i);
+   send1((1:N)+(i-1)*N) = (Ni1-N+1:Ni1)-N*(2*delta-2+i);
+   send2((1:N)+(i-1)*N) = (1:N)+N*(2*delta-2+i);
 end
 
 % the local-to-global index mapping
