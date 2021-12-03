@@ -12,7 +12,7 @@ N = 65;
 h = (x1-x0)/(N+1);
 
 % requirement: overlap + depth - 1 <= (N-1)/2
-depth = 1;
+depth = 2;
 overlap = 4;
 if (overlap + depth - 1 > (N-1)/2)
    error("overlap + depth exceeds mesh size")
