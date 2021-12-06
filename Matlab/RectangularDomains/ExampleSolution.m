@@ -4,8 +4,8 @@ addpath('Subroutines')
 
 x0 = -1; x1 = 1; 
 y0 = -1; y1 = 1; 
-N = 2^3; h = (x1-x0)/(N+1);
-depth = 1; 
+N = 2^7+1; h = (x1-x0)/(N+1);
+depth = ceil(h^(-1/3)); 
 % Parameters needed to generate grid
 
 [Points,Interior,Boundary,NMatSDD,CMatSDD,theta] = buildMesh_Rect(x0,x1,y0,y1,h,depth);
@@ -17,7 +17,7 @@ depth = 1;
 % CMatSDD - (Ni x 3*Nt) stencil coef 
 % theta - (Nt x 1) angles of stencil directions (in radians) 
 
-order = 1;
+order = 2;
 epsilon = h^2;
 % Parameters needed to solve problem
 
@@ -46,6 +46,6 @@ weight = quadWeights(theta,order);
 
 [uSoln, perf] = quadSolver(NMatSDD,CMatSDD,F,uBdry,epsilon,weight,h);
 % Solve with newton's method and no given initial guess. 
-
-figure(2)
-plot3(Points(:,1),Points(:,2),uSoln,'.')
+perf
+% figure(2)
+% plot3(Points(:,1),Points(:,2),uSoln,'.')
