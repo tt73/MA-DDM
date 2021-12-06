@@ -8,12 +8,12 @@ clear
 % Parameters needed to generate grid
 x0 = -1; x1 = 1;
 y0 = -1; y1 = 1;
-N = 65;
+N = 2^7+1;
 h = (x1-x0)/(N+1);
 
 % requirement: overlap + depth - 1 <= (N-1)/2
 depth = 3;
-overlap = 3;
+overlap = 10;
 if (overlap + depth - 1 > (N-1)/2)
    error("overlap + depth exceeds mesh size")
 end
@@ -74,7 +74,7 @@ F = contF(Points(Interior,1),Points(Interior,2));
 uBdry = DirBC(Points(Boundary,1),Points(Boundary,2));
 [uSoln, ~] = quadSolver(NMatSDD,CMatSDD,F,uBdry,epsilon,weight,h);
 
-% smallest possible error with DDM 
+% smallest possible error with DDM
 min_err = norm(exact-uSoln(Interior),inf);
 
 % direct solution
@@ -91,6 +91,7 @@ direct2 = uSoln(Dom2.Interior);
 ress = zeros(max_iter,1);
 err_direct = zeros(max_iter,1);
 err_exact = zeros(max_iter,1);
+newt_iters = zeros(max_iter,1);
 
 for k = 1:max_iter
    
@@ -99,14 +100,21 @@ for k = 1:max_iter
    uBdry1(end-Dom1.Ns+1:end) = u2(Dom2.send);
    
    % solve
-   [out1, ~] = quadSolver(Dom1.NMatLoc,CMatSDD(Dom1.Interior,:),F1,uBdry1,epsilon,weight,h); % call solver
-   [out2, ~] = quadSolver(Dom2.NMatLoc,CMatSDD(Dom2.Interior,:),F2,uBdry2,epsilon,weight,h); % call solver
+   if (k>1)
+      [out1,~,newt1] = quadSolver(Dom1.NMatLoc,CMatSDD(Dom1.Interior,:),F1,uBdry1,epsilon,weight,h,u1(1:length(Dom1.Interior))); % call solver
+      [out2,~,newt2] = quadSolver(Dom2.NMatLoc,CMatSDD(Dom2.Interior,:),F2,uBdry2,epsilon,weight,h,u2(1:length(Dom2.Interior))); % call solver
+      newt_iters(k) = newt1+newt2;
+   else
+      [out1,~,newt1] = quadSolver(Dom1.NMatLoc,CMatSDD(Dom1.Interior,:),F1,uBdry1,epsilon,weight,h);
+      [out2,~,newt2] = quadSolver(Dom2.NMatLoc,CMatSDD(Dom2.Interior,:),F2,uBdry2,epsilon,weight,h);
+      newt_iters(k) = newt1+newt2;
+   end
    
    % residue
    res = norm(uBdry2(end-Dom2.Ns+1:end) - out1(Dom1.send)) + ...
       norm(uBdry1(end-Dom1.Ns+1:end) - out2(Dom2.send));
    if(k == 1)
-       res0 = res;
+      res0 = res;
    end
    res = res/res0;
    if (res < tol)
@@ -122,10 +130,10 @@ for k = 1:max_iter
    u_interface = (u1(Dom1.ai) + u2(Dom2.ai))/2;
    u_global = [u1(Dom1.oi); u_interface; u2(Dom2.oi)];
    
-   % compute error from exact solution 
+   % compute error from exact solution
    err_exact(k) = norm(u_global-exact,inf);
    
-   % compute discrepancy from direct numerical solver 
+   % compute discrepancy from direct numerical solver
    err_direct(k) = norm(u_global-uSoln(Interior),inf);
    
    ress(k) = res;
