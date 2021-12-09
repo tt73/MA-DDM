@@ -1,3 +1,4 @@
+%% 1D Newton-Krylov-Schwarz 
 
 a = 0;  b = 1;      % domain
 kap = 1;            % curvature
@@ -5,7 +6,7 @@ ga = 0;             % u(a) = ga
 gb = 1;             % u(b) = gb
 u_exact =@(x) -sqrt(1-x.^2)+1; % exact viscosity solution
 
-N = 7;
+N = 51;
 h = 1/(N+1);
 delta = 1;
 Nloc = (N+1)/2 + delta - 1;
@@ -13,7 +14,7 @@ x_global = h:h:1-h;
 U_newton= zeros(N,1);
 
 
-N_iter =100;
+N_iter = 100;
 
 for l = 1:N_iter
     
@@ -57,7 +58,7 @@ N = length(u);
 Nloc = (N+1)/2 + delta - 1; 
 ih2 = h^-2; % inverse h^2 
 
-J1 = gallery('tridiag',Nloc,1/h^2,0,1/h^2);
+J1 = gallery('tridiag',Nloc,ih2,0,ih2);
 J2 = J1;
 
 % left domain
@@ -87,16 +88,12 @@ end
 end
 
 function [b1, b2]= makeRHS(u,ga,gb,h,kap,delta) % rhs of oddm jacobi system 
-
 F = makeF(u,ga,gb,h,kap);
-
 N = length(u);
 Nloc = (N+1)/2 + delta - 1; 
 
-
 F1 = F(1:Nloc);
 F2 = F(end-Nloc+1:end);
-
 b1 = -F1;
 b2 = -F2;
 end
