@@ -1,4 +1,4 @@
-function [uNewt,t,stepcount] = quadSolver(NMatSDD,CMatSDD,F,uBdry,epsilon,weight,h,uInit)
+function [uNewt,stepcount] = quadSolver(NMatSDD,CMatSDD,F,uBdry,epsilon,weight,h,uInit)
 % Solves Dirichlet problem for Monge-Ampere using the quadrature based
 % finite difference scheme via Newton's Method
 

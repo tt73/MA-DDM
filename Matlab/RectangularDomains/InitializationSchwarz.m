@@ -4,22 +4,21 @@
 
 addpath('Subroutines')
 clear
-
 % Parameters needed to generate grid
 x0 = -1; x1 = 1;
 y0 = -1; y1 = 1;
-N = 2^7+1;
+N = 2^(7)+1;
 h = (x1-x0)/(N+1);
 
 % requirement: overlap + depth - 1 <= (N-1)/2
 depth = ceil(h^(-1/3));
-overlap = 3;
+overlap = depth+1;
 if (overlap + depth - 1 > (N-1)/2)
    error("overlap + depth exceeds mesh size")
 end
 
 % choose F
-choice = 3;
+choice = 1;
 switch(choice)
    case 1
       DirBC = @(x,y) (exp((x.^2+y.^2)/2));
@@ -37,12 +36,17 @@ end
 [Points,Interior,Boundary,NMatSDD,CMatSDD,theta] = buildMesh_Rect(x0,x1,y0,y1,h,depth);
 
 % solver settings
-order = 1;
+order = 2;
 epsilon = h^2;
 weight = quadWeights(theta,order);
 vCount = length(weight);
 
+% Initialization
+tic
 uInit = poissonInit(NMatSDD,CMatSDD,contF(Points(Interior,1),Points(Interior,2)),DirBC(Points(Boundary,1),Points(Boundary,2)),1,(vCount+1)/2);
+uInit = [uInit;DirBC(Points(Boundary,1),Points(Boundary,2))];
+% [uInit,stepsInit] = fastInit(NMatSDD,CMatSDD,contF(Points(Interior,1),Points(Interior,2)),DirBC(Points(Boundary,1),Points(Boundary,2)),epsilon,weight,h);
+t0 = toc
 
 % Call domain decomposition
 [Dom1, Dom2] = splitDomain(Points,Interior,Boundary,h,theta,NMatSDD,depth,overlap,0);
@@ -55,8 +59,10 @@ relax = 1.0; % must be between 0 and 2, default = 1
 init = 'On'; % 'On' inititalizes with previous step, 'Off' doesn't
 
 % Initialize ddm
-u1 = zeros(size(Dom1.l2g));
-u2 = zeros(size(Dom2.l2g));
+% u1 = zeros(size(Dom1.l2g));
+% u2 = zeros(size(Dom2.l2g));
+u1 = uInit(Dom1.l2g);
+u2 = uInit(Dom2.l2g);
 
 F1 = contF(Points(Dom1.Interior,1),Points(Dom1.Interior,2));
 uBdry1 = DirBC(Points(Dom1.Boundary,1),Points(Dom1.Boundary,2));
@@ -68,7 +74,6 @@ uBdry2 = DirBC(Points(Dom2.Boundary,1),Points(Dom2.Boundary,2));
 % uBdry2 = [uBdry2; zeros(size(Dom2.Interface))];
 uBdry2 = [uBdry2; uInit(Dom2.Interface)];
 
-
 %% Error in the direct solution
 
 % exact solutions
@@ -79,8 +84,9 @@ exact2 = DirBC(Points(Dom2.Interior,1),Points(Dom2.Interior,2));
 % solve without doing DDM
 F = contF(Points(Interior,1),Points(Interior,2));
 uBdry = DirBC(Points(Boundary,1),Points(Boundary,2));
-[uSoln, ~] = quadSolver(NMatSDD,CMatSDD,F,uBdry,epsilon,weight,h);
-
+tic
+[uSoln, ~] = quadSolver(NMatSDD,CMatSDD,F,uBdry,epsilon,weight,h,uInit(Interior));
+t1 = toc
 % smallest possible error with DDM 
 min_err = norm(exact-uSoln(Interior),inf);
 
@@ -91,13 +97,14 @@ direct2 = uSoln(Dom2.Interior);
 % init with exact solution
 % u1 = DirBC(Points(Dom1.l2g,1),Points(Dom1.l2g,2));
 % u2 = DirBC(Points(Dom2.l2g,1),Points(Dom2.l2g,2));
+
 %% DDM Iteration
 % This section can take a while to run.
 
 ress = zeros(max_iter,1);
 err_direct = zeros(max_iter,1);
 err_exact = zeros(max_iter,1);
-
+tic
 for k = 1:max_iter
    
    % prepare uBdry
@@ -108,17 +115,14 @@ for k = 1:max_iter
     switch(init)
        % Passes old solution as initialization for N.M.
        case 'On' 
-           if k == 1
-               [out1, ~] = quadSolver(Dom1.NMatLoc,CMatSDD(Dom1.Interior,:),F1,uBdry1,epsilon,weight,h); % call solver
-               [out2, ~] = quadSolver(Dom2.NMatLoc,CMatSDD(Dom2.Interior,:),F2,uBdry2,epsilon,weight,h); % call solver
-           else
-               [out1, ~] = quadSolver(Dom1.NMatLoc,CMatSDD(Dom1.Interior,:),F1,uBdry1,epsilon,weight,h,u1(1:length(Dom1.Interior))); % call solver
-               [out2, ~] = quadSolver(Dom2.NMatLoc,CMatSDD(Dom2.Interior,:),F2,uBdry2,epsilon,weight,h,u2(1:length(Dom2.Interior))); % call solver
-
-           end
+%             [out1, ~] = fastInit(Dom1.NMatLoc,CMatSDD(Dom1.Interior,:),F1,uBdry1,epsilon,weight,h,u1(1:length(Dom1.Interior))); % call solver
+%             [out2, ~] = fastInit(Dom2.NMatLoc,CMatSDD(Dom2.Interior,:),F2,uBdry2,epsilon,weight,h,u2(1:length(Dom2.Interior))); % call solver
+            [out1, ~] = quadSolver(Dom1.NMatLoc,CMatSDD(Dom1.Interior,:),F1,uBdry1,epsilon,weight,h,u1(1:length(Dom1.Interior))); % call solver
+            [out2, ~] = quadSolver(Dom2.NMatLoc,CMatSDD(Dom2.Interior,:),F2,uBdry2,epsilon,weight,h,u2(1:length(Dom2.Interior))); % call solver
+           
        case 'Off'
-           [out1, ~] = quadSolver(Dom1.NMatLoc,CMatSDD(Dom1.Interior,:),F1,uBdry1,epsilon,weight,h); % call solver
-           [out2, ~] = quadSolver(Dom2.NMatLoc,CMatSDD(Dom2.Interior,:),F2,uBdry2,epsilon,weight,h); % call solver
+            [out1, ~] = quadSolver(Dom1.NMatLoc,CMatSDD(Dom1.Interior,:),F1,uBdry1,epsilon,weight,h); % call solver
+            [out2, ~] = quadSolver(Dom2.NMatLoc,CMatSDD(Dom2.Interior,:),F2,uBdry2,epsilon,weight,h); % call solver
    end
    % residue
    res = norm(uBdry2(end-Dom2.Ns+1:end) - out1(Dom1.send)) + ...
@@ -148,6 +152,47 @@ for k = 1:max_iter
    
    ress(k) = res;
 end
+t2 = toc
+
+%% info
+
+fprintf("Overlap: %4.2f%%\n",overlap/((N-1)/2)*100)
+
+if (conv_iter < max_iter)
+   disp("Conv:    "+k+" iterations")
+else
+   disp("Conv:    hit max iterations")
+end
+
+%% Visualize solution
+figure, hold on, view(3)
+
+% plot boundary in black
+plot3(Points(Dom1.Boundary,1),Points(Dom1.Boundary,2),u1(Dom1.Ni+1:Dom1.Ni+Dom1.Nb),'.','Color','k')
+plot3(Points(Dom2.Boundary,1),Points(Dom2.Boundary,2),u2(Dom2.Ni+1:Dom2.Ni+Dom2.Nb),'.','Color','k')
+
+% plot the original interior (oi) solutions for each domain in different colors
+plot3(Points(Dom1.Interior(Dom1.oi),1),Points(Dom1.Interior(Dom1.oi),2),u1(Dom1.oi),'.','Color','b')
+plot3(Points(Dom2.Interior(Dom2.oi),1),Points(Dom2.Interior(Dom2.oi),2),u2(Dom2.oi),'.','Color','g')
+
+% plot the interface - average of both domains
+u_interface = (u1(Dom1.ai) + u2(Dom2.ai))/2;
+plot3(Points(Dom1.Interior(Dom1.ai),1),Points(Dom1.Interior(Dom1.ai),2),u_interface,'.','Color','m')
+xlabel('x'), ylabel('y'), zlabel('u')
+title('DDM Solution')
+
+
+%% Residue and Error
+
+figure, hold on, title(sprintf('Error over Iteration with \n N = %d, depth = %d, overlap = %d',N,depth,overlap))
+plot(1:conv_iter,log10(ress(1:conv_iter)),'g--','linewidth',1.5)
+plot(1:conv_iter,log10(err_direct(1:conv_iter)),'r:','linewidth',1.5)
+plot(1:conv_iter,log10(err_exact(1:conv_iter)),'b:','linewidth',1.5)
+yline(log10(min_err),'k--')
+legend('log10(residue)','log10(err direct)','log10(err exact)','min err')
+xlabel('Iterations')
+
+
 
 %%
 % This function splits the domain along the x-axis Dom1 at the bottom.
