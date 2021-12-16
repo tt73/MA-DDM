@@ -37,7 +37,7 @@ stepcount = 0;
 tic
 while resid > h
     
-    deltaU = [newtUpdate(NMatSDD,CMatSDD,weight,uNewt,F,epsilon);bZ];
+    deltaU = [newtUpdate2(NMatSDD,CMatSDD,weight,uNewt,F,epsilon);bZ];
     % Only updated in the Interior
     
     alpha = 1;
