@@ -18,11 +18,9 @@ function [uNewt,t,stepcount] = quadSolver2(NMatSDD,CMatSDD,Dvvs,F,uBdry,epsilon,
 vCount = length(weight);
 % number of points in the quadrature
 
-if nargin == 8
-    
+if (~exist('uInit','var'))
     uInit = poissonInit(NMatSDD,CMatSDD,F,uBdry,1,(vCount+1)/2);
     % Does a single step of the poisson iteration to initialize the solver
-    
 end
 
 aproxMAOp = @(u)(pi^2*((SDDMat(NMatSDD,CMatSDD,u,vCount,epsilon).^(-1))*weight).^(-2)+min(min(SDDMat(NMatSDD,CMatSDD,u,vCount,-Inf),epsilon),[],2));

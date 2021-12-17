@@ -49,7 +49,7 @@ for i = 1:length(theta)
    Dvvs{i} = sparse( repmat(Interior,1,3), [NMatSDD(:,i*3-2) NMatSDD(:,i*3-1) NMatSDD(:,i*3)], [CMatSDD(:,i*3-2) CMatSDD(:,i*3-1) CMatSDD(:,i*3)], length(F), length(Points));
 end
 
-[uSoln, perf] = quadSolver(NMatSDD,CMatSDD,Dvvs,F,uBdry,epsilon,weight,h);
+[uSoln, perf] = quadSolver2(NMatSDD,CMatSDD,Dvvs,F,uBdry,epsilon,weight,h);
 % Solve with newton's method and no given initial guess. 
 
 figure(2)

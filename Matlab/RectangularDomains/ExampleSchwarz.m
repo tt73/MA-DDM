@@ -8,18 +8,20 @@ clear
 % Parameters needed to generate grid
 x0 = -1; x1 = 1;
 y0 = -1; y1 = 1;
-N = 2^6+1;
+N = 2^5+1;
 h = (x1-x0)/(N+1);
 
 % requirement: overlap + depth - 1 <= (N-1)/2
-depth = 1;
-overlap = 1;
+depth = 2;
+overlap = 6;
 if (overlap + depth - 1 > (N-1)/2)
    error("overlap + depth exceeds mesh size")
 end
+% for around 10% overlap, choose overlap ~ (N-1)/20 
+
 
 % choose F
-choice = 3;
+choice = 1;
 switch(choice)
    case 1
       DirBC = @(x,y) (exp((x.^2+y.^2)/2));
@@ -69,12 +71,6 @@ Dvvs2 = cell(length(theta),1);
 for i = 1:length(theta)
    Dvvs{i} = sparse( repmat(Interior,1,3), [NMatSDD(:,i*3-2) NMatSDD(:,i*3-1) NMatSDD(:,i*3)], [CMatSDD(:,i*3-2) CMatSDD(:,i*3-1) CMatSDD(:,i*3)], length(Interior), length(Points));
    Dvvs1{i} = sparse( repmat(Dom1.Interior,1,3), [Dom1.NMatLoc(:,i*3-2) Dom1.NMatLoc(:,i*3-1) Dom1.NMatLoc(:,i*3)], [CMatSDD(Dom1.Interior,i*3-2) CMatSDD(Dom1.Interior,i*3-1) CMatSDD(Dom1.Interior,i*3)], Dom1.Ni, Dom1.Ni+Dom1.Nb+Dom1.Ns);
-   
-%    p = repmat(Dom1.Interior,1,3)
-%    q = [Dom2.NMatLoc(:,i*3-2) Dom2.NMatLoc(:,i*3-1) Dom2.NMatLoc(:,i*3)]
-%    r = [CMatSDD(Dom2.Interior,i*3-2) CMatSDD(Dom2.Interior,i*3-1) CMatSDD(Dom2.Interior,i*3)]
-%    Dvvs2{i} = sparse(p, q, r, Dom2.Ni, Dom2.Ni+Dom2.Nb);
-
    Dvvs2{i} = sparse( repmat(Dom1.Interior,1,3), [Dom2.NMatLoc(:,i*3-2) Dom2.NMatLoc(:,i*3-1) Dom2.NMatLoc(:,i*3)], [CMatSDD(Dom2.Interior,i*3-2) CMatSDD(Dom2.Interior,i*3-1) CMatSDD(Dom2.Interior,i*3)], Dom2.Ni, Dom2.Ni+Dom2.Nb+Dom2.Ns);
 end
 
