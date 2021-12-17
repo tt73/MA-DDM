@@ -8,7 +8,7 @@ clear
 % Parameters needed to generate grid
 x0 = -1; x1 = 1;
 y0 = -1; y1 = 1;
-N = 2^7+1;
+N = 2^6+1;
 h = (x1-x0)/(N+1);
 
 % requirement: overlap + depth - 1 <= (N-1)/2
@@ -93,6 +93,7 @@ err_direct = zeros(max_iter,1);
 err_exact = zeros(max_iter,1);
 newt_iters = zeros(max_iter,1);
 
+tic 
 for k = 1:max_iter
    
    % prepare uBdry
@@ -138,6 +139,7 @@ for k = 1:max_iter
    
    ress(k) = res;
 end
+toc
 
 %% info
 

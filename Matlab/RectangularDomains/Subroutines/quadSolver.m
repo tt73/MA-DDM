@@ -36,7 +36,7 @@ resid = norm(aproxMAOp(uNewt)-F,inf);
 stepcount = 0;
 while resid > h
     
-    deltaU = [newtUpdate(NMatSDD,CMatSDD,weight,uNewt,F,epsilon);bZ];
+    deltaU = [newtUpdate2(NMatSDD,CMatSDD,weight,uNewt,F,epsilon);bZ];
     % Only updated in the Interior
     
     alpha = 1;

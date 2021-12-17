@@ -1,12 +1,21 @@
+%% 1D Newton-Krylov-Schwarz 
+
+a = 0;  b = 1;      % domain
+kap = 1;            % curvature
+ga = 0;             % u(a) = ga
+gb = 1;             % u(b) = gb
+u_exact =@(x) -sqrt(1-x.^2)+1; % exact viscosity solution
+
 N = 51;
 h = 1/(N+1);
-delta = 2;
+delta = 1;
 Nloc = (N+1)/2 + delta - 1;
 x_global = h:h:1-h;
 U_newton= zeros(N,1);
 
 
-N_iter = 10;
+N_iter = 100;
+
 for l = 1:N_iter
     
     % construct DDM jacobian system
@@ -15,8 +24,7 @@ for l = 1:N_iter
     [b1,b2] = makeRHS(U_newton,ga,gb,h,kap,delta); % should be parallel 
     
     % use orthodir to compute local solutions of s 
-    [s1,s2,conv_iter] = run_orthodir(N_iter,1e-8,Nloc,delta,h,J1,J2,b1,b2);
-    disp(conv_iter)
+    [s1,s2,conv_iter] = run_orthodir(N_iter,1e-12,Nloc,delta,h,J1,J2,b1,b2);
     
     % piece together s1 and s2 to make s 
     s = combine(s1,s2,N,delta);
@@ -28,31 +36,21 @@ end
 plot(x_global,U_newton)
 
 
-function [b1, b2]= makeRHS(u,ga,gb,h,kap,delta) % rhs of oddm jacobi system 
+
+%% Subroutines 
+
+function F = makeF(u,ga,gb,h,kap) % system to find root of
 N = length(u);
-Nloc = (N+1)/2 + delta - 1; 
-ih2 = h^-2; % inverse h^2 
+F = zeros(N,1);
+ih2 = 1/h^2;
 
-F1 = zeros(Nloc,1);
-F2 = F1;
+F(1) = ih2*(u(2)-2*u(1)+ga)-kap*(1+ih2*max([u(1)-ga,u(1)-u(2),0])^2)^(3/2); % at the left endpoint
 
-% compute left domain 
-F1(1) = ih2*(u(2)-2*u(1)+ga)-kap*(1+ih2*max([u(1)-ga,u(1)-u(2),0])^2)^(3/2); % at the left endpoint
-for j = 2:Nloc-1
-    F1(j) = ih2*(u(j+1)-2*u(j)+u(j-1))-kap*(1+ih2*max([u(j)-u(j-1),u(j)-u(j+1),0])^2)^(3/2); % at the middle points
+for j = 2:N-1
+    F(j) = ih2*(u(j+1)-2*u(j)+u(j-1))-kap*(1+ih2*max([u(j)-u(j-1),u(j)-u(j+1),0])^2)^(3/2); % at the middle points
 end
-F1(Nloc) = ih2*(u(Nloc+1)-2*u(Nloc)+u(Nloc-1))-kap*(1+ih2*max([u(Nloc)-u(N-1),u(N)-u(Nloc+1),0])^2)^(3/2); % at the right endpoin
 
-% compute right domain 
-shift = N-Nloc;
-F2(1) = ih2*(u(2+shift)-2*u(1+shift)+u(shift))-kap*(1+ih2*max([u(1+shift),u(1+shift)-u(2+shift),0])^2)^(3/2); % at the left endpoint
-for j = 2:Nloc-1
-    F2(j) = ih2*(u(j+1+shift)-2*u(j+shift)+u(j-1+shift))-kap*(1+ih2*max([u(j+shift)-u(j-1+shift),u(j+shift)-u(j+1+shift),0])^2)^(3/2); % at the middle points
-end
-F2(Nloc) = ih2*(gb-2*u(N)+u(N-1))-kap*(1+ih2*max([u(N)-u(N-1),u(N)-gb,0])^2)^(3/2); % at the right endpoint
-
-b1 = -F1;
-b2 = -F2;
+F(N) = ih2*(gb-2*u(N)+u(N-1))-kap*(1+ih2*max([u(N)-u(N-1),u(N)-gb,0])^2)^(3/2); % at the right endpoint
 end
 
 function [J1,J2] = makeJs(u,ga,gb,h,kap,delta)  % jacobian
@@ -60,7 +58,7 @@ N = length(u);
 Nloc = (N+1)/2 + delta - 1; 
 ih2 = h^-2; % inverse h^2 
 
-J1 = gallery('tridiag',Nloc,1/h^2,0,1/h^2);
+J1 = gallery('tridiag',Nloc,ih2,0,ih2);
 J2 = J1;
 
 % left domain
@@ -79,7 +77,7 @@ end
 shift = N-Nloc;
 for i = 1:Nloc
     if (i==1)
-        m2 = max([u(i+shift)-u(i+shift-1),-u(i+1+shift)+u(i+shift), 0]);
+        m2 = max([u(i+shift)-u(i-1+shift),-u(i+1+shift)+u(i+shift), 0]);
     elseif(i==Nloc)
         m2 = max([u(i+shift)-u(i-1+shift),-gb+u(i+shift), 0]);
     else
@@ -87,6 +85,17 @@ for i = 1:Nloc
     end
     J2(i,i) = -2*ih2 - 3*ih2*kap*(1+ih2*m2^2)^(1/2)*m2;
 end
+end
+
+function [b1, b2]= makeRHS(u,ga,gb,h,kap,delta) % rhs of oddm jacobi system 
+F = makeF(u,ga,gb,h,kap);
+N = length(u);
+Nloc = (N+1)/2 + delta - 1; 
+
+F1 = F(1:Nloc);
+F2 = F(end-Nloc+1:end);
+b1 = -F1;
+b2 = -F2;
 end
 
 
@@ -165,7 +174,6 @@ g21 = zeros(Nloc,1);    g21(1) = mu(2);
 % do one last solve with the static part 
 u1 = J1\(g1+g12);
 u2 = J2\(g2+g21);
-
 end
 
 function s = combine(s1,s2,N,delta)
@@ -180,5 +188,4 @@ s(end-nn+1:end) = s2(end-nn+1:end);
 
 mid = (N+1)/2;
 s(mid) = (s1(end-delta+1)+s2(delta))/2; 
-
 end
