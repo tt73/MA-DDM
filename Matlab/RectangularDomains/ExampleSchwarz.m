@@ -12,8 +12,8 @@ N = 2^6+1;
 h = (x1-x0)/(N+1);
 
 % requirement: overlap + depth - 1 <= (N-1)/2
-depth = 3;
-overlap = 10;
+depth = 1;
+overlap = 1;
 if (overlap + depth - 1 > (N-1)/2)
    error("overlap + depth exceeds mesh size")
 end
@@ -62,6 +62,23 @@ F2 = contF(Points(Dom2.Interior,1),Points(Dom2.Interior,2));
 uBdry2 = DirBC(Points(Dom2.Boundary,1),Points(Dom2.Boundary,2));
 uBdry2 = [uBdry2; zeros(size(Dom2.Interface))];
 
+% Precompute Dvv matrices
+Dvvs = cell(length(theta),1);
+Dvvs1 = cell(length(theta),1);
+Dvvs2 = cell(length(theta),1);
+for i = 1:length(theta)
+   Dvvs{i} = sparse( repmat(Interior,1,3), [NMatSDD(:,i*3-2) NMatSDD(:,i*3-1) NMatSDD(:,i*3)], [CMatSDD(:,i*3-2) CMatSDD(:,i*3-1) CMatSDD(:,i*3)], length(Interior), length(Points));
+   Dvvs1{i} = sparse( repmat(Dom1.Interior,1,3), [Dom1.NMatLoc(:,i*3-2) Dom1.NMatLoc(:,i*3-1) Dom1.NMatLoc(:,i*3)], [CMatSDD(Dom1.Interior,i*3-2) CMatSDD(Dom1.Interior,i*3-1) CMatSDD(Dom1.Interior,i*3)], Dom1.Ni, Dom1.Ni+Dom1.Nb+Dom1.Ns);
+   
+%    p = repmat(Dom1.Interior,1,3)
+%    q = [Dom2.NMatLoc(:,i*3-2) Dom2.NMatLoc(:,i*3-1) Dom2.NMatLoc(:,i*3)]
+%    r = [CMatSDD(Dom2.Interior,i*3-2) CMatSDD(Dom2.Interior,i*3-1) CMatSDD(Dom2.Interior,i*3)]
+%    Dvvs2{i} = sparse(p, q, r, Dom2.Ni, Dom2.Ni+Dom2.Nb);
+
+   Dvvs2{i} = sparse( repmat(Dom1.Interior,1,3), [Dom2.NMatLoc(:,i*3-2) Dom2.NMatLoc(:,i*3-1) Dom2.NMatLoc(:,i*3)], [CMatSDD(Dom2.Interior,i*3-2) CMatSDD(Dom2.Interior,i*3-1) CMatSDD(Dom2.Interior,i*3)], Dom2.Ni, Dom2.Ni+Dom2.Nb+Dom2.Ns);
+end
+
+
 %% Error in the direct solution
 
 % exact solutions
@@ -72,7 +89,7 @@ exact2 = DirBC(Points(Dom2.Interior,1),Points(Dom2.Interior,2));
 % solve without doing DDM
 F = contF(Points(Interior,1),Points(Interior,2));
 uBdry = DirBC(Points(Boundary,1),Points(Boundary,2));
-[uSoln, ~] = quadSolver(NMatSDD,CMatSDD,F,uBdry,epsilon,weight,h);
+[uSoln, ~] = quadSolver2(NMatSDD,CMatSDD,Dvvs,F,uBdry,epsilon,weight,h);
 
 % smallest possible error with DDM
 min_err = norm(exact-uSoln(Interior),inf);
@@ -93,7 +110,7 @@ err_direct = zeros(max_iter,1);
 err_exact = zeros(max_iter,1);
 newt_iters = zeros(max_iter,1);
 
-tic 
+tic
 for k = 1:max_iter
    
    % prepare uBdry
@@ -102,12 +119,12 @@ for k = 1:max_iter
    
    % solve
    if (k>1)
-      [out1,~,newt1] = quadSolver(Dom1.NMatLoc,CMatSDD(Dom1.Interior,:),F1,uBdry1,epsilon,weight,h,u1(1:length(Dom1.Interior))); % call solver
-      [out2,~,newt2] = quadSolver(Dom2.NMatLoc,CMatSDD(Dom2.Interior,:),F2,uBdry2,epsilon,weight,h,u2(1:length(Dom2.Interior))); % call solver
+      [out1,~,newt1] = quadSolver2(Dom1.NMatLoc,CMatSDD(Dom1.Interior,:),Dvvs1,F1,uBdry1,epsilon,weight,h,u1(1:length(Dom1.Interior))); % call solver
+      [out2,~,newt2] = quadSolver2(Dom2.NMatLoc,CMatSDD(Dom2.Interior,:),Dvvs2,F2,uBdry2,epsilon,weight,h,u2(1:length(Dom2.Interior))); % call solver
       newt_iters(k) = newt1+newt2;
    else
-      [out1,~,newt1] = quadSolver(Dom1.NMatLoc,CMatSDD(Dom1.Interior,:),F1,uBdry1,epsilon,weight,h);
-      [out2,~,newt2] = quadSolver(Dom2.NMatLoc,CMatSDD(Dom2.Interior,:),F2,uBdry2,epsilon,weight,h);
+      [out1,~,newt1] = quadSolver2(Dom1.NMatLoc,CMatSDD(Dom1.Interior,:),Dvvs1,F1,uBdry1,epsilon,weight,h);
+      [out2,~,newt2] = quadSolver2(Dom2.NMatLoc,CMatSDD(Dom2.Interior,:),Dvvs2,F2,uBdry2,epsilon,weight,h);
       newt_iters(k) = newt1+newt2;
    end
    

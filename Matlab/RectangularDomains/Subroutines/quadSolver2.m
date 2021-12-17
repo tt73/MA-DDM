@@ -1,4 +1,4 @@
-function [uNewt,t,stepcount] = quadSolver(NMatSDD,CMatSDD,F,uBdry,epsilon,weight,h,uInit)
+function [uNewt,t,stepcount] = quadSolver2(NMatSDD,CMatSDD,Dvvs,F,uBdry,epsilon,weight,h,uInit)
 % Solves Dirichlet problem for Monge-Ampere using the quadrature based
 % finite difference scheme via Newton's Method
 
@@ -18,7 +18,7 @@ function [uNewt,t,stepcount] = quadSolver(NMatSDD,CMatSDD,F,uBdry,epsilon,weight
 vCount = length(weight);
 % number of points in the quadrature
 
-if (~exist('uInit','var'))
+if nargin == 8
     
     uInit = poissonInit(NMatSDD,CMatSDD,F,uBdry,1,(vCount+1)/2);
     % Does a single step of the poisson iteration to initialize the solver
@@ -37,7 +37,7 @@ stepcount = 0;
 tic
 while resid > h
     
-    deltaU = [newtUpdate(NMatSDD,CMatSDD,weight,uNewt,F,epsilon);bZ];
+    deltaU = [newtUpdate2(NMatSDD,CMatSDD,Dvvs,weight,uNewt,F,epsilon);bZ];
     % Only updated in the Interior
     
     alpha = 1;

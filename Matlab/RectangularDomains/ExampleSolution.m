@@ -4,7 +4,7 @@ addpath('Subroutines')
 
 x0 = -1; x1 = 1; 
 y0 = -1; y1 = 1; 
-N = 2^6; h = (x1-x0)/(N+1);
+N = 2^8; h = (x1-x0)/(N+1);
 depth = 1; 
 % Parameters needed to generate grid
 
@@ -44,7 +44,12 @@ uBdry = DirBC(Points(Boundary,1),Points(Boundary,2));
 weight = quadWeights(theta,order);
 % weights from angle discretization
 
-[uSoln, perf] = quadSolver(NMatSDD,CMatSDD,F,uBdry,epsilon,weight,h);
+Dvvs = cell(length(theta),1);
+for i = 1:length(theta)
+   Dvvs{i} = sparse( repmat(Interior,1,3), [NMatSDD(:,i*3-2) NMatSDD(:,i*3-1) NMatSDD(:,i*3)], [CMatSDD(:,i*3-2) CMatSDD(:,i*3-1) CMatSDD(:,i*3)], length(F), length(Points));
+end
+
+[uSoln, perf] = quadSolver(NMatSDD,CMatSDD,Dvvs,F,uBdry,epsilon,weight,h);
 % Solve with newton's method and no given initial guess. 
 
 figure(2)
