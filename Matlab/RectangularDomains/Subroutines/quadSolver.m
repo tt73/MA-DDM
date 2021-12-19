@@ -34,7 +34,7 @@ bZ = zeros(length(uBdry),1);
 
 resid = norm(aproxMAOp(uNewt)-F,inf);
 stepcount = 0;
-tic
+localtic = tic;
 while resid > h
     
     deltaU = [newtUpdate(NMatSDD,CMatSDD,weight,uNewt,F,epsilon);bZ];
@@ -70,7 +70,7 @@ while resid > h
     stepcount = stepcount + 1;
     
 end
-t = toc;
+t = toc(localtic);
 % Track the time and number of steps for NM to converge
 
 end
