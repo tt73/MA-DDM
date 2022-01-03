@@ -8,7 +8,7 @@ This is a repository for the implementation of an experimental parallel domain d
 
 ## Model 
 In this project we are solving equations of the form <br />
-![equation](<img src="https://bit.ly/3eJbnJs" align="center" border="0" alt="det(D^2 u(x))  = f(x)" width="160" height="22" />)
+![equation](https://bit.ly/3eJbnJs" align="center" border="0" alt="det(D^2u(x))=f(x)")
 <br />
 
 $ \det( D^2 u ) = f(x) $
