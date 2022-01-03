@@ -9,9 +9,8 @@ This is a repository for the implementation of an experimental parallel domain d
 ## Model 
 In this project we are solving equations of the form <br />
 <img src="https://latex.codecogs.com/svg.image?\bg_white&space;\det(D^2u(x))&space;=&space;f(x)" title="\bg_white \det(D^2u(x)) = f(x)" />
+<br />
 
-
-![equation](http://www.sciweavers.org/tex2img.php?eq=1%2Bsin%28mc%5E2%29&bc=White&fc=Black&im=jpg&fs=12&ff=arev&edit=)
 
 ## Method 
 
