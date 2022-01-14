@@ -1,4 +1,4 @@
-function [uNewt,t,stepcount] = quadSolver(NMatSDD,CMatSDD,F,uBdry,epsilon,weight,h,uInit)
+function [uNewt,t,stepcount] = quadSolver2(NMatSDD,CMatSDD,Dvvs,F,uBdry,epsilon,weight,h,uInit)
 % Solves Dirichlet problem for Monge-Ampere using the quadrature based
 % finite difference scheme via Newton's Method
 
@@ -19,10 +19,8 @@ vCount = length(weight);
 % number of points in the quadrature
 
 if (~exist('uInit','var'))
-    
     uInit = poissonInit(NMatSDD,CMatSDD,F,uBdry,1,(vCount+1)/2);
     % Does a single step of the poisson iteration to initialize the solver
-    
 end
 
 aproxMAOp = @(u)(pi^2*((SDDMat(NMatSDD,CMatSDD,u,vCount,epsilon).^(-1))*weight).^(-2)+min(min(SDDMat(NMatSDD,CMatSDD,u,vCount,-Inf),epsilon),[],2));
@@ -34,10 +32,10 @@ bZ = zeros(length(uBdry),1);
 
 resid = norm(aproxMAOp(uNewt)-F,inf);
 stepcount = 0;
-localtic = tic;
+tic
 while resid > h
     
-    deltaU = [newtUpdate(NMatSDD,CMatSDD,weight,uNewt,F,epsilon);bZ];
+    deltaU = [newtUpdate2(NMatSDD,CMatSDD,Dvvs,weight,uNewt,F,epsilon);bZ];
     % Only updated in the Interior
     
     alpha = 1;
@@ -70,7 +68,7 @@ while resid > h
     stepcount = stepcount + 1;
     
 end
-t = toc(localtic);
+t = toc;
 % Track the time and number of steps for NM to converge
 
 end

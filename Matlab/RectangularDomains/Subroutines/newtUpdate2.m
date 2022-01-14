@@ -1,4 +1,4 @@
-function [deltaU] = newtUpdate2(NMatSDD,CMatSDD,weight,uNewt,F,epsilon)
+function [deltaU] = newtUpdate2(NMatSDD,CMatSDD,Dvvs,weight,uNewt,F,epsilon)
 % Compute an update step of Newton's method for the quadrature scheme
 
 % INPUTS
@@ -42,7 +42,7 @@ for i = 1:vCount
     % memory intensive, but the loops do start to create a bottle neck as
     % the depth increases
     
-    Dvv = sparse(repmat(Interior,1,3),[NMatSDD(:,i*3-2) NMatSDD(:,i*3-1) NMatSDD(:,i*3) ],[CMatSDD(:,i*3-2) CMatSDD(:,i*3-1) CMatSDD(:,i*3)],intLength,pLength);
+    Dvv = Dvvs{i};
     % Dvv is the SDD difference matrix to the corresponding to current
     % search direction
     
@@ -58,7 +58,7 @@ for i = 1:vCount
     dTemp(UvvTemp <= epsilon,:) = 0;
     
     [I, J, V] = find(dTemp);
-	iJac = cat(1,iJac,I); 
+	 iJac = cat(1,iJac,I); 
     jJac = cat(1,jJac,J);
     vJac = cat(1,vJac,V);
     % Only updating at UvvTemp > epsilon corresponds to scaling by the
