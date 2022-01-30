@@ -8,12 +8,12 @@ clear
 % Parameters needed to generate grid
 x0 = -1; x1 = 1;
 y0 = -1; y1 = 1;
-N = 2^5+1;
+N = 2^7+1;
 h = (x1-x0)/(N+1);
 
 % requirement: overlap + depth - 1 <= (N-1)/2
-depth = 2;
-overlap = 6;
+depth = ceil(h^(-1/3));
+overlap = ceil((N-1)/20);
 if (overlap + depth - 1 > (N-1)/2)
    error("overlap + depth exceeds mesh size")
 end
@@ -39,8 +39,8 @@ end
 [Points,Interior,Boundary,NMatSDD,CMatSDD,theta] = buildMesh_Rect(x0,x1,y0,y1,h,depth);
 
 % solver settings
-order = 1;
-epsilon = h^2;
+order = 2;
+epsilon = (h*depth)^2;
 weight = quadWeights(theta,order);
 
 % Call domain decomposition
@@ -85,8 +85,9 @@ exact2 = DirBC(Points(Dom2.Interior,1),Points(Dom2.Interior,2));
 % solve without doing DDM
 F = contF(Points(Interior,1),Points(Interior,2));
 uBdry = DirBC(Points(Boundary,1),Points(Boundary,2));
+dirtime = tic;
 [uSoln, ~] = quadSolver2(NMatSDD,CMatSDD,Dvvs,F,uBdry,epsilon,weight,h);
-
+toc(dirtime)
 % smallest possible error with DDM
 min_err = norm(exact-uSoln(Interior),inf);
 
@@ -94,9 +95,7 @@ min_err = norm(exact-uSoln(Interior),inf);
 direct1 = uSoln(Dom1.Interior);
 direct2 = uSoln(Dom2.Interior);
 
-% init with exact solution
-% u1 = DirBC(Points(Dom1.l2g,1),Points(Dom1.l2g,2));
-% u2 = DirBC(Points(Dom2.l2g,1),Points(Dom2.l2g,2));
+
 
 %% DDM Iteration
 % This section can take a while to run.
@@ -106,7 +105,7 @@ err_direct = zeros(max_iter,1);
 err_exact = zeros(max_iter,1);
 newt_iters = zeros(max_iter,1);
 
-tic
+ddmtime = tic;
 for k = 1:max_iter
    
    % prepare uBdry
@@ -114,7 +113,7 @@ for k = 1:max_iter
    uBdry1(end-Dom1.Ns+1:end) = u2(Dom2.send);
    
    % solve
-   if (k>1)
+   if (k>0)
       [out1,~,newt1] = quadSolver2(Dom1.NMatLoc,CMatSDD(Dom1.Interior,:),Dvvs1,F1,uBdry1,epsilon,weight,h,u1(1:length(Dom1.Interior))); % call solver
       [out2,~,newt2] = quadSolver2(Dom2.NMatLoc,CMatSDD(Dom2.Interior,:),Dvvs2,F2,uBdry2,epsilon,weight,h,u2(1:length(Dom2.Interior))); % call solver
       newt_iters(k) = newt1+newt2;
@@ -152,7 +151,7 @@ for k = 1:max_iter
    
    ress(k) = res;
 end
-toc
+toc(ddmtime)
 
 %% info
 
