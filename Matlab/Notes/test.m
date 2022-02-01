@@ -1,4 +1,5 @@
-%% 1D Newton-Krylov-Schwarz 
+%% 1D NKS 
+% The newton is the outer loop and krylov is the inner loop. 
 
 a = 0;  b = 1;      % domain
 kap = 1;            % curvature
@@ -16,6 +17,7 @@ U_newton= zeros(N,1);
 
 N_iter = 100;
 
+%% newton iteration on the outside 
 for l = 1:N_iter
     
     % construct DDM jacobian system
@@ -23,6 +25,7 @@ for l = 1:N_iter
     
     [b1,b2] = makeRHS(U_newton,ga,gb,h,kap,delta); % should be parallel 
     
+    %% orthodir iteration on the inside
     % use orthodir to compute local solutions of s 
     [s1,s2,conv_iter] = run_orthodir(N_iter,1e-12,Nloc,delta,h,J1,J2,b1,b2);
     
