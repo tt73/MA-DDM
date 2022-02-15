@@ -33,6 +33,7 @@ Suppose you already had an MPI inmplementation installed. Then the MPI command y
    ```
    alias petsc="$PETSC_DIR/$PETSC_ARCH/bin/mpiexec"
    ```
+When I try to run a PETSc code with `mpiexec -n 2 ./program` I get a "bad termination" error. I have to use the MIPCH command that PETSc wants me to use to work around this issue. I am able to run the code properly with the command `petsc -n 2 ./program`.
 
 
 ## Compiling the code
@@ -50,6 +51,6 @@ You run PETSc code with `mpirun`, `mpiexec`, or `mpifort` depending on your MPI 
 
 The order of the arguments matter. Typical command or running PETSc code might look something like this:
 ```
-   mpiexec -n 4 ./program_name -flag_for_program input
+   petsc -n 4 ./program_name -flag_for_program input
 ```
-Notice mpiexec and the program you wish to run both take inputs. Inputs for the program come after the name of the program. A common mpiexec argument is the number of threads `-n`. This has to come before the program name. The program has to have the `./` to signify that the program you are trying to call lives in the current directory. The program might also have a flag `-n` which can be confusing.
+Notice that the `petsc` command and the program you wish to run both take inputs. Inputs for the program come after the name of the program. A common mpiexec argument is the number of threads `-n`. This has to come before the program name. The program has to have the `./` to signify that the program you are trying to call lives in the current directory. The program might also have a flag `-n` which can be confusing.
