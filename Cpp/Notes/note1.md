@@ -5,13 +5,15 @@ The goal is to be able to call to construct and solves systems all in petsc on t
 
 ## Install PETSc
 Getting PETSc is actually pretty easy, especially on Linux. Go to this [page](https://petsc.org/release/download/) and follow instructions. Here are the barebones instructions:
-1. Open up the terminal `Ctrl+Shift+t`
 
-2. Type `cd` to move to your home directory. (or wherever you want)
 
-3. Type `git clone -b release https://gitlab.com/petsc/petsc.git petsc` to pull their source code.
+1. Install MPICH on your computer. On Ubuntu, the command was `sudo apt install mpich`. It should be saved in `/usr/bin/mpich` by default. 
+   
+2. Optional: you can install the Intel Math Kernel Library. The BLAS/LAPACK library is a prereq for PETSc but it will MKL.  
+   
+3. Open up the terminal `Ctrl+Shift+t`. Type `cd` to move to your home directory. (or wherever you want). Then type `git clone -b release https://gitlab.com/petsc/petsc.git petsc` to pull their source code.
 
-4. Type `cd petsc` to move into the directory. And then type `./configure` to set up the code. This will work if you have MPI and BLAS/LAPACK istalled. You have the option to let PETSc install the dependencies for you. Do `./configure --download-mpich --download-fblaslapack` and it should work. This will take a while.
+4. Type `cd petsc` to move into the directory. And then type `./configure` to set up the code. This will work if you have MPI and BLAS/LAPACK istalled. You have the option to let PETSc install the dependencies for you. Do `./configure --with-mpi-dir=/usr --download-fblaslapack` and it should work. If you have MKL installed then omit the last argument, ie. `./configure --with-mpi-dir=/usr`. 
 
 5. When the configure is done, scroll up in the termial a bit and you should see a message telling you to run a `make` command. Copy & paste that command into the terminal to install PETSc.
 
@@ -27,14 +29,6 @@ You need to be able to link the PETSc library when compiling code. To avoid manu
    export PETSC_ARCH=linux-gnu-c-debug
    ```
 
-Suppose you already had an MPI inmplementation installed. Then the MPI command you use in the terminal might be different then the MPI command that PETSc intends for you to use. For example, suppose you installed MPICH during the config, then PETSc wants you to use `$PETSC_DIR/$PETSC_ARCH/bin/mpiexec`, which may or may not be the same as `mpiexec` that you have readily loaded. Follow the instruction below to make a new command `petsc` which is an alternate name for `mpiexec` to run PETSc programs.
-
-* In the terminal type `cd; gedit .bashrc` to open up an editor. Below where you have defined PETSC_DIR and PETSC_ARCH, add this line. Save and close.
-   ```
-   alias petsc="$PETSC_DIR/$PETSC_ARCH/bin/mpiexec"
-   ```
-When I try to run a PETSc code with `mpiexec -n 2 ./program` I get a "bad termination" error. I have to use the MIPCH command that PETSc wants me to use to work around this issue. I am able to run the code properly with the command `petsc -n 2 ./program`.
-
 
 ## Compiling the code
 PETSc devs want you to compile code with Makefiles. Create a file named `makefile` in the directory containing your source code. In your Makefile, add the lines:
@@ -47,10 +41,9 @@ These lines will import variables and compilation rules provided by the PETSc de
 If you have a code that has multiple dependencies e.g. a code that depends on several custom libraries, then you acutally need to write a custom rule to get the code compiling.
 
 ## Running the code
-You run PETSc code with `mpirun`, `mpiexec`, or `mpifort` depending on your MPI implementation and source code. For this project, we are using C code so `mpiexec` is what we use if we want to call it from the command line. I will use `petsc` because it is my aliased command.
-
+You run PETSc code with `mpirun`, `mpiexec`, or `mpifort` depending on your MPI implementation and source code. For this project, we are using C code so `mpiexec` is what we use if we want to call it from the command line. 
 The order of the arguments matter. Typical command or running PETSc code might look something like this:
 ```
-   petsc -n 4 ./program_name -flag_for_program input
+   mpiexec -n 4 ./program_name -flag_for_program input
 ```
-Notice that the `petsc` command and the program you wish to run both take inputs. Inputs for the program come after the name of the program. A common mpiexec argument is the number of threads `-n`. This has to come before the program name. The program has to have the `./` to signify that the program you are trying to call lives in the current directory. The program might also have a flag `-n` which can be confusing.
+Notice that the `mpiexec` command and the program you wish to run both take inputs. Inputs for the program come after the name of the program. A common mpiexec argument is the number of threads `-n`. This has to come before the program name. The program has to have the `./` to signify that the program you are trying to call lives in the current directory. The program might also have a flag `-n` which can be confusing.
