@@ -41,3 +41,11 @@ include ${PETSC_DIR}/lib/petsc/conf/variables
 #
 include ${PETSC_DIR}/lib/petsc/conf/rules
 include ${PETSC_DIR}/lib/petsc/conf/test
+
+
+# Type `make all` the build the two programs in this directory
+all: euler tri
+
+# Type `make clr` to delete the executable files.
+clr:
+	rm -f tri euler
