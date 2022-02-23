@@ -8,7 +8,7 @@ clear
 % Parameters needed to generate grid
 x0 = -1; x1 = 1;
 y0 = -1; y1 = 1;
-N = 2^7+1;
+N = 2^4+1;
 h = (x1-x0)/(N+1);
 
 % requirement: overlap + depth - 1 <= (N-1)/2
@@ -21,7 +21,7 @@ end
 
 
 % choose F
-choice = 1;
+choice = 3;
 switch(choice)
    case 1
       DirBC = @(x,y) (exp((x.^2+y.^2)/2));
@@ -44,25 +44,16 @@ epsilon = (h*depth)^2;
 weight = quadWeights(theta,order);
 
 % Call domain decomposition
-[Dom1, Dom2] = splitDomain(Points,Interior,Boundary,h,theta,NMatSDD,depth,overlap,0);
+[Dom1, Dom2] = splitDomain(Points,Interior,Boundary,h,theta,NMatSDD,CMatSDD,depth,overlap,0);
 
 % DDM settings
-max_iter = 100;
+max_iter = 200;
 conv_iter = max_iter;
 tol = 1e-6;
-relax = 1.0; % must be between 0 and 2, default = 1
+% tol = h^2;
+relax = 1; % must be between 0 and 2, default = 1
+alpha = 1;
 
-% Initialize ddm
-u1 = zeros(size(Dom1.l2g));
-u2 = zeros(size(Dom2.l2g));
-
-F1 = contF(Points(Dom1.Interior,1),Points(Dom1.Interior,2));
-uBdry1 = DirBC(Points(Dom1.Boundary,1),Points(Dom1.Boundary,2));
-uBdry1 = [uBdry1; zeros(size(Dom1.Interface))];
-
-F2 = contF(Points(Dom2.Interior,1),Points(Dom2.Interior,2));
-uBdry2 = DirBC(Points(Dom2.Boundary,1),Points(Dom2.Boundary,2));
-uBdry2 = [uBdry2; zeros(size(Dom2.Interface))];
 
 % Precompute Dvv matrices
 Dvvs = cell(length(theta),1);
@@ -70,12 +61,14 @@ Dvvs1 = cell(length(theta),1);
 Dvvs2 = cell(length(theta),1);
 for i = 1:length(theta)
    Dvvs{i} = sparse( repmat(Interior,1,3), [NMatSDD(:,i*3-2) NMatSDD(:,i*3-1) NMatSDD(:,i*3)], [CMatSDD(:,i*3-2) CMatSDD(:,i*3-1) CMatSDD(:,i*3)], length(Interior), length(Points));
-   Dvvs1{i} = sparse( repmat(Dom1.Interior,1,3), [Dom1.NMatLoc(:,i*3-2) Dom1.NMatLoc(:,i*3-1) Dom1.NMatLoc(:,i*3)], [CMatSDD(Dom1.Interior,i*3-2) CMatSDD(Dom1.Interior,i*3-1) CMatSDD(Dom1.Interior,i*3)], Dom1.Ni, Dom1.Ni+Dom1.Nb+Dom1.Ns);
-   Dvvs2{i} = sparse( repmat(Dom1.Interior,1,3), [Dom2.NMatLoc(:,i*3-2) Dom2.NMatLoc(:,i*3-1) Dom2.NMatLoc(:,i*3)], [CMatSDD(Dom2.Interior,i*3-2) CMatSDD(Dom2.Interior,i*3-1) CMatSDD(Dom2.Interior,i*3)], Dom2.Ni, Dom2.Ni+Dom2.Nb+Dom2.Ns);
+   Dvvs1{i} = sparse( repmat(Dom1.Interior,1,3), [Dom1.NMatLoc(:,i*3-2) Dom1.NMatLoc(:,i*3-1) Dom1.NMatLoc(:,i*3)], [Dom1.CMatLoc(:,i*3-2) Dom1.CMatLoc(:,i*3-1) Dom1.CMatLoc(:,i*3)], Dom1.Ni, Dom1.Ni+Dom1.Nb+Dom1.Ns);
+   Dvvs2{i} = sparse( repmat(Dom1.Interior,1,3), [Dom2.NMatLoc(:,i*3-2) Dom2.NMatLoc(:,i*3-1) Dom2.NMatLoc(:,i*3)], [Dom2.CMatLoc(:,i*3-2) Dom2.CMatLoc(:,i*3-1) Dom2.CMatLoc(:,i*3)], Dom2.Ni, Dom2.Ni+Dom2.Nb+Dom2.Ns);
 end
 
 
-%% Error in the direct solution
+% %% Error in the direct solution
+
+
 
 % exact solutions
 exact = DirBC(Points(Interior,1),Points(Interior,2));
@@ -85,17 +78,46 @@ exact2 = DirBC(Points(Dom2.Interior,1),Points(Dom2.Interior,2));
 % solve without doing DDM
 F = contF(Points(Interior,1),Points(Interior,2));
 uBdry = DirBC(Points(Boundary,1),Points(Boundary,2));
+% uInit = poissonInit(NMatSDD,CMatSDD,F,uBdry,1,(length(theta)+1)/2);
+% uInitB = [uInit;uBdry];
+% 
+% dirtime = tic;
+% [uSoln, ~,dirCount] = quadSolverJFNK(NMatSDD,CMatSDD,Dvvs,F,uBdry,epsilon,weight,h,Inf);
+% dirCount
+% toc(dirtime)
+% % smallest possible error with DDM
+% min_err = norm(exact-uSoln(Interior),inf)
+
 dirtime = tic;
-[uSoln, ~] = quadSolver2(NMatSDD,CMatSDD,Dvvs,F,uBdry,epsilon,weight,h);
+[uSoln, ~,dirCount] = quadSolver2(NMatSDD,CMatSDD,Dvvs,F,uBdry,epsilon,weight,h);
+dirCount
 toc(dirtime)
 % smallest possible error with DDM
-min_err = norm(exact-uSoln(Interior),inf);
+min_err = norm(exact-uSoln(Interior),inf)
+
+
 
 % direct solution
 direct1 = uSoln(Dom1.Interior);
 direct2 = uSoln(Dom2.Interior);
 
 
+% Initialize ddm
+u1 = zeros(size(Dom1.l2g));
+u2 = zeros(size(Dom2.l2g));
+% u1 = uInitB(Dom1.l2g);
+% u2 = uInitB(Dom2.l2g);
+
+
+F1 = contF(Points(Dom1.Interior,1),Points(Dom1.Interior,2));
+uBdry1 = DirBC(Points(Dom1.Boundary,1),Points(Dom1.Boundary,2));
+uBdry1 = [uBdry1; zeros(size(Dom1.Interface))];
+% uBdry1 = [uBdry1; uInitB(Dom1.Interface)];
+
+F2 = contF(Points(Dom2.Interior,1),Points(Dom2.Interior,2));
+uBdry2 = DirBC(Points(Dom2.Boundary,1),Points(Dom2.Boundary,2));
+uBdry2 = [uBdry2; zeros(size(Dom2.Interface))];
+% uBdry2 = [uBdry2; uInitB(Dom2.Interface)];
 
 %% DDM Iteration
 % This section can take a while to run.
@@ -106,6 +128,9 @@ err_exact = zeros(max_iter,1);
 newt_iters = zeros(max_iter,1);
 
 ddmtime = tic;
+output = cell(1,4);
+
+% parpool(2)
 for k = 1:max_iter
    
    % prepare uBdry
@@ -113,19 +138,20 @@ for k = 1:max_iter
    uBdry1(end-Dom1.Ns+1:end) = u2(Dom2.send);
    
    % solve
-   if (k>0)
-      [out1,~,newt1] = quadSolver2(Dom1.NMatLoc,CMatSDD(Dom1.Interior,:),Dvvs1,F1,uBdry1,epsilon,weight,h,u1(1:length(Dom1.Interior))); % call solver
-      [out2,~,newt2] = quadSolver2(Dom2.NMatLoc,CMatSDD(Dom2.Interior,:),Dvvs2,F2,uBdry2,epsilon,weight,h,u2(1:length(Dom2.Interior))); % call solver
+%    if (k>0)
+      [out1,~,newt1] = quadSolverJFNK(Dom1.NMatLoc,Dom1.CMatLoc,Dvvs1,F1,uBdry1,epsilon,weight,h,min(k,5),u1(1:length(Dom1.Interior))); % call solver
+      [out2,~,newt2] = quadSolverJFNK(Dom2.NMatLoc,Dom2.CMatLoc,Dvvs2,F2,uBdry2,epsilon,weight,h,min(k,5),u2(1:length(Dom2.Interior))); % call solver
       newt_iters(k) = newt1+newt2;
-   else
-      [out1,~,newt1] = quadSolver2(Dom1.NMatLoc,CMatSDD(Dom1.Interior,:),Dvvs1,F1,uBdry1,epsilon,weight,h);
-      [out2,~,newt2] = quadSolver2(Dom2.NMatLoc,CMatSDD(Dom2.Interior,:),Dvvs2,F2,uBdry2,epsilon,weight,h);
-      newt_iters(k) = newt1+newt2;
-   end
-   
+%    else
+%       [out1,~,newt1] = quadSolver3(Dom1.NMatLoc,Dom1.CMatLoc,Dvvs1,F1,uBdry1,epsilon,weight,h);
+%       [out2,~,newt2] = quadSolver3(Dom2.NMatLoc,Dom2.CMatLoc,Dvvs2,F2,uBdry2,epsilon,weight,h);
+%       newt_iters(k) = newt1+newt2;
+%    end
+
+
    % residue
-   res = norm(uBdry2(end-Dom2.Ns+1:end) - out1(Dom1.send)) + ...
-      norm(uBdry1(end-Dom1.Ns+1:end) - out2(Dom2.send));
+   res = norm(uBdry2(end-Dom2.Ns+1:end) - out1(Dom1.send),Inf) + ...
+      norm(uBdry1(end-Dom1.Ns+1:end) - out2(Dom2.send),Inf);
    if(k == 1)
       res0 = res;
    end
@@ -139,9 +165,15 @@ for k = 1:max_iter
    u1 = relax*out1 + (1-relax)*u1;
    u2 = relax*out2 + (1-relax)*u2;
    
+   olTemp1 = (1-alpha)*u2(Dom2.locOL)+alpha*u1(Dom1.locOL);
+   olTemp2 = (1-alpha)*u1(Dom1.locOL)+alpha*u2(Dom2.locOL);
+   u1(Dom1.locOL) = olTemp1;
+   u2(Dom2.locOL) = olTemp2;    
+   
    % compute the global DDM solution
    u_interface = (u1(Dom1.ai) + u2(Dom2.ai))/2;
    u_global = [u1(Dom1.oi); u_interface; u2(Dom2.oi)];
+
    
    % compute error from exact solution
    err_exact(k) = norm(u_global-exact,inf);
@@ -199,7 +231,7 @@ xlabel('Iterations')
 % Then it labels which nodes are interfaces.
 % Finally, it labels which of its own nodes should be sent over.
 % Note that delta has to be > 0.
-function[Dom1, Dom2] = splitDomain(Points,Interior,Boundary,h,theta,NMat,depth,delta,check)
+function[Dom1, Dom2] = splitDomain(Points,Interior,Boundary,h,theta,NMat,CMat,depth,delta,check)
 
 if (delta == 0)
    error("Input delta must be a positive integer")
@@ -330,9 +362,18 @@ Dom1.oi = oi1;
 Dom1.ai = ai1;
 Dom1.l2g = l2g1;
 Dom1.NMatLoc = NMatLoc1;
+Dom1.CMatLoc = CMat(Dom1.Interior,:);
 Dom2.send = send2;
 Dom2.oi = oi2;
 Dom2.ai = ai2;
 Dom2.l2g = l2g2;
 Dom2.NMatLoc = NMatLoc2;
+Dom2.CMatLoc = CMat(Dom2.Interior,:);
+
+%
+locOL1 = find(ismember(Dom1.l2g,intersect(Dom1.Interior,Dom2.Interior)));
+locOL2 = find(ismember(Dom2.l2g,intersect(Dom1.Interior,Dom2.Interior)));
+
+Dom1.locOL = locOL1;
+Dom2.locOL = locOL2;
 end

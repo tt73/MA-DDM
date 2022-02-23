@@ -1,4 +1,4 @@
-function [deltaU] = newtUpdate2(NMatSDD,CMatSDD,Dvvs,weight,uNewt,F,epsilon)
+function [deltaU] = newtUpdate(NMatSDD,CMatSDD,weight,uNewt,F,epsilon)
 % Compute an update step of Newton's method for the quadrature scheme
 
 % INPUTS
@@ -23,12 +23,7 @@ spmat = spdiags((SDDMat(NMatSDD,CMatSDD,uNewt,vCount,epsilon).^-1*weight),0,intL
 % scaled by a specific value, we write as a diagon matrix for faster
 % multiplication
 
-% jacobian = sparse(intLength,intLength);
-% jacobian = sparse(i,j,vals)... make i,j,vals 
-iJac = [];
-jJac = [];
-vJac = [];
-
+jacobian = sparse(intLength,intLength);
 reg = sparse(intLength,intLength);
 % reg will be the jacobian of the regularization term
 
@@ -42,11 +37,11 @@ for i = 1:vCount
     % memory intensive, but the loops do start to create a bottle neck as
     % the depth increases
     
-    Dvv = Dvvs{i};
+    Dvv = sparse(repmat(Interior,1,3),[NMatSDD(:,i*3-2) NMatSDD(:,i*3-1) NMatSDD(:,i*3) ],[CMatSDD(:,i*3-2) CMatSDD(:,i*3-1) CMatSDD(:,i*3)],intLength,pLength);
     % Dvv is the SDD difference matrix to the corresponding to current
     % search direction
     
-    UvvTemp= full(Dvv*uNewt); Uvv = max(UvvTemp,epsilon);
+    UvvTemp= (Dvv*uNewt); Uvv = max(UvvTemp,epsilon);
     % Uvv is the set of regularized SDDs for the given direction
     
     D = weight(i)*spdiags(Uvv.^-2,0,intLength,intLength);
@@ -54,13 +49,7 @@ for i = 1:vCount
     % D,dTemp are just terms that follow out of the jacobian formula
     % Only care about jacobian at the interior points
     
-    % add rows dTemp which satisfy this condition
-    dTemp(UvvTemp <= epsilon,:) = 0;
-    
-    [I, J, V] = find(dTemp);
-	 iJac = cat(1,iJac,I); 
-    jJac = cat(1,jJac,J);
-    vJac = cat(1,vJac,V);
+    jacobian(UvvTemp > epsilon,:) = jacobian(UvvTemp > epsilon,:)+dTemp(UvvTemp > epsilon,:);
     % Only updating at UvvTemp > epsilon corresponds to scaling by the
     % heaviside function we get in the derivative of max(epsilon,uvv)
     
@@ -77,7 +66,6 @@ end
 % Can potentially make loops faster by reducing terms that need to be
 % updated, but not priority at the moment.
 
-jacobian = sparse(iJac,jJac,vJac,intLength,intLength);
 jacobian = 2*pi^2*(spmat\jacobian) + reg;
 % jacobian = correction*jacobian+reg;
 % Combine all terms of jacobian

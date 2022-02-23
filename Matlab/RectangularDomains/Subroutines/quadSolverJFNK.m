@@ -1,4 +1,4 @@
-function [uNewt,t,stepcount] = quadSolver2(NMatSDD,CMatSDD,Dvvs,F,uBdry,epsilon,weight,h,M,uInit)
+function [uNewt,t,stepcount] = quadSolverNK(NMatSDD,CMatSDD,Dvvs,F,uBdry,epsilon,weight,h,M,uInit)
 % Solves Dirichlet problem for Monge-Ampere using the quadrature based
 % finite difference scheme via Newton's Method
 
@@ -39,7 +39,7 @@ stepcount = 0;
 tic
 while resid > h
     
-    deltaU = [newtUpdate2(NMatSDD,CMatSDD,Dvvs,weight,uNewt,F,epsilon);bZ];
+    deltaU = [newtUpdateJFNK(NMatSDD,CMatSDD,Dvvs,weight,uNewt,F,epsilon,epsilon*1e-9);bZ];
     % Only updated in the Interior
     
     alpha = 1;
@@ -70,7 +70,6 @@ while resid > h
     resid = residTemp;
     uNewt = uNewtTemp;
     stepcount = stepcount + 1;
-
     if stepcount > M
         break
     end

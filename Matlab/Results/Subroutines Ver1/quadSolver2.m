@@ -1,4 +1,4 @@
-function [uNewt,t,stepcount] = quadSolver2(NMatSDD,CMatSDD,Dvvs,F,uBdry,epsilon,weight,h,M,uInit)
+function [uNewt,t,stepcount] = quadSolver2(NMatSDD,CMatSDD,Dvvs,F,uBdry,epsilon,weight,h,uInit)
 % Solves Dirichlet problem for Monge-Ampere using the quadrature based
 % finite difference scheme via Newton's Method
 
@@ -21,10 +21,6 @@ vCount = length(weight);
 if (~exist('uInit','var'))
     uInit = poissonInit(NMatSDD,CMatSDD,F,uBdry,1,(vCount+1)/2);
     % Does a single step of the poisson iteration to initialize the solver
-end
-
-if (~exist('M','var'))
-    M = inf;
 end
 
 aproxMAOp = @(u)(pi^2*((SDDMat(NMatSDD,CMatSDD,u,vCount,epsilon).^(-1))*weight).^(-2)+min(min(SDDMat(NMatSDD,CMatSDD,u,vCount,-Inf),epsilon),[],2));
@@ -70,10 +66,6 @@ while resid > h
     resid = residTemp;
     uNewt = uNewtTemp;
     stepcount = stepcount + 1;
-
-    if stepcount > M
-        break
-    end
     
 end
 t = toc;
