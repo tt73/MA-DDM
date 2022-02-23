@@ -13,12 +13,12 @@ addpath('Subroutines Ver1')
 % Fix parameters
 N = 2^6+1;
 overlap = ceil((N-1)/20);
-method = 2;
+method = 3;
 Outputs = cell(1,3);
 tol = 1e-6;
 
 examples = {'Radial Smooth','Degenate','Blow-Up' };
-for choice = 1:3
+for choice = 1
     [Errors,Iterations,Times,Solutions,Domains,Parameters] = SchwarzSolver(N,overlap,choice,method,tol);   
     Outputs{choice} = {Errors,Iterations,Times,Solutions,Domains,Parameters};
 
@@ -35,21 +35,4 @@ for choice = 1:3
     legend('log10(residue)','log10(err exact)','min err',"Location","best","FontSize",12)
     xlabel('Iterations','FontSize',18)
     
-    
-    Dom1 = Domains{1};
-    Dom2 = Domains{2};
-    Points = Domains{3};
-    Interior = Domains{4};
-    uDDM = Solutions{1};
-    uDIR = Solutions{2};
-    uTrue = Solutions{3};
-    F = Solutions{4};
-    uBdry = Solutions{5};
-
-    figure, hold on
-    title(['DDM Solution: ' examples{choice}],'FontSize',20)
-    plot3(Points(Dom1.Interior,1),Points(Dom1.Interior,2),uDDM(Dom1.Interior),'b.')
-    plot3(Points(Dom2.Interior,1),Points(Dom2.Interior,2),uDDM(Dom2.Interior),'or')
-    legend({'Subdomain 1','Subdomain 2'},'FontSize',12)
-    view([.9 0.2 .2])
 end

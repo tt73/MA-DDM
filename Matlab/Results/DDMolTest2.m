@@ -10,7 +10,7 @@ addpath('Subroutines Ver1')
 % 6:Parameters = {1:h, 2:depth, 3:tol};
 
 % Fix parameters
-method = 2;
+method = 3;
 tol = 1e-6;
 N1 = 2^5+1;
 OL1 = [ceil(1+(N1-1)/2*(0:.08:.72))' ceil(1+(N1-1)/2*(0:.08:.72))' ceil(1+(N1-1)/2*(0:.08:.72))';];
@@ -40,21 +40,31 @@ for i = 1:3
     end
 end
 
-Examples = {'Smooth Radial','Degnerate','Blow-Up'};
+% Examples = {'Smooth Radial','Degnerate','Blow-Up'};
+% figure
+% hold on
+% plot(OLP1(:,1),DDM_Iters1(:,1),'-o','LineWidth',1)
+% plot(OLP1(:,1),DDM_Iters1(:,2),'-*','LineWidth',1)
+% plot(OLP1(:,1),DDM_Iters1(:,3),'-s','LineWidth',1)
+% title(sprintf('DDM Solver: Resolution vs Error \n Overlap = 10%%, tol = 1e-6'),'FontSize',20)
+% legend(Examples,"Location","best","FontSize",11)
+% xlabel('log10(h)','FontSize',14)
+% ylabel('log10(||u-u_h||_{\infty})','FontSize',14)
+
 figure
 hold on
-plot(OLP1(:,1),DDM_Iters1(:,1),'-o','LineWidth',1)
-plot(OLP1(:,1),DDM_Iters1(:,2),'-*','LineWidth',1)
-plot(OLP1(:,1),DDM_Iters1(:,3),'-s','LineWidth',1)
-title(sprintf('DDM Solver: Resolution vs Error \n Overlap = 10%%, tol = 1e-6'),'FontSize',20)
+plot(OLP1(:,1),DDM_Time1(:,1),'-o','LineWidth',1)
+plot(OLP1(:,1),DDM_Time1(:,2),'-*','LineWidth',1)
+plot(OLP1(:,1),DDM_Time1(:,3),'-s','LineWidth',1)
+title(sprintf('DDM Solver: Overlap vs Newton Iterations \n N = %d, tol = 1e-6',N2),'FontSize',20)
 legend(Examples,"Location","best","FontSize",11)
-xlabel('log10(h)','FontSize',14)
-ylabel('log10(||u-u_h||_{\infty})','FontSize',14)
+xlabel('Percent Overlap','FontSize',14)
+ylabel('Total Newton Iterations','FontSize',14)
 %%
 % Fix parameters
-method = 2;
+method = 3;
 tol = 1e-6;
-N2 = 2^6+1;
+N2 = 2^7+1;
 OL2 = [ceil(1+(N2-1)/2*(0:.08:.72))' ceil(1+(N2-1)/2*(0:.08:.72))' ceil(1+(N2-1)/2*(0:.08:.72))';];
 Outputs2 = cell(10,3);
 for choice = 1:3
@@ -108,7 +118,7 @@ hold on
 plot(OLP2(:,1),DDM_Time2(:,1),'-o','LineWidth',1)
 plot(OLP2(:,1),DDM_Time2(:,2),'-*','LineWidth',1)
 plot(OLP2(:,1),DDM_Time2(:,3),'-s','LineWidth',1)
-title('DDM TIME','FontSize',20)
+title(sprintf('DDM Solver: Overlap vs Newton Iterations \n N = %d, tol = 1e-6',N2),'FontSize',20)
 legend(Examples,"Location","best","FontSize",11)
 xlabel('Percent Overlap','FontSize',14)
 ylabel('Total Newton Iterations','FontSize',14)

@@ -8,7 +8,7 @@ clear
 % Parameters needed to generate grid
 x0 = -1; x1 = 1;
 y0 = -1; y1 = 1;
-N = 2^7+1;
+N = 2^4+1;
 h = (x1-x0)/(N+1);
 
 % requirement: overlap + depth - 1 <= (N-1)/2
@@ -21,7 +21,7 @@ end
 
 
 % choose F
-choice = 1;
+choice = 3;
 switch(choice)
    case 1
       DirBC = @(x,y) (exp((x.^2+y.^2)/2));
@@ -49,10 +49,10 @@ weight = quadWeights(theta,order);
 % DDM settings
 max_iter = 200;
 conv_iter = max_iter;
-% tol = 1e-6;
-tol = h^2;
+tol = 1e-6;
+% tol = h^2;
 relax = 1; % must be between 0 and 2, default = 1
-alpha = .9
+alpha = 1;
 
 
 % Precompute Dvv matrices
@@ -66,7 +66,7 @@ for i = 1:length(theta)
 end
 
 
-%% Error in the direct solution
+% %% Error in the direct solution
 
 
 
@@ -80,13 +80,22 @@ F = contF(Points(Interior,1),Points(Interior,2));
 uBdry = DirBC(Points(Boundary,1),Points(Boundary,2));
 % uInit = poissonInit(NMatSDD,CMatSDD,F,uBdry,1,(length(theta)+1)/2);
 % uInitB = [uInit;uBdry];
+% 
+% dirtime = tic;
+% [uSoln, ~,dirCount] = quadSolverJFNK(NMatSDD,CMatSDD,Dvvs,F,uBdry,epsilon,weight,h,Inf);
+% dirCount
+% toc(dirtime)
+% % smallest possible error with DDM
+% min_err = norm(exact-uSoln(Interior),inf)
 
 dirtime = tic;
 [uSoln, ~,dirCount] = quadSolver2(NMatSDD,CMatSDD,Dvvs,F,uBdry,epsilon,weight,h);
 dirCount
 toc(dirtime)
 % smallest possible error with DDM
-min_err = norm(exact-uSoln(Interior),inf);
+min_err = norm(exact-uSoln(Interior),inf)
+
+
 
 % direct solution
 direct1 = uSoln(Dom1.Interior);
@@ -119,7 +128,7 @@ err_exact = zeros(max_iter,1);
 newt_iters = zeros(max_iter,1);
 
 ddmtime = tic;
-output = cell(1,2);
+output = cell(1,4);
 
 % parpool(2)
 for k = 1:max_iter
@@ -130,8 +139,8 @@ for k = 1:max_iter
    
    % solve
 %    if (k>0)
-      [out1,~,newt1] = quadSolver3(Dom1.NMatLoc,Dom1.CMatLoc,Dvvs1,F1,uBdry1,epsilon,weight,h,u1(1:length(Dom1.Interior))); % call solver
-      [out2,~,newt2] = quadSolver3(Dom2.NMatLoc,Dom2.CMatLoc,Dvvs2,F2,uBdry2,epsilon,weight,h,u2(1:length(Dom2.Interior))); % call solver
+      [out1,~,newt1] = quadSolverJFNK(Dom1.NMatLoc,Dom1.CMatLoc,Dvvs1,F1,uBdry1,epsilon,weight,h,min(k,5),u1(1:length(Dom1.Interior))); % call solver
+      [out2,~,newt2] = quadSolverJFNK(Dom2.NMatLoc,Dom2.CMatLoc,Dvvs2,F2,uBdry2,epsilon,weight,h,min(k,5),u2(1:length(Dom2.Interior))); % call solver
       newt_iters(k) = newt1+newt2;
 %    else
 %       [out1,~,newt1] = quadSolver3(Dom1.NMatLoc,Dom1.CMatLoc,Dvvs1,F1,uBdry1,epsilon,weight,h);
@@ -141,8 +150,8 @@ for k = 1:max_iter
 
 
    % residue
-   res = norm(uBdry2(end-Dom2.Ns+1:end) - out1(Dom1.send)) + ...
-      norm(uBdry1(end-Dom1.Ns+1:end) - out2(Dom2.send));
+   res = norm(uBdry2(end-Dom2.Ns+1:end) - out1(Dom1.send),Inf) + ...
+      norm(uBdry1(end-Dom1.Ns+1:end) - out2(Dom2.send),Inf);
    if(k == 1)
       res0 = res;
    end
@@ -159,7 +168,7 @@ for k = 1:max_iter
    olTemp1 = (1-alpha)*u2(Dom2.locOL)+alpha*u1(Dom1.locOL);
    olTemp2 = (1-alpha)*u1(Dom1.locOL)+alpha*u2(Dom2.locOL);
    u1(Dom1.locOL) = olTemp1;
-   u2(Dom2.locOL) = olTemp2;
+   u2(Dom2.locOL) = olTemp2;    
    
    % compute the global DDM solution
    u_interface = (u1(Dom1.ai) + u2(Dom2.ai))/2;
