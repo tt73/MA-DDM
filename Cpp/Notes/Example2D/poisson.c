@@ -14,6 +14,7 @@ int main(int argc,char **args) {
    Vec           b,u,uexact;
    KSP           ksp;
    PetscReal     errnorm;
+   PetscViewer   viewer; 
    DMDALocalInfo info;
 
    ierr = PetscInitialize(&argc,&args,NULL,help); if (ierr) return ierr;
@@ -54,14 +55,21 @@ int main(int argc,char **args) {
                info.mx,info.my,errnorm); CHKERRQ(ierr);
 
 
-   PetscViewerPushFormat(PETSC_VIEWER_STDOUT_WORLD,PETSC_VIEWER_BINARY_MATLAB);
-   PetscViewerPopFormat(PETSC_VIEWER_STDOUT_WORLD);
-   // MatView(A,PETSC_VIEWER_STDOUT_WORLD);
-   // VecView(b,PETSC_VIEWER_STDOUT_WORLD);
+   // Print sparsity pattern 
+   // MatView(A,PETSC_VIEWER_DRAW_WORLD); // this doesn't work, need X windows 
+
+   // Set matrix and vector print format 
+   PetscViewerCreate(PETSC_COMM_WORLD, &viewer);
+   PetscViewerPushFormat(viewer,PETSC_VIEWER_ASCII_MATLAB);
+   PetscViewerASCIIOpen(PETSC_COMM_WORLD,"mat.output",&viewer);
+   MatView(A,viewer); 
+   PetscViewerASCIIOpen(PETSC_COMM_WORLD,"vec.output",&viewer);
+   VecView(b,viewer);
 
    // Done. Clean up
    VecDestroy(&u);  VecDestroy(&uexact);  VecDestroy(&b);
    MatDestroy(&A);  KSPDestroy(&ksp);  DMDestroy(&da);
+   PetscViewerDestroy(&viewer);
    return PetscFinalize();
 }
 //ENDMAIN
