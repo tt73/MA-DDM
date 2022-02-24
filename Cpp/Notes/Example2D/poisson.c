@@ -1,3 +1,16 @@
+/*
+   This is a sample code from Bueler's Petsc book.
+   It solves the 2D Poisson problem on a square with a Krylov method.
+
+   Goals:
+   * Understand how the DMDACreate2d function works and all of its features
+   * Learn how to interface PETSc with Matlab
+
+   Compile this code by typing `make clr` and then `make poisson`.
+   Run this code by typing: `./poisson`.
+   Run this code with Np threads with an M by N grid by typing
+      `mpiexec -n Np ./poisson -da_grid_x M -da_grid_y N`
+*/
 static char help[] = "A structured-grid Poisson solver using DMDA+KSP.\n\n";
 
 #include <petsc.h>
@@ -8,21 +21,26 @@ extern PetscErrorCode formRHS(DM, Vec);
 
 //STARTMAIN
 int main(int argc,char **args) {
-   PetscErrorCode ierr;
-   DM            da;
-   Mat           A;
-   Vec           b,u,uexact;
-   KSP           ksp;
-   PetscReal     errnorm;
-   PetscViewer   viewer; 
-   DMDALocalInfo info;
+   Mat           A;           // Problem: Au=b
+   Vec           b,u,uexact;  //
+   DM            da;          // DataManager  - distributed array
+   KSP           ksp;         // Krylov object fascilitates solving Au=b
+   PetscViewer   viewer;      // Viewer object fascilitates printing out A, u, b
+   PetscReal     errnorm;     // errnorm = |u-uexact|
+   DMDALocalInfo info;        // Info contains parallel info which is different for each thread
+   PetscErrorCode ierr;       // standard error handling variable
 
    ierr = PetscInitialize(&argc,&args,NULL,help); if (ierr) return ierr;
 
    // change default 9x9 size using -da_grid_x M -da_grid_y N
    ierr = DMDACreate2d(PETSC_COMM_WORLD,
-               DM_BOUNDARY_NONE, DM_BOUNDARY_NONE, DMDA_STENCIL_STAR,
-               9,9,PETSC_DECIDE,PETSC_DECIDE,1,1,NULL,NULL,&da); CHKERRQ(ierr);
+                       DM_BOUNDARY_NONE, DM_BOUNDARY_NONE,
+                       DMDA_STENCIL_STAR,
+                       9,9,
+                       PETSC_DECIDE,PETSC_DECIDE,
+                       1,1,NULL,NULL,
+                       &da);
+   CHKERRQ(ierr);
 
    // create linear system matrix A
    ierr = DMSetFromOptions(da); CHKERRQ(ierr);
@@ -55,21 +73,31 @@ int main(int argc,char **args) {
                info.mx,info.my,errnorm); CHKERRQ(ierr);
 
 
-   // Print sparsity pattern 
-   // MatView(A,PETSC_VIEWER_DRAW_WORLD); // this doesn't work, need X windows 
+   // Print sparsity pattern
+   // MatView(A,PETSC_VIEWER_DRAW_WORLD); // this doesn't work, need X windows
 
-   // Set matrix and vector print format 
-   PetscViewerCreate(PETSC_COMM_WORLD, &viewer);
-   PetscViewerPushFormat(viewer,PETSC_VIEWER_ASCII_MATLAB);
-   PetscViewerASCIIOpen(PETSC_COMM_WORLD,"mat.output",&viewer);
-   MatView(A,viewer); 
-   PetscViewerASCIIOpen(PETSC_COMM_WORLD,"vec.output",&viewer);
+   // Set matrix and vector print format
+   PetscViewerCreate(PETSC_COMM_WORLD, &viewer); // initialize the viewer object
+
+   PetscViewerASCIIOpen(PETSC_COMM_WORLD,"load_mat.m",&viewer);  // set viewer to print out to "load_mat.m"
+   PetscViewerPushFormat(viewer,PETSC_VIEWER_ASCII_MATLAB); // set viewer to print in matlab syntax
+   PetscObjectSetName((PetscObject)A,"A");                  // set the variable name of A to A in matlab
+   MatView(A,viewer);                                       // print out the matrix
+
+   PetscViewerASCIIOpen(PETSC_COMM_WORLD,"load_b.m",&viewer);  // these commands are the same as the ones above
+   PetscViewerPushFormat(viewer,PETSC_VIEWER_ASCII_MATLAB); // except its for b
+   PetscObjectSetName((PetscObject)b,"b");
    VecView(b,viewer);
+
+   PetscViewerASCIIOpen(PETSC_COMM_WORLD,"load_u.m",&viewer);  // these commands are the same as the ones above
+   PetscViewerPushFormat(viewer,PETSC_VIEWER_ASCII_MATLAB); // except its for u
+   PetscObjectSetName((PetscObject)u,"u");
+   VecView(u,viewer);
 
    // Done. Clean up
    VecDestroy(&u);  VecDestroy(&uexact);  VecDestroy(&b);
-   MatDestroy(&A);  KSPDestroy(&ksp);  DMDestroy(&da);
-   PetscViewerDestroy(&viewer);
+   MatDestroy(&A);  KSPDestroy(&ksp);     DMDestroy(&da);
+   PetscViewerDestroy(&viewer); // the viewer need to be destroyed as well
    return PetscFinalize();
 }
 //ENDMAIN
@@ -121,6 +149,7 @@ PetscErrorCode formMatrix(DM da, Mat A) {
 }
 //ENDMATRIX
 
+
 //STARTEXACT
 PetscErrorCode formExact(DM da, Vec uexact) {
    PetscErrorCode ierr;
@@ -141,6 +170,7 @@ PetscErrorCode formExact(DM da, Vec uexact) {
    ierr = DMDAVecRestoreArray(da, uexact, &auexact);CHKERRQ(ierr);
    return 0;
 }
+
 
 PetscErrorCode formRHS(DM da, Vec b) {
    PetscErrorCode ierr;

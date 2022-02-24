@@ -49,3 +49,4 @@ all: poisson
 # Type `make clr` to delete the executable files.
 clr:
 	rm -f poisson
+	rm -f load_b.m load_u.m load_mat.m
