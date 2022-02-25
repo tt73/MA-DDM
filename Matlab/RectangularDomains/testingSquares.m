@@ -1,7 +1,3 @@
-%%
-% This is a script that runs schwarz alternating method with 2
-% overlapping subdomains. The domain is split along the x-axis.
-
 addpath('Subroutines')
 clear
 
@@ -13,7 +9,8 @@ h = (x1-x0)/(N+1);
 
 % requirement: overlap + depth - 1 <= (N-1)/2
 depth = ceil(h^(-1/3));
-overlap = ceil((N-1)/5);
+overlap = ceil(sqrt(depth)*(N-1)/20);
+% overlap = 85;
 % overlap = 3;
 if (overlap + depth - 1 > (N-1)/2)
    error("overlap + depth exceeds mesh size")
@@ -43,11 +40,9 @@ end
 order = 2;
 epsilon = (h*depth)^2;
 weight = quadWeights(theta,order);
-delta = h*overlap;
-
-[subInd,subOL] = fourSquares(x0,x1,y0,y1,delta,Points,Interior);
 
 
+% discrete operator on the whole space
 vCount = length(theta);
 aproxMAOp = @(u)(pi^2*((SDDMat(NMatSDD,CMatSDD,u,vCount,epsilon).^(-1))*weight).^(-2)+min(min(SDDMat(NMatSDD,CMatSDD,u,vCount,-Inf),epsilon),[],2));
 
@@ -58,6 +53,7 @@ conv_iter = max_iter;
 % tol = 1e-6;
 tol = h;
 relax = 1; % must be between 0 and 2, default = 1
+delta = h*overlap;
 
 % Precompute Dvv matrices
 Dvvs = cell(length(theta),1);
@@ -71,21 +67,31 @@ exact = DirBC(Points(Interior,1),Points(Interior,2));
 % solve without doing DDM
 F = contF(Points(Interior,1),Points(Interior,2));
 uBdry = DirBC(Points(Boundary,1),Points(Boundary,2));
-
+%%
+II = InterpInit(x0,x1,y0,y1,DirBC,contF,order);
+uInit = II(Points(Interior,1),Points(Interior,2));
+% uInit = griddata(pOld(:,1),pOld(:,2),uOld,Points(Interior,1),Points(Interior,2));
 dirtime = tic;
-[uSoln, ~,dirCount] = quadSolver2(NMatSDD,CMatSDD,Dvvs,F,uBdry,epsilon,weight,h);
+[uSoln, ~,dirCount] = quadSolver2(NMatSDD,CMatSDD,Dvvs,F,uBdry,epsilon,weight,h,Inf,uInit);
 dirCount
 toc(dirtime)
 % smallest possible error with DDM
 min_err = norm(exact-uSoln(Interior),inf)
 
-uDDM = [zeros(length(Interior),1);uBdry];
+% initializing global DDM solution
+% uDDM = [zeros(length(Interior),1);uBdry];
+uDDM = [uInit;uBdry];
 
+% Global indices of 4 aprox equal square subdomains
+% subInd is disjoint squares
+% subOL is the corresponding exterior overlap regions
+[subInd,subOL] = fourSquares(x0,x1,y0,y1,delta,Points,Interior);
+
+% creates a struct array of each local discretization
 Doms = subDoms(NMatSDD,CMatSDD,Dvvs,subInd,subOL,F,uDDM);
 
 
 %% DDM Iteration
-% This section can take a while to run.
 
 ress = zeros(max_iter,1);
 err_direct = zeros(max_iter,1);
@@ -95,16 +101,24 @@ newt_iters = zeros(max_iter,1);
 ddmtime = tic;
 output = cell(1,4);
 
+% Run the ddm iterations
 for k = 1:max_iter
-    [out1,newt1] = dom2qs(Doms(1),epsilon,weight,h); % call solver
-    [out2,newt2] = dom2qs(Doms(2),epsilon,weight,h); % call solver
-    [out3,newt3] = dom2qs(Doms(3),epsilon,weight,h);
-    [out4,newt4] = dom2qs(Doms(4),epsilon,weight,h);
+    M = 1;
+    % Run each local solver
+    [out1,newt1] = dom2qs(Doms(1),epsilon,weight,h,M); % call solver
+    [out2,newt2] = dom2qs(Doms(2),epsilon,weight,h,M); % call solver
+    [out3,newt3] = dom2qs(Doms(3),epsilon,weight,h,M);
+    [out4,newt4] = dom2qs(Doms(4),epsilon,weight,h,M);
     newt_iters(k) = newt1+newt2+newt3+newt4;
+    
+    % Recombine without any relaxation or averaging, just taking the
+    % subsolutions on disjoint squares
+    % Can modify for more flexibility
     [Doms,uDDM] = updater(out1,out2,out3,out4,Doms,uDDM);
-% 
 
-res = norm(aproxMAOp(uDDM)-F,Inf);
+    % Using the nonlinear residual instead of the residue, not sure what
+    % the residue should be. 
+    res = norm(aproxMAOp(uDDM)-F,Inf);
 
     %    % compute error from exact solution
        err_exact(k) = norm(uDDM(Interior)-exact,inf);
@@ -131,13 +145,20 @@ yline(log10(min_err),'k--')
 legend('log10(residue)','log10(err direct)','log10(err exact)','min err')
 xlabel('Iterations')
 
+%%
+figure, hold on
+for i = 1:4
+    plot3(Points(Doms(i).nOL_g,1),Points(Doms(i).nOL_g,2),uDDM(Doms(i).nOL_g),'.','MarkerSize',10)
+end
+%%
+% Applies solver to one of the subdomain structs
+function[output,newt] = dom2qs(Dom,epsilon,weight,h,M)
 
-function[output,newt] = dom2qs(Dom,epsilon,weight,h)
-
-[output,~,newt] = quadSolver2(Dom.NMat_l,Dom.CMat_l,Dom.Dvvs_l,Dom.F_l,Dom.uBdry_l,epsilon,weight,h,1,Dom.uInt_l);
+[output,~,newt] = quadSolver2(Dom.NMat_l,Dom.CMat_l,Dom.Dvvs_l,Dom.F_l,Dom.uBdry_l,epsilon,weight,h,M,Dom.uInt_l);
 
 end
 
+% Updates the global solution and the subsolutions
 function[Doms,uDDM] = updater(out1,out2,out3,out4,Doms,uDDM)
     uDDM(Doms(1).nOL_g) = out1(Doms(1).nOL_l);
     uDDM(Doms(2).nOL_g) = out2(Doms(2).nOL_l);

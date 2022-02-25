@@ -8,7 +8,7 @@ clear
 % Parameters needed to generate grid
 x0 = -1; x1 = 1;
 y0 = -1; y1 = 1;
-N = 2^4+1;
+N = 2^7+1;
 h = (x1-x0)/(N+1);
 
 % requirement: overlap + depth - 1 <= (N-1)/2
@@ -21,7 +21,7 @@ end
 
 
 % choose F
-choice = 3;
+choice = 1;
 switch(choice)
    case 1
       DirBC = @(x,y) (exp((x.^2+y.^2)/2));

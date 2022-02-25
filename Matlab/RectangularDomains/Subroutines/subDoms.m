@@ -2,22 +2,22 @@ function [Doms] = subDoms(NMatSDD,CMatSDD,Dvvs,subInd,subOL,F,uSoln)
 % uSoln should include exact boundary data
 
 % Initialize full adjacency matrix, including the boundary nodes
-[N,m]= size(NMatSDD);
+% [N,m]= size(NMatSDD);
 M = max(max(NMatSDD));
-adj = zeros(N,M); 
+% adj = zeros(N,M); 
 
 % number of sub indices
 K = length(subInd);
 
-% Fill in the adjacency matrix using the neighbor matrix
-for i = 1:N
-    for j = 1:m
-        adj(i,NMatSDD(i,j))=1;
-    end
-end
-
-% Adjacency matrix only with interior nodes
-Adj = adj(1:N,1:N);
+% % Fill in the adjacency matrix using the neighbor matrix
+% for i = 1:N
+%     for j = 1:m
+%         adj(i,NMatSDD(i,j))=1;
+%     end
+% end
+% 
+% % Adjacency matrix only with interior nodes
+% Adj = adj(1:N,1:N);
 
 % Build the local subdomains
 d = length(Dvvs);
