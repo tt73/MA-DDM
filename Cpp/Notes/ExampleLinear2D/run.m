@@ -18,11 +18,13 @@ disp(out)
 %% Issue running programs
 % For some reason, calling the program with the system function doesn't work.
 %
-M = 100;
-N = 40;
+M = 300;
+N = 300;
 cmd = sprintf('./poisson -da_grid_x %d -da_grid_y %d',M,N);
 [code,out] = system(cmd);
 % I get an error: './poisson: /usr/local/MATLAB/R2020b/sys/os/glnxa64/libgfortran.so.5: version `GFORTRAN_9' not found (required by /lib/x86_64-linux-gnu/libmpichfort.so.12)
+
+
 
 %% The simplest work-around
 % Quickest way of interfacing with Matlab is to run the code outside of Matlab.
@@ -34,8 +36,8 @@ cmd = sprintf('./poisson -da_grid_x %d -da_grid_y %d',M,N);
 
 % Run the program with ./poisson -da_grid_x M -da_grid_y N
 % where M and N are integers of your choosing
-M = 100
-N = 50
+
+fprintf("Run the following command directly in the terminal: \n %s\n",cmd)
 
 % The following lines loads variables used in the petsc program
 

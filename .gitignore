@@ -1,2 +1,2 @@
-*.asv
-Matlab/RectangularDomains/*.asv
+**.asv
+**.DS_Store

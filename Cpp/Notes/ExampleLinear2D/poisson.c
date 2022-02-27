@@ -42,13 +42,13 @@ int main(int argc,char **args) {
                        &da);
    CHKERRQ(ierr);
 
-   // create linear system matrix A
+   // Initialize and apply the given settings to `da` and `A`
    ierr = DMSetFromOptions(da); CHKERRQ(ierr);
    ierr = DMSetUp(da); CHKERRQ(ierr);
    ierr = DMCreateMatrix(da,&A); CHKERRQ(ierr);
    ierr = MatSetFromOptions(A); CHKERRQ(ierr);
 
-   // create RHS b, approx solution u, exact solution uexact
+   // Initialize RHS b, approx solution u, exact solution uexact
    ierr = DMCreateGlobalVector(da,&b); CHKERRQ(ierr);
    ierr = VecDuplicate(b,&u); CHKERRQ(ierr);
    ierr = VecDuplicate(b,&uexact); CHKERRQ(ierr);
@@ -106,43 +106,60 @@ int main(int argc,char **args) {
 PetscErrorCode formMatrix(DM da, Mat A) {
    PetscErrorCode ierr;
    DMDALocalInfo  info;
-   MatStencil     row, col[5];
+   MatStencil     row, col[5];  // stencil variable - define i & j
    PetscReal      hx, hy, v[5];
    PetscInt       i, j, ncols;
 
+   // Each thread gets its own unique values stored in `info`
    ierr = DMDAGetLocalInfo(da,&info); CHKERRQ(ierr);
+
+   // info.mx = # of local horizontal nodes, info.my # of local vertical nodes (ends included)
    hx = 1.0/(info.mx-1);  hy = 1.0/(info.my-1);
+
+   // Each thread loops over its own range of (ys < j < ym),(xs < i < xm)
    for (j = info.ys; j < info.ys+info.ym; j++) {
       for (i = info.xs; i < info.xs+info.xm; i++) {
+
+         /*
+            The entries of A get filled with a subroutine called
+            `MatSetValuesStencil`. You need to create `MatStencil`
+            variables. This example is a 5-point star stencil.
+         */
          row.j = j;           // row of A corresponding to (x_i,y_j)
          row.i = i;
          col[0].j = j;        // diagonal entry
          col[0].i = i;
-         ncols = 1;
+         ncols = 1;   // there's at least 1 col to affect
          if (i==0 || i==info.mx-1 || j==0 || j==info.my-1) {
                v[0] = 1.0;      // on boundary: trivial equation
          } else {
                v[0] = 2*(hy/hx + hx/hy); // interior: build a row
                if (i-1 > 0) {
-                  col[ncols].j = j;    col[ncols].i = i-1;
-                  v[ncols++] = -hy/hx;
+                  col[ncols].j = j;
+                  col[ncols].i = i-1;
+                  v[ncols++] = -hy/hx; // west
                }
                if (i+1 < info.mx-1) {
-                  col[ncols].j = j;    col[ncols].i = i+1;
-                  v[ncols++] = -hy/hx;
+                  col[ncols].j = j;
+                  col[ncols].i = i+1;
+                  v[ncols++] = -hy/hx; // east
                }
                if (j-1 > 0) {
-                  col[ncols].j = j-1;  col[ncols].i = i;
-                  v[ncols++] = -hx/hy;
+                  col[ncols].j = j-1;
+                  col[ncols].i = i;
+                  v[ncols++] = -hx/hy; // south
                }
                if (j+1 < info.my-1) {
-                  col[ncols].j = j+1;  col[ncols].i = i;
-                  v[ncols++] = -hx/hy;
+                  col[ncols].j = j+1;
+                  col[ncols].i = i;
+                  v[ncols++] = -hx/hy; // north
                }
          }
+         // insert values for 1 row, and ncol columns (which is usually 3, but can be 2 or 1)
          ierr = MatSetValuesStencil(A,1,&row,ncols,col,v,INSERT_VALUES); CHKERRQ(ierr);
       }
    }
+   // this is the standard assembly procedure to create the matrix in parallel
    ierr = MatAssemblyBegin(A,MAT_FINAL_ASSEMBLY); CHKERRQ(ierr);
    ierr = MatAssemblyEnd(A,MAT_FINAL_ASSEMBLY); CHKERRQ(ierr);
    return 0;
@@ -151,14 +168,26 @@ PetscErrorCode formMatrix(DM da, Mat A) {
 
 
 //STARTEXACT
+/*
+   We are solving for a poisson problem with homogeneous BC.
+   The exact solution is
+      U(x,y) = (x^2 - x^4)*(y^2-y^4)
+   on [0,1]x[0,1].
+*/
 PetscErrorCode formExact(DM da, Vec uexact) {
    PetscErrorCode ierr;
    PetscInt       i, j;
    PetscReal      hx, hy, x, y, **auexact;
    DMDALocalInfo  info;
 
+   // Each thread gets unique info variable
    ierr = DMDAGetLocalInfo(da,&info); CHKERRQ(ierr);
    hx = 1.0/(info.mx-1);  hy = 1.0/(info.my-1);
+
+   /*
+      The parallel vector assembly process sandwiched between
+      GetArray and RestoreArray.
+   */
    ierr = DMDAVecGetArray(da, uexact, &auexact);CHKERRQ(ierr);
    for (j = info.ys; j < info.ys+info.ym; j++) {
       y = j * hy;
@@ -168,6 +197,8 @@ PetscErrorCode formExact(DM da, Vec uexact) {
       }
    }
    ierr = DMDAVecRestoreArray(da, uexact, &auexact);CHKERRQ(ierr);
+
+
    return 0;
 }
 

@@ -44,9 +44,9 @@ include ${PETSC_DIR}/lib/petsc/conf/test
 
 
 # Type `make all` the build the two programs in this directory
-all: poisson
+all: poisson view2d
 
 # Type `make clr` to delete the executable files.
 clr:
-	rm -f poisson
-	rm -f load_b.m load_u.m load_mat.m
+	rm -f poisson view2d
+	rm -f load_b.m load_u.m load_mat.m view2d.out
