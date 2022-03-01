@@ -1,18 +1,27 @@
 static char help[] = "1D reaction-diffusion problem with DMDA and SNES.  Option prefix -rct_.\n\n";
 
 /*
-   The 1D grid is broken up into sub-intervals automatically with DMDA. 
+   The 1D grid is broken up into sub-intervals automatically with DMDA.
    The main motivation to use DMDA with SNES is to use something called "coloring"
-   which works well with Finite Diff (a type of Jacobian-free) newton's method. 
-   This code also allows the user to use the Jacobian free Newton-Krylov method. 
-   You can even choose which Krylov method you want to use. 
-   It's recommended to use conjugate gradient since the Jacobian is symmetric (?). 
+   which works well with Finite Diff (a type of Jacobian-free) newton's method.
+   This code also allows the user to use the Jacobian free Newton-Krylov method.
+   You can even choose which Krylov method you want to use.
+   It's recommended to use conjugate gradient since the Jacobian is symmetric (?).
 
 
-   Run with `-snes_fd_color` to use Finite Diff with the node coloring. 
-   Run with `-snes_mf` to use the matrix free Newton Krylov method. 
-   The Krylov is unconditioned and apparently not that good. 
-   Run with `-snes_mf -ksp_type cg -ksp 
+   Run with `-snes_fd_color` to use Finite Diff with the node coloring.
+   Run with `-snes_mf` to use the matrix free Newton Krylov method.
+   The Krylov is unconditioned and apparently not that good.
+   Run with `-snes_mf -ksp_type cg -ksp
+
+   This code comes with a special feature, an inexact Jacobian.
+   Using this inexact Jacobian directly leads to more Newton iterations.
+   To compare, run   `./diffeq1d -rct_noRinJ -snes_monitor` vs `./diffeq1d -snes_monitor`.
+   However, this inexact Jacobian is actually a good preconditioner for the Jacobian-free Newton Krylov method.
+   Add the option `-snes_mf_operator` to use the preconditioned NK method.
+   To see why its good run `./diffeq1d -snes_monitor -rct_noRinJ -snes_mf_operator -ksp_converged_reason -da_refine 5`.
+   The `ksp_converged_reason` tells us how the Krylov performed at each Newton iteration.
+
 */
 #include <petsc.h>
 
@@ -33,7 +42,7 @@ int main(int argc,char **args) {
    SNES          snes;
    AppCtx        user;
    Vec           u, uexact;           // u and uexact are petsc vectors
-   PetscReal     errnorm, *au, *auex; // au and auex are C arrays 
+   PetscReal     errnorm, *au, *auex; // au and auex are C arrays
    DMDALocalInfo info;
 
    ierr = PetscInitialize(&argc,&args,NULL,help); if (ierr) return ierr;
@@ -46,19 +55,19 @@ int main(int argc,char **args) {
 
    ierr = PetscOptionsBegin(PETSC_COMM_WORLD,"rct_","options for reaction",""); CHKERRQ(ierr);
    ierr = PetscOptionsBool("-noRinJ","do not include R(u) term in Jacobian",
-         "reaction.c",user.noRinJ,&(user.noRinJ),NULL); CHKERRQ(ierr);
+         "diffeq1d.c",user.noRinJ,&(user.noRinJ),NULL); CHKERRQ(ierr);
    ierr = PetscOptionsEnd(); CHKERRQ(ierr);
 
    // 1d DMDA
-   // The discretization of the domain and the subdivision per MPI processor 
-   // is handled at the same time with this block of function calls. 
+   // The discretization of the domain and the subdivision per MPI processor
+   // is handled at the same time with this block of function calls.
    ierr = DMDACreate1d(PETSC_COMM_WORLD,DM_BOUNDARY_NONE,9,1,1,NULL,&da); CHKERRQ(ierr);
    ierr = DMSetFromOptions(da); CHKERRQ(ierr);
    ierr = DMSetUp(da); CHKERRQ(ierr);
    ierr = DMSetApplicationContext(da,&user); CHKERRQ(ierr);
 
    // Any vector representing a function defined over the domain needs
-   // to be created in association with the `da` object. 
+   // to be created in association with the `da` object.
    ierr = DMCreateGlobalVector(da,&u); CHKERRQ(ierr);
    ierr = VecDuplicate(u,&uexact); CHKERRQ(ierr);
    ierr = DMDAVecGetArray(da,u,&au); CHKERRQ(ierr);
@@ -68,23 +77,23 @@ int main(int argc,char **args) {
    ierr = DMDAVecGetArray(da,uexact,&auex); CHKERRQ(ierr);
 
    // this is a custom function
-   ierr = InitialAndExact(&info,au,auex,&user); CHKERRQ(ierr); 
+   ierr = InitialAndExact(&info,au,auex,&user); CHKERRQ(ierr);
 
    ierr = DMDAVecRestoreArray(da,u,&au); CHKERRQ(ierr);
    ierr = DMDAVecRestoreArray(da,uexact,&auex); CHKERRQ(ierr);
 
-   // SNES is the nonlinear solver object 
-   // The snes object and the da object need to be associated 
+   // SNES is the nonlinear solver object
+   // The snes object and the da object need to be associated
    ierr = SNESCreate(PETSC_COMM_WORLD,&snes); CHKERRQ(ierr);
    ierr = SNESSetDM(snes,da); CHKERRQ(ierr);
 
    // This is the syntax to associate user-defined Jacobians and Residue functions to the snes
-   // Instead of being linked directly to snes, its linked to the da. 
+   // Instead of being linked directly to snes, its linked to the da.
    ierr = DMDASNESSetFunctionLocal(da,INSERT_VALUES,(DMDASNESFunction)FormFunctionLocal,&user); CHKERRQ(ierr);
    ierr = DMDASNESSetJacobianLocal(da,(DMDASNESJacobian)FormJacobianLocal,&user); CHKERRQ(ierr);
    ierr = SNESSetFromOptions(snes); CHKERRQ(ierr);
 
-   // call the solver 
+   // call the solver
    ierr = SNESSolve(snes,NULL,u); CHKERRQ(ierr);
 
    ierr = VecAXPY(u,-1.0,uexact); CHKERRQ(ierr);    // u <- u + (-1.0) uexact
