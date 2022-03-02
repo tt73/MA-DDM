@@ -7,7 +7,7 @@ M = max(max(NMatSDD));
 % adj = zeros(N,M); 
 
 % number of sub indices
-K = length(subInd);
+K = numel(subInd);
 
 % % Fill in the adjacency matrix using the neighbor matrix
 % for i = 1:N
