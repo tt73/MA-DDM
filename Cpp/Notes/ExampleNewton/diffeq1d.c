@@ -52,7 +52,7 @@ int main(int argc,char **args) {
    // 1d DMDA
    // The discretization of the domain and the subdivision per MPI processor 
    // is handled at the same time with this block of function calls. 
-   ierr = DMDACreate1d(PETSC_COMM_WORLD,DM_BOUNDARY_NONE,9,1,1,NULL,&da); CHKERRQ(ierr);
+   ierr = DMDACreate1d(PETSC_COMM_WORLD,DM_BOUNDARY_GHOSTED,9,1,1,NULL,&da); CHKERRQ(ierr);
    ierr = DMSetFromOptions(da); CHKERRQ(ierr);
    ierr = DMSetUp(da); CHKERRQ(ierr);
    ierr = DMSetApplicationContext(da,&user); CHKERRQ(ierr);

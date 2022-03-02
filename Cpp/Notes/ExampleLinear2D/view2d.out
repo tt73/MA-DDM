@@ -1,0 +1,6 @@
+%DM Object: 2 MPI processes
+%  type: da
+Processor [0] M 3 N 4 m 1 n 2 w 1 s 2
+X range of indices: 0 3, Y range of indices: 0 2
+Processor [1] M 3 N 4 m 1 n 2 w 1 s 2
+X range of indices: 0 3, Y range of indices: 2 4
