@@ -59,15 +59,9 @@ int main(int argc,char **args) {
    ierr = PetscOptionsEnd(); CHKERRQ(ierr);
 
    // 1d DMDA
-<<<<<<< HEAD
-   // The discretization of the domain and the subdivision per MPI processor
-   // is handled at the same time with this block of function calls.
-   ierr = DMDACreate1d(PETSC_COMM_WORLD,DM_BOUNDARY_NONE,9,1,1,NULL,&da); CHKERRQ(ierr);
-=======
-   // The discretization of the domain and the subdivision per MPI processor 
-   // is handled at the same time with this block of function calls. 
+   // ierr = DMDACreate1d(PETSC_COMM_WORLD,DM_BOUNDARY_NONE,9,1,1,NULL,&da); CHKERRQ(ierr);
    ierr = DMDACreate1d(PETSC_COMM_WORLD,DM_BOUNDARY_GHOSTED,9,1,1,NULL,&da); CHKERRQ(ierr);
->>>>>>> b26002cf71b37f25ca572b7f5edca51f45d9092b
+
    ierr = DMSetFromOptions(da); CHKERRQ(ierr);
    ierr = DMSetUp(da); CHKERRQ(ierr);
    ierr = DMSetApplicationContext(da,&user); CHKERRQ(ierr);
