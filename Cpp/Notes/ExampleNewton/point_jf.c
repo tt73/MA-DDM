@@ -66,7 +66,14 @@ PetscErrorCode FormFunction(SNES snes, Vec x, Vec F, void *ctx) {
    PetscErrorCode ierr;
    const PetscReal  b = 2.0, *ax;
    PetscReal        *aF;
-
+   /*
+      F is a 2 by 1 array which represents the residue so
+         F[0] = 1/b * exp(b * x) - y
+         F[1] = x^2 + y^2 - 1
+      The vector x is the input so really we have
+         x[0] = x
+         x[1] = y
+   */
    ierr = VecGetArrayRead(x,&ax);CHKERRQ(ierr);
    ierr = VecGetArray(F,&aF);CHKERRQ(ierr);
    aF[0] = (1.0 / b) * PetscExpReal(b * ax[0]) - ax[1];
