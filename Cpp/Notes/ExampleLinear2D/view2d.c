@@ -33,14 +33,15 @@ static char help[] = "Tests VecView() contour plotting for 2d DMDAs.\n\n";
 int main(int argc,char **argv)
 {
    PetscMPIInt      rank;
-   PetscInt         M = 10,N = 8;
+   PetscInt         M = 3,N = 4;
+   PetscInt         s = 2; // stencil width
    PetscErrorCode   ierr;
    PetscBool        flg = PETSC_FALSE;
    DM               da;
    PetscViewer      viewer;
    Vec              local,global;
    PetscScalar      value;
-   DMBoundaryType   bx    = DM_BOUNDARY_NONE,by = DM_BOUNDARY_NONE;
+   DMBoundaryType   bx    = DM_BOUNDARY_GHOSTED,by = DM_BOUNDARY_GHOSTED;
    DMDAStencilType  stype = DMDA_STENCIL_BOX;
 
    ierr = PetscInitialize(&argc,&argv,(char*)0,help);if (ierr) return ierr;
@@ -54,7 +55,7 @@ int main(int argc,char **argv)
    if (flg) stype = DMDA_STENCIL_STAR;
 
    /* Create distributed array and get vectors */
-   ierr = DMDACreate2d(PETSC_COMM_WORLD,bx,by,stype,M,N,PETSC_DECIDE,PETSC_DECIDE,1,1,NULL,NULL,&da);CHKERRQ(ierr);
+   ierr = DMDACreate2d(PETSC_COMM_WORLD,bx,by,stype,M,N,PETSC_DECIDE,PETSC_DECIDE,1,s,NULL,NULL,&da);CHKERRQ(ierr);
    ierr = DMSetFromOptions(da);CHKERRQ(ierr);
    ierr = DMSetUp(da);CHKERRQ(ierr);
    ierr = DMCreateGlobalVector(da,&global);CHKERRQ(ierr);
