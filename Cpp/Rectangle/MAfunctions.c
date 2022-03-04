@@ -28,9 +28,11 @@ PetscErrorCode MA1DFunctionLocal(DMDALocalInfo *info, PetscReal *au,
 
 
 /*
-   This is the Residue function. For the MA equation, the residue is
-      F(u) = det(D^2(u)) - f(u).
+   The equation we want to find the root of is F(u). F is the discretized version of the nonlinear system:
+      F(u) = f - det(D^2(u)) = 0
+   In the implementation, u is a 2D array and it's the 2nd arg. The F is also a 2D array and it's the 3rd arg.
 
+   We let our solution be u(x,y) = exp((x^2+y^2)/2). And we assume u is known at the boundary.
 */
 PetscErrorCode MA2DFunctionLocal(DMDALocalInfo *info, PetscReal **au, PetscReal **aF, MACtx *user) {
    PetscErrorCode ierr;
@@ -44,6 +46,12 @@ PetscErrorCode MA2DFunctionLocal(DMDALocalInfo *info, PetscReal **au, PetscReal 
    scx = user->cx * hy / hx;
    scy = user->cy * hx / hy;
    scdiag = 2.0 * (scx + scy);    // diagonal scaling
+
+   /*
+      In th ebody of this loop, we need to assign values to
+         aF[j][i] = F(u(x_i,y_j))
+      for all i
+   */
    for (j = info->ys; j < info->ys + info->ym; j++) {
       y = xymin[1] + j * hy;
       for (i = info->xs; i < info->xs + info->xm; i++) {
