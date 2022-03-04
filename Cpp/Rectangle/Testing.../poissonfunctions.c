@@ -1,8 +1,8 @@
 #include <petsc.h>
-#include "MAfunctions.h"
+#include "poissonfunctions.h"
 
-PetscErrorCode MA1DFunctionLocal(DMDALocalInfo *info, PetscReal *au,
-                                      PetscReal *aF, MACtx *user) {
+PetscErrorCode Poisson1DFunctionLocal(DMDALocalInfo *info, PetscReal *au,
+                                      PetscReal *aF, PoissonCtx *user) {
     PetscErrorCode ierr;
     PetscInt   i;
     PetscReal  xmax[1], xmin[1], h, x, ue, uw;
@@ -26,23 +26,20 @@ PetscErrorCode MA1DFunctionLocal(DMDALocalInfo *info, PetscReal *au,
     return 0;
 }
 
-
-/*
-   The equation we want to find the root of is F(u). F is the discretized version of the nonlinear system:
-      F(u) = f - det(D^2(u)) in the domain and 
-      F(u) = u - g           on the boundary 
-   In the implementation, u is a 2D array and it's the 2nd arg. The F is also a 2D array and it's the 3rd arg.
-
-*/
-PetscErrorCode MA2DFunctionLocal(DMDALocalInfo *info, PetscReal **au, PetscReal **aF, MACtx *user) {
+//STARTFORM2DFUNCTION
+PetscErrorCode Poisson2DFunctionLocal(DMDALocalInfo *info, PetscReal **au,
+                                      PetscReal **aF, PoissonCtx *user) {
    PetscErrorCode ierr;
    PetscInt   i, j, k;
-   PetscReal  xymin[2], xymax[2], hx, hy, x, y, ue, uw, un, us;
-   PetscReal  left, right; // left and right terms in the MA operator approximation 
-   PetscReal  weights[3], SDD[3]; // quadrature weight and second directional deriv
+   PetscReal  xymin[2], xymax[2], hx, hy, x, y,
+            ue, uw, un, us;
+   PetscReal  left, right, weights[3], SDD[3], eps; 
+
    ierr = DMGetBoundingBox(info->da,xymin,xymax); CHKERRQ(ierr);
    hx = (xymax[0] - xymin[0]) / (info->mx - 1);
    hy = (xymax[1] - xymin[1]) / (info->my - 1);
+
+   eps = hx*hx;
 
    // quad weights for order 1 approx  
    weights[0] = PETSC_PI/4.0;
@@ -55,17 +52,19 @@ PetscErrorCode MA2DFunctionLocal(DMDALocalInfo *info, PetscReal **au, PetscReal 
          x = xymin[0] + i * hx;
 
          if (i==0 || i==info->mx-1 || j==0 || j==info->my-1) {
-            // on the boundary dOmega, F(u) = u - g
-            // g_bdry(x,y,z) refers to the exact solution 
-               aF[j][i] = au[j][i] - user->g_bdry(x,y,0.0,user);
-         } else {
-            // in the interior Omega, F(u) = f - det+(D^2u)
-            un = (j+1 == info->my-1) ? user->g_bdry(x,y+hy,0.0,user) : au[j+1][i];
-            us = (j-1 == 0)          ? user->g_bdry(x,y-hy,0.0,user) : au[j-1][i];
-            ue = (i+1 == info->mx-1) ? user->g_bdry(x+hx,y,0.0,user) : au[j][i+1];
-            uw = (i-1 == 0)          ? user->g_bdry(x-hx,y,0.0,user) : au[j][i-1];
+            aF[j][i] = au[j][i] - user->g_bdry(x,y,0.0,user);
 
-            // There are only 2 directional derivs when 
+         } else {
+            ue = (i+1 == info->mx-1) ? user->g_bdry(x+hx,y,0.0,user)
+                                    : au[j][i+1];
+            uw = (i-1 == 0)          ? user->g_bdry(x-hx,y,0.0,user)
+                                    : au[j][i-1];
+            un = (j+1 == info->my-1) ? user->g_bdry(x,y+hy,0.0,user)
+                                    : au[j+1][i];
+            us = (j-1 == 0)          ? user->g_bdry(x,y-hy,0.0,user)
+                                    : au[j-1][i];
+
+            // There are only 3 directional derivs when 
             SDD[0] = (uw - 2.0*au[j][i] + ue)/(hx*hx); // horizontal centered-diff
             SDD[1] = (un - 2.0*au[j][i] + us)/(hy*hy); // vertical centered-diff 
             SDD[2] = (ue - 2.0*au[j][i] + uw)/(hx*hx); // horizontal centered-diff again
@@ -73,20 +72,21 @@ PetscErrorCode MA2DFunctionLocal(DMDALocalInfo *info, PetscReal **au, PetscReal 
             // calculate the left term in the MA operator 
             left = 0; 
             for (k = 0; k < 3; k++) {
-               left = left + weights[k]/PetscMax(SDD[k],user->epsilon);
+               left = left + weights[k]/PetscMax(SDD[k],eps);
             }
             left = PetscPowReal(left,-2.0);
             left = left * PETSC_PI*PETSC_PI;
 
             // calculate the right term in the MA operator 
-            right = user->epsilon;
+            right = eps;
             for (k = 0; k < 3; k++) {
                if (right > SDD[k]){
                   right = SDD[k];
                }
             }
 
-            aF[j][i] = -user->f_rhs(x,y,0.0,user) + (left + right);
+
+            aF[j][i] = -(left+right) - user->f_rhs(x,y,0.0,user);
          }
       }
    }
@@ -95,8 +95,11 @@ PetscErrorCode MA2DFunctionLocal(DMDALocalInfo *info, PetscReal **au, PetscReal 
 }
 //ENDFORM2DFUNCTION
 
-PetscErrorCode MA3DFunctionLocal(DMDALocalInfo *info, PetscReal ***au,
-                                      PetscReal ***aF, MACtx *user) {
+
+
+
+PetscErrorCode Poisson3DFunctionLocal(DMDALocalInfo *info, PetscReal ***au,
+                                      PetscReal ***aF, PoissonCtx *user) {
     PetscErrorCode ierr;
     PetscInt   i, j, k;
     PetscReal  xyzmin[3], xyzmax[3], hx, hy, hz, dvol, scx, scy, scz, scdiag,
@@ -145,8 +148,8 @@ PetscErrorCode MA3DFunctionLocal(DMDALocalInfo *info, PetscReal ***au,
     return 0;
 }
 
-PetscErrorCode MA1DJacobianLocal(DMDALocalInfo *info, PetscScalar *au,
-                                      Mat J, Mat Jpre, MACtx *user) {
+PetscErrorCode Poisson1DJacobianLocal(DMDALocalInfo *info, PetscScalar *au,
+                                      Mat J, Mat Jpre, PoissonCtx *user) {
     PetscErrorCode  ierr;
     PetscInt     i,ncols;
     PetscReal    xmin[1], xmax[1], h, v[3];
@@ -181,8 +184,8 @@ PetscErrorCode MA1DJacobianLocal(DMDALocalInfo *info, PetscScalar *au,
     return 0;
 }
 
-PetscErrorCode MA2DJacobianLocal(DMDALocalInfo *info, PetscScalar **au,
-                                      Mat J, Mat Jpre, MACtx *user) {
+PetscErrorCode Poisson2DJacobianLocal(DMDALocalInfo *info, PetscScalar **au,
+                                      Mat J, Mat Jpre, PoissonCtx *user) {
     PetscErrorCode  ierr;
     PetscReal   xymin[2], xymax[2], hx, hy, scx, scy, scdiag, v[5];
     PetscInt    i,j,ncols;
@@ -225,8 +228,8 @@ PetscErrorCode MA2DJacobianLocal(DMDALocalInfo *info, PetscScalar **au,
     return 0;
 }
 
-PetscErrorCode MA3DJacobianLocal(DMDALocalInfo *info, PetscScalar ***au,
-                                      Mat J, Mat Jpre, MACtx *user) {
+PetscErrorCode Poisson3DJacobianLocal(DMDALocalInfo *info, PetscScalar ***au,
+                                      Mat J, Mat Jpre, PoissonCtx *user) {
     PetscErrorCode  ierr;
     PetscReal   xyzmin[3], xyzmax[3], hx, hy, hz, dvol, scx, scy, scz, scdiag, v[7];
     PetscInt    i,j,k,ncols;
@@ -292,7 +295,7 @@ PetscErrorCode MA3DJacobianLocal(DMDALocalInfo *info, PetscScalar ***au,
 }
 
 PetscErrorCode InitialState(DM da, InitialType it, PetscBool gbdry,
-                            Vec u, MACtx *user) {
+                            Vec u, PoissonCtx *user) {
     PetscErrorCode ierr;
     DMDALocalInfo  info;
     PetscRandom    rctx;

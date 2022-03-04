@@ -1,55 +1,45 @@
-# -*- mode: makefile -*-
-
-#  This sample Makefile can be used to compile PETSc applications
-#  Copy this file to your source directory as "Makefile" and modify as needed.
-#  See also $PETSC_DIR/share/petsc/Makefile.user for the preferred approach
-#  You must set the environmental variable(s) PETSC_DIR (and PETSC_ARCH if PETSc was not configured with the --prefix option)
-#
-#   You can set specific values below but that should rarely need to
-CFLAGS		 =
-FFLAGS		 =
-CPPFLAGS         =
-FPPFLAGS         =
-
-#  For example - a single source file (ex1.c or ex1.F90) can be compiled with:
-#
-#      make ex1
-#
-#  You do not need to edit this makefile at all.
-#
-#  For a multi-file case, suppose you have the source files a.c, b.c, and c.cxx
-#  This can be built by uncommenting the following two lines.
-#
-# app : a.o b.o c.o
-# 	$(LINK.C) -o $@ $^ $(LDLIBS)
-#
-#  When linking in a multi-files with Fortran source files a.F90, b.c, and c.cxx
-#  You may need to use
-#
-# app : a.o b.o c.o
-# 	$(LINK.F) -o $@ $^ $(LDLIBS)
-
-# If the file c.cxx needs to link with a C++ standard library -lstdc++ , then
-# you'll need to add it explicitly.  It can go in the rule above or be added to
-# a target-specific variable by uncommenting the line below.
-# app : LDLIBS += -lstdc++
-
 include ${PETSC_DIR}/lib/petsc/conf/variables
-
-#  To access the PETSc variables for the build, including compilers, compiler flags, libraries etc but
-#  manage the build rules yourself (rarely needed) comment out the next lines
-#
 include ${PETSC_DIR}/lib/petsc/conf/rules
-include ${PETSC_DIR}/lib/petsc/conf/test
+CFLAGS += -pedantic -std=c99
 
-
-# Type `make all` the build the two programs in this directory
-test1: test1.o MAfunctions.o
-	-${CLINKER} -o test1 test1.o MAfunctions.o ${PETSC_LIB}
-	${RM} test1.o poissonfunctions.o
+fish: fish.o poissonfunctions.o
+	-${CLINKER} -o fish fish.o poissonfunctions.o ${PETSC_LIB}
+	${RM} fish.o poissonfunctions.o
 
 # testing
-# Type `make clr` to delete the executable files.
-clr:
-	rm -f test1
+
+runfish_1:
+	-@../testit.sh fish "-fsh_dim 1 -fsh_problem manupoly -da_refine 3 -pc_type mg -ksp_rtol 1.0e-12 -snes_monitor_short -ksp_converged_reason" 1 1
+
+runfish_2:
+	-@../testit.sh fish "-fsh_dim 1 -fsh_problem manupoly -da_refine 1 -mat_is_symmetric 1.0e-5 -snes_fd_color" 1 2
+
+runfish_3:
+	-@../testit.sh fish "-fsh_dim 2 -fsh_initial_gonboundary false -da_refine 1 -pc_type mg -ksp_converged_reason" 1 3
+
+runfish_4:
+	-@../testit.sh fish "-fsh_dim 2 -da_refine 3 -pc_type mg -pc_mg_cycle_type w -mg_levels_ksp_type richardson -mg_levels_ksp_max_it 1 -ksp_converged_reason" 2 4
+
+runfish_5:
+	-@../testit.sh fish "-fsh_dim 2 -da_refine 3 -mat_is_symmetric 1.0e-7 -snes_fd_color" 1 5
+
+runfish_6:
+	-@../testit.sh fish "-fsh_dim 3 -da_refine 2 -fsh_problem manupoly -ksp_converged_reason -fsh_cx 0.01 -fsh_cy 2 -fsh_cz 100" 1 6
+
+runfish_7:
+	-@../testit.sh fish "-fsh_dim 3 -fsh_problem manupoly -snes_fd_color -ksp_rtol 1.0e-12 -pc_type mg -pc_mg_galerkin -ksp_converged_reason -da_refine 2" 2 7
+
+runfish_8:
+	-@../testit.sh fish "-fsh_dim 3 -da_refine 2 -mat_is_symmetric 1.0e-7 -snes_fd_color" 1 8
+
+test_fish: runfish_1 runfish_2 runfish_3 runfish_4 runfish_5 runfish_6 runfish_7 runfish_8
+
+test: test_fish
+
+# etc
+
+.PHONY: distclean runfish_1 runfish_2 runfish_3 runfish_4 runfish_5 runfish_6 runfish_7 runfish_8 test test_fish
+
+distclean:
+	@rm -f *~ fish *tmp
 

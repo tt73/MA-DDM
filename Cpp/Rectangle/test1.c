@@ -38,6 +38,9 @@ static PetscReal u_exact_3Dmanupoly(PetscReal x, PetscReal y, PetscReal z, void 
 }
 
 
+
+
+
 static PetscReal u_exact_1Dmanuexp(PetscReal x, PetscReal y, PetscReal z, void *ctx) {
     return - PetscExpReal(x);
 }
@@ -54,21 +57,24 @@ static PetscReal zero(PetscReal x, PetscReal y, PetscReal z, void *ctx) {
     return 0.0;
 }
 
-// right-hand-side functions  f(x,y) = - laplacian u
+// right-hand-side functions 
 
+/*
+   exact solution:
+      u(x) = exp(|x|^2/2), for x in Rn
+
+   In 2d,
+      u(x,y) = exp((x^2+y^2)/2)
+   
+   So, the source function is 
+      det(D^2(u)) = u^2*(1+x^2+y^2)
+*/
 static PetscReal f_rhs_1Dmanupoly(PetscReal x, PetscReal y, PetscReal z, void *ctx) {
-    MACtx* user = (MACtx*)ctx;
-    return user->cx * 12.0 * x*x - 2.0;
+   return (1.0 + x*x)*PetscExpReal(x*x/2.0);
 }
 
 static PetscReal f_rhs_2Dmanupoly(PetscReal x, PetscReal y, PetscReal z, void *ctx) {
-    MACtx* user = (MACtx*)ctx;
-    PetscReal   aa, bb, ddaa, ddbb;
-    aa = x*x * (1.0 - x*x);
-    bb = y*y * (y*y - 1.0);
-    ddaa = 2.0 * (1.0 - 6.0 * x*x);
-    ddbb = 2.0 * (6.0 * y*y - 1.0);
-    return - (user->cx * ddaa * bb + user->cy * aa * ddbb);
+   return (1.0 + x*x + y*y)*PetscExpReal(x*x + y*y);
 }
 
 static PetscReal f_rhs_3Dmanupoly(PetscReal x, PetscReal y, PetscReal z, void *ctx) {
@@ -153,11 +159,12 @@ int main(int argc,char **args) {
    PetscBool      gonboundary = PETSC_TRUE; // initial iterate has u=g on boundary
 
    PetscInt s = 1;  // Stencil width
-   PetscInt N = 1;  // We want an interior domain that is N by N
+   PetscInt N = 2;  // We want an interior domain that is N by N
 
    ierr = PetscInitialize(&argc,&args,NULL,help); if (ierr) return ierr;
 
    // get options and configure context
+   user.epsilon = 1.0/((N+1)*(N+1));
    user.Lx = 1.0;
    user.Ly = 1.0;
    user.Lz = 1.0;
@@ -258,7 +265,7 @@ int main(int argc,char **args) {
    ierr = DMSetUp(da); CHKERRQ(ierr);
 
    // not sure if i need this
-   // ierr = DMDASetUniformCoordinates(da,0.0,user.Lx,0.0,user.Ly,0.0,user.Lz); CHKERRQ(ierr);
+   ierr = DMDASetUniformCoordinates(da,0.0,user.Lx,0.0,user.Ly,0.0,user.Lz); CHKERRQ(ierr);
 
    // set SNES call-backs
    /*
