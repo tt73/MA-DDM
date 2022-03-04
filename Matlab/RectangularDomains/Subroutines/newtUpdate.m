@@ -70,7 +70,11 @@ jacobian = 2*pi^2*(spmat\jacobian) + reg;
 % jacobian = correction*jacobian+reg;
 % Combine all terms of jacobian
 
-resid = sparse(pi^2*((SDDMat(NMatSDD,CMatSDD,uNewt,vCount,epsilon).^(-1))*weight).^(-2)+min(min(SDDMat(NMatSDD,CMatSDD,uNewt,vCount,-Inf),epsilon),[],2)-F);
+Mtemp = SDDMat(NMatSDD,CMatSDD,uNewt,vCount,epsilon); 
+Mtemp2 = SDDMat(NMatSDD,CMatSDD,uNewt,vCount,-Inf); 
+LeftTerm = pi^2*((Mtemp.^(-1))*weight).^(-2); 
+RightTerm = min(min(Mtemp2,epsilon),[],2);
+resid = sparse( LeftTerm + RightTerm - F);
 % Could be neater...
 
 deltaU = jacobian\resid;
