@@ -8,6 +8,7 @@ PetscErrorCode Poisson1DFunctionLocal(DMDALocalInfo *info, PetscReal *au,
     PetscReal  xmax[1], xmin[1], h, x, ue, uw;
     ierr = DMGetBoundingBox(info->da,xmin,xmax); CHKERRQ(ierr);
     h = (xmax[0] - xmin[0]) / (info->mx - 1);
+    PetscPrintf(MPI_COMM_WORLD,"xmax= %f, xmin=%f\n",xmax[0],xmin[0]);
     for (i = info->xs; i < info->xs + info->xm; i++) {
         x = xmin[0] + i * h;
         if (i==0 || i==info->mx-1) {
@@ -31,9 +32,8 @@ PetscErrorCode Poisson2DFunctionLocal(DMDALocalInfo *info, PetscReal **au,
                                       PetscReal **aF, PoissonCtx *user) {
    PetscErrorCode ierr;
    PetscInt   i, j, k;
-   PetscReal  xymin[2], xymax[2], hx, hy, x, y,
-            ue, uw, un, us;
-   PetscReal  left, right, weights[3], SDD[3], eps; 
+   PetscReal  xymin[2], xymax[2], hx, hy, x, y, ue, uw, un, us;
+   PetscReal  left, right, weights[3], SDD[3], eps;
 
    ierr = DMGetBoundingBox(info->da,xymin,xymax); CHKERRQ(ierr);
    hx = (xymax[0] - xymin[0]) / (info->mx - 1);
@@ -41,10 +41,13 @@ PetscErrorCode Poisson2DFunctionLocal(DMDALocalInfo *info, PetscReal **au,
 
    eps = hx*hx;
 
-   // quad weights for order 1 approx  
+   PetscPrintf(MPI_COMM_WORLD,"xmax= %f, xmin=%f\n",xymax[0],xymin[0]);
+
+
+   // quad weights for order 1 approx
    weights[0] = PETSC_PI/4.0;
    weights[1] = PETSC_PI/2.0;
-   weights[2] = PETSC_PI/4.0;  
+   weights[2] = PETSC_PI/4.0;
 
    for (j = info->ys; j < info->ys + info->ym; j++) {
       y = xymin[1] + j * hy;
@@ -64,20 +67,20 @@ PetscErrorCode Poisson2DFunctionLocal(DMDALocalInfo *info, PetscReal **au,
             us = (j-1 == 0)          ? user->g_bdry(x,y-hy,0.0,user)
                                     : au[j-1][i];
 
-            // There are only 3 directional derivs when 
+            // There are only 3 directional derivs when
             SDD[0] = (uw - 2.0*au[j][i] + ue)/(hx*hx); // horizontal centered-diff
-            SDD[1] = (un - 2.0*au[j][i] + us)/(hy*hy); // vertical centered-diff 
+            SDD[1] = (un - 2.0*au[j][i] + us)/(hy*hy); // vertical centered-diff
             SDD[2] = (ue - 2.0*au[j][i] + uw)/(hx*hx); // horizontal centered-diff again
 
-            // calculate the left term in the MA operator 
-            left = 0; 
+            // calculate the left term in the MA operator
+            left = 0;
             for (k = 0; k < 3; k++) {
                left = left + weights[k]/PetscMax(SDD[k],eps);
             }
             left = PetscPowReal(left,-2.0);
             left = left * PETSC_PI*PETSC_PI;
 
-            // calculate the right term in the MA operator 
+            // calculate the right term in the MA operator
             right = eps;
             for (k = 0; k < 3; k++) {
                if (right > SDD[k]){
@@ -86,7 +89,7 @@ PetscErrorCode Poisson2DFunctionLocal(DMDALocalInfo *info, PetscReal **au,
             }
 
 
-            aF[j][i] = -(left+right) - user->f_rhs(x,y,0.0,user);
+            aF[j][i] = (left+right) - user->f_rhs(x,y,0.0,user);
          }
       }
    }

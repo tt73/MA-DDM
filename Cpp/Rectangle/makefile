@@ -2,9 +2,9 @@ include ${PETSC_DIR}/lib/petsc/conf/variables
 include ${PETSC_DIR}/lib/petsc/conf/rules
 CFLAGS += -pedantic -std=c99
 
-fish: fish.o poissonfunctions.o
-	-${CLINKER} -o fish fish.o poissonfunctions.o ${PETSC_LIB}
-	${RM} fish.o poissonfunctions.o
+test1: test1.o MAfunctions.o
+	-${CLINKER} -o test1 test1.o MAfunctions.o ${PETSC_LIB}
+	${RM} test1.o MAfunctions.o
 
 # testing
 
@@ -41,5 +41,5 @@ test: test_fish
 .PHONY: distclean runfish_1 runfish_2 runfish_3 runfish_4 runfish_5 runfish_6 runfish_7 runfish_8 test test_fish
 
 distclean:
-	@rm -f *~ fish *tmp
+	@rm -f *~ test1 *tmp
 

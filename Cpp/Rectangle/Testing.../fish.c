@@ -41,7 +41,6 @@ static PetscReal zero(PetscReal x, PetscReal y, PetscReal z, void *ctx) {
 }
 
 // right-hand-side functions  f(x,y) = - laplacian u
-
 static PetscReal f_rhs_1Dmanupoly(PetscReal x, PetscReal y, PetscReal z, void *ctx) {
    return (1.0 + x*x)*PetscExpReal(x*x/2.0);
 }
@@ -51,16 +50,9 @@ static PetscReal f_rhs_2Dmanupoly(PetscReal x, PetscReal y, PetscReal z, void *c
 }
 
 static PetscReal f_rhs_3Dmanupoly(PetscReal x, PetscReal y, PetscReal z, void *ctx) {
-    PoissonCtx* user = (PoissonCtx*)ctx;
-    PetscReal   aa, bb, cc, ddaa, ddbb, ddcc;
-    aa = x*x * (1.0 - x*x);
-    bb = y*y * (y*y - 1.0);
-    cc = z*z * (z*z - 1.0);
-    ddaa = 2.0 * (1.0 - 6.0 * x*x);
-    ddbb = 2.0 * (6.0 * y*y - 1.0);
-    ddcc = 2.0 * (6.0 * z*z - 1.0);
-    return - (user->cx * ddaa * bb * cc + user->cy * aa * ddbb * cc + user->cz * aa * bb * ddcc);
+   return (1.0 + x*x + y*y + z*z)*PetscExpReal(3.0/2.0*(x*x + y*y + z*z));
 }
+
 
 static PetscReal f_rhs_1Dmanuexp(PetscReal x, PetscReal y, PetscReal z, void *ctx) {
     return PetscExpReal(x);
