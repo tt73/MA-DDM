@@ -1,24 +1,34 @@
 #include <petsc.h>
 #include "MAfunctions.h"
 
-PetscErrorCode MA1DFunctionLocal(DMDALocalInfo *info, PetscReal *au, PetscReal *aF, MACtx *user) {
-    PetscErrorCode ierr;
-    PetscInt   i;
-    PetscReal  xmax[1], xmin[1], h, x, ue, uw;
-    ierr = DMGetBoundingBox(info->da,xmin,xmax); CHKERRQ(ierr);
-    h = (xmax[0] - xmin[0]) / (info->mx - 1);
-    for (i = info->xs; i < info->xs + info->xm; i++) {
-        x = xmin[0] + i * h;
-        if (i==0 || i==info->mx-1) {
-            aF[i] = au[i] - user->g_bdry(x,0.0,0.0,user);
-        } else {
-            ue = (i+1 == info->mx-1) ? user->g_bdry(x+h,0.0,0.0,user) : au[i+1];
-            uw = (i-1 == 0)          ? user->g_bdry(x-h,0.0,0.0,user) : au[i-1];
-            aF[i] = (2.0 * au[i] - uw - ue)/(h*h) - user->f_rhs(x,0.0,0.0,user);
-        }
-    }
-    ierr = PetscLogFlops(9.0*info->xm);CHKERRQ(ierr);
-    return 0;
+/*
+   This is the residue function for the 1D Monge-Ampere. Which is actually just
+      det(D^2u) = u''.
+   So we wish to find the root of
+      F(u) = {f - u''  in the domain
+             {u - g    on the boundary
+   Since this is 1D, the ouptut F is represented as an array and so is the input u.
+*/
+PetscErrorCode MA1DFunctionLocal(DMDALocalInfo *info, PetscReal *u, PetscReal *F, MACtx *user) {
+   PetscErrorCode ierr;
+   PetscInt   i;
+   PetscReal  xmax[1], xmin[1], h, x, ue, uw;
+   ierr = DMGetBoundingBox(info->da,xmin,xmax); CHKERRQ(ierr);
+   h = (xmax[0] - xmin[0]) / (info->mx - 1);
+   for (i = info->xs; i < info->xs + info->xm; i++) {
+      x = xmin[0] + i * h;
+      if (i==0 || i==info->mx-1) {
+         // first and last points correspond to boundary
+         F[i] = u[i] - user->g_bdry(x,0.0,0.0,user);
+      } else {
+         // interior points depend on left and right neighbors
+         ue = (i+1 == info->mx-1) ? user->g_bdry(x+h,0.0,0.0,user) : u[i+1];
+         uw = (i-1 == 0)          ? user->g_bdry(x-h,0.0,0.0,user) : u[i-1];
+         F[i] = (-uw + 2.0*u[i] - ue)/(h*h) - user->f_rhs(x,0.0,0.0,user);
+      }
+   }
+   ierr = PetscLogFlops(9.0*info->xm);CHKERRQ(ierr);
+   return 0;
 }
 
 
@@ -80,7 +90,7 @@ PetscErrorCode MA2DFunctionLocal(DMDALocalInfo *info, PetscReal **au, PetscReal 
                   right = SDD[k];
                }
             }
-            aF[j][i] = (left + right) - user->f_rhs(x,y,0.0,user) ;
+            aF[j][i] = user->f_rhs(x,y,0.0,user) - (left + right);
          }
       }
    }
@@ -139,6 +149,14 @@ PetscErrorCode MA3DFunctionLocal(DMDALocalInfo *info, PetscReal ***au,
     return 0;
 }
 
+/*
+   The 1D Jacobian
+
+   The au is the input of size mx.
+   The output J is a matrix of size mx by mx.
+   The values of J are filled exactly how you would expect...
+      For each row, fill in 3 values
+*/
 PetscErrorCode MA1DJacobianLocal(DMDALocalInfo *info, PetscScalar *au, Mat J, Mat Jpre, MACtx *user) {
    PetscErrorCode  ierr;
    PetscInt     i,ncols;
@@ -154,14 +172,14 @@ PetscErrorCode MA1DJacobianLocal(DMDALocalInfo *info, PetscScalar *au, Mat J, Ma
       if (i==0 || i==info->mx-1) {
          v[0] = 1.0;  // if on the boundary, J_{i,j} = 1
       } else {
-         v[0] = 2.0/(h*h); // middle
+         v[0] = 2.0/(h*h); // middle J_{i,j} = 2/h^2
          if (i-1 > 0) {
             col[ncols].i = i-1;
-            v[ncols++] = -1.0/(h*h); // left
+            v[ncols++] = -1.0/(h*h); // left J_{i-1,j} = -1/h^2
          }
          if (i+1 < info->mx-1) {
             col[ncols].i = i+1;
-            v[ncols++] = -1.0/(h*h); // right
+            v[ncols++] = -1.0/(h*h); // right J_{i+1,j} = -1/h^2
          }
       }
       // Insert up to 3 values of the Jacobian per row
@@ -178,12 +196,18 @@ PetscErrorCode MA1DJacobianLocal(DMDALocalInfo *info, PetscScalar *au, Mat J, Ma
 }
 
 /*
-   This subroutine inserts values into Jpre, which is the Jacobian.
-   It assembles J and Jpre at the end.
+   The 2D Jacobian
+
+   The input au is a 2D array of size my by mx.
+   The ouptut J is a matrix of size mx*my by mx*my.
+   In each row of J, there are at most 5 values being updated because for width=1, our
+   method is a 5-point stencil.
+   Petsc automatically handles the indexing. We are on a structured mesh so it is very easy.
 */
 PetscErrorCode MA2DJacobianLocal(DMDALocalInfo *info, PetscScalar **au, Mat J, Mat Jpre, MACtx *user) {
    PetscErrorCode  ierr;
-   PetscReal   xymin[2], xymax[2], hx, hy, scx, scy, scdiag, v[5];
+   PetscReal   xymin[2], xymax[2], hx, hy, v[5];
+   PetscReal   SDD[3], weights[3];
    PetscInt    i,j,ncols;
    MatStencil  col[5],row;
 
@@ -199,31 +223,28 @@ PetscErrorCode MA2DJacobianLocal(DMDALocalInfo *info, PetscScalar **au, Mat J, M
       for (i = info->xs; i < info->xs+info->xm; i++) {
          row.i = i;
          col[0].i = i;
+         v[0] = 1.0; // default value to insert around the edge
          ncols = 1;
-         if (i==0 || i==info->mx-1 || j==0 || j==info->my-1) { // on the boundary dOmega, J(u)=1
-            v[0] = 1.0;
-         } else {
-            if (i>0 && i<info->mx-1 && j>0 && j<info->my-1) { // interior points
-               if (i-1 > 0) {
-                  col[ncols].j = j;
-                  col[ncols].i = i-1;
-                  v[ncols++] = - scx;
-               }
-               if (i+1 < info->mx-1) {
-                  col[ncols].j = j;
-                  col[ncols].i = i+1;
-                  v[ncols++] = - scx;
-               }
-               if (j-1 > 0) {
-                  col[ncols].j = j-1;
-                  col[ncols].i = i;
-                  v[ncols++] = - scy;
-               }
-               if (j+1 < info->my-1) {
-                  col[ncols].j = j+1;
-                  col[ncols].i = i;
-                  v[ncols++] = - scy;
-               }
+         if (i>0 && i<info->mx-1 && j>0 && j<info->my-1) { // for strictly interior points...
+            if (i-1 > 0) {
+               col[ncols].j = j;
+               col[ncols].i = i-1;
+               v[ncols++] = 1.0/(hx*hy); // value of J_{i-1,j}
+            }
+            if (i+1 < info->mx-1) {
+               col[ncols].j = j;
+               col[ncols].i = i+1;
+               v[ncols++] = 1.0/(hx*hy); // value of J_{i+1,j}
+            }
+            if (j-1 > 0) {
+               col[ncols].j = j-1;
+               col[ncols].i = i;
+               v[ncols++] = 1.0/(hx*hy); // value of J_{i,j-1}
+            }
+            if (j+1 < info->my-1) {
+               col[ncols].j = j+1;
+               col[ncols].i = i;
+               v[ncols++] = 1.0/(hx*hy); // value of J_{i,j+1}
             }
          }
          ierr = MatSetValuesStencil(Jpre,1,&row,ncols,col,v,INSERT_VALUES); CHKERRQ(ierr);
@@ -239,6 +260,9 @@ PetscErrorCode MA2DJacobianLocal(DMDALocalInfo *info, PetscScalar **au, Mat J, M
    return 0;
 }
 
+/*
+   The 3D Jacobian
+*/
 PetscErrorCode MA3DJacobianLocal(DMDALocalInfo *info, PetscScalar ***au, Mat J, Mat Jpre, MACtx *user) {
    PetscErrorCode  ierr;
    PetscReal   xyzmin[3], xyzmax[3], hx, hy, hz, dvol, scx, scy, scz, scdiag, v[7];
@@ -304,8 +328,7 @@ PetscErrorCode MA3DJacobianLocal(DMDALocalInfo *info, PetscScalar ***au, Mat J, 
    return 0;
 }
 
-PetscErrorCode InitialState(DM da, InitialType it, PetscBool gbdry,
-                            Vec u, MACtx *user) {
+PetscErrorCode InitialState(DM da, InitialType it, PetscBool gbdry, Vec u, MACtx *user) {
     PetscErrorCode ierr;
     DMDALocalInfo  info;
     PetscRandom    rctx;

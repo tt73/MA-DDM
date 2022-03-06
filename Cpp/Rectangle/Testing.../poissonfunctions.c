@@ -189,46 +189,46 @@ PetscErrorCode Poisson1DJacobianLocal(DMDALocalInfo *info, PetscScalar *au,
 
 PetscErrorCode Poisson2DJacobianLocal(DMDALocalInfo *info, PetscScalar **au,
                                       Mat J, Mat Jpre, PoissonCtx *user) {
-    PetscErrorCode  ierr;
-    PetscReal   xymin[2], xymax[2], hx, hy, scx, scy, scdiag, v[5];
-    PetscInt    i,j,ncols;
-    MatStencil  col[5],row;
+   PetscErrorCode  ierr;
+   PetscReal   xymin[2], xymax[2], hx, hy, scx, scy, scdiag, v[5];
+   PetscInt    i,j,ncols;
+   MatStencil  col[5],row;
 
-    ierr = DMGetBoundingBox(info->da,xymin,xymax); CHKERRQ(ierr);
-    hx = (xymax[0] - xymin[0]) / (info->mx - 1);
-    hy = (xymax[1] - xymin[1]) / (info->my - 1);
-    scx = user->cx * hy / hx;
-    scy = user->cy * hx / hy;
-    scdiag = 2.0 * (scx + scy);
-    for (j = info->ys; j < info->ys+info->ym; j++) {
-        row.j = j;
-        col[0].j = j;
-        for (i = info->xs; i < info->xs+info->xm; i++) {
-            row.i = i;
-            col[0].i = i;
-            ncols = 1;
-            v[0] = scdiag;
-            if (i>0 && i<info->mx-1 && j>0 && j<info->my-1) {
-                if (i-1 > 0) {
-                    col[ncols].j = j;    col[ncols].i = i-1;  v[ncols++] = - scx;  }
-                if (i+1 < info->mx-1) {
-                    col[ncols].j = j;    col[ncols].i = i+1;  v[ncols++] = - scx;  }
-                if (j-1 > 0) {
-                    col[ncols].j = j-1;  col[ncols].i = i;    v[ncols++] = - scy;  }
-                if (j+1 < info->my-1) {
-                    col[ncols].j = j+1;  col[ncols].i = i;    v[ncols++] = - scy;  }
-            }
-            ierr = MatSetValuesStencil(Jpre,1,&row,ncols,col,v,INSERT_VALUES); CHKERRQ(ierr);
-        }
-    }
+   ierr = DMGetBoundingBox(info->da,xymin,xymax); CHKERRQ(ierr);
+   hx = (xymax[0] - xymin[0]) / (info->mx - 1);
+   hy = (xymax[1] - xymin[1]) / (info->my - 1);
+   scx = user->cx * hy / hx;
+   scy = user->cy * hx / hy;
+   scdiag = 2.0 * (scx + scy);
+   for (j = info->ys; j < info->ys+info->ym; j++) {
+      row.j = j;
+      col[0].j = j;
+      for (i = info->xs; i < info->xs+info->xm; i++) {
+         row.i = i;
+         col[0].i = i;
+         ncols = 1;
+         v[0] = scdiag;
+         if (i>0 && i<info->mx-1 && j>0 && j<info->my-1) {
+            if (i-1 > 0) {
+               col[ncols].j = j;    col[ncols].i = i-1;  v[ncols++] = - scx;  }
+            if (i+1 < info->mx-1) {
+               col[ncols].j = j;    col[ncols].i = i+1;  v[ncols++] = - scx;  }
+            if (j-1 > 0) {
+               col[ncols].j = j-1;  col[ncols].i = i;    v[ncols++] = - scy;  }
+            if (j+1 < info->my-1) {
+               col[ncols].j = j+1;  col[ncols].i = i;    v[ncols++] = - scy;  }
+         }
+         ierr = MatSetValuesStencil(Jpre,1,&row,ncols,col,v,INSERT_VALUES); CHKERRQ(ierr);
+      }
+   }
 
-    ierr = MatAssemblyBegin(Jpre,MAT_FINAL_ASSEMBLY); CHKERRQ(ierr);
-    ierr = MatAssemblyEnd(Jpre,MAT_FINAL_ASSEMBLY); CHKERRQ(ierr);
-    if (J != Jpre) {
-        ierr = MatAssemblyBegin(J,MAT_FINAL_ASSEMBLY); CHKERRQ(ierr);
-        ierr = MatAssemblyEnd(J,MAT_FINAL_ASSEMBLY); CHKERRQ(ierr);
-    }
-    return 0;
+   ierr = MatAssemblyBegin(Jpre,MAT_FINAL_ASSEMBLY); CHKERRQ(ierr);
+   ierr = MatAssemblyEnd(Jpre,MAT_FINAL_ASSEMBLY); CHKERRQ(ierr);
+   if (J != Jpre) {
+      ierr = MatAssemblyBegin(J,MAT_FINAL_ASSEMBLY); CHKERRQ(ierr);
+      ierr = MatAssemblyEnd(J,MAT_FINAL_ASSEMBLY); CHKERRQ(ierr);
+   }
+   return 0;
 }
 
 PetscErrorCode Poisson3DJacobianLocal(DMDALocalInfo *info, PetscScalar ***au,
