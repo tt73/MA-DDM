@@ -99,54 +99,53 @@ PetscErrorCode MA2DFunctionLocal(DMDALocalInfo *info, PetscReal **au, PetscReal 
 }
 //ENDFORM2DFUNCTION
 
-PetscErrorCode MA3DFunctionLocal(DMDALocalInfo *info, PetscReal ***au,
-                                      PetscReal ***aF, MACtx *user) {
-    PetscErrorCode ierr;
-    PetscInt   i, j, k;
-    PetscReal  xyzmin[3], xyzmax[3], hx, hy, hz, dvol, scx, scy, scz, scdiag,
-               x, y, z, ue, uw, un, us, uu, ud;
-    ierr = DMGetBoundingBox(info->da,xyzmin,xyzmax); CHKERRQ(ierr);
-    hx = (xyzmax[0] - xyzmin[0]) / (info->mx - 1);
-    hy = (xyzmax[1] - xyzmin[1]) / (info->my - 1);
-    hz = (xyzmax[2] - xyzmin[2]) / (info->mz - 1);
-    dvol = hx * hy * hz;
-    scx = user->cx * dvol / (hx*hx);
-    scy = user->cy * dvol / (hy*hy);
-    scz = user->cz * dvol / (hz*hz);
-    scdiag = 2.0 * (scx + scy + scz);
-    for (k = info->zs; k < info->zs + info->zm; k++) {
-        z = xyzmin[2] + k * hz;
-        for (j = info->ys; j < info->ys + info->ym; j++) {
-            y = xyzmin[1] + j * hy;
-            for (i = info->xs; i < info->xs + info->xm; i++) {
-                x = xyzmin[0] + i * hx;
-                if (   i==0 || i==info->mx-1
-                    || j==0 || j==info->my-1
-                    || k==0 || k==info->mz-1) {
-                    aF[k][j][i] = au[k][j][i] - user->g_bdry(x,y,z,user);
-                    aF[k][j][i] *= scdiag;
-                } else {
-                    ue = (i+1 == info->mx-1) ? user->g_bdry(x+hx,y,z,user)
-                                             : au[k][j][i+1];
-                    uw = (i-1 == 0)          ? user->g_bdry(x-hx,y,z,user)
-                                             : au[k][j][i-1];
-                    un = (j+1 == info->my-1) ? user->g_bdry(x,y+hy,z,user)
-                                             : au[k][j+1][i];
-                    us = (j-1 == 0)          ? user->g_bdry(x,y-hy,z,user)
-                                             : au[k][j-1][i];
-                    uu = (k+1 == info->mz-1) ? user->g_bdry(x,y,z+hz,user)
-                                             : au[k+1][j][i];
-                    ud = (k-1 == 0)          ? user->g_bdry(x,y,z-hz,user)
-                                             : au[k-1][j][i];
-                    aF[k][j][i] = scdiag * au[k][j][i]
-                        - scx * (uw + ue) - scy * (us + un) - scz * (uu + ud)
-                        - dvol * user->f_rhs(x,y,z,user);
-                }
+PetscErrorCode MA3DFunctionLocal(DMDALocalInfo *info, PetscReal ***au, PetscReal ***aF, MACtx *user) {
+   PetscErrorCode ierr;
+   PetscInt   i, j, k;
+   PetscReal  xyzmin[3], xyzmax[3], hx, hy, hz, dvol, scx, scy, scz, scdiag,
+            x, y, z, ue, uw, un, us, uu, ud;
+   ierr = DMGetBoundingBox(info->da,xyzmin,xyzmax); CHKERRQ(ierr);
+   hx = (xyzmax[0] - xyzmin[0]) / (info->mx - 1);
+   hy = (xyzmax[1] - xyzmin[1]) / (info->my - 1);
+   hz = (xyzmax[2] - xyzmin[2]) / (info->mz - 1);
+   dvol = hx * hy * hz;
+   scx = user->cx * dvol / (hx*hx);
+   scy = user->cy * dvol / (hy*hy);
+   scz = user->cz * dvol / (hz*hz);
+   scdiag = 2.0 * (scx + scy + scz);
+   for (k = info->zs; k < info->zs + info->zm; k++) {
+      z = xyzmin[2] + k * hz;
+      for (j = info->ys; j < info->ys + info->ym; j++) {
+         y = xyzmin[1] + j * hy;
+         for (i = info->xs; i < info->xs + info->xm; i++) {
+            x = xyzmin[0] + i * hx;
+            if (   i==0 || i==info->mx-1
+               || j==0 || j==info->my-1
+               || k==0 || k==info->mz-1) {
+               aF[k][j][i] = au[k][j][i] - user->g_bdry(x,y,z,user);
+               aF[k][j][i] *= scdiag;
+            } else {
+               ue = (i+1 == info->mx-1) ? user->g_bdry(x+hx,y,z,user)
+                                       : au[k][j][i+1];
+               uw = (i-1 == 0)          ? user->g_bdry(x-hx,y,z,user)
+                                       : au[k][j][i-1];
+               un = (j+1 == info->my-1) ? user->g_bdry(x,y+hy,z,user)
+                                       : au[k][j+1][i];
+               us = (j-1 == 0)          ? user->g_bdry(x,y-hy,z,user)
+                                       : au[k][j-1][i];
+               uu = (k+1 == info->mz-1) ? user->g_bdry(x,y,z+hz,user)
+                                       : au[k+1][j][i];
+               ud = (k-1 == 0)          ? user->g_bdry(x,y,z-hz,user)
+                                       : au[k-1][j][i];
+               aF[k][j][i] = scdiag * au[k][j][i]
+                  - scx * (uw + ue) - scy * (us + un) - scz * (uu + ud)
+                  - dvol * user->f_rhs(x,y,z,user);
             }
-        }
-    }
-    ierr = PetscLogFlops(14.0*info->xm*info->ym*info->zm);CHKERRQ(ierr);
-    return 0;
+         }
+      }
+   }
+   ierr = PetscLogFlops(14.0*info->xm*info->ym*info->zm);CHKERRQ(ierr);
+   return 0;
 }
 
 /*
@@ -200,9 +199,7 @@ PetscErrorCode MA1DJacobianLocal(DMDALocalInfo *info, PetscScalar *au, Mat J, Ma
 
    The input au is a 2D array of size my by mx.
    The ouptut J is a matrix of size mx*my by mx*my.
-   In each row of J, there are at most 5 values being updated because for width=1, our
-   method is a 5-point stencil.
-   Petsc automatically handles the indexing. We are on a structured mesh so it is very easy.
+   The J is constructed implicitly using stencil values. 
 */
 PetscErrorCode MA2DJacobianLocal(DMDALocalInfo *info, PetscScalar **au, Mat J, Mat Jpre, MACtx *user) {
    PetscErrorCode  ierr;
@@ -214,6 +211,12 @@ PetscErrorCode MA2DJacobianLocal(DMDALocalInfo *info, PetscScalar **au, Mat J, M
    ierr = DMGetBoundingBox(info->da,xymin,xymax); CHKERRQ(ierr);
    hx = (xymax[0] - xymin[0]) / (info->mx - 1);
    hy = (xymax[1] - xymin[1]) / (info->my - 1);
+
+   // quad weights for order 1 approx
+   weights[0] = PETSC_PI/4.0;
+   weights[1] = PETSC_PI/2.0;
+   weights[2] = PETSC_PI/4.0;
+
 
    // loop over each row of J
    for (j = info->ys; j < info->ys+info->ym; j++) {
