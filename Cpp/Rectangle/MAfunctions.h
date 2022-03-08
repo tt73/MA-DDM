@@ -42,7 +42,7 @@ typedef struct {
     PetscReal Lx, Ly, Lz;
     // coefficients in  - cx u_xx - cy u_yy - cz u_zz = f
     PetscReal cx, cy, cz;
-    // epsilon is the regularization term 
+    // epsilon is the regularization term
     PetscReal epsilon;
     // right-hand-side f(x,y,z)
     PetscReal (*f_rhs)(PetscReal x, PetscReal y, PetscReal z, void *ctx);
@@ -65,22 +65,19 @@ PetscErrorCode MA3DFunctionLocal(DMDALocalInfo *info,
 /* This generates a tridiagonal sparse matrix.  If cx=1 then it has 2 on the
 diagonal and -1 or zero in off-diagonal positions.  For example,
     ./fish -fsh_dim 1 -mat_view ::ascii_dense -da_refine N                */
-PetscErrorCode MA1DJacobianLocal(DMDALocalInfo *info, PetscReal *au,
-                                      Mat J, Mat Jpre, MACtx *user);
+PetscErrorCode MA1DJacobianLocal(DMDALocalInfo *info, PetscReal *au, Mat J, Mat Jpre, MACtx *user);
 
 /* If h = hx = hy and h = L/(m-1) then this generates a 2m-1 bandwidth
 sparse matrix.  If cx=cy=1 then it has 4 on the diagonal and -1 or zero in
 off-diagonal positions.  For example,
     ./fish -fsh_dim 2 -mat_view :foo.m:ascii_matlab -da_refine N
 produces a matrix which can be read into Matlab/Octave.                   */
-PetscErrorCode MA2DJacobianLocal(DMDALocalInfo *info, PetscReal **au,
-                                      Mat J, Mat Jpre, MACtx *user);
+PetscErrorCode MA2DJacobianLocal(DMDALocalInfo *info, PetscReal **au, Mat J, Mat Jpre, MACtx *user);
 
 /* If h = hx = hy = hz and h = L/(m-1) then this generates a 2m^2-1 bandwidth
 sparse matrix.  For example,
     ./fish -fsh_dim 3 -mat_view :foo.m:ascii_matlab -da_refine N          */
-PetscErrorCode MA3DJacobianLocal(DMDALocalInfo *info, PetscReal ***au,
-                                      Mat J, Mat Jpre, MACtx *user);
+PetscErrorCode MA3DJacobianLocal(DMDALocalInfo *info, PetscReal ***au, Mat J, Mat Jpre, MACtx *user);
 
 /* The following function generates an initial iterate using either
   * zero
@@ -90,8 +87,7 @@ the boundary locations in the initial state, or not.                      */
 
 typedef enum {ZEROS, RANDOM} InitialType;
 
-PetscErrorCode InitialState(DM da, InitialType it, PetscBool gbdry,
-                            Vec u, MACtx *user);
+PetscErrorCode InitialState(DM da, InitialType it, PetscBool gbdry, Vec u, MACtx *user);
 
 #endif
 

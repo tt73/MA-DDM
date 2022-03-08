@@ -274,7 +274,6 @@ int main(int argc,char **args) {
    ierr = DMDASNESSetFunctionLocal(da,INSERT_VALUES,(DMDASNESFunction)(residual_ptr[dim-1]),&user); CHKERRQ(ierr);
    ierr = DMDASNESSetJacobianLocal(da,(DMDASNESJacobian)(jacobian_ptr[dim-1]),&user); CHKERRQ(ierr);
 
-
    // default to KSPONLY+CG because problem is linear and SPD
    ierr = SNESSetType(snes,SNESKSPONLY); CHKERRQ(ierr);
    ierr = SNESGetKSP(snes,&ksp); CHKERRQ(ierr);
@@ -285,7 +284,6 @@ int main(int argc,char **args) {
    ierr = DMGetGlobalVector(da,&u_initial); CHKERRQ(ierr);
    ierr = InitialState(da, initial, gonboundary, u_initial, &user); CHKERRQ(ierr);
    ierr = SNESSolve(snes,NULL,u_initial); CHKERRQ(ierr);
-
 
    // Get the numerical and exact solution as Vecs
    ierr = SNESGetDM(snes,&da_after); // let DM da_after hold the data management info (possibly different than original da)
@@ -324,7 +322,6 @@ int main(int argc,char **args) {
                "  error |u-uexact|_inf = %.3e, |u-uexact|_h = %.3e\n",
                ProblemTypes[problem],gridstr,errinf,err2h); CHKERRQ(ierr);
 
-
    // Print out the solution to another file
    PetscViewer viewer;  // Viewer object fascilitates printing out solution
    PetscViewerCreate(PETSC_COMM_WORLD, &viewer); // initialize the viewer object
@@ -336,7 +333,6 @@ int main(int argc,char **args) {
    PetscViewerPushFormat(viewer,PETSC_VIEWER_ASCII_MATLAB); // except its for u
    PetscObjectSetName((PetscObject)u_exact,"u_exact");
    VecView(u_exact,viewer);
-
 
    ierr = DMDestroy(&da); CHKERRQ(ierr);
    ierr = PetscViewerDestroy(&viewer); CHKERRQ(ierr); // the viewer need to be destroyed as well
