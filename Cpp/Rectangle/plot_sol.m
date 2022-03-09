@@ -3,7 +3,7 @@
 % Run this command: ./test1 -da_refine 2 -snes_monitor -snes_converged_reason -snes_type newtontr
 % Then run this script
 
-clear
+clear, close all
 
 load_u % load petsc's numerical solution, u
 load_exact % load exact solution coded in petsc

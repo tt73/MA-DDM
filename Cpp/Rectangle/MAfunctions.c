@@ -239,102 +239,108 @@ PetscErrorCode MA2DJacobianLocal(DMDALocalInfo *info, PetscScalar **au, Mat J, M
          ncols = 1;
          x = xymin[0] + i * hx;
 
-         un = (j+1 == info->my-1) ? user->g_bdry(x,y+hy,0.0,user) : au[j+1][i];
-         us = (j-1 == 0)          ? user->g_bdry(x,y-hy,0.0,user) : au[j-1][i];
-         ue = (i+1 == info->mx-1) ? user->g_bdry(x+hx,y,0.0,user) : au[j][i+1];
-         uw = (i-1 == 0)          ? user->g_bdry(x-hx,y,0.0,user) : au[j][i-1];
+         if (i>0 && i<info->mx-1 && j>0 && j<info->my-1) {
 
-         // in the interior Omega, F(u) = f - det+(D^2u)
-         // There are only 2 directional derivs when
-         SDD[0] = (uw - 2.0*au[j][i] + ue)/(hx*hx); // horizontal centered-diff
-         SDD[1] = (un - 2.0*au[j][i] + us)/(hy*hy); // vertical centered-diff
-         SDD[2] = (ue - 2.0*au[j][i] + uw)/(hx*hx); // horizontal centered-diff again
+            // PetscPrintf(PETSC_COMM_WORLD,"i = %d, j = %d\n",i,j);
+            un = (j+1 == info->my-1) ? user->g_bdry(x,y+hy,0.0,user) : au[j+1][i];
+            us = (j-1 == 0)          ? user->g_bdry(x,y-hy,0.0,user) : au[j-1][i];
+            ue = (i+1 == info->mx-1) ? user->g_bdry(x+hx,y,0.0,user) : au[j][i+1];
+            uw = (i-1 == 0)          ? user->g_bdry(x-hx,y,0.0,user) : au[j][i-1];
 
-         // Comparison against SDD and espilon
-         SGTE[0] = SDD[0] > user->epsilon;
-         SGTE[1] = SDD[1] > user->epsilon;
-         SGTE[2] = SDD[2] > user->epsilon;
+            // in the interior Omega, F(u) = f - det+(D^2u)
+            // There are only 2 directional derivs when
+            SDD[0] = (uw - 2.0*au[j][i] + ue)/(hx*hx); // horizontal centered-diff
+            SDD[1] = (un - 2.0*au[j][i] + us)/(hy*hy); // vertical centered-diff
+            SDD[2] = (ue - 2.0*au[j][i] + uw)/(hx*hx); // horizontal centered-diff again
 
-         min_k = 0;
-         for(k =1; k <3; k++){
-            if (SDD[min_k] > SDD[k]) min_k = k;
-         }
-         if (SDD[min_k] > user->epsilon){
-            // if epsilon is the smallest Jacobian term is 0
-            // dDt[.][3] = 0
-            min_k = 3;
-            // otherwise its just dDt[.][min_k]
-         }
+            // Comparison against SDD and espilon
+            SGTE[0] = SDD[0] > user->epsilon;
+            SGTE[1] = SDD[1] > user->epsilon;
+            SGTE[2] = SDD[2] > user->epsilon;
 
-         // Compute the common factor 2*pi^2*sum(w[k]/max(SDD[k],eps))^(-3)
-         common = 0;
-         for (k = 0; k < 3; k++) {
-            common += weights[k]/(SGTE[k]? SDD[k]:user->epsilon);
-         }
-         common = PetscPowReal(common,-3);
-         common *= 2*PETSC_PI*PETSC_PI;
-
-         // Compute center value
-         v[0] = 0;
-         for (k = 0; k<3; k++) {
-            if(SGTE[k]) {
-               v[0] += weights[k]/(SDD[k]*SDD[k])*dDt[0][k];
+            // Find the smallest SDD 
+            min_k = 0;
+            for(k=1; k<3; k++){
+               if (SDD[min_k] > SDD[k]) min_k = k;
             }
-         }
-         v[0] += dDt[0][min_k]; // add the Jacobian of the min(min()) term
-         ncols = 1;
+            if (SDD[min_k] > user->epsilon){
+               // if epsilon is the smallest Jacobian term is 0
+               // dDt[.][3] = 0
+               min_k = 3;
+               // otherwise its just dDt[.][min_k]
+            }
 
-         if (i>0 && i<info->mx-1 && j>0 && j<info->my-1) { // for strictly interior points...
-            if (j+1 < info->my-1) { // north
-               col[ncols].j = j+1;
-               col[ncols].i = i;
-               v[ncols] = 0;
-               for (k = 0; k<3; k++) {
-                  if(SGTE[k]) {
-                     v[ncols] += weights[k]/(SDD[k]*SDD[k])*dDt[1][k];
-                  }
+            // Compute the common factor 2*pi^2*sum(w[k]/max(SDD[k],eps))^(-3)
+            common = 0;
+            for (k = 0; k < 3; k++) {
+               common += weights[k]/(SGTE[k]? SDD[k]:user->epsilon);
+            }
+            common = PetscPowReal(common,-3);
+            common *= 2*PETSC_PI*PETSC_PI;
+
+            // Compute center value
+            v[0] = 0;
+            for (k = 0; k<3; k++) {
+               if(SGTE[k]) {
+                  v[0] += weights[k]/(SDD[k]*SDD[k])*dDt[0][k];
                }
-               v[ncols] += dDt[1][min_k];
-               ncols++;
             }
-            if (j-1 > 0) {          // south
-               col[ncols].j = j-1;
-               col[ncols].i = i;
-               v[ncols] = 0;
-               for (k = 0; k<3; k++) {
-                  if(SGTE[k]) {
-                     v[ncols] += weights[k]/(SDD[k]*SDD[k])*dDt[2][k];
+            v[0] += dDt[0][min_k]; // add the Jacobian of the min(min()) term
+            ncols = 1;
+
+            if (i>0 && i<info->mx-1 && j>0 && j<info->my-1) { // for strictly interior points...
+               if (j+1 < info->my-1) { // north
+                  col[ncols].j = j+1;
+                  col[ncols].i = i;
+                  v[ncols] = 0;
+                  for (k = 0; k<3; k++) {
+                     if(SGTE[k]) {
+                        v[ncols] += weights[k]/(SDD[k]*SDD[k])*dDt[1][k];
+                     }
                   }
+                  v[ncols] += dDt[1][min_k];
+                  ncols++;
                }
-               v[ncols] += dDt[2][min_k];
-               ncols++;
-            }
-            if (i+1 < info->mx-1) {  // east
-               col[ncols].j = j;
-               col[ncols].i = i+1;
-               v[ncols] = 0;
-               for (k = 0; k<3; k++) {
-                  if(SGTE[k]) {
-                     v[ncols] += weights[k]/(SDD[k]*SDD[k])*dDt[2][k];
+               if (j-1 > 0) {          // south
+                  col[ncols].j = j-1;
+                  col[ncols].i = i;
+                  v[ncols] = 0;
+                  for (k = 0; k<3; k++) {
+                     if(SGTE[k]) {
+                        v[ncols] += weights[k]/(SDD[k]*SDD[k])*dDt[2][k];
+                     }
                   }
+                  v[ncols] += dDt[2][min_k];
+                  ncols++;
                }
-               v[ncols] += dDt[2][min_k];
-               ncols++;
-            }
-            if (i-1 > 0) {           // west
-               col[ncols].j = j;
-               col[ncols].i = i-1;
-               v[ncols] = 0;
-               for (k = 0; k<3; k++) {
-                  if(SGTE[k]) {
-                     v[ncols] += weights[k]/(SDD[k]*SDD[k])*dDt[3][k];
+               if (i+1 < info->mx-1) {  // east
+                  col[ncols].j = j;
+                  col[ncols].i = i+1;
+                  v[ncols] = 0;
+                  for (k = 0; k<3; k++) {
+                     if(SGTE[k]) {
+                        v[ncols] += weights[k]/(SDD[k]*SDD[k])*dDt[2][k];
+                     }
                   }
+                  v[ncols] += dDt[2][min_k];
+                  ncols++;
                }
-               v[ncols] += dDt[3][min_k];
-               ncols++;
+               if (i-1 > 0) {           // west
+                  col[ncols].j = j;
+                  col[ncols].i = i-1;
+                  v[ncols] = 0;
+                  for (k = 0; k<3; k++) {
+                     if(SGTE[k]) {
+                        v[ncols] += weights[k]/(SDD[k]*SDD[k])*dDt[3][k];
+                     }
+                  }
+                  v[ncols] += dDt[3][min_k];
+                  ncols++;
+               }
             }
+
+            ierr = MatSetValuesStencil(Jpre,1,&row,ncols,col,v,INSERT_VALUES); CHKERRQ(ierr);
          }
-         ierr = MatSetValuesStencil(Jpre,1,&row,ncols,col,v,INSERT_VALUES); CHKERRQ(ierr);
       }
    }
 
