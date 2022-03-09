@@ -221,11 +221,11 @@ PetscErrorCode MA2DJacobianLocal(DMDALocalInfo *info, PetscScalar **au, Mat J, M
       c = 0,1,2,3,4 corresponding to
       center, north, south, east, and west
    */
-   dDt[0][0] = -2.0/h2; dDt[0][1] = -2.0/h2; dDt[0][2] = -2.0/h2; dDt[0][3] = 0;
-   dDt[1][0] = 0;       dDt[1][1] = 1/h2;    dDt[1][2] = 0;       dDt[1][3] = 0;       // north
-   dDt[2][0] = 0;       dDt[2][1] = 1/h2;    dDt[2][2] = 0;       dDt[2][3] = 0;       // south
-   dDt[3][0] = 1/h2;    dDt[3][1] = 0;       dDt[3][2] = 1/h2;    dDt[3][3] = 0;       // east
-   dDt[4][0] = 1/h2;    dDt[4][1] = 0;       dDt[4][2] = 1/h2;    dDt[4][3] = 0;       // west
+   dDt[0][0] = 2.0/h2; dDt[0][1] = 2.0/h2; dDt[0][2] = 2.0/h2; dDt[0][3] = 0;
+   dDt[1][0] = 0;       dDt[1][1] = -1/h2;    dDt[1][2] = 0;       dDt[1][3] = 0;       // north
+   dDt[2][0] = 0;       dDt[2][1] = -1/h2;    dDt[2][2] = 0;       dDt[2][3] = 0;       // south
+   dDt[3][0] = -1/h2;    dDt[3][1] = 0;       dDt[3][2] = -1/h2;    dDt[3][3] = 0;       // east
+   dDt[4][0] = -1/h2;    dDt[4][1] = 0;       dDt[4][2] = -1/h2;    dDt[4][3] = 0;       // west
 
    // loop over each row of J
    for (j = info->ys; j < info->ys+info->ym; j++) {
@@ -258,7 +258,7 @@ PetscErrorCode MA2DJacobianLocal(DMDALocalInfo *info, PetscScalar **au, Mat J, M
             SGTE[1] = SDD[1] > user->epsilon;
             SGTE[2] = SDD[2] > user->epsilon;
 
-            // Find the smallest SDD 
+            // Find the smallest SDD, then check it against eps 
             min_k = 0;
             for(k=1; k<3; k++){
                if (SDD[min_k] > SDD[k]) min_k = k;
@@ -267,7 +267,6 @@ PetscErrorCode MA2DJacobianLocal(DMDALocalInfo *info, PetscScalar **au, Mat J, M
                // if epsilon is the smallest Jacobian term is 0
                // dDt[.][3] = 0
                min_k = 3;
-               // otherwise its just dDt[.][min_k]
             }
 
             // Compute the common factor 2*pi^2*sum(w[k]/max(SDD[k],eps))^(-3)
@@ -280,64 +279,64 @@ PetscErrorCode MA2DJacobianLocal(DMDALocalInfo *info, PetscScalar **au, Mat J, M
 
             // Compute center value
             v[0] = 0;
-            for (k = 0; k<3; k++) {
+            for (k=0; k<3; k++) {
                if(SGTE[k]) {
                   v[0] += weights[k]/(SDD[k]*SDD[k])*dDt[0][k];
                }
             }
-            v[0] += dDt[0][min_k]; // add the Jacobian of the min(min()) term
+            // jacobian = (common term)*(summation term) + (min-min term) 
+            v[0] = common*v[0] + dDt[0][min_k];    
             ncols = 1;
 
-            if (i>0 && i<info->mx-1 && j>0 && j<info->my-1) { // for strictly interior points...
-               if (j+1 < info->my-1) { // north
-                  col[ncols].j = j+1;
-                  col[ncols].i = i;
-                  v[ncols] = 0;
-                  for (k = 0; k<3; k++) {
-                     if(SGTE[k]) {
-                        v[ncols] += weights[k]/(SDD[k]*SDD[k])*dDt[1][k];
-                     }
+            if (j+1 < info->my-1) { // north
+               col[ncols].j = j+1;
+               col[ncols].i = i;
+               v[ncols] = 0;
+               for (k = 0; k<3; k++) {
+                  if(SGTE[k]) {
+                     v[ncols] += weights[k]/(SDD[k]*SDD[k])*dDt[1][k];
                   }
-                  v[ncols] += dDt[1][min_k];
-                  ncols++;
                }
-               if (j-1 > 0) {          // south
-                  col[ncols].j = j-1;
-                  col[ncols].i = i;
-                  v[ncols] = 0;
-                  for (k = 0; k<3; k++) {
-                     if(SGTE[k]) {
-                        v[ncols] += weights[k]/(SDD[k]*SDD[k])*dDt[2][k];
-                     }
-                  }
-                  v[ncols] += dDt[2][min_k];
-                  ncols++;
-               }
-               if (i+1 < info->mx-1) {  // east
-                  col[ncols].j = j;
-                  col[ncols].i = i+1;
-                  v[ncols] = 0;
-                  for (k = 0; k<3; k++) {
-                     if(SGTE[k]) {
-                        v[ncols] += weights[k]/(SDD[k]*SDD[k])*dDt[2][k];
-                     }
-                  }
-                  v[ncols] += dDt[2][min_k];
-                  ncols++;
-               }
-               if (i-1 > 0) {           // west
-                  col[ncols].j = j;
-                  col[ncols].i = i-1;
-                  v[ncols] = 0;
-                  for (k = 0; k<3; k++) {
-                     if(SGTE[k]) {
-                        v[ncols] += weights[k]/(SDD[k]*SDD[k])*dDt[3][k];
-                     }
-                  }
-                  v[ncols] += dDt[3][min_k];
-                  ncols++;
-               }
+               v[ncols] = common*v[ncols] + dDt[1][min_k];
+               ncols++;
             }
+            if (j-1 > 0) {          // south
+               col[ncols].j = j-1;
+               col[ncols].i = i;
+               v[ncols] = 0;
+               for (k = 0; k<3; k++) {
+                  if(SGTE[k]) {
+                     v[ncols] += weights[k]/(SDD[k]*SDD[k])*dDt[2][k];
+                  }
+               }
+               v[ncols] = common*v[ncols] + dDt[2][min_k];
+               ncols++;
+            }
+            if (i+1 < info->mx-1) {  // east
+               col[ncols].j = j;
+               col[ncols].i = i+1;
+               v[ncols] = 0;
+               for (k = 0; k<3; k++) {
+                  if(SGTE[k]) {
+                     v[ncols] += weights[k]/(SDD[k]*SDD[k])*dDt[3][k];
+                  }
+               }
+               v[ncols] = common*v[ncols] + dDt[3][min_k];
+               ncols++;
+            }
+            if (i-1 > 0) {           // west
+               col[ncols].j = j;
+               col[ncols].i = i-1;
+               v[ncols] = 0;
+               for (k = 0; k<3; k++) {
+                  if(SGTE[k]) {
+                     v[ncols] += weights[k]/(SDD[k]*SDD[k])*dDt[4][k];
+                  }
+               }
+               v[ncols] = common*v[ncols] + dDt[4][min_k];
+               ncols++;
+            }
+    
 
             ierr = MatSetValuesStencil(Jpre,1,&row,ncols,col,v,INSERT_VALUES); CHKERRQ(ierr);
          }
