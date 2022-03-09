@@ -291,11 +291,12 @@ int main(int argc,char **args) {
    ierr = DMDAGetLocalInfo(da_after,&info); // retrieve local process info from DA
    ierr = DMCreateGlobalVector(da_after,&u_exact);
    getuexact = getuexact_ptr[dim-1];
-   ierr = (*getuexact)(&info,u_exact,&user);
-   ierr = VecDuplicate(u_exact,&err);
+   ierr = (*getuexact)(&info,u_exact,&user); // compute exact solution using g(x,y)
+   ierr = VecDuplicate(u_exact,&err);        // make a copy of exact solution to `err` 
+   ierr = VecCopy(u_exact,err);        // make a copy of exact solution to `err` 
 
    // Compute the error
-   ierr = VecAXPY(err,-1.0,u); CHKERRQ(ierr);   // uexact <- u + (-1.0)*uexact
+   ierr = VecAYPX(err,-1.0,u); CHKERRQ(ierr);   // err <- u + (-1.0)*uexact
    ierr = VecNorm(err,NORM_INFINITY,&errinf); CHKERRQ(ierr);
    ierr = VecNorm(err,NORM_2,&err2h); CHKERRQ(ierr);
 //ENDGETSOLUTION
@@ -317,8 +318,7 @@ int main(int argc,char **args) {
          SETERRQ(PETSC_COMM_SELF,4,"invalid dim value in final report\n");
    }
    err2h /= normconst2h; // like continuous L2
-   ierr = PetscPrintf(PETSC_COMM_WORLD,
-               "problem %s on %s grid:\n"
+   ierr = PetscPrintf(PETSC_COMM_WORLD, "problem %s on %s grid:\n"
                "  error |u-uexact|_inf = %.3e, |u-uexact|_h = %.3e\n",
                ProblemTypes[problem],gridstr,errinf,err2h); CHKERRQ(ierr);
 
@@ -333,6 +333,11 @@ int main(int argc,char **args) {
    PetscViewerPushFormat(viewer,PETSC_VIEWER_ASCII_MATLAB); // except its for u
    PetscObjectSetName((PetscObject)u_exact,"u_exact");
    VecView(u_exact,viewer);
+
+   PetscViewerASCIIOpen(PETSC_COMM_WORLD,"load_err.m",&viewer);  // set the file name
+   PetscViewerPushFormat(viewer,PETSC_VIEWER_ASCII_MATLAB); // except its for u
+   PetscObjectSetName((PetscObject)err,"err");
+   VecView(err,viewer);
 
    ierr = DMDestroy(&da); CHKERRQ(ierr);
    ierr = PetscViewerDestroy(&viewer); CHKERRQ(ierr); // the viewer need to be destroyed as well
@@ -366,12 +371,14 @@ PetscErrorCode Form2DUExact(DMDALocalInfo *info, Vec u, MACtx* user) {
    ierr = DMGetBoundingBox(info->da,xymin,xymax); CHKERRQ(ierr);
    hx = (xymax[0] - xymin[0]) / (info->mx - 1);
    hy = (xymax[1] - xymin[1]) / (info->my - 1); // mx = my = N+2
+
    ierr = DMDAVecGetArray(info->da, u, &au);CHKERRQ(ierr);
    for (j=info->ys; j<info->ys+info->ym; j++) {
       y = xymin[1] + j * hy;
       for (i=info->xs; i<info->xs+info->xm; i++) {
          x = xymin[0] + i * hx;
-         au[j][i] = user->g_bdry(x,y,0.0,user);
+
+         au[j][i] = user->g_bdry(x, y,0.0,user);
       }
    }
    ierr = DMDAVecRestoreArray(info->da, u, &au);CHKERRQ(ierr);
