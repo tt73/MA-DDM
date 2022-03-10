@@ -30,7 +30,7 @@ figure
 surf(u_grid-u_exac)
 title('error')
 
-fprintf('|error|_inf = %f',norm(u_grid(:)-u_exac(:),inf))
+fprintf('|error|_inf = %f\n',norm(u_grid(:)-u_exac(:),inf))
 
 figure
 err_s = reshape(err,n,n);
