@@ -236,8 +236,9 @@ PetscErrorCode MA2DJacobianLocal(DMDALocalInfo *info, PetscScalar **au, Mat J, M
       for (i = info->xs; i < info->xs+info->xm; i++) {
          row.i = i;
          col[0].i = i;
-         ncols = 1;
          x = xymin[0] + i * hx;
+
+         ncols = 1;
 
          if (i>0 && i<info->mx-1 && j>0 && j<info->my-1) {
 
@@ -258,7 +259,7 @@ PetscErrorCode MA2DJacobianLocal(DMDALocalInfo *info, PetscScalar **au, Mat J, M
             SGTE[1] = SDD[1] > user->epsilon;
             SGTE[2] = SDD[2] > user->epsilon;
 
-            // Find the smallest SDD, then check it against eps 
+            // Find the smallest SDD, then check it against eps
             min_k = 0;
             for(k=1; k<3; k++){
                if (SDD[min_k] > SDD[k]) min_k = k;
@@ -284,16 +285,17 @@ PetscErrorCode MA2DJacobianLocal(DMDALocalInfo *info, PetscScalar **au, Mat J, M
                   v[0] += weights[k]/(SDD[k]*SDD[k])*dDt[0][k];
                }
             }
-            // jacobian = (common term)*(summation term) + (min-min term) 
-            v[0] = common*v[0] + dDt[0][min_k];    
-            ncols = 1;
+            // jacobian = (common term)*(summation term) + (min-min term)
+            v[0] = common*v[0] + dDt[0][min_k];
 
-            // north value 
-            if (j+1 == info->my-1) {
-               col[ncols].j = j+1;
-               col[ncols].i = i;
-               v[ncols++] = 1.0;
-            } else if (j+1 < info->my-1) { 
+
+            // north value
+            // if (j+1 == info->my-1) {
+            //    col[ncols].j = j+1;
+            //    col[ncols].i = i;
+            //    v[ncols++] = 1.0;
+            // } else
+            if (j+1 < info->my-1) {
                col[ncols].j = j+1;
                col[ncols].i = i;
                v[ncols] = 0;
@@ -305,13 +307,14 @@ PetscErrorCode MA2DJacobianLocal(DMDALocalInfo *info, PetscScalar **au, Mat J, M
                v[ncols] = common*v[ncols] + dDt[1][min_k];
                ncols++;
             }
-            
+
             // South
-            if (j-1 == 0) {
-               col[ncols].j = j-1;
-               col[ncols].i = i;
-               v[ncols++] = 1.0;
-            } else if (j-1 > 0) {         
+            // if (j-1 == 0) {
+            //    col[ncols].j = j-1;
+            //    col[ncols].i = i;
+            //    v[ncols++] = 1.0;
+            // } else
+            if (j-1 > 0) {
                col[ncols].j = j-1;
                col[ncols].i = i;
                v[ncols] = 0;
@@ -323,13 +326,14 @@ PetscErrorCode MA2DJacobianLocal(DMDALocalInfo *info, PetscScalar **au, Mat J, M
                v[ncols] = common*v[ncols] + dDt[2][min_k];
                ncols++;
             }
-            
-            // east 
-            if (i+1 == info->mx-1) {
-               col[ncols].j = j;
-               col[ncols].i = i+1;
-               v[ncols++] = 1.0;
-            } else if (i+1 < info->mx-1) {  // east
+
+            // east
+            // if (i+1 == info->mx-1) {
+            //    col[ncols].j = j;
+            //    col[ncols].i = i+1;
+            //    v[ncols++] = 1.0;
+            // } else
+            if (i+1 < info->mx-1) {  // east
                col[ncols].j = j;
                col[ncols].i = i+1;
                v[ncols] = 0;
@@ -341,13 +345,14 @@ PetscErrorCode MA2DJacobianLocal(DMDALocalInfo *info, PetscScalar **au, Mat J, M
                v[ncols] = common*v[ncols] + dDt[3][min_k];
                ncols++;
             }
-            
+
             // west
-            if (i-1 == 0) {
-               col[ncols].j = j;
-               col[ncols].i = i-1;
-               v[ncols++] = 1.0;
-            } else if (i-1 > 0) {           
+            // if (i-1 == 0) {
+            //    col[ncols].j = j;
+            //    col[ncols].i = i-1;
+            //    v[ncols++] = 1.0;
+            // } else
+            if (i-1 > 0) {
                col[ncols].j = j;
                col[ncols].i = i-1;
                v[ncols] = 0;
@@ -359,7 +364,11 @@ PetscErrorCode MA2DJacobianLocal(DMDALocalInfo *info, PetscScalar **au, Mat J, M
                v[ncols] = common*v[ncols] + dDt[4][min_k];
                ncols++;
             }
-      
+
+            ierr = MatSetValuesStencil(Jpre,1,&row,ncols,col,v,INSERT_VALUES); CHKERRQ(ierr);
+
+         } else {
+            v[0] = 1.0;
             ierr = MatSetValuesStencil(Jpre,1,&row,ncols,col,v,INSERT_VALUES); CHKERRQ(ierr);
          }
       }
@@ -399,37 +408,37 @@ PetscErrorCode MA3DJacobianLocal(DMDALocalInfo *info, PetscScalar ***au, Mat J, 
          row.j = j;
          col[0].j = j;
          for (i = info->xs; i < info->xs+info->xm; i++) {
-               row.i = i;
-               col[0].i = i;
-               ncols = 1;
-               v[0] = scdiag;
-               if (i>0 && i<info->mx-1 && j>0 && j<info->my-1 && k>0 && k<info->mz-1) {
-                  if (i-1 > 0) {
-                     col[ncols].k = k;    col[ncols].j = j;    col[ncols].i = i-1;
-                     v[ncols++] = - scx;
-                  }
-                  if (i+1 < info->mx-1) {
-                     col[ncols].k = k;    col[ncols].j = j;    col[ncols].i = i+1;
-                     v[ncols++] = - scx;
-                  }
-                  if (j-1 > 0) {
-                     col[ncols].k = k;    col[ncols].j = j-1;  col[ncols].i = i;
-                     v[ncols++] = - scy;
-                  }
-                  if (j+1 < info->my-1) {
-                     col[ncols].k = k;    col[ncols].j = j+1;  col[ncols].i = i;
-                     v[ncols++] = - scy;
-                  }
-                  if (k-1 > 0) {
-                     col[ncols].k = k-1;  col[ncols].j = j;    col[ncols].i = i;
-                     v[ncols++] = - scz;
-                  }
-                  if (k+1 < info->mz-1) {
-                     col[ncols].k = k+1;  col[ncols].j = j;    col[ncols].i = i;
-                     v[ncols++] = - scz;
-                  }
+            row.i = i;
+            col[0].i = i;
+            ncols = 1;
+            v[0] = scdiag;
+            if (i>0 && i<info->mx-1 && j>0 && j<info->my-1 && k>0 && k<info->mz-1) {
+               if (i-1 > 0) {
+                  col[ncols].k = k;    col[ncols].j = j;    col[ncols].i = i-1;
+                  v[ncols++] = - scx;
                }
-               ierr = MatSetValuesStencil(Jpre,1,&row,ncols,col,v,INSERT_VALUES); CHKERRQ(ierr);
+               if (i+1 < info->mx-1) {
+                  col[ncols].k = k;    col[ncols].j = j;    col[ncols].i = i+1;
+                  v[ncols++] = - scx;
+               }
+               if (j-1 > 0) {
+                  col[ncols].k = k;    col[ncols].j = j-1;  col[ncols].i = i;
+                  v[ncols++] = - scy;
+               }
+               if (j+1 < info->my-1) {
+                  col[ncols].k = k;    col[ncols].j = j+1;  col[ncols].i = i;
+                  v[ncols++] = - scy;
+               }
+               if (k-1 > 0) {
+                  col[ncols].k = k-1;  col[ncols].j = j;    col[ncols].i = i;
+                  v[ncols++] = - scz;
+               }
+               if (k+1 < info->mz-1) {
+                  col[ncols].k = k+1;  col[ncols].j = j;    col[ncols].i = i;
+                  v[ncols++] = - scz;
+               }
+            }
+            ierr = MatSetValuesStencil(Jpre,1,&row,ncols,col,v,INSERT_VALUES); CHKERRQ(ierr);
          }
       }
    }
