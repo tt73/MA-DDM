@@ -172,35 +172,19 @@ int main(int argc,char **args) {
    user.cy = 1.0;
    user.cz = 1.0;
    ierr = PetscOptionsBegin(PETSC_COMM_WORLD,"t1_", "options for test1.c", ""); CHKERRQ(ierr);
-   ierr = PetscOptionsReal("-cx",
-      "set coefficient of x term u_xx in equation",
-      "test1.c",user.cx,&user.cx,NULL);CHKERRQ(ierr);
-   ierr = PetscOptionsReal("-cy",
-      "set coefficient of y term u_yy in equation",
-      "test1.c",user.cy,&user.cy,NULL);CHKERRQ(ierr);
-   ierr = PetscOptionsReal("-cz",
-      "set coefficient of z term u_zz in equation",
-      "test1.c",user.cz,&user.cz,NULL);CHKERRQ(ierr);
-   ierr = PetscOptionsInt("-dim",
-      "dimension of problem (=1,2,3 only)",
-      "test1.c",dim,&dim,NULL);CHKERRQ(ierr);
-   ierr = PetscOptionsBool("-initial_gonboundary",
-      "set initial iterate to have correct boundary values",
+
+   ierr = PetscOptionsInt("-dim","dimension of problem (=1,2,3 only)","test1.c",dim,&dim,NULL);CHKERRQ(ierr);
+   ierr = PetscOptionsBool("-initial_gonboundary","set initial iterate to have correct boundary values",
       "test1.c",gonboundary,&gonboundary,NULL);CHKERRQ(ierr);
-   ierr = PetscOptionsEnum("-initial_type",
-      "type of initial iterate",
+   ierr = PetscOptionsEnum("-initial_type","type of initial iterate",
       "test1.c",InitialTypes,(PetscEnum)initial,(PetscEnum*)&initial,NULL); CHKERRQ(ierr);
-   ierr = PetscOptionsReal("-Lx",
-      "set Lx in domain ([0,Lx] x [0,Ly] x [0,Lz], etc.)",
+   ierr = PetscOptionsReal("-Lx", "set Lx in domain ([0,Lx] x [0,Ly] x [0,Lz], etc.)",
       "test1.c",user.Lx,&user.Lx,NULL);CHKERRQ(ierr);
-   ierr = PetscOptionsReal("-Ly",
-      "set Ly in domain ([0,Lx] x [0,Ly] x [0,Lz], etc.)",
+   ierr = PetscOptionsReal("-Ly","set Ly in domain ([0,Lx] x [0,Ly] x [0,Lz], etc.)",
       "test1.c",user.Ly,&user.Ly,NULL);CHKERRQ(ierr);
-   ierr = PetscOptionsReal("-Lz",
-      "set Ly in domain ([0,Lx] x [0,Ly] x [0,Lz], etc.)",
+   ierr = PetscOptionsReal("-Lz","set Ly in domain ([0,Lx] x [0,Ly] x [0,Lz], etc.)",
       "test1.c",user.Lz,&user.Lz,NULL);CHKERRQ(ierr);
-   ierr = PetscOptionsEnum("-problem",
-      "problem type; determines exact solution and RHS",
+   ierr = PetscOptionsEnum("-problem","problem type; determines exact solution and RHS",
       "test1.c",ProblemTypes,(PetscEnum)problem,(PetscEnum*)&problem,NULL); CHKERRQ(ierr);
    ierr = PetscOptionsEnd(); CHKERRQ(ierr);
 
@@ -222,17 +206,17 @@ int main(int argc,char **args) {
    switch (dim) {
       case 1:
          ierr = DMDACreate1d(PETSC_COMM_WORLD,
-               DM_BOUNDARY_NONE,3,1,1, NULL, &da); CHKERRQ(ierr);
+               DM_BOUNDARY_NONE,N+2,1,1, NULL, &da); CHKERRQ(ierr);
          break;
       case 2:
-         ierr = DMDACreate2d(PETSC_COMM_WORLD, // MPI not important
-                           DM_BOUNDARY_NONE,  // not important
-                           DM_BOUNDARY_NONE,  // not important
-                           DMDA_STENCIL_STAR,  // not important
+         ierr = DMDACreate2d(PETSC_COMM_WORLD,   // MPI not important
+                           DM_BOUNDARY_NONE,  // periodicity in  x
+                           DM_BOUNDARY_NONE,  // periodicity in y
+                           DMDA_STENCIL_STAR, // stencil type: box vs star
                            N+2,N+2,           // mesh size in x & y directions
-                           PETSC_DECIDE,PETSC_DECIDE,  // not important
-                           1,                 // not important
-                           s,                 // stencil width not important
+                           PETSC_DECIDE,PETSC_DECIDE, // local mesh size
+                           1,                 // degree of freedom
+                           s,                 // stencil width
                            NULL,NULL,         // not important
                            &da); CHKERRQ(ierr);
          break;
@@ -329,6 +313,7 @@ int main(int argc,char **args) {
    PetscViewerPushFormat(viewer,PETSC_VIEWER_ASCII_MATLAB); // except its for u
    PetscObjectSetName((PetscObject)u,"u");
    VecView(u,viewer);
+
    PetscViewerASCIIOpen(PETSC_COMM_WORLD,"load_exact.m",&viewer);  // set the file name
    PetscViewerPushFormat(viewer,PETSC_VIEWER_ASCII_MATLAB); // except its for u
    PetscObjectSetName((PetscObject)u_exact,"u_exact");

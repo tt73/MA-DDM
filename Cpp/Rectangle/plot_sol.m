@@ -7,7 +7,6 @@ clear, close all
 
 load_u % load petsc's numerical solution, u
 load_exact % load exact solution coded in petsc
-load_err
 
 s = length(u); 
 n = sqrt(s);
@@ -31,7 +30,3 @@ surf(u_grid-u_exac)
 title('error')
 
 fprintf('|error|_inf = %f\n',norm(u_grid(:)-u_exac(:),inf))
-
-figure
-err_s = reshape(err,n,n);
-surf(err_s)
