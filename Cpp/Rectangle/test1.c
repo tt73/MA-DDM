@@ -292,8 +292,8 @@ int main(int argc,char **args) {
    ierr = DMCreateGlobalVector(da_after,&u_exact);
    getuexact = getuexact_ptr[dim-1];
    ierr = (*getuexact)(&info,u_exact,&user); // compute exact solution using g(x,y)
-   ierr = VecDuplicate(u_exact,&err);      // allocated mem for `err` 
-   ierr = VecCopy(u_exact,err);        // make a copy of exact solution to `err` 
+   ierr = VecDuplicate(u_exact,&err);        // allocated mem for `err`
+   ierr = VecCopy(u_exact,err);              // make a copy of exact solution to `err`
 
    // Compute the error
    ierr = VecAYPX(err,-1.0,u); CHKERRQ(ierr);   // err <- u + (-1.0)*uexact
@@ -334,15 +334,10 @@ int main(int argc,char **args) {
    PetscObjectSetName((PetscObject)u_exact,"u_exact");
    VecView(u_exact,viewer);
 
-   PetscViewerASCIIOpen(PETSC_COMM_WORLD,"load_err.m",&viewer);  // set the file name
-   PetscViewerPushFormat(viewer,PETSC_VIEWER_ASCII_MATLAB); // except its for u
-   PetscObjectSetName((PetscObject)err,"err");
-   VecView(err,viewer);
-
    ierr = DMDestroy(&da); CHKERRQ(ierr);
-   ierr = VecDestroy(&err); CHKERRQ(ierr); 
-   ierr = VecDestroy(&u_exact); CHKERRQ(ierr); 
-   ierr = PetscViewerDestroy(&viewer); CHKERRQ(ierr); 
+   ierr = VecDestroy(&err); CHKERRQ(ierr);
+   ierr = VecDestroy(&u_exact); CHKERRQ(ierr);
+   ierr = PetscViewerDestroy(&viewer); CHKERRQ(ierr);
    ierr = SNESDestroy(&snes); CHKERRQ(ierr);
    return PetscFinalize();
 }
