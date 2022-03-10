@@ -90,7 +90,7 @@ PetscErrorCode MA2DFunctionLocal(DMDALocalInfo *info, PetscReal **au, PetscReal 
                   right = SDD[k];
                }
             }
-            aF[j][i] = user->f_rhs(x,y,0.0,user) - (left + right);
+            aF[j][i] = (left + right) - user->f_rhs(x,y,0.0,user);
          }
       }
    }
@@ -221,11 +221,11 @@ PetscErrorCode MA2DJacobianLocal(DMDALocalInfo *info, PetscScalar **au, Mat J, M
       c = 0,1,2,3,4 corresponding to
       center, north, south, east, and west
    */
-   dDt[0][0] = 2.0/h2; dDt[0][1] = 2.0/h2; dDt[0][2] = 2.0/h2; dDt[0][3] = 0;
-   dDt[1][0] = 0;       dDt[1][1] = -1/h2;    dDt[1][2] = 0;       dDt[1][3] = 0;       // north
-   dDt[2][0] = 0;       dDt[2][1] = -1/h2;    dDt[2][2] = 0;       dDt[2][3] = 0;       // south
-   dDt[3][0] = -1/h2;    dDt[3][1] = 0;       dDt[3][2] = -1/h2;    dDt[3][3] = 0;       // east
-   dDt[4][0] = -1/h2;    dDt[4][1] = 0;       dDt[4][2] = -1/h2;    dDt[4][3] = 0;       // west
+   dDt[0][0] = -2.0/h2; dDt[0][1] = -2.0/h2; dDt[0][2] = -2.0/h2; dDt[0][3] = 0;
+   dDt[1][0] = 0;       dDt[1][1] = 1/h2;    dDt[1][2] = 0;       dDt[1][3] = 0;       // north
+   dDt[2][0] = 0;       dDt[2][1] = 1/h2;    dDt[2][2] = 0;       dDt[2][3] = 0;       // south
+   dDt[3][0] = 1/h2;    dDt[3][1] = 0;       dDt[3][2] = 1/h2;    dDt[3][3] = 0;       // east
+   dDt[4][0] = 1/h2;    dDt[4][1] = 0;       dDt[4][2] = 1/h2;    dDt[4][3] = 0;       // west
 
    // loop over each row of J
    for (j = info->ys; j < info->ys+info->ym; j++) {
@@ -274,7 +274,7 @@ PetscErrorCode MA2DJacobianLocal(DMDALocalInfo *info, PetscScalar **au, Mat J, M
             for (k = 0; k < 3; k++) {
                common += weights[k]/(SGTE[k]? SDD[k]:user->epsilon);
             }
-            common = PetscPowReal(common,-3);
+            common = PetscPowReal(common,-3.0);
             common *= 2*PETSC_PI*PETSC_PI;
 
             // Compute center value
@@ -288,7 +288,12 @@ PetscErrorCode MA2DJacobianLocal(DMDALocalInfo *info, PetscScalar **au, Mat J, M
             v[0] = common*v[0] + dDt[0][min_k];    
             ncols = 1;
 
-            if (j+1 < info->my-1) { // north
+            // north value 
+            if (j+1 == info->my-1) {
+               col[ncols].j = j+1;
+               col[ncols].i = i;
+               v[ncols++] = 1.0;
+            } else if (j+1 < info->my-1) { 
                col[ncols].j = j+1;
                col[ncols].i = i;
                v[ncols] = 0;
@@ -300,7 +305,13 @@ PetscErrorCode MA2DJacobianLocal(DMDALocalInfo *info, PetscScalar **au, Mat J, M
                v[ncols] = common*v[ncols] + dDt[1][min_k];
                ncols++;
             }
-            if (j-1 > 0) {          // south
+            
+            // South
+            if (j-1 == 0) {
+               col[ncols].j = j-1;
+               col[ncols].i = i;
+               v[ncols++] = 1.0;
+            } else if (j-1 > 0) {         
                col[ncols].j = j-1;
                col[ncols].i = i;
                v[ncols] = 0;
@@ -312,7 +323,13 @@ PetscErrorCode MA2DJacobianLocal(DMDALocalInfo *info, PetscScalar **au, Mat J, M
                v[ncols] = common*v[ncols] + dDt[2][min_k];
                ncols++;
             }
-            if (i+1 < info->mx-1) {  // east
+            
+            // east 
+            if (i+1 == info->mx-1) {
+               col[ncols].j = j;
+               col[ncols].i = i+1;
+               v[ncols++] = 1.0;
+            } else if (i+1 < info->mx-1) {  // east
                col[ncols].j = j;
                col[ncols].i = i+1;
                v[ncols] = 0;
@@ -324,7 +341,13 @@ PetscErrorCode MA2DJacobianLocal(DMDALocalInfo *info, PetscScalar **au, Mat J, M
                v[ncols] = common*v[ncols] + dDt[3][min_k];
                ncols++;
             }
-            if (i-1 > 0) {           // west
+            
+            // west
+            if (i-1 == 0) {
+               col[ncols].j = j;
+               col[ncols].i = i-1;
+               v[ncols++] = 1.0;
+            } else if (i-1 > 0) {           
                col[ncols].j = j;
                col[ncols].i = i-1;
                v[ncols] = 0;
@@ -336,8 +359,7 @@ PetscErrorCode MA2DJacobianLocal(DMDALocalInfo *info, PetscScalar **au, Mat J, M
                v[ncols] = common*v[ncols] + dDt[4][min_k];
                ncols++;
             }
-    
-
+      
             ierr = MatSetValuesStencil(Jpre,1,&row,ncols,col,v,INSERT_VALUES); CHKERRQ(ierr);
          }
       }

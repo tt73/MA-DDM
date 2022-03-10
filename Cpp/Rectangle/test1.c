@@ -277,7 +277,7 @@ int main(int argc,char **args) {
    // default to KSPONLY+CG because problem is linear and SPD
    ierr = SNESSetType(snes,SNESKSPONLY); CHKERRQ(ierr);
    ierr = SNESGetKSP(snes,&ksp); CHKERRQ(ierr);
-   ierr = KSPSetType(ksp,KSPCG); CHKERRQ(ierr);
+   ierr = KSPSetType(ksp,KSPGMRES); CHKERRQ(ierr);
    ierr = SNESSetFromOptions(snes); CHKERRQ(ierr);
 
    // set initial iterate and then solve
