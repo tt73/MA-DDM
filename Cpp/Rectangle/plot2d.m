@@ -1,6 +1,10 @@
 %% Notes
 
 % Run this command: ./test1 -da_refine 2 -snes_monitor -snes_converged_reason -snes_type newtontr
+
+% Run this command for parallel: mpiexec -n 4 ./test1 -da_refine 2 -snes_monitor -snes_converged_reason -snes_type newtontr
+
+
 % Then run this script
 
 clear, close all
