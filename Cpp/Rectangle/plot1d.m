@@ -24,7 +24,7 @@ plot(u_exact);
 title('Exact solution')
 
 figure
-surf(u-u_exact)
+plot(u-u_exact)
 title('error')
 
 fprintf('|error|_inf = %f\n',norm(u-u_exact,inf))
