@@ -100,45 +100,45 @@ PetscErrorCode MA2DFunctionLocal(DMDALocalInfo *info, PetscReal **au, PetscReal 
 //ENDFORM2DFUNCTION
 
 PetscErrorCode MA3DFunctionLocal(DMDALocalInfo *info, PetscReal ***au, PetscReal ***aF, MACtx *user) {
-   PetscErrorCode ierr;
-   PetscInt   i, j, k;
-   PetscReal  xyzmin[3], xyzmax[3], hx, hy, hz, dvol, scx, scy, scz, scdiag,
-            x, y, z, ue, uw, un, us, uu, ud;
-   ierr = DMGetBoundingBox(info->da,xyzmin,xyzmax); CHKERRQ(ierr);
-   hx = (xyzmax[0] - xyzmin[0]) / (info->mx - 1);
-   hy = (xyzmax[1] - xyzmin[1]) / (info->my - 1);
-   hz = (xyzmax[2] - xyzmin[2]) / (info->mz - 1);
-   dvol = hx * hy * hz;
-   scx = user->cx * dvol / (hx*hx);
-   scy = user->cy * dvol / (hy*hy);
-   scz = user->cz * dvol / (hz*hz);
-   scdiag = 2.0 * (scx + scy + scz);
-   for (k = info->zs; k < info->zs + info->zm; k++) {
-      z = xyzmin[2] + k * hz;
-      for (j = info->ys; j < info->ys + info->ym; j++) {
-         y = xyzmin[1] + j * hy;
-         for (i = info->xs; i < info->xs + info->xm; i++) {
-            x = xyzmin[0] + i * hx;
-            if (   i==0 || i==info->mx-1
-               || j==0 || j==info->my-1
-               || k==0 || k==info->mz-1) {
-               aF[k][j][i] = au[k][j][i] - user->g_bdry(x,y,z,user);
-               aF[k][j][i] *= scdiag;
-            } else {
-               ue = (i+1 == info->mx-1) ? user->g_bdry(x+hx,y,z,user) : au[k][j][i+1];
-               uw = (i-1 == 0)          ? user->g_bdry(x-hx,y,z,user) : au[k][j][i-1];
-               un = (j+1 == info->my-1) ? user->g_bdry(x,y+hy,z,user) : au[k][j+1][i];
-               us = (j-1 == 0)          ? user->g_bdry(x,y-hy,z,user) : au[k][j-1][i];
-               uu = (k+1 == info->mz-1) ? user->g_bdry(x,y,z+hz,user) : au[k+1][j][i];
-               ud = (k-1 == 0)          ? user->g_bdry(x,y,z-hz,user) : au[k-1][j][i];
-               aF[k][j][i] = scdiag * au[k][j][i]
-                  - scx * (uw + ue) - scy * (us + un) - scz * (uu + ud)
-                  - dvol * user->f_rhs(x,y,z,user);
-            }
-         }
-      }
-   }
-   ierr = PetscLogFlops(14.0*info->xm*info->ym*info->zm);CHKERRQ(ierr);
+   // PetscErrorCode ierr;
+   // PetscInt   i, j, k;
+   // PetscReal  xyzmin[3], xyzmax[3], hx, hy, hz, dvol, scx, scy, scz, scdiag,
+   //          x, y, z, ue, uw, un, us, uu, ud;
+   // ierr = DMGetBoundingBox(info->da,xyzmin,xyzmax); CHKERRQ(ierr);
+   // hx = (xyzmax[0] - xyzmin[0]) / (info->mx - 1);
+   // hy = (xyzmax[1] - xyzmin[1]) / (info->my - 1);
+   // hz = (xyzmax[2] - xyzmin[2]) / (info->mz - 1);
+   // dvol = hx * hy * hz;
+   // scx = user->cx * dvol / (hx*hx);
+   // scy = user->cy * dvol / (hy*hy);
+   // scz = user->cz * dvol / (hz*hz);
+   // scdiag = 2.0 * (scx + scy + scz);
+   // for (k = info->zs; k < info->zs + info->zm; k++) {
+   //    z = xyzmin[2] + k * hz;
+   //    for (j = info->ys; j < info->ys + info->ym; j++) {
+   //       y = xyzmin[1] + j * hy;
+   //       for (i = info->xs; i < info->xs + info->xm; i++) {
+   //          x = xyzmin[0] + i * hx;
+   //          if (   i==0 || i==info->mx-1
+   //             || j==0 || j==info->my-1
+   //             || k==0 || k==info->mz-1) {
+   //             aF[k][j][i] = au[k][j][i] - user->g_bdry(x,y,z,user);
+   //             aF[k][j][i] *= scdiag;
+   //          } else {
+   //             ue = (i+1 == info->mx-1) ? user->g_bdry(x+hx,y,z,user) : au[k][j][i+1];
+   //             uw = (i-1 == 0)          ? user->g_bdry(x-hx,y,z,user) : au[k][j][i-1];
+   //             un = (j+1 == info->my-1) ? user->g_bdry(x,y+hy,z,user) : au[k][j+1][i];
+   //             us = (j-1 == 0)          ? user->g_bdry(x,y-hy,z,user) : au[k][j-1][i];
+   //             uu = (k+1 == info->mz-1) ? user->g_bdry(x,y,z+hz,user) : au[k+1][j][i];
+   //             ud = (k-1 == 0)          ? user->g_bdry(x,y,z-hz,user) : au[k-1][j][i];
+   //             aF[k][j][i] = scdiag * au[k][j][i]
+   //                - scx * (uw + ue) - scy * (us + un) - scz * (uu + ud)
+   //                - dvol * user->f_rhs(x,y,z,user);
+   //          }
+   //       }
+   //    }
+   // }
+   // ierr = PetscLogFlops(14.0*info->xm*info->ym*info->zm);CHKERRQ(ierr);
    return 0;
 }
 
@@ -360,67 +360,67 @@ PetscErrorCode MA2DJacobianLocal(DMDALocalInfo *info, PetscScalar **au, Mat J, M
    The 3D Jacobian
 */
 PetscErrorCode MA3DJacobianLocal(DMDALocalInfo *info, PetscScalar ***au, Mat J, Mat Jpre, MACtx *user) {
-   PetscErrorCode  ierr;
-   PetscReal   xyzmin[3], xyzmax[3], hx, hy, hz, dvol, scx, scy, scz, scdiag, v[7];
-   PetscInt    i,j,k,ncols;
-   MatStencil  col[7],row;
+   // PetscErrorCode  ierr;
+   // PetscReal   xyzmin[3], xyzmax[3], hx, hy, hz, dvol, scx, scy, scz, scdiag, v[7];
+   // PetscInt    i,j,k,ncols;
+   // MatStencil  col[7],row;
 
-   ierr = DMGetBoundingBox(info->da,xyzmin,xyzmax); CHKERRQ(ierr);
-   hx = (xyzmax[0] - xyzmin[0]) / (info->mx - 1);
-   hy = (xyzmax[1] - xyzmin[1]) / (info->my - 1);
-   hz = (xyzmax[2] - xyzmin[2]) / (info->mz - 1);
-   dvol = hx * hy * hz;
-   scx = user->cx * dvol / (hx*hx);
-   scy = user->cy * dvol / (hy*hy);
-   scz = user->cz * dvol / (hz*hz);
-   scdiag = 2.0 * (scx + scy + scz);
-   for (k = info->zs; k < info->zs+info->zm; k++) {
-      row.k = k;
-      col[0].k = k;
-      for (j = info->ys; j < info->ys+info->ym; j++) {
-         row.j = j;
-         col[0].j = j;
-         for (i = info->xs; i < info->xs+info->xm; i++) {
-            row.i = i;
-            col[0].i = i;
-            ncols = 1;
-            v[0] = scdiag;
-            if (i>0 && i<info->mx-1 && j>0 && j<info->my-1 && k>0 && k<info->mz-1) {
-               if (i-1 > 0) {
-                  col[ncols].k = k;    col[ncols].j = j;    col[ncols].i = i-1;
-                  v[ncols++] = - scx;
-               }
-               if (i+1 < info->mx-1) {
-                  col[ncols].k = k;    col[ncols].j = j;    col[ncols].i = i+1;
-                  v[ncols++] = - scx;
-               }
-               if (j-1 > 0) {
-                  col[ncols].k = k;    col[ncols].j = j-1;  col[ncols].i = i;
-                  v[ncols++] = - scy;
-               }
-               if (j+1 < info->my-1) {
-                  col[ncols].k = k;    col[ncols].j = j+1;  col[ncols].i = i;
-                  v[ncols++] = - scy;
-               }
-               if (k-1 > 0) {
-                  col[ncols].k = k-1;  col[ncols].j = j;    col[ncols].i = i;
-                  v[ncols++] = - scz;
-               }
-               if (k+1 < info->mz-1) {
-                  col[ncols].k = k+1;  col[ncols].j = j;    col[ncols].i = i;
-                  v[ncols++] = - scz;
-               }
-            }
-            ierr = MatSetValuesStencil(Jpre,1,&row,ncols,col,v,INSERT_VALUES); CHKERRQ(ierr);
-         }
-      }
-   }
-   ierr = MatAssemblyBegin(Jpre,MAT_FINAL_ASSEMBLY); CHKERRQ(ierr);
-   ierr = MatAssemblyEnd(Jpre,MAT_FINAL_ASSEMBLY); CHKERRQ(ierr);
-   if (J != Jpre) {
-      ierr = MatAssemblyBegin(J,MAT_FINAL_ASSEMBLY); CHKERRQ(ierr);
-      ierr = MatAssemblyEnd(J,MAT_FINAL_ASSEMBLY); CHKERRQ(ierr);
-   }
+   // ierr = DMGetBoundingBox(info->da,xyzmin,xyzmax); CHKERRQ(ierr);
+   // hx = (xyzmax[0] - xyzmin[0]) / (info->mx - 1);
+   // hy = (xyzmax[1] - xyzmin[1]) / (info->my - 1);
+   // hz = (xyzmax[2] - xyzmin[2]) / (info->mz - 1);
+   // dvol = hx * hy * hz;
+   // scx = user->cx * dvol / (hx*hx);
+   // scy = user->cy * dvol / (hy*hy);
+   // scz = user->cz * dvol / (hz*hz);
+   // scdiag = 2.0 * (scx + scy + scz);
+   // for (k = info->zs; k < info->zs+info->zm; k++) {
+   //    row.k = k;
+   //    col[0].k = k;
+   //    for (j = info->ys; j < info->ys+info->ym; j++) {
+   //       row.j = j;
+   //       col[0].j = j;
+   //       for (i = info->xs; i < info->xs+info->xm; i++) {
+   //          row.i = i;
+   //          col[0].i = i;
+   //          ncols = 1;
+   //          v[0] = scdiag;
+   //          if (i>0 && i<info->mx-1 && j>0 && j<info->my-1 && k>0 && k<info->mz-1) {
+   //             if (i-1 > 0) {
+   //                col[ncols].k = k;    col[ncols].j = j;    col[ncols].i = i-1;
+   //                v[ncols++] = - scx;
+   //             }
+   //             if (i+1 < info->mx-1) {
+   //                col[ncols].k = k;    col[ncols].j = j;    col[ncols].i = i+1;
+   //                v[ncols++] = - scx;
+   //             }
+   //             if (j-1 > 0) {
+   //                col[ncols].k = k;    col[ncols].j = j-1;  col[ncols].i = i;
+   //                v[ncols++] = - scy;
+   //             }
+   //             if (j+1 < info->my-1) {
+   //                col[ncols].k = k;    col[ncols].j = j+1;  col[ncols].i = i;
+   //                v[ncols++] = - scy;
+   //             }
+   //             if (k-1 > 0) {
+   //                col[ncols].k = k-1;  col[ncols].j = j;    col[ncols].i = i;
+   //                v[ncols++] = - scz;
+   //             }
+   //             if (k+1 < info->mz-1) {
+   //                col[ncols].k = k+1;  col[ncols].j = j;    col[ncols].i = i;
+   //                v[ncols++] = - scz;
+   //             }
+   //          }
+   //          ierr = MatSetValuesStencil(Jpre,1,&row,ncols,col,v,INSERT_VALUES); CHKERRQ(ierr);
+   //       }
+   //    }
+   // }
+   // ierr = MatAssemblyBegin(Jpre,MAT_FINAL_ASSEMBLY); CHKERRQ(ierr);
+   // ierr = MatAssemblyEnd(Jpre,MAT_FINAL_ASSEMBLY); CHKERRQ(ierr);
+   // if (J != Jpre) {
+   //    ierr = MatAssemblyBegin(J,MAT_FINAL_ASSEMBLY); CHKERRQ(ierr);
+   //    ierr = MatAssemblyEnd(J,MAT_FINAL_ASSEMBLY); CHKERRQ(ierr);
+   // }
    return 0;
 }
 

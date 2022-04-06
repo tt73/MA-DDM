@@ -3,27 +3,27 @@
 
 PetscErrorCode Poisson1DFunctionLocal(DMDALocalInfo *info, PetscReal *au,
                                       PetscReal *aF, PoissonCtx *user) {
-    PetscErrorCode ierr;
-    PetscInt   i;
-    PetscReal  xmax[1], xmin[1], h, x, ue, uw;
-    ierr = DMGetBoundingBox(info->da,xmin,xmax); CHKERRQ(ierr);
-    h = (xmax[0] - xmin[0]) / (info->mx - 1);
-    for (i = info->xs; i < info->xs + info->xm; i++) {
-        x = xmin[0] + i * h;
-        if (i==0 || i==info->mx-1) {
-            aF[i] = au[i] - user->g_bdry(x,0.0,0.0,user);
-            aF[i] *= user->cx * (2.0 / h);
-        } else {
-            ue = (i+1 == info->mx-1) ? user->g_bdry(x+h,0.0,0.0,user)
-                                     : au[i+1];
-            uw = (i-1 == 0)          ? user->g_bdry(x-h,0.0,0.0,user)
-                                     : au[i-1];
-            aF[i] = user->cx * (2.0 * au[i] - uw - ue) / h
-                    - h * user->f_rhs(x,0.0,0.0,user);
-        }
-    }
-    ierr = PetscLogFlops(9.0*info->xm);CHKERRQ(ierr);
-    return 0;
+   PetscErrorCode ierr;
+   PetscInt   i;
+   PetscReal  xmax[1], xmin[1], h, x, ue, uw;
+   ierr = DMGetBoundingBox(info->da,xmin,xmax); CHKERRQ(ierr);
+   h = (xmax[0] - xmin[0]) / (info->mx - 1);
+   for (i = info->xs; i < info->xs + info->xm; i++) {
+      x = xmin[0] + i * h;
+      if (i==0 || i==info->mx-1) {
+         aF[i] = au[i] - user->g_bdry(x,0.0,0.0,user);
+         aF[i] *= user->cx * (2.0 / h);
+      } else {
+         ue = (i+1 == info->mx-1) ? user->g_bdry(x+h,0.0,0.0,user)
+                                    : au[i+1];
+         uw = (i-1 == 0)          ? user->g_bdry(x-h,0.0,0.0,user)
+                                    : au[i-1];
+         aF[i] = user->cx * (2.0 * au[i] - uw - ue) / h
+                  - h * user->f_rhs(x,0.0,0.0,user);
+      }
+   }
+   ierr = PetscLogFlops(9.0*info->xm);CHKERRQ(ierr);
+   return 0;
 }
 
 //STARTFORM2DFUNCTION

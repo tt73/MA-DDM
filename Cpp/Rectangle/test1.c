@@ -76,16 +76,17 @@ static PetscReal f_rhs_3Dex11(PetscReal x, PetscReal y, PetscReal z, void *ctx) 
    RHS: Det(D^2u(x)) = 2/(2- |x|^2)^p(n)
 */
 static PetscReal u_exact_1Dex12(PetscReal x, PetscReal y, PetscReal z, void *ctx) {
-   return 0.5*PetscPowReal(PetscMax(PetscAbsReal(x-0.5)-0.2,0),2);
+   return -PetscSqrtReal(2.0 - x*x);
 }
 static PetscReal u_exact_2Dex12(PetscReal x, PetscReal y, PetscReal z, void *ctx) {
-   return 0.5*PetscPowReal(PetscMax(PetscSqrtReal(PetscSqr(x-0.5)+PetscSqr(y-0.5))-0.2,0),2);
+   return -PetscSqrtReal(2.0 - x*x - y*y);
 }
 static PetscReal u_exact_3Dex12(PetscReal x, PetscReal y, PetscReal z, void *ctx) {
-   return 0.5*PetscPowReal(PetscMax(PetscSqrtReal(PetscSqr(x-0.5)+PetscSqr(y-0.5)+PetscSqr(z-0.5))-0.2,0),2);
+   return -PetscSqrtReal(2.0 - x*x - y*y - z*z);
 }
+
 // RHS
-static PetscReal f_rhs_1Dex12(PetscReal x, PetscReal y, PetscReal z, void *ctx) { // not sure if this is right
+static PetscReal f_rhs_1Dex12(PetscReal x, PetscReal y, PetscReal z, void *ctx) { 
    return 2.0/PetscPowReal(2-x*x,1.5);
 }
 static PetscReal f_rhs_2Dex12(PetscReal x, PetscReal y, PetscReal z, void *ctx) {
@@ -97,7 +98,7 @@ static PetscReal f_rhs_3Dex12(PetscReal x, PetscReal y, PetscReal z, void *ctx) 
 
 
 static PetscReal zero(PetscReal x, PetscReal y, PetscReal z, void *ctx) {
-   return PetscMax(1-0.2/PetscSqrtReal(PetscSqr(x-0.5)+PetscSqr(y-0.5)+PetscSqr(z-0.5)),0);
+   return 0.0;
 }
 
 
@@ -119,22 +120,22 @@ static ExactFcnVec getuexact_ptr[3]
     = {&Form1DUExact, &Form2DUExact, &Form3DUExact};
 //ENDPTRARRAYS
 
-typedef enum {ex10, ex11, ZERO} ProblemType;
-static const char* ProblemTypes[] = {"ex10","ex11","zero",
+typedef enum {ex10, ex11, ex12} ProblemType;
+static const char* ProblemTypes[] = {"ex10","ex11","ex12",
                                      "ProblemType", "", NULL};
 
 // more arrays of pointers to functions:   ..._ptr[DIMS][PROBLEMS]
 typedef PetscReal (*PointwiseFcn)(PetscReal,PetscReal,PetscReal,void*);
 
 static PointwiseFcn g_bdry_ptr[3][3]
-    = {{&u_exact_1Dex10, &u_exact_1Dex11, &zero},
-       {&u_exact_2Dex10, &u_exact_2Dex11, &zero},
-       {&u_exact_3Dex10, &u_exact_3Dex11, &zero}};
+    = {{&u_exact_1Dex10, &u_exact_1Dex11, &u_exact_1Dex12},
+       {&u_exact_2Dex10, &u_exact_2Dex11, &u_exact_2Dex12},
+       {&u_exact_3Dex10, &u_exact_3Dex11, &u_exact_3Dex12}};
 
 static PointwiseFcn f_rhs_ptr[3][3]
-    = {{&f_rhs_1Dex10, &f_rhs_1Dex11, &zero},
-       {&f_rhs_2Dex10, &f_rhs_2Dex11, &zero},
-       {&f_rhs_3Dex10, &f_rhs_3Dex11, &zero}};
+    = {{&f_rhs_1Dex10, &f_rhs_1Dex11, &f_rhs_1Dex12},
+       {&f_rhs_2Dex10, &f_rhs_2Dex11, &f_rhs_2Dex12},
+       {&f_rhs_3Dex10, &f_rhs_3Dex11, &f_rhs_3Dex12}};
 
 static const char* InitialTypes[] = {"zeros","random",
                                      "InitialType", "", NULL};
@@ -168,9 +169,6 @@ int main(int argc,char **args) {
    user.Lx = 1.0;
    user.Ly = 1.0;
    user.Lz = 1.0;
-   user.cx = 1.0;
-   user.cy = 1.0;
-   user.cz = 1.0;
    // command args for this programa need a 't1_' prefix
    ierr = PetscOptionsBegin(PETSC_COMM_WORLD,"t1_", "options for test1.c", ""); CHKERRQ(ierr);
    ierr = PetscOptionsInt("-dim","dimension of problem (=1,2,3 only)","test1.c",dim,&dim,NULL);CHKERRQ(ierr);
@@ -329,18 +327,18 @@ int main(int argc,char **args) {
 
 
 PetscErrorCode Form1DUExact(DMDALocalInfo *info, Vec u, MACtx* user) {
-  PetscErrorCode ierr;
-  PetscInt   i;
-  PetscReal  xmax[1], xmin[1], hx, x, *au;
-  ierr = DMGetBoundingBox(info->da,xmin,xmax); CHKERRQ(ierr);
-  hx = (xmax[0] - xmin[0]) / (info->mx - 1);
-  ierr = DMDAVecGetArray(info->da, u, &au);CHKERRQ(ierr);
-  for (i=info->xs; i<info->xs+info->xm; i++) {
+   PetscErrorCode ierr;
+   PetscInt   i;
+   PetscReal  xmax[1], xmin[1], hx, x, *au;
+   ierr = DMGetBoundingBox(info->da,xmin,xmax); CHKERRQ(ierr);
+   hx = (xmax[0] - xmin[0]) / (info->mx - 1);
+   ierr = DMDAVecGetArray(info->da, u, &au);CHKERRQ(ierr);
+   for (i=info->xs; i<info->xs+info->xm; i++) {
       x = xmin[0] + i*hx;
       au[i] = user->g_bdry(x,0.0,0.0,user);
-  }
-  ierr = DMDAVecRestoreArray(info->da, u, &au);CHKERRQ(ierr);
-  return 0;
+   }
+   ierr = DMDAVecRestoreArray(info->da, u, &au);CHKERRQ(ierr);
+   return 0;
 }
 
 PetscErrorCode Form2DUExact(DMDALocalInfo *info, Vec u, MACtx* user) {
