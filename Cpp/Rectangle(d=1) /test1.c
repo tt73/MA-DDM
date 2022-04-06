@@ -189,7 +189,6 @@ int main(int argc,char **args) {
    user.g_bdry = g_bdry_ptr[dim-1][problem];
    user.f_rhs = f_rhs_ptr[dim-1][problem];
 
-
    /*
       Only doing dim = 1 and 2.
       Since this is a serial code, the only important information is:
@@ -321,9 +320,6 @@ int main(int argc,char **args) {
    ierr = SNESDestroy(&snes); CHKERRQ(ierr);
    return PetscFinalize();
 }
-
-
-
 
 
 PetscErrorCode Form1DUExact(DMDALocalInfo *info, Vec u, MACtx* user) {
