@@ -2,6 +2,17 @@
 #include "MAfunctions.h"
 
 /*
+   Note on DMDALocalInfo:
+   PetscInt         mx,my,mz;    global number of grid points in each direction
+   PetscInt         xs,ys,zs;    starting point of this processor, excluding ghosts
+   PetscInt         xm,ym,zm;    number of grid points on this processor, excluding ghosts
+   PetscInt         gxs,gys,gzs;    starting point of this processor including ghosts
+   PetscInt         gxm,gym,gzm;    number of grid points on this processor including ghosts
+*/
+
+
+
+/*
    This is the residue function for the 1D Monge-Ampere. Which is actually just
       det(D^2u) = u''.
    So we wish to find the root of
@@ -14,12 +25,13 @@ PetscErrorCode MA1DFunctionLocal(DMDALocalInfo *info, PetscReal *u, PetscReal *F
    PetscInt   i;
    PetscReal  xmax[1], xmin[1], h, x, ue, uw;
    ierr = DMGetBoundingBox(info->da,xmin,xmax); CHKERRQ(ierr);
-   h = (xmax[0] - xmin[0]) / (info->mx - 1);
+   h = (xmax[0] - xmin[0]) / (info->mx + 1);
+   PetscPrintf(PETSC_COMM_WORLD,"xmin = %f, xmax = %f, xm = %d, mx = %d, h = %f\n",xmin[0],xmax[0],info->xm,info->mx,h);
    for (i = info->xs; i < info->xs + info->xm; i++) {
-      x = xmin[0] + i*h;
+      x = xmin[0] + (1+i)*h;
       ue = (i == info->mx-1) ? user->g_bdry(x+h,0.0,0.0,user) : u[i+1];
       uw = (i == 0)          ? user->g_bdry(x-h,0.0,0.0,user) : u[i-1];
-      F[i] = -(-uw + 2.0*u[i] - ue)/(h*h) + user->f_rhs(x,0.0,0.0,user);
+      F[i] = (-uw + 2.0*u[i] - ue)/(h*h) + user->f_rhs(x,0.0,0.0,user);
    }
    ierr = PetscLogFlops(9.0*info->xm);CHKERRQ(ierr);
    return 0;
@@ -40,8 +52,8 @@ PetscErrorCode MA2DFunctionLocal(DMDALocalInfo *info, PetscReal **au, PetscReal 
    PetscReal  left, right; // left and right terms in the MA operator approximation
    PetscReal  weights[3], SDD[3]; // quadrature weight and second directional deriv
    ierr = DMGetBoundingBox(info->da,xymin,xymax); CHKERRQ(ierr);
-   hx = (xymax[0] - xymin[0]) / (info->mx - 1);
-   hy = (xymax[1] - xymin[1]) / (info->my - 1);
+   hx = (xymax[0] - xymin[0]) / (info->mx + 1);
+   hy = (xymax[1] - xymin[1]) / (info->my + 1);
 
    // quad weights for order 1 approx
    weights[0] = PETSC_PI/4.0;
@@ -49,14 +61,14 @@ PetscErrorCode MA2DFunctionLocal(DMDALocalInfo *info, PetscReal **au, PetscReal 
    weights[2] = PETSC_PI/4.0;
 
    for (j = info->ys; j < info->ys + info->ym; j++) {
-      y = xymin[1] + j*hy;
+      y = xymin[1] + (j+1)*hy;
       for (i = info->xs; i < info->xs + info->xm; i++) {
-         x = xymin[0] + i*hx;
+         x = xymin[0] + (i+1)*hx;
 
-         un = (j+1 == info->my-1) ? user->g_bdry(x,y+hy,0.0,user) : au[j+1][i];
-         us = (j-1 == 0)          ? user->g_bdry(x,y-hy,0.0,user) : au[j-1][i];
-         ue = (i+1 == info->mx-1) ? user->g_bdry(x+hx,y,0.0,user) : au[j][i+1];
-         uw = (i-1 == 0)          ? user->g_bdry(x-hx,y,0.0,user) : au[j][i-1];
+         un = (j == info->my-1) ? user->g_bdry(x,y+hy,0.0,user) : au[j+1][i];
+         us = (j == 0)          ? user->g_bdry(x,y-hy,0.0,user) : au[j-1][i];
+         ue = (i == info->mx-1) ? user->g_bdry(x+hx,y,0.0,user) : au[j][i+1];
+         uw = (i == 0)          ? user->g_bdry(x-hx,y,0.0,user) : au[j][i-1];
 
          // in the interior Omega, F(u) = f - det+(D^2u)
          // There are only 2 directional derivs when
@@ -145,20 +157,20 @@ PetscErrorCode MA1DJacobianLocal(DMDALocalInfo *info, PetscScalar *au, Mat J, Ma
    MatStencil   col[3],row;
 
    ierr = DMGetBoundingBox(info->da,xmin,xmax); CHKERRQ(ierr);
-   h = (xmax[0]-xmin[0])/(info->mx-1);
+   h = (xmax[0]-xmin[0])/(info->mx+1);
    for (i = info->xs; i < info->xs+info->xm; i++) { // loop over each row of J (mx by mx)
       row.i = i;
       col[0].i = i;
       ncols = 1;
 
-      v[0] = -2.0/(h*h); // middle J_{i,j} = 2/h^2
+      v[0] = 2.0/(h*h); // middle J_{i,j} = 2/h^2
       if (i-1 > 0) {
          col[ncols].i = i-1;
-         v[ncols++] = 1.0/(h*h); // left J_{i-1,j} = -1/h^2
+         v[ncols++] = -1.0/(h*h); // left J_{i-1,j} = -1/h^2
       }
       if (i+1 < info->mx-1) {
          col[ncols].i = i+1;
-         v[ncols++] = 1.0/(h*h); // right J_{i+1,j} = -1/h^2
+         v[ncols++] = -1.0/(h*h); // right J_{i+1,j} = -1/h^2
       }
       // Insert up to 3 values of the Jacobian per row
       ierr = MatSetValuesStencil(Jpre,1,&row,ncols,col,v,INSERT_VALUES); CHKERRQ(ierr);
@@ -192,11 +204,11 @@ PetscErrorCode MA2DJacobianLocal(DMDALocalInfo *info, PetscScalar **au, Mat J, M
    PetscInt     min_k; // jacobian of the min(min(D^2_theta,eps)) term depends on smallest D^2_theta
 
    ierr = DMGetBoundingBox(info->da,xymin,xymax); CHKERRQ(ierr);
-   hx = (xymax[0] - xymin[0]) / (info->mx - 1);
-   hy = (xymax[1] - xymin[1]) / (info->my - 1);
+   hx = (xymax[0] - xymin[0]) / (info->mx + 1);
+   hy = (xymax[1] - xymin[1]) / (info->my + 1);
    h2 = hx*hy;
 
-   // quad weights for order 1 approx
+   // quad weights for order 1
    weights[0] = PETSC_PI/4.0;
    weights[1] = PETSC_PI/2.0;
    weights[2] = PETSC_PI/4.0;
@@ -216,67 +228,59 @@ PetscErrorCode MA2DJacobianLocal(DMDALocalInfo *info, PetscScalar **au, Mat J, M
    for (j = info->ys; j < info->ys+info->ym; j++) {
       row.j = j;
       col[0].j = j;
-      y = xymin[1] + j * hy;
+      y = xymin[1] + (j+1)*hy;
       // loop over each col of J
       for (i = info->xs; i < info->xs+info->xm; i++) {
          row.i = i;
          col[0].i = i;
-         x = xymin[0] + i * hx;
+         x = xymin[0] + (i+1)*hx;
          ncols = 1;
 
-         if (i==0 || i==info->mx-1 || j==0 || j==info->my-1) {
-            // Easy case: the Jacobian is 1 on the boundary
-            v[0] = 1.0;
-            ierr = MatSetValuesStencil(Jpre,1,&row,ncols,col,v,INSERT_VALUES); CHKERRQ(ierr);
+         un = (j == info->my-1) ? user->g_bdry(x,y+hy,0.0,user) : au[j+1][i];
+         us = (j == 0)          ? user->g_bdry(x,y-hy,0.0,user) : au[j-1][i];
+         ue = (i == info->mx-1) ? user->g_bdry(x+hx,y,0.0,user) : au[j][i+1];
+         uw = (i == 0)          ? user->g_bdry(x-hx,y,0.0,user) : au[j][i-1];
 
-         } else {
-            // Interior case: ... see write up
-            // in the interior Omega, F(u) = f - det+(D^2u)
+         // Directional derivs
+         SDD[0] = (uw - 2.0*au[j][i] + ue)/(hx*hx); // horizontal centered-diff
+         SDD[1] = (un - 2.0*au[j][i] + us)/(hy*hy); // vertical centered-diff
+         SDD[2] = (ue - 2.0*au[j][i] + uw)/(hx*hx); // horizontal centered-diff again
 
-            un = (j+1 == info->my-1) ? user->g_bdry(x,y+hy,0.0,user) : au[j+1][i];
-            us = (j-1 == 0)          ? user->g_bdry(x,y-hy,0.0,user) : au[j-1][i];
-            ue = (i+1 == info->mx-1) ? user->g_bdry(x+hx,y,0.0,user) : au[j][i+1];
-            uw = (i-1 == 0)          ? user->g_bdry(x-hx,y,0.0,user) : au[j][i-1];
+         // Comparison against SDD and espilon
+         SGTE[0] = SDD[0] > user->epsilon;
+         SGTE[1] = SDD[1] > user->epsilon;
+         SGTE[2] = SDD[2] > user->epsilon;
 
-            // Directional derivs
-            SDD[0] = (uw - 2.0*au[j][i] + ue)/(hx*hx); // horizontal centered-diff
-            SDD[1] = (un - 2.0*au[j][i] + us)/(hy*hy); // vertical centered-diff
-            SDD[2] = (ue - 2.0*au[j][i] + uw)/(hx*hx); // horizontal centered-diff again
+         // Find the smallest SDD, then check it against eps
+         min_k = 0;
+         for(k=1; k<3; k++){
+            if (SDD[min_k] > SDD[k]) min_k = k;
+         }
+         if (SDD[min_k] > user->epsilon){
+            // if epsilon is the smallest Jacobian term is 0
+            // dDt[.][3] = 0
+            min_k = 3;
+         }
 
-            // Comparison against SDD and espilon
-            SGTE[0] = SDD[0] > user->epsilon;
-            SGTE[1] = SDD[1] > user->epsilon;
-            SGTE[2] = SDD[2] > user->epsilon;
+         // Compute the common factor 2*pi^2*sum(w[k]/max(SDD[k],eps))^(-3)
+         common = 0;
+         for (k = 0; k < 3; k++) {
+            common += weights[k]/(SGTE[k]? SDD[k]:user->epsilon);
+         }
+         common = PetscPowReal(common,-3.0);
+         common *= 2*PETSC_PI*PETSC_PI;
 
-            // Find the smallest SDD, then check it against eps
-            min_k = 0;
-            for(k=1; k<3; k++){
-               if (SDD[min_k] > SDD[k]) min_k = k;
+         // Compute center value
+         v[0] = 0;
+         for (k=0; k<3; k++) {
+            if(SGTE[k]) {
+               v[0] += weights[k]/(SDD[k]*SDD[k])*dDt[0][k];
             }
-            if (SDD[min_k] > user->epsilon){
-               // if epsilon is the smallest Jacobian term is 0
-               // dDt[.][3] = 0
-               min_k = 3;
-            }
+         }
+         v[0] = common*v[0] + dDt[0][min_k]; // jacobian = (common term)*(summation term) + (min-min term)
 
-            // Compute the common factor 2*pi^2*sum(w[k]/max(SDD[k],eps))^(-3)
-            common = 0;
-            for (k = 0; k < 3; k++) {
-               common += weights[k]/(SGTE[k]? SDD[k]:user->epsilon);
-            }
-            common = PetscPowReal(common,-3.0);
-            common *= 2*PETSC_PI*PETSC_PI;
-
-            // Compute center value
-            v[0] = 0;
-            for (k=0; k<3; k++) {
-               if(SGTE[k]) {
-                  v[0] += weights[k]/(SDD[k]*SDD[k])*dDt[0][k];
-               }
-            }
-            v[0] = common*v[0] + dDt[0][min_k]; // jacobian = (common term)*(summation term) + (min-min term)
-
-            // Compute north value
+         // Compute north value
+         if (j < info->my-1 ) {
             col[ncols].j = j+1;
             col[ncols].i = i;
             v[ncols] = 0;
@@ -287,9 +291,11 @@ PetscErrorCode MA2DJacobianLocal(DMDALocalInfo *info, PetscScalar **au, Mat J, M
             }
             v[ncols] = common*v[ncols] + dDt[1][min_k];
             ncols++;
+         }
 
 
-            // Compute south value
+         // Compute south value
+         if (j > 0) {
             col[ncols].j = j-1;
             col[ncols].i = i;
             v[ncols] = 0;
@@ -300,9 +306,11 @@ PetscErrorCode MA2DJacobianLocal(DMDALocalInfo *info, PetscScalar **au, Mat J, M
             }
             v[ncols] = common*v[ncols] + dDt[2][min_k];
             ncols++;
+         }
 
 
-            // east
+         // east
+         if (i < info->mx-1){
             col[ncols].j = j;
             col[ncols].i = i+1;
             v[ncols] = 0;
@@ -313,9 +321,11 @@ PetscErrorCode MA2DJacobianLocal(DMDALocalInfo *info, PetscScalar **au, Mat J, M
             }
             v[ncols] = common*v[ncols] + dDt[3][min_k];
             ncols++;
+         }
 
 
-            // west
+         // west
+         if (i>0){
             col[ncols].j = j;
             col[ncols].i = i-1;
             v[ncols] = 0;
@@ -326,9 +336,8 @@ PetscErrorCode MA2DJacobianLocal(DMDALocalInfo *info, PetscScalar **au, Mat J, M
             }
             v[ncols] = common*v[ncols] + dDt[4][min_k];
             ncols++;
-
-            ierr = MatSetValuesStencil(Jpre,1,&row,ncols,col,v,INSERT_VALUES); CHKERRQ(ierr);
          }
+         ierr = MatSetValuesStencil(Jpre,1,&row,ncols,col,v,INSERT_VALUES); CHKERRQ(ierr);
       }
    }
 

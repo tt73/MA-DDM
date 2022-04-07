@@ -35,16 +35,18 @@ diagonal Jacobian entries with the same values as the diagonal entries for
 points in the interior.  Thus these Jacobian matrices have constant diagonal.
 */
 typedef struct {
-    // domain dimensions
-    PetscReal Lx, Ly, Lz;
-    // epsilon is the regularization term
-    PetscReal epsilon;
-    // right-hand-side f(x,y,z)
-    PetscReal (*f_rhs)(PetscReal x, PetscReal y, PetscReal z, void *ctx);
-    // Dirichlet boundary condition g(x,y,z)
-    PetscReal (*g_bdry)(PetscReal x, PetscReal y, PetscReal z, void *ctx);
-    // additional context; see example usage in ch7/minimal.c
-    void   *addctx;
+   // domain dimensions
+   PetscReal Lx, Ly, Lz;
+   // epsilon is the regularization term
+   PetscReal epsilon;
+   // right-hand-side f(x,y,z)
+   PetscReal (*f_rhs)(PetscReal x, PetscReal y, PetscReal z, void *ctx);
+   // Dirichlet boundary condition g(x,y,z)
+   PetscReal (*g_bdry)(PetscReal x, PetscReal y, PetscReal z, void *ctx);
+   // additional context; see example usage in ch7/minimal.c
+   void   *addctx;
+
+
 } MACtx;
 
 PetscErrorCode MA1DFunctionLocal(DMDALocalInfo *info,

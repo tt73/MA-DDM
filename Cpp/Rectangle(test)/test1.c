@@ -82,7 +82,7 @@ static PetscReal u_exact_3Dex12(PetscReal x, PetscReal y, PetscReal z, void *ctx
 }
 
 // RHS
-static PetscReal f_rhs_1Dex12(PetscReal x, PetscReal y, PetscReal z, void *ctx) { 
+static PetscReal f_rhs_1Dex12(PetscReal x, PetscReal y, PetscReal z, void *ctx) {
    return 2.0/PetscPowReal(2-x*x,1.5);
 }
 static PetscReal f_rhs_2Dex12(PetscReal x, PetscReal y, PetscReal z, void *ctx) {
@@ -237,15 +237,14 @@ int main(int argc,char **args) {
    ierr = DMSetFromOptions(da); CHKERRQ(ierr);
    ierr = DMSetUp(da); CHKERRQ(ierr);
 
-   // Make the association between DA mesh to coordinates 
+   // Make the association between DA mesh to coordinates
    /*
-      We omit the boundary from the DA uniform mesh. 
-      Instead, DA will contain only the interior points. 
-      Therefore the range goes from h to 1 - h. 
+      We omit the boundary from the DA uniform mesh.
+      Instead, DA will contain only the interior points.
+      Therefore the range goes from h to 1 - h.
    */
-   h = 1.0/(N+1);
-   xmin = 0.0 + h; 
-   xmax = user.Lx - h;
+   xmin = 0.0 ;
+   xmax = user.Lx ;
    ierr = DMDASetUniformCoordinates(da,xmin,xmax,xmin,xmax,xmin,xmax); CHKERRQ(ierr);
 
    // set SNES call-backs
@@ -326,16 +325,15 @@ int main(int argc,char **args) {
    return PetscFinalize();
 }
 
-
 PetscErrorCode Form1DUExact(DMDALocalInfo *info, Vec u, MACtx* user) {
    PetscErrorCode ierr;
    PetscInt   i;
    PetscReal  xmax[1], xmin[1], hx, x, *au;
    ierr = DMGetBoundingBox(info->da,xmin,xmax); CHKERRQ(ierr);
-   hx = (xmax[0] - xmin[0]) / (info->mx - 1);
+   hx = (xmax[0] - xmin[0]) / (info->mx + 1);
    ierr = DMDAVecGetArray(info->da, u, &au);CHKERRQ(ierr);
    for (i=info->xs; i<info->xs+info->xm; i++) {
-      x = xmin[0] + i*hx;
+      x = xmin[0] + (i+1)*hx;
       au[i] = user->g_bdry(x,0.0,0.0,user);
    }
    ierr = DMDAVecRestoreArray(info->da, u, &au);CHKERRQ(ierr);
@@ -347,8 +345,8 @@ PetscErrorCode Form2DUExact(DMDALocalInfo *info, Vec u, MACtx* user) {
    PetscInt   i, j;
    PetscReal  xymin[2], xymax[2], hx, hy, x, y, **au;
    ierr = DMGetBoundingBox(info->da,xymin,xymax); CHKERRQ(ierr);
-   hx = (xymax[0] - xymin[0]) / (info->mx - 1);
-   hy = (xymax[1] - xymin[1]) / (info->my - 1); // mx = my = N+2
+   hx = (xymax[0] - xymin[0]) / (info->mx + 1);
+   hy = (xymax[1] - xymin[1]) / (info->my + 1); // mx = my = N+2
 
    ierr = DMDAVecGetArray(info->da, u, &au);CHKERRQ(ierr);
    for (j=info->ys; j<info->ys+info->ym; j++) {
