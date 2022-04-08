@@ -39,13 +39,15 @@ typedef struct {
    PetscReal Lx, Ly, Lz;
    // epsilon is the regularization term
    PetscReal epsilon;
+   // quadrature weights
+   PetscReal *weights; // figure out how to compute weights
+
    // right-hand-side f(x,y,z)
    PetscReal (*f_rhs)(PetscReal x, PetscReal y, PetscReal z, void *ctx);
    // Dirichlet boundary condition g(x,y,z)
    PetscReal (*g_bdry)(PetscReal x, PetscReal y, PetscReal z, void *ctx);
    // additional context; see example usage in ch7/minimal.c
    void   *addctx;
-
 
 } MACtx;
 
@@ -74,4 +76,5 @@ typedef enum {ZEROS, RANDOM} InitialType;
 
 PetscErrorCode InitialState(DM da, InitialType it, PetscBool gbdry, Vec u, MACtx *user);
 
+PetscErrorCode ComputeWeights(PetscInt width, PetscInt order, MACtx *user) ;
 #endif

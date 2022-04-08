@@ -10,8 +10,6 @@
    PetscInt         gxm,gym,gzm;    number of grid points on this processor including ghosts
 */
 
-
-
 /*
    This is the residue function for the 1D Monge-Ampere. Which is actually just
       det(D^2u) = u''.
@@ -26,7 +24,6 @@ PetscErrorCode MA1DFunctionLocal(DMDALocalInfo *info, PetscReal *u, PetscReal *F
    PetscReal  xmax[1], xmin[1], h, x, ue, uw;
    ierr = DMGetBoundingBox(info->da,xmin,xmax); CHKERRQ(ierr);
    h = (xmax[0] - xmin[0]) / (info->mx + 1);
-   PetscPrintf(PETSC_COMM_WORLD,"xmin = %f, xmax = %f, xm = %d, mx = %d, h = %f\n",xmin[0],xmax[0],info->xm,info->mx,h);
    for (i = info->xs; i < info->xs + info->xm; i++) {
       x = xmin[0] + (1+i)*h;
       ue = (i == info->mx-1) ? user->g_bdry(x+h,0.0,0.0,user) : u[i+1];
@@ -43,7 +40,6 @@ PetscErrorCode MA1DFunctionLocal(DMDALocalInfo *info, PetscReal *u, PetscReal *F
       F(u) = f - det(D^2(u)) in the domain and
       F(u) = u - g           on the boundary
    In the implementation, u is a 2D array and it's the 2nd arg. The F is also a 2D array and it's the 3rd arg.
-
 */
 PetscErrorCode MA2DFunctionLocal(DMDALocalInfo *info, PetscReal **au, PetscReal **aF, MACtx *user) {
    PetscErrorCode ierr;
@@ -51,9 +47,12 @@ PetscErrorCode MA2DFunctionLocal(DMDALocalInfo *info, PetscReal **au, PetscReal 
    PetscReal  xymin[2], xymax[2], hx, hy, x, y, ue, uw, un, us;
    PetscReal  left, right; // left and right terms in the MA operator approximation
    PetscReal  weights[3], SDD[3]; // quadrature weight and second directional deriv
+   PetscInt   width;
    ierr = DMGetBoundingBox(info->da,xymin,xymax); CHKERRQ(ierr);
    hx = (xymax[0] - xymin[0]) / (info->mx + 1);
    hy = (xymax[1] - xymin[1]) / (info->my + 1);
+
+   width = info->sw;
 
    // quad weights for order 1 approx
    weights[0] = PETSC_PI/4.0;
@@ -293,7 +292,6 @@ PetscErrorCode MA2DJacobianLocal(DMDALocalInfo *info, PetscScalar **au, Mat J, M
             ncols++;
          }
 
-
          // Compute south value
          if (j > 0) {
             col[ncols].j = j-1;
@@ -308,7 +306,6 @@ PetscErrorCode MA2DJacobianLocal(DMDALocalInfo *info, PetscScalar **au, Mat J, M
             ncols++;
          }
 
-
          // east
          if (i < info->mx-1){
             col[ncols].j = j;
@@ -322,7 +319,6 @@ PetscErrorCode MA2DJacobianLocal(DMDALocalInfo *info, PetscScalar **au, Mat J, M
             v[ncols] = common*v[ncols] + dDt[3][min_k];
             ncols++;
          }
-
 
          // west
          if (i>0){
@@ -506,3 +502,20 @@ PetscErrorCode InitialState(DM da, InitialType it, PetscBool gbdry, Vec u, MACtx
     return 0;
 }
 
+PetscErrorCode ComputeWeights(PetscInt width, PetscInt order, MACtx *user) {
+   PetscErrorCode ierr;
+   PetscInt   i;
+   ierr = PetscMalloc1(width,&user->weights); // allocate memory for weights
+   if(order==1){
+      for(i=0; i<width; i++) {
+
+      }
+   } elseif(order==2){
+      for(i=0; i<width; i++) {
+
+      }
+   } else {
+      SETERRQ(PETSC_COMM_SELF,5,"Quadarature order > 2 not supported.\n");
+   }
+   return 0;
+}

@@ -112,13 +112,11 @@ static DMDASNESJacobian jacobian_ptr[3]
 
 typedef PetscErrorCode (*ExactFcnVec)(DMDALocalInfo*,Vec,MACtx*);
 
-static ExactFcnVec getuexact_ptr[3]
-    = {&Form1DUExact, &Form2DUExact, &Form3DUExact};
-//ENDPTRARRAYS
+static ExactFcnVec getuexact_ptr[3] = {&Form1DUExact, &Form2DUExact, &Form3DUExact};
+
 
 typedef enum {ex10, ex11, ex12} ProblemType;
-static const char* ProblemTypes[] = {"ex10","ex11","ex12",
-                                     "ProblemType", "", NULL};
+static const char* ProblemTypes[] = {"ex10","ex11","ex12","ProblemType","", NULL};
 
 // more arrays of pointers to functions:   ..._ptr[DIMS][PROBLEMS]
 typedef PetscReal (*PointwiseFcn)(PetscReal,PetscReal,PetscReal,void*);
@@ -133,8 +131,7 @@ static PointwiseFcn f_rhs_ptr[3][3]
        {&f_rhs_2Dex10, &f_rhs_2Dex11, &f_rhs_2Dex12},
        {&f_rhs_3Dex10, &f_rhs_3Dex11, &f_rhs_3Dex12}};
 
-static const char* InitialTypes[] = {"zeros","random",
-                                     "InitialType", "", NULL};
+static const char* InitialTypes[] = {"zeros","random","InitialType","", NULL};
 
 
 int main(int argc,char **args) {
@@ -156,7 +153,7 @@ int main(int argc,char **args) {
 
    PetscInt s = 1;  // Stencil width
    PetscInt N = 2;  // We want an interior domain that is N by N
-   PetscReal h, xmin, xmax;
+   PetscReal xmin, xmax;
 
 
    ierr = PetscInitialize(&argc,&args,NULL,help); if (ierr) return ierr;
@@ -169,6 +166,8 @@ int main(int argc,char **args) {
    // command args for this programa need a 't1_' prefix
    ierr = PetscOptionsBegin(PETSC_COMM_WORLD,"t1_", "options for test1.c", ""); CHKERRQ(ierr);
    ierr = PetscOptionsInt("-dim","dimension of problem (=1,2,3 only)","test1.c",dim,&dim,NULL);CHKERRQ(ierr);
+   ierr = PetscOptionsInt("-width","stencil width (=1,2)","test1.c",s,&s,NULL);CHKERRQ(ierr);
+   ierr = PetscOptionsInt("-N","number of rows of interior nodes (default is 2)","test1.c",N,&N,NULL);CHKERRQ(ierr);
    ierr = PetscOptionsBool("-initial_gonboundary","set initial iterate to have correct boundary values",
       "test1.c",gonboundary,&gonboundary,NULL);CHKERRQ(ierr);
    ierr = PetscOptionsEnum("-initial_type","type of initial iterate",
@@ -198,28 +197,41 @@ int main(int argc,char **args) {
    */
    switch (dim) {
       case 1:
-         ierr = DMDACreate1d(PETSC_COMM_WORLD,
-               DM_BOUNDARY_NONE,N,1,1, NULL, &da); CHKERRQ(ierr);
+         ierr = DMDACreate1d(PETSC_COMM_WORLD,DM_BOUNDARY_NONE,N,1,s,NULL,&da); CHKERRQ(ierr);
          break;
       case 2:
-         ierr = DMDACreate2d(PETSC_COMM_WORLD,   // MPI not important
-                           DM_BOUNDARY_NONE,  // periodicity in  x
-                           DM_BOUNDARY_NONE,  // periodicity in y
-                           DMDA_STENCIL_STAR, // stencil type: box vs star
-                           N,N,           // mesh size in x & y directions
-                           PETSC_DECIDE,PETSC_DECIDE, // local mesh size
-                           1,                 // degree of freedom
-                           s,                 // stencil width
-                           NULL,NULL,         // not important
-                           &da); CHKERRQ(ierr);
+         if(s==1){
+            ierr = DMDACreate2d(PETSC_COMM_WORLD,   // MPI not important
+                              DM_BOUNDARY_NONE,  // periodicity in  x
+                              DM_BOUNDARY_NONE,  // periodicity in y
+                              DMDA_STENCIL_STAR, // stencil type: box vs star
+                              N,N,           // mesh size in x & y directions
+                              PETSC_DECIDE,PETSC_DECIDE, // local mesh size
+                              1,                 // degree of freedom
+                              s,                 // stencil width
+                              NULL,NULL,         // not important
+                              &da); CHKERRQ(ierr);
+         else {
+            ierr = DMDACreate2d(PETSC_COMM_WORLD,   // MPI not important
+                              DM_BOUNDARY_NONE,  // periodicity in  x
+                              DM_BOUNDARY_NONE,  // periodicity in y
+                              DMDA_STENCIL_BOX, // stencil type: box vs star
+                              N,N,           // mesh size in x & y directions
+                              PETSC_DECIDE,PETSC_DECIDE, // local mesh size
+                              1,                 // degree of freedom
+                              s,                 // stencil width
+                              NULL,NULL,         // not important
+                              &da); CHKERRQ(ierr);
+         }
          break;
+
       case 3:
          SETERRQ(PETSC_COMM_SELF,1,"dim = 3 not supported\n");
          ierr = DMDACreate3d(PETSC_COMM_WORLD,
                DM_BOUNDARY_NONE, DM_BOUNDARY_NONE, DM_BOUNDARY_NONE,
                DMDA_STENCIL_STAR,
                3,3,3,PETSC_DECIDE,PETSC_DECIDE,PETSC_DECIDE,
-               1,1,NULL,NULL,NULL,&da); CHKERRQ(ierr);
+               1,s,NULL,NULL,NULL,&da); CHKERRQ(ierr);
          break;
       default:
          SETERRQ(PETSC_COMM_SELF,1,"invalid dim for DMDA creation\n");
@@ -247,6 +259,9 @@ int main(int argc,char **args) {
    xmax = user.Lx ;
    ierr = DMDASetUniformCoordinates(da,xmin,xmax,xmin,xmax,xmin,xmax); CHKERRQ(ierr);
 
+   // Compute quadrature weights
+   ComputeWeights(s, 1, &user);
+
    // set SNES call-backs
    /*
       SetFuntionLocal - link the custom residue function to `da`
@@ -257,10 +272,11 @@ int main(int argc,char **args) {
    ierr = DMDASNESSetFunctionLocal(da,INSERT_VALUES,(DMDASNESFunction)(residual_ptr[dim-1]),&user); CHKERRQ(ierr);
    ierr = DMDASNESSetJacobianLocal(da,(DMDASNESJacobian)(jacobian_ptr[dim-1]),&user); CHKERRQ(ierr);
 
-   // default to KSPONLY+CG because problem is linear and SPD
-   ierr = SNESSetType(snes,SNESKSPONLY); CHKERRQ(ierr);
-   ierr = SNESGetKSP(snes,&ksp); CHKERRQ(ierr);
-   ierr = KSPSetType(ksp,KSPGMRES); CHKERRQ(ierr);
+
+   // ierr = SNESSetType(snes,SNESKSPONLY); CHKERRQ(ierr);
+   // ierr = SNESGetKSP(snes,&ksp); CHKERRQ(ierr);
+   // ierr = KSPSetType(ksp,KSPGMRES); CHKERRQ(ierr);
+   ierr = SNESSetType(snes,SNESNEWTONTR); CHKERRQ(ierr);
    ierr = SNESSetFromOptions(snes); CHKERRQ(ierr);
 
    // set initial iterate and then solve
@@ -350,9 +366,9 @@ PetscErrorCode Form2DUExact(DMDALocalInfo *info, Vec u, MACtx* user) {
 
    ierr = DMDAVecGetArray(info->da, u, &au);CHKERRQ(ierr);
    for (j=info->ys; j<info->ys+info->ym; j++) {
-      y = xymin[1] + j*hy;
+      y = xymin[1] + (j+1)*hy;
       for (i=info->xs; i<info->xs+info->xm; i++) {
-         x = xymin[0] + i*hx;
+         x = xymin[0] + (i+1)*hx;
          au[j][i] = user->g_bdry(x, y,0.0,user);
       }
    }
@@ -370,11 +386,11 @@ PetscErrorCode Form3DUExact(DMDALocalInfo *info, Vec u, MACtx* user) {
    hz = (xyzmax[2] - xyzmin[2]) / (info->mz - 1);
    ierr = DMDAVecGetArray(info->da, u, &au);CHKERRQ(ierr);
    for (k=info->zs; k<info->zs+info->zm; k++) {
-      z = xyzmin[2] + k*hz;
+      z = xyzmin[2] + (k+1)*hz;
       for (j=info->ys; j<info->ys+info->ym; j++) {
-         y = xyzmin[1] + j*hy;
+         y = xyzmin[1] + (j+1)*hy;
          for (i=info->xs; i<info->xs+info->xm; i++) {
-            x = xyzmin[0] + i*hx;
+            x = xyzmin[0] + (i+1)*hx;
             au[k][j][i] = user->g_bdry(x,y,z,user);
          }
       }
