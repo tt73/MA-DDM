@@ -3,11 +3,11 @@
 
 /*
    Note on DMDALocalInfo:
-   PetscInt         mx,my,mz;    global number of grid points in each direction
-   PetscInt         xs,ys,zs;    starting point of this processor, excluding ghosts
-   PetscInt         xm,ym,zm;    number of grid points on this processor, excluding ghosts
-   PetscInt         gxs,gys,gzs;    starting point of this processor including ghosts
-   PetscInt         gxm,gym,gzm;    number of grid points on this processor including ghosts
+   PetscInt  mx,my,mz;    global number of grid points in each direction
+   PetscInt  xs,ys,zs;    starting point of this processor, excluding ghosts
+   PetscInt  xm,ym,zm;    number of grid points on this processor, excluding ghosts
+   PetscInt  gxs,gys,gzs;    starting point of this processor including ghosts
+   PetscInt  gxm,gym,gzm;    number of grid points on this processor including ghosts
 */
 
 /*
@@ -22,81 +22,142 @@ PetscErrorCode MA1DFunctionLocal(DMDALocalInfo *info, PetscReal *u, PetscReal *F
    PetscErrorCode ierr;
    PetscInt   i;
    PetscReal  xmax[1], xmin[1], h, x, ue, uw;
-   ierr = DMGetBoundingBox(info->da,xmin,xmax); CHKERRQ(ierr);
-   h = (xmax[0] - xmin[0]) / (info->mx + 1);
+
+   DMGetBoundingBox(info->da,xmin,xmax);
+   h = (xmax[0] - xmin[0])/(info->mx + 1);
    for (i = info->xs; i < info->xs + info->xm; i++) {
       x = xmin[0] + (1+i)*h;
       ue = (i == info->mx-1) ? user->g_bdry(x+h,0.0,0.0,user) : u[i+1];
       uw = (i == 0)          ? user->g_bdry(x-h,0.0,0.0,user) : u[i-1];
       F[i] = (-uw + 2.0*u[i] - ue)/(h*h) + user->f_rhs(x,0.0,0.0,user);
    }
-   ierr = PetscLogFlops(9.0*info->xm);CHKERRQ(ierr);
    return 0;
 }
 
 
 /*
    The equation we want to find the root of is F(u). F is the discretized version of the nonlinear system:
-      F(u) = f - det(D^2(u)) in the domain and
-      F(u) = u - g           on the boundary
-   In the implementation, u is a 2D array and it's the 2nd arg. The F is also a 2D array and it's the 3rd arg.
+      F(u) =  det(D^2(u)) - f 
+   The 2nd arg **au is a 2D array representing the discretization of u i.e. au[i][j] ~ u(x_i,y_j) 
+   The 3rd arg **aF is a 2D array representing the discritization of F i.e. aF[i][j] ~ F(u(x_i,y_j))
+
+   We use the approximation                                 
+                  ⎛2d + 1            ⎞-2                           
+                  ⎜ ____             ⎟                           
+                  ⎜ ╲                ⎟                           
+                 2⎜  ╲       w_k     ⎟                           
+     aF[i][j] = π ⎜  ╱   ──────────  ⎟  + min(min(D_k^2u, ε)) - f[i][j]
+                  ⎜ ╱  max(D_k^2u, ε)⎟     k                   
+                  ⎜ ‾‾‾‾               ⎟                           
+                  ⎝ k = 0            ⎠
+   where d is the stencil width, w_k is the quad weight, and D_k^2u is the kth 2nd directional derivative. 
+   See write-up for more details.                            
 */
 PetscErrorCode MA2DFunctionLocal(DMDALocalInfo *info, PetscReal **au, PetscReal **aF, MACtx *user) {
    PetscErrorCode ierr;
    PetscInt   i, j, k;
-   PetscReal  xymin[2], xymax[2], hx, hy, x, y, ue, uw, un, us;
+   PetscReal  xymin[2], xymax[2], hx, hy, x, y;
    PetscReal  left, right; // left and right terms in the MA operator approximation
-   PetscReal  weights[3], SDD[3]; // quadrature weight and second directional deriv
-   PetscInt   width;
+   PetscReal  *SDD; // second directional deriv
+   PetscReal  *uFwd, *uBak; // u in the the forward and backward position for each direction k
+   PetscInt   width, M; // stencil width, and total number of directions 
+
+   // get info from DA 
    ierr = DMGetBoundingBox(info->da,xymin,xymax); CHKERRQ(ierr);
-   hx = (xymax[0] - xymin[0]) / (info->mx + 1);
-   hy = (xymax[1] - xymin[1]) / (info->my + 1);
-
+   hx   = (xymax[0] - xymin[0])/(info->mx + 1);
+   hy   = (xymax[1] - xymin[1])/(info->my + 1);
+   // allocate mem for derivative stuff 
    width = info->sw;
-
-   // quad weights for order 1 approx
-   weights[0] = PETSC_PI/4.0;
-   weights[1] = PETSC_PI/2.0;
-   weights[2] = PETSC_PI/4.0;
-
+   M     = 2*width + 1; 
+   PetscMalloc2(M,&uFwd,M,&uBak); // allocate mem for forward and backward
+   PetscMalloc1(M,&SDD);          // allocate mem for SDD 
+   // begin loop over all local interior nodes
    for (j = info->ys; j < info->ys + info->ym; j++) {
       y = xymin[1] + (j+1)*hy;
-      for (i = info->xs; i < info->xs + info->xm; i++) {
+      for (i=info->xs; i<info->xs+info->xm; i++) {
          x = xymin[0] + (i+1)*hx;
-
-         un = (j == info->my-1) ? user->g_bdry(x,y+hy,0.0,user) : au[j+1][i];
-         us = (j == 0)          ? user->g_bdry(x,y-hy,0.0,user) : au[j-1][i];
-         ue = (i == info->mx-1) ? user->g_bdry(x+hx,y,0.0,user) : au[j][i+1];
-         uw = (i == 0)          ? user->g_bdry(x-hx,y,0.0,user) : au[j][i-1];
-
-         // in the interior Omega, F(u) = f - det+(D^2u)
-         // There are only 2 directional derivs when
-         SDD[0] = (uw - 2.0*au[j][i] + ue)/(hx*hx); // horizontal centered-diff
-         SDD[1] = (un - 2.0*au[j][i] + us)/(hy*hy); // vertical centered-diff
-         SDD[2] = (ue - 2.0*au[j][i] + uw)/(hx*hx); // horizontal centered-diff again
-
-         // calculate the left term in the MA operator
-         left = 0;
-         for (k = 0; k < 3; k++) {
-            left = left + weights[k]/PetscMax(SDD[k],user->epsilon);
-         }
-         left = PetscPowReal(left,-2.0);
-         left = left * PETSC_PI*PETSC_PI;
-
-         // calculate the right term in the MA operator
-         right = user->epsilon;
-         for (k = 0; k < 3; k++) {
-            if (right > SDD[k]){ // find minimum
-               right = SDD[k];
+         if (width==1) { 
+            // width 1 case is hardcoded because it is simple 
+            uFwd[0] = (i == info->mx-1) ? user->g_bdry(x+hx,y,0.0,user) : au[j][i+1]; // east  
+            uBak[0] = (i == 0)          ? user->g_bdry(x-hx,y,0.0,user) : au[j][i-1]; // west 
+            uFwd[1] = (j == info->my-1) ? user->g_bdry(x,y+hy,0.0,user) : au[j+1][i]; // north
+            uBak[1] = (j == 0)          ? user->g_bdry(x,y-hy,0.0,user) : au[j-1][i]; // south
+            uFwd[2] = (i == 0)          ? user->g_bdry(x-hx,y,0.0,user) : au[j][i-1]; // west 
+            uBak[2] = (i == info->mx-1) ? user->g_bdry(x+hx,y,0.0,user) : au[j][i+1]; // east
+            // 2nd dir. deriv
+            SDD[0] = (uFwd[0] - 2.0*au[j][i] + uBak[0])/(hx*hx); // horizontal centered-diff
+            SDD[1] = (uFwd[1] - 2.0*au[j][i] + uBak[1])/(hy*hy); // vertical centered-diff
+            SDD[2] = (uFwd[2] - 2.0*au[j][i] + uBak[2])/(hx*hx); // horizontal centered-diff again
+            // calculate the left term in the MA operator
+            left = 0;
+            for (k=0; k<3; k++) {
+               left = left + user->weights[k]/PetscMax(SDD[k],user->epsilon);
             }
+            left = PetscPowReal(left,-2.0);
+            left = left * PETSC_PI*PETSC_PI;
+            // calculate the right term in the MA operator
+            right = user->epsilon;
+            for (k=0; k<3; k++) {
+               if (right > SDD[k]){ // find minimum
+                  right = SDD[k];
+               }
+            }
+            aF[j][i] = (left + right) - user->f_rhs(x,y,0.0,user);
+         } else if (width==2) { //
+            // get fwd & bak u for north direction 
+            uFwd[width] = (j+2 > info->my-1) ? user->g_bdry(x,xymax[1],0.0,user) : au[j+2][i]; // north
+            uBak[width] = (j-2 < 0)          ? user->g_bdry(x,xymin[1],0.0,user) : au[j-2][i]; // south
+            // get fwd & bak u for east and west 
+            uFwd[0]   = (i+2 > info->mx-1) ? user->g_bdry(xymax[0],y,0.0,user) : au[j][i+2];  // east
+            uBak[0]   = (i-2 < 0)          ? user->g_bdry(xymin[0],y,0.0,user) : au[j][i-2];  // west 
+            uFwd[M-1] = uBak[0];
+            uBak[M-1] = uFwd[0]; 
+            // NE direction
+            if (i<info->mx-1 && j<info->my-1) {
+               uFwd[1] = au[j+1][i+1]; 
+            } else {
+               uFwd[1] = user->g_bdry(x+hx,y+hy,0.0,user);
+            }
+            // NW direction 
+            if (i>0 && j<info->my-1) {
+               uFwd[M-2] = au[j+1][i-1]; 
+            } else {
+               uFwd[1] = user->g_bdry(x-hx,y+hy,0.0,user);
+            }
+            // SW 
+            if (i>0 && j>0) {
+               uBak[1] = au[j-1][i-1]; 
+            } else {
+               uBak[1] = user->g_bdry(x-hx,y-hy,0.0,user);
+            }
+            // SE 
+            if (i<info->mx-1 && j>0) {
+               uBak[M-2] = au[j-1][i+1]; 
+            } else {
+               uBak[M-2] = user->g_bdry(x+hx,y-hy,0.0,user);
+            }
+  
+
+            for (k=0; k<2*width+1; k++) {
+               // only works when not near boundary 
+               SDD[k] = (uFwd[k] - 2.0*au[j][i] + uBak[k])/(hx*hx*(k%2==0? 2.0:PetscSqrtReal(2.0)));
+            }
+         } else { // general width 
+
+            // loop over all directions k 
+               // determmine uf ub 
+               // uf = u[j+dy][i+dx] if interior, else 
+               // use table(i,j,k) to get xp yp uf = g(xp,yp) 
+            
+            // loop again 
+               // compute SDD 
+             
          }
-         aF[j][i] = (left + right) - user->f_rhs(x,y,0.0,user);
       }
    }
-   ierr = PetscLogFlops(11.0*info->xm*info->ym);CHKERRQ(ierr);
+   PetscFree(SDD); 
    return 0;
 }
-//ENDFORM2DFUNCTION
 
 PetscErrorCode MA3DFunctionLocal(DMDALocalInfo *info, PetscReal ***au, PetscReal ***aF, MACtx *user) {
    // PetscErrorCode ierr;
@@ -194,7 +255,7 @@ PetscErrorCode MA1DJacobianLocal(DMDALocalInfo *info, PetscScalar *au, Mat J, Ma
 PetscErrorCode MA2DJacobianLocal(DMDALocalInfo *info, PetscScalar **au, Mat J, Mat Jpre, MACtx *user) {
    PetscErrorCode  ierr;
    PetscReal    xymin[2], xymax[2], x, y, hx, hy, h2, v[5];
-   PetscReal    SDD[3], weights[3], ue, uw, un, us;
+   PetscReal    SDD[3], ue, uw, un, us;
    PetscBool    SGTE[3]; // stands for "SDD[k] greather than epsilon"
    PetscReal    common; // common factor for all stencil derivatives
    PetscInt     i,j,k,ncols;
@@ -206,11 +267,6 @@ PetscErrorCode MA2DJacobianLocal(DMDALocalInfo *info, PetscScalar **au, Mat J, M
    hx = (xymax[0] - xymin[0]) / (info->mx + 1);
    hy = (xymax[1] - xymin[1]) / (info->my + 1);
    h2 = hx*hy;
-
-   // quad weights for order 1
-   weights[0] = PETSC_PI/4.0;
-   weights[1] = PETSC_PI/2.0;
-   weights[2] = PETSC_PI/4.0;
 
    // dDt[c][k] is the partial derivative of the D^2_theta_k at u_ij
    /*
@@ -264,7 +320,7 @@ PetscErrorCode MA2DJacobianLocal(DMDALocalInfo *info, PetscScalar **au, Mat J, M
          // Compute the common factor 2*pi^2*sum(w[k]/max(SDD[k],eps))^(-3)
          common = 0;
          for (k = 0; k < 3; k++) {
-            common += weights[k]/(SGTE[k]? SDD[k]:user->epsilon);
+            common += user->weights[k]/(SGTE[k]? SDD[k]:user->epsilon);
          }
          common = PetscPowReal(common,-3.0);
          common *= 2*PETSC_PI*PETSC_PI;
@@ -273,7 +329,7 @@ PetscErrorCode MA2DJacobianLocal(DMDALocalInfo *info, PetscScalar **au, Mat J, M
          v[0] = 0;
          for (k=0; k<3; k++) {
             if(SGTE[k]) {
-               v[0] += weights[k]/(SDD[k]*SDD[k])*dDt[0][k];
+               v[0] += user->weights[k]/(SDD[k]*SDD[k])*dDt[0][k];
             }
          }
          v[0] = common*v[0] + dDt[0][min_k]; // jacobian = (common term)*(summation term) + (min-min term)
@@ -285,7 +341,7 @@ PetscErrorCode MA2DJacobianLocal(DMDALocalInfo *info, PetscScalar **au, Mat J, M
             v[ncols] = 0;
             for (k = 0; k<3; k++) {
                if(SGTE[k]) {
-                  v[ncols] += weights[k]/(SDD[k]*SDD[k])*dDt[1][k];
+                  v[ncols] += user->weights[k]/(SDD[k]*SDD[k])*dDt[1][k];
                }
             }
             v[ncols] = common*v[ncols] + dDt[1][min_k];
@@ -299,7 +355,7 @@ PetscErrorCode MA2DJacobianLocal(DMDALocalInfo *info, PetscScalar **au, Mat J, M
             v[ncols] = 0;
             for (k = 0; k<3; k++) {
                if(SGTE[k]) {
-                  v[ncols] += weights[k]/(SDD[k]*SDD[k])*dDt[2][k];
+                  v[ncols] += user->weights[k]/(SDD[k]*SDD[k])*dDt[2][k];
                }
             }
             v[ncols] = common*v[ncols] + dDt[2][min_k];
@@ -313,7 +369,7 @@ PetscErrorCode MA2DJacobianLocal(DMDALocalInfo *info, PetscScalar **au, Mat J, M
             v[ncols] = 0;
             for (k = 0; k<3; k++) {
                if(SGTE[k]) {
-                  v[ncols] += weights[k]/(SDD[k]*SDD[k])*dDt[3][k];
+                  v[ncols] += user->weights[k]/(SDD[k]*SDD[k])*dDt[3][k];
                }
             }
             v[ncols] = common*v[ncols] + dDt[3][min_k];
@@ -327,7 +383,7 @@ PetscErrorCode MA2DJacobianLocal(DMDALocalInfo *info, PetscScalar **au, Mat J, M
             v[ncols] = 0;
             for (k = 0; k<3; k++) {
                if(SGTE[k]) {
-                  v[ncols] += weights[k]/(SDD[k]*SDD[k])*dDt[4][k];
+                  v[ncols] += user->weights[k]/(SDD[k]*SDD[k])*dDt[4][k];
                }
             }
             v[ncols] = common*v[ncols] + dDt[4][min_k];
@@ -503,18 +559,35 @@ PetscErrorCode InitialState(DM da, InitialType it, PetscBool gbdry, Vec u, MACtx
 }
 
 PetscErrorCode ComputeWeights(PetscInt width, PetscInt order, MACtx *user) {
-   PetscErrorCode ierr;
-   PetscInt   i;
-   ierr = PetscMalloc1(width,&user->weights); // allocate memory for weights
-   if(order==1){
+   PetscInt   i,M;
+   PetscReal  a;
+   PetscReal  *theta; 
+
+   // Compute angles of L1 stencil points
+   M = 2*width+1;
+   PetscMalloc1(M,&theta);
+   theta[width] = PETSC_PI/2;  
+   for (i=0; i<width; i++) {
+      a = PetscAtanReal((i)/(width-i)); 
+      theta[i]     = a; 
+      theta[M-i-1] = PETSC_PI - a;
+   }
+   // Compute quadrature weights
+   PetscMalloc1(M,&user->weights); 
+   if (order==1) {
+      if (width==1) {
+         user->weights[0] = PETSC_PI/4.0;
+         user->weights[1] = PETSC_PI/2.0;
+         user->weights[2] = PETSC_PI/4.0;
+      } else { // for width larger than 1 
+         
+
+      }
+   } else if(order==2) {
       for(i=0; i<width; i++) {
 
       }
-   } elseif(order==2){
-      for(i=0; i<width; i++) {
-
-      }
-   } else {
+   } else { // for all other orders 
       SETERRQ(PETSC_COMM_SELF,5,"Quadarature order > 2 not supported.\n");
    }
    return 0;

@@ -211,7 +211,7 @@ int main(int argc,char **args) {
                               s,                 // stencil width
                               NULL,NULL,         // not important
                               &da); CHKERRQ(ierr);
-         else {
+         } else {
             ierr = DMDACreate2d(PETSC_COMM_WORLD,   // MPI not important
                               DM_BOUNDARY_NONE,  // periodicity in  x
                               DM_BOUNDARY_NONE,  // periodicity in y
