@@ -140,7 +140,7 @@ int main(int argc,char **args) {
    SNES           snes;
    KSP            ksp;
    Vec            u_initial, u, u_exact, err;
-   MACtx          user;
+   MACtx          user; // see header file
    DMDALocalInfo  info;
    PetscReal      errinf, normconst2h, err2h;
    char           gridstr[99];
@@ -151,8 +151,11 @@ int main(int argc,char **args) {
    InitialType    initial = ZEROS;          // set u=0 for initial iterate
    PetscBool      gonboundary = PETSC_TRUE; // initial iterate has u=g on boundary
 
-   PetscInt s = 1;  // Stencil width
-   PetscInt N = 2;  // We want an interior domain that is N by N
+   PetscInt  i;  // iteration
+   PetscInt  s = 1;  // Stencil width
+   PetscInt  N = 2;  // We want an interior domain that is N by N
+   PetscInt  order = 2; // Quadrature order 1 or 2
+   PetscBool debug = PETSC_FALSE; // debugging set to false
    PetscReal xmin, xmax;
 
 
@@ -168,6 +171,8 @@ int main(int argc,char **args) {
    ierr = PetscOptionsInt("-dim","dimension of problem (=1,2,3 only)","test1.c",dim,&dim,NULL);CHKERRQ(ierr);
    ierr = PetscOptionsInt("-width","stencil width (=1,2)","test1.c",s,&s,NULL);CHKERRQ(ierr);
    ierr = PetscOptionsInt("-N","number of rows of interior nodes (default is 2)","test1.c",N,&N,NULL);CHKERRQ(ierr);
+   ierr = PetscOptionsInt("-order","order of quadrature (default is 2)","test1.c",order,&order,NULL);CHKERRQ(ierr);
+   ierr = PetscOptionsBool("-debug","print out extra info","test1.c",debug,&debug,NULL);CHKERRQ(ierr);
    ierr = PetscOptionsBool("-initial_gonboundary","set initial iterate to have correct boundary values",
       "test1.c",gonboundary,&gonboundary,NULL);CHKERRQ(ierr);
    ierr = PetscOptionsEnum("-initial_type","type of initial iterate",
@@ -260,7 +265,12 @@ int main(int argc,char **args) {
    ierr = DMDASetUniformCoordinates(da,xmin,xmax,xmin,xmax,xmin,xmax); CHKERRQ(ierr);
 
    // Compute quadrature weights
-   ComputeWeights(s, 1, &user);
+   ComputeWeights(s, order, &user);
+   if (debug) {
+      for (i=0; i<2*s+1; i++) {
+         PetscPrintf(PETSC_COMM_WORLD, "weight[%d]: %f\n",i,user.weights[i]);
+      }
+   }
 
    // set SNES call-backs
    /*
