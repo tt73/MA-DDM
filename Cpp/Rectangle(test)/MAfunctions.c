@@ -257,7 +257,7 @@ PetscErrorCode MA2DJacobianLocal(DMDALocalInfo *info, PetscScalar **au, Mat J, M
    PetscReal    *v;
    MatStencil   *col;
    MatStencil   row;
-   PetscReal    left,right,common;
+   PetscReal    common;
    PetscReal    *uFwd, *uBak; // u in the the forward and backward position for each direction k
    PetscReal    *hFwd, *hBak; // magnitude of step in forward and backward dirs for each direction k
    PetscReal    *SDD;   // second directional deriv
@@ -317,37 +317,75 @@ PetscErrorCode MA2DJacobianLocal(DMDALocalInfo *info, PetscScalar **au, Mat J, M
             SDD[0] = (uFwd[0] - 2.0*au[j][i] + uBak[0])/(hx*hx); // horizontal centered-diff
             SDD[1] = (uFwd[1] - 2.0*au[j][i] + uBak[1])/(hy*hy); // vertical centered-diff
             SDD[2] = (uFwd[2] - 2.0*au[j][i] + uBak[2])/(hx*hx); // horizontal centered-diff again
-            // Comparison against SDD and espilon
-            SGTE[0] = SDD[0] > user->epsilon;
-            SGTE[1] = SDD[1] > user->epsilon;
-            SGTE[2] = SDD[2] > user->epsilon;
-            // Find the smallest SDD, then check it against eps
-            min_k = 0;
-            for(k=1; k<Nk; k++) {
-               if (SDD[min_k] > SDD[k]) min_k = k;
+            // stencil step sizes
+            hFwd[0] = hx; hBak[0] = hx;
+            hFwd[1] = hy; hBak[1] = hy;
+            hFwd[2] = hx; hBak[2] = hx;
+         } else if (width==2) {
+            // get fwd & bak u for north direction
+            uFwd[width] = (j+2 > info->my-1) ? user->g_bdry(x,xymax[1],0.0,user) : au[j+2][i]; // north
+            uBak[width] = (j-2 < 0)          ? user->g_bdry(x,xymin[1],0.0,user) : au[j-2][i]; // south
+            hFwd[width] = (j+2 > info->my-1) ? hy : 2*hy; // north
+            hBak[width] = (j-2 < 0)          ? hy : 2*hy; // south
+            // get fwd & bak u for east and west
+            uFwd[0]   = (i+2 > info->mx-1) ? user->g_bdry(xymax[0],y,0.0,user) : au[j][i+2];  // east
+            uBak[0]   = (i-2 < 0)          ? user->g_bdry(xymin[0],y,0.0,user) : au[j][i-2];  // west
+            uFwd[Nk-1] = uBak[0];
+            uBak[Nk-1] = uFwd[0];
+            hFwd[0]   = (i+2 > info->mx-1) ? hx : 2*hx;  // east
+            hBak[0]   = (i-2 < 0)          ? hx : 2*hx;  // west
+            hFwd[Nk-1] = hBak[0];
+            hBak[Nk-1] = hFwd[0];
+            // NE direction
+            uFwd[1] = (i<info->mx-1 && j<info->my-1)? au[j+1][i+1] : user->g_bdry(x+hx,y+hy,0.0,user);
+            hFwd[1] = PetscSqrtReal(hx*hx+hy*hy); // doesn't change for width=2
+            // NW direction
+            uFwd[Nk-2] = (i>0 && j<info->my-1)? au[j+1][i-1] : user->g_bdry(x-hx,y+hy,0.0,user);
+            hFwd[Nk-2] = PetscSqrtReal(hx*hx+hy*hy); // doesn't change for width=2
+            // SW
+            uBak[1] = (i>0 && j>0)? au[j-1][i-1] : user->g_bdry(x-hx,y-hy,0.0,user);
+            hBak[1] = PetscSqrtReal(hx*hx+hy*hy); // doesn't change for width=2
+            // SE
+            uBak[Nk-2] = (i<info->mx-1 && j>0)? au[j-1][i+1] : user->g_bdry(x+hx,y-hy,0.0,user);
+            hBak[Nk-2] = PetscSqrtReal(hx*hx+hy*hy); // doesn't change for width=2
+            // Compute SDD
+            for (k=0; k<2*width+1; k++) {
+               // Use formula for generalized centered difference
+               SDD[k] = (hBak[k]*uFwd[k] - (hBak[k]+hFwd[k])*au[j][i] + hFwd[k]*uBak[k])/(hBak[k]*hFwd[k]*(hBak[k]+hFwd[k]));
             }
-            if (SDD[min_k]>user->epsilon) {
-               min_k = 3;
+         }
+         // Comparison against SDD and espilon
+         for (k=0; k<Nk; k++) {
+            SGTE[k] = SDD[k] > user->epsilon;
+         }
+         // Find the smallest SDD, then check it against eps
+         min_k = 0;
+         for(k=1; k<Nk; k++) {
+            if (SDD[min_k] > SDD[k]) min_k = k;
+         }
+         if (SDD[min_k]>user->epsilon) {
+            min_k = 3;
+         }
+         // Compute the common factor 2*pi^2*sum(w[k]/max(SDD[k],eps))^(-3)
+         common = 0;
+         for (k=0; k<Nk; k++) {
+            common += user->weights[k]/(SGTE[k]? SDD[k]:user->epsilon);
+         }
+         common = PetscPowReal(common,-3.0);
+         common *= 2*PETSC_PI*PETSC_PI;
+         // Compute center value
+         v[0] = 0;
+         for (k=0; k<Nk; k++) {
+            if(SGTE[k]) {
+               // v[0] += user->weights[k]/(SDD[k]*SDD[k])*dDt[0][k];
+               v[0] += user->weights[k]/(SDD[k]*SDD[k])*(-2.0/(hFwd[k]*hBak[k]));
             }
-            // Compute the common factor 2*pi^2*sum(w[k]/max(SDD[k],eps))^(-3)
-            common = 0;
-            for (k=0; k<Nk; k++) {
-               common += user->weights[k]/(SGTE[k]? SDD[k]:user->epsilon);
-            }
-            common = PetscPowReal(common,-3.0);
-            common *= 2*PETSC_PI*PETSC_PI;
-            // Compute center value
-            v[0] = 0;
-            for (k=0; k<Nk; k++) {
-               if(SGTE[k]) {
-                  v[0] += user->weights[k]/(SDD[k]*SDD[k])*dDt[0][k];
-               }
-            }
-            v[0] = common*v[0] + dDt[0][min_k]; // jacobian = (common term)*(summation term) + (min-min term)
-
+         }
+         v[0] = common*v[0] + dDt[0][min_k]; // jacobian = (common term)*(summation term) + (min-min term)
+         if (width==1) {
             // Compute other values for remaining 4*width stencil pts
             count = 1;
-            for (di=width; di>-width; di--){
+            for (di=width; di>-width; di--) {
                dj = -PetscAbsReal(di)+width;
                // forward
                if (i+di<=info->mx-1 && j+dj<=info->my-1) {
