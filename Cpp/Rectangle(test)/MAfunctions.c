@@ -54,8 +54,8 @@ PetscErrorCode MA1DFunctionLocal(DMDALocalInfo *info, PetscReal *u, PetscReal *F
 */
 PetscErrorCode MA2DFunctionLocal(DMDALocalInfo *info, PetscReal **au, PetscReal **aF, MACtx *user) {
    PetscErrorCode ierr;
-   PetscInt   i, j, k;
-   PetscReal  xymin[2], xymax[2], hx, hy, x, y;
+   PetscInt   i, j, k, Si, Sj;
+   PetscReal  xymin[2],xymax[2],hx,hy,x,y,x0,y0;
    PetscReal  left, right; // left and right terms in the MA operator approximation
    PetscReal  *SDD; // second directional deriv
    PetscReal  *uFwd, *uBak; // u in the the forward and backward position for each direction k
@@ -84,8 +84,8 @@ PetscErrorCode MA2DFunctionLocal(DMDALocalInfo *info, PetscReal **au, PetscReal 
             uBak[0] = (i == 0)          ? user->g_bdry(x-hx,y,0.0,user) : au[j][i-1]; // west
             uFwd[1] = (j == info->my-1) ? user->g_bdry(x,y+hy,0.0,user) : au[j+1][i]; // north
             uBak[1] = (j == 0)          ? user->g_bdry(x,y-hy,0.0,user) : au[j-1][i]; // south
-            uFwd[2] = (i == 0)          ? user->g_bdry(x-hx,y,0.0,user) : au[j][i-1]; // west
-            uBak[2] = (i == info->mx-1) ? user->g_bdry(x+hx,y,0.0,user) : au[j][i+1]; // east
+            uFwd[2] = uBak[0];                                                        // west
+            uBak[2] = uFwd[0];                                                        // east
             // 2nd dir. deriv
             SDD[0] = (uFwd[0] - 2.0*au[j][i] + uBak[0])/(hx*hx); // horizontal centered-diff
             SDD[1] = (uFwd[1] - 2.0*au[j][i] + uBak[1])/(hy*hy); // vertical centered-diff
@@ -123,15 +123,42 @@ PetscErrorCode MA2DFunctionLocal(DMDALocalInfo *info, PetscReal **au, PetscReal 
                SDD[k] = (hBak[k]*uFwd[k] - (hBak[k]+hFwd[k])*au[j][i] + hFwd[k]*uBak[k])/(hBak[k]*hFwd[k]*(hBak[k]+hFwd[k]));
             }
          } else { // Figure out how to compute SDD for general width
-
-            // loop over all directions k
-               // determmine uf ub
-               // uf = u[j+dy][i+dx] if interior, else
-               // use table(i,j,k) to get xp yp uf = g(xp,yp)
-
-            // loop again
-               // compute SDD
-
+            // loop over first 2*width directions 
+            for (k=0; k<M-1; k++) {
+               Si = user->Si[k]; Sj = user->Sj[k];
+               // Forward point for direction k
+               if (i+Si>=0 && i+Si<=info->mx-1 && j+Sj<=info->my-1) {
+                  // forward stencil point in the kth direction is in range 
+                  uFwd[k] = au[j+Sj][i+Si];
+                  hFwd[k] = hx*PetscSqrtReal(Sj*Sj + Si*Si); 
+               } else {
+                  // otherwise get the coordinates of the projection 
+                  x0 = 0; // need to implement 
+                  y0 = 0;
+                  uFwd[k] = user->g_bdry(x0,y0,0.0,user);               
+                  hFwd[k] = PetscSqrtReal((x-x0)*(x-x0) + (y-y0)*(y-y0)); 
+               }
+               // Backward point for direction k
+               if (i-Si>=0 && i-Si<=info->mx-1 && j-Sj>=0) {
+                  // backward stencil point in the kth direction is in range 
+                  uFwd[k] = au[j-Sj][i-Si];
+                  hFwd[k] = hx*PetscSqrtReal(Sj*Sj + Si*Si); 
+               } else {
+                  // otherwise get the coordinates of the projection 
+                  x0 = 0; // need to implement 
+                  y0 = 0;
+                  uFwd[k] = user->g_bdry(x0,y0,0.0,user);               
+                  hFwd[k] = PetscSqrtReal((x-x0)*(x-x0) + (y-y0)*(y-y0)); 
+               }
+            }
+            uFwd[M-1] = uBak[0];
+            uBak[M-1] = uFwd[0];
+            hFwd[M-1] = hBak[0];
+            hBak[M-1] = hFwd[0];
+            // Use formula for generalized centered difference
+            for (k=0; k<2*width+1; k++) {
+               SDD[k] = (hBak[k]*uFwd[k] - (hBak[k]+hFwd[k])*au[j][i] + hFwd[k]*uBak[k])/(hBak[k]*hFwd[k]*(hBak[k]+hFwd[k]));
+            }
          }
          // calculate the left term in the MA operator
          left = 0;
@@ -592,6 +619,7 @@ PetscErrorCode InitialState(DM da, InitialType it, PetscBool gbdry, Vec u, MACtx
     return 0;
 }
 
+// This function computes `weights` variable in the MACtx object. 
 PetscErrorCode ComputeWeights(PetscInt width, PetscInt order, MACtx *user) {
    PetscInt   i,M;
    PetscReal  a,h1,h2;
@@ -679,11 +707,34 @@ PetscErrorCode PrintProjection(DM da, MACtx *user) {
          }
       }
    }
-
-
-
-   
-
-
    return 0;     
+}
+
+
+/*
+   This function computes Si and Sj in the MACtx object. 
+
+   The derivative approximation at a node (i,j) on a square lattice 
+   depends on several neighboring nodes. Given some integer `width`, the 
+   set of all nodes (p,q) with L1 distance equal to `width` are a part of 
+   the stencil. There are always 4*width points. Among them, we only care 
+   about the directions that form an angle [0, pi) wrt. (i,j) because 
+   the rest are just mirrored across the center. 
+
+   We will call these points the forward stencil point in the kth direction
+   for 0 < k < 2*width-1. 
+*/
+PetscErrorCode ComputeFwdStencilDirs(PetscInt width, MACtx *user) {
+   PetscInt   k,count,N;
+
+   // Compute angles of L1 stencil points
+   N = 2*width;
+   PetscCalloc2(N,&user->Si,N,&user->Sj);
+   count = 0;
+   for (k=width; -width<k; k--) {
+      user->Si[count] = k;
+      user->Sj[count] = -PetscAbsReal(k)+width;
+      count++;
+   }
+   return 0;
 }

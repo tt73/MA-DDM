@@ -264,6 +264,14 @@ int main(int argc,char **args) {
    xmax = user.Lx ;
    ierr = DMDASetUniformCoordinates(da,xmin,xmax,xmin,xmax,xmin,xmax); CHKERRQ(ierr);
 
+   // Compute the stencil directions based on the L1 norm
+   ComputeFwdStencilDirs(s, &user);
+   if (debug) {
+      for (i=0; i<2*s; i++) {
+         PetscPrintf(PETSC_COMM_WORLD, "Si[%2d]=%4d  Sj[%2d]=%4d\n",i,user.Si[i],i,user.Sj[i]);
+      }
+   }
+
    // Compute quadrature weights
    ComputeWeights(s, order, &user);
    if (debug) {
@@ -273,7 +281,7 @@ int main(int argc,char **args) {
    }
 
    // Precompute projections for stencil points that are outside of the domain 
-   PrintProjection(da, &user);
+   // PrintProjection(da, &user);
 
 
    // set SNES call-backs
