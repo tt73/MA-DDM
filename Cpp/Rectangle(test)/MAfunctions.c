@@ -417,10 +417,10 @@ PetscErrorCode MA2DJacobianLocal(DMDALocalInfo *info, PetscScalar **au, Mat J, M
             }
          }
          // Insert values
-         PetscPrintf(PETSC_COMM_WORLD, "Now inserting values for i,j = (%d,%d)\n",i,j);
-         for (k=0; k<ncols; k++) {
-            PetscPrintf(PETSC_COMM_WORLD, "v[%d][%d] = %f\n",col[k].i,col[k].j,v[k]);
-         }
+         // PetscPrintf(PETSC_COMM_WORLD, "Now inserting values for i,j = (%d,%d)\n",i,j);
+         // for (k=0; k<ncols; k++) {
+         //    PetscPrintf(PETSC_COMM_WORLD, "v[%d][%d] = %f\n",col[k].i,col[k].j,v[k]);
+         // }
          ierr = MatSetValuesStencil(Jpre,1,&row,ncols,col,v,INSERT_VALUES); CHKERRQ(ierr);
       }
    }
@@ -636,4 +636,54 @@ PetscErrorCode ComputeWeights(PetscInt width, PetscInt order, MACtx *user) {
    }
    PetscFree(theta);
    return 0;
+}
+
+
+// Code to print projectinos 
+PetscErrorCode PrintProjection(DM da, MACtx *user) {
+   PetscErrorCode ierr;
+   DMDALocalInfo  info;
+   PetscInt i,j,k,count,width,N,M,Nk;
+   PetscInt *di, *dj; 
+   PetscReal *xFwd, *xBak, *yFwd, *yBak; 
+
+   // Get dimensions and other info from da 
+   ierr = DMDAGetLocalInfo(da,&info); CHKERRQ(ierr);
+   N = info.my;     // total rows 
+   M = info.mx;     // total cols 
+   width = info.sw; // stencil width
+
+   // Compute stencil directions 
+   Nk = 4*width+1;
+   PetscCalloc2(Nk,&di,Nk,&dj); // initilize 2 arrays of zeros 
+   count = 1;
+   for (k=width; k>-width; k--) {
+      di[count] = k;
+      dj[count] = -PetscAbsReal(k)+width;
+      count++;
+      di[count] = -k;
+      dj[count] = PetscAbsReal(k)-width;
+      count++;
+   }
+
+   PetscPrintf(PETSC_COMM_WORLD,"Stencil directions for width = %d:\n",width);
+   for (k=0; k<Nk; k++) {
+      PetscPrintf(PETSC_COMM_WORLD,"(%d) di,dj = (%d,%d)\n",k,di[k],dj[k]);
+   }
+
+
+   for (i=0; i<M; i++) {
+      for (j=0; j<N; j++) {
+         for (k=0; k<Nk; k++) {
+            PetscPrintf(PETSC_COMM_WORLD,"i,j,k = (%d,%d,%d)\n",i,j,k);
+         }
+      }
+   }
+
+
+
+   
+
+
+   return 0;     
 }

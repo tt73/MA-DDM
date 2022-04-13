@@ -272,6 +272,10 @@ int main(int argc,char **args) {
       }
    }
 
+   // Precompute projections for stencil points that are outside of the domain 
+   PrintProjection(da, &user);
+
+
    // set SNES call-backs
    /*
       SetFuntionLocal - link the custom residue function to `da`

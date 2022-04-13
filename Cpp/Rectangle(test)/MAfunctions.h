@@ -77,4 +77,7 @@ typedef enum {ZEROS, RANDOM} InitialType;
 PetscErrorCode InitialState(DM da, InitialType it, PetscBool gbdry, Vec u, MACtx *user);
 
 PetscErrorCode ComputeWeights(PetscInt width, PetscInt order, MACtx *user) ;
+
+PetscErrorCode PrintProjection(DM da, MACtx *user);
+
 #endif
