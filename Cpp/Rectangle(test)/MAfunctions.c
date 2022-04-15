@@ -43,7 +43,7 @@ PetscErrorCode MA1DFunctionLocal(DMDALocalInfo *info, PetscReal *u, PetscReal *F
 PetscErrorCode MA2DFunctionLocal(DMDALocalInfo *info, PetscReal **au, PetscReal **aF, MACtx *user) {
    PetscErrorCode ierr;
    PetscInt   i, j, k, Si, Sj;
-   PetscReal  xymin[2],xymax[2],hx,hy,x,y,x0,y0;
+   PetscReal  xymin[2],xymax[2],hx,hy,x,y,di,dj;
    PetscReal  DetD2u; // MA operator approximation
    PetscReal  *SDD; // second directional deriv
    PetscReal  *uFwd, *uBak; // u in the the forward and backward position for each direction k
@@ -96,15 +96,11 @@ PetscErrorCode MA2DFunctionLocal(DMDALocalInfo *info, PetscReal **au, PetscReal 
             hFwd[3] = PetscSqrtReal(hx*hx+hy*hy); // doesn't change for width=2
             uBak[3] = (i<info->mx-1 && j>0)? au[j-1][i+1] : user->g_bdry(x+hx,y-hy,0.0,user);
             hBak[3] = PetscSqrtReal(hx*hx+hy*hy); // doesn't change for width=2
-            // Compute SDD
-            for (k=0; k<M; k++) {
-               // Use formula for generalized centered difference
-               SDD[k] = (hBak[k]*uFwd[k] - (hBak[k]+hFwd[k])*au[j][i] + hFwd[k]*uBak[k])/(hBak[k]*hFwd[k]*(hBak[k]+hFwd[k]));
-            }
          } else { // Figure out how to compute SDD for general width
             // loop over first 2*width directions
             for (k=0; k<M; k++) {
-               Si = user->Si[k]; Sj = user->Sj[k];
+               Si = user->Si[k]; 
+               Sj = user->Sj[k];
                // Forward point for direction k
                if (i+Si>=0 && i+Si<=info->mx-1 && j+Sj<=info->my-1) {
                   // forward stencil point in the kth direction is in range
@@ -112,10 +108,9 @@ PetscErrorCode MA2DFunctionLocal(DMDALocalInfo *info, PetscReal **au, PetscReal 
                   hFwd[k] = hx*PetscSqrtReal(Sj*Sj + Si*Si);
                } else {
                   // otherwise get the coordinates of the projection
-                  x0 = 0; // need to implement
-                  y0 = 0;
-                  uFwd[k] = user->g_bdry(x0,y0,0.0,user);
-                  hFwd[k] = PetscSqrtReal((x-x0)*(x-x0) + (y-y0)*(y-y0));
+                  ComputeProjectionIndeces(&di,&dj,i,j,Si,Sj,info->mx-1,info->my-1);
+                  uFwd[k] = user->g_bdry(x+hx*di,y+hx*dj,0.0,user);
+                  hFwd[k] = hx*PetscSqrtReal(di*di + dj*dj);
                }
                // Backward point for direction k
                if (i-Si>=0 && i-Si<=info->mx-1 && j-Sj>=0) {
@@ -124,16 +119,15 @@ PetscErrorCode MA2DFunctionLocal(DMDALocalInfo *info, PetscReal **au, PetscReal 
                   hFwd[k] = hx*PetscSqrtReal(Sj*Sj + Si*Si);
                } else {
                   // otherwise get the coordinates of the projection
-                  x0 = 0; // need to implement
-                  y0 = 0;
-                  uFwd[k] = user->g_bdry(x0,y0,0.0,user);
-                  hFwd[k] = PetscSqrtReal((x-x0)*(x-x0) + (y-y0)*(y-y0));
+                  ComputeProjectionIndeces(&di,&dj,i,j,-Si,-Sj,info->mx-1,info->my-1);
+                  uFwd[k] = user->g_bdry(x+hx*di,y+hx*dj,0.0,user);
+                  hFwd[k] = PetscSqrtReal(di*di + dj*dj);
                }
             }
-            // Use formula for generalized centered difference
-            for (k=0; k<2*width; k++) {
-               SDD[k] = (hBak[k]*uFwd[k] - (hBak[k]+hFwd[k])*au[j][i] + hFwd[k]*uBak[k])/(hBak[k]*hFwd[k]*(hBak[k]+hFwd[k]));
-            }
+         }
+         // Use formula for generalized centered difference
+         for (k=0; k<2*width; k++) {
+            SDD[k] = (hBak[k]*uFwd[k] - (hBak[k]+hFwd[k])*au[j][i] + hFwd[k]*uBak[k])/(hBak[k]*hFwd[k]*(hBak[k]+hFwd[k]));
          }
          ApproxDetD2u(&DetD2u,M,SDD,user);
          aF[j][i] = DetD2u - user->f_rhs(x,y,0.0,user);
@@ -503,6 +497,9 @@ PetscErrorCode MA3DJacobianLocal(DMDALocalInfo *info, PetscScalar ***au, Mat J, 
    where d is the stencil width, w_k is the quad weight, and D_k^2u is the kth 2nd directional derivative.
    See write-up for more details. The summation term is called `left` and the min-min term is called `right`
    in the code.
+
+   Note: there are 2d+1 directions but the last SDD is the same as the last. Therefore we only sum over 2*d
+   terms and the first term is added twice. 
 */
 PetscErrorCode ApproxDetD2u(PetscReal *DetD2u, PetscInt dim, PetscReal *SDD, MACtx *user) {
    PetscInt  k;
@@ -514,7 +511,7 @@ PetscErrorCode ApproxDetD2u(PetscReal *DetD2u, PetscInt dim, PetscReal *SDD, MAC
       // PetscPrintf(PETSC_COMM_WORLD, "SDD[%d]= %f\n",k,SDD[k]);
       left += user->weights[k]/PetscMax(SDD[k],user->epsilon);
    }
-   left += user->weights[0]/PetscMax(SDD[0],user->epsilon);
+   left += user->weights[0]/PetscMax(SDD[0],user->epsilon); // last SDD is same as first SDD
    left =  PetscPowReal(left,-2.0);
    left *= PETSC_PI*PETSC_PI;
    // calculate the right term
@@ -628,7 +625,7 @@ PetscErrorCode ComputeWeights(PetscInt width, PetscInt order, MACtx *user) {
    PetscMalloc1(M,&theta);
    theta[width] = PETSC_PI/2;
    for (i=0; i<width; i++) {
-      a = PetscAtanReal((i)/(width-i));
+      a = PetscAtan2Real(i,width-i);
       theta[i]     = a;
       theta[M-i-1] = PETSC_PI - a;
    }
@@ -733,6 +730,42 @@ PetscErrorCode ComputeFwdStencilDirs(PetscInt width, MACtx *user) {
       user->Si[count] = k;
       user->Sj[count] = -PetscAbsReal(k)+width;
       count++;
+   }
+   return 0;
+}
+
+/*
+   This is Algorithm 5 in the Appendix.
+*/
+PetscErrorCode ComputeProjectionIndeces(PetscReal *di, PetscReal *dj, PetscInt i, PetscInt j, PetscInt Si, PetscInt Sj, PetscInt Nx, PetscInt Ny) {
+   PetscReal m;
+   PetscBool check;
+
+   if (Si==0) {
+      *di = 0;
+      *dj = (Si>0)? Ny-j : -(1+j);
+   } else if (Sj==0) {
+      *di = (Si>0)? Nx-i : -(1+i);
+      *dj = 0;
+   } else {
+      m = Sj/Si; 
+      if (Si>0 && Sj>0) {
+         check = PetscAbsReal((Ny-j)/m) > PetscAbsReal(Nx-i);
+         *di = (check)? (Ny-j)/m : Nx-i; 
+         *dj = (check)?     Ny-j : m*(Nx-i);
+      } else if (Si>0 && Sj<0) {
+         check = PetscAbsReal(Nx-i) > PetscAbsReal((1+j)/m);
+         *di = (check)?     Nx-i : -(1+j)/m; 
+         *dj = (check)? m*(Nx-i) : -(1+j);
+      } else if (Si<0 && Sj<0) {
+         check = PetscAbsReal((1+j)/m) > PetscAbsReal(1+i);
+         *di = (check)? -(1+j)/m : -(1+i); 
+         *dj = (check)?   -(1+j) : -m*(1+i);
+      } else {
+         check = PetscAbsReal(1+i) > PetscAbsReal((Ny-j)/m); 
+         *di = (check)?   -(1+i) : -(Ny-j)/m;
+         *dj = (check)? -m*(1+i) : Ny - j;
+      }
    }
    return 0;
 }

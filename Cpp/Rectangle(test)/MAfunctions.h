@@ -49,6 +49,8 @@ PetscErrorCode ComputeWeights(PetscInt width, PetscInt order, MACtx *user);
 
 PetscErrorCode ComputeFwdStencilDirs(PetscInt width, MACtx *user);
 
+PetscErrorCode ComputeProjectionIndeces(PetscReal *di, PetscReal *dj, PetscInt i, PetscInt j, PetscInt Si, PetscInt Sj, PetscInt Nx, PetscInt Ny);
+
 PetscErrorCode PrintProjection(DM da, MACtx *user);
 
 #endif
