@@ -57,6 +57,7 @@ PetscErrorCode MA2DFunctionLocal(DMDALocalInfo *info, PetscReal **au, PetscReal 
    // allocate mem for derivative stuff
    width = info->sw;
    M     = 2*width;
+   
    PetscMalloc1(M,&SDD);          //
    PetscMalloc2(M,&uFwd,M,&uBak); //
    PetscMalloc2(M,&hFwd,M,&hBak); //
@@ -98,34 +99,34 @@ PetscErrorCode MA2DFunctionLocal(DMDALocalInfo *info, PetscReal **au, PetscReal 
             hBak[3] = PetscSqrtReal(hx*hx+hy*hy); // doesn't change for width=2
          } else { // Figure out how to compute SDD for general width
             // loop over first 2*width directions
-            PetscPrintf(PETSC_COMM_WORLD,"Index = (%d,%d)\n",i,j);
+            // PetscPrintf(PETSC_COMM_WORLD,"Index = (%d,%d)\n",i,j);
             for (k=0; k<M; k++) {
                Si = user->Si[k]; 
                Sj = user->Sj[k];
                // Forward point for direction k
-               if (i+Si>=0 && i+Si<=info->mx-1 && j+Sj<=info->my-1) {
+               if (i+Si>=0 && i+Si<=info->mx-1 && j+Sj<=info->my-1 && j+Sj>=0) {
                   // forward stencil point in the kth direction is in range
                   uFwd[k] = au[j+Sj][i+Si];
                   hFwd[k] = hx*PetscSqrtReal(Sj*Sj + Si*Si);
                } else {
                   // otherwise get the coordinates of the projection
-                  ComputeProjectionIndeces(&di,&dj,i,j,Si,Sj,info->mx-1,info->my-1);
+                  ComputeProjectionIndeces(&di,&dj,i,j,Si,Sj,info->mx,info->my);
                   uFwd[k] = user->g_bdry(x+hx*di,y+hx*dj,0.0,user);
                   hFwd[k] = hx*PetscSqrtReal(di*di + dj*dj);
-                  PetscPrintf(PETSC_COMM_WORLD,"Stencil direction = (%2d,%2d), Projected Point (%5.2f,%5.2f), Projection Stencil (%5.2f,%5.2f)\n",Si,Sj,x+hx*di,y+hx*dj,di,dj);
+                  // PetscPrintf(PETSC_COMM_WORLD,"Fwd: Stencil direction = (%2d,%2d), Original Point (%f,%f), Projected Point (%5.2f,%5.2f), Projection Stencil (%5.2f,%5.2f)\n",Si,Sj,x,y,x+hx*di,y+hx*dj,di,dj);
                   
                }
                // Backward point for direction k
-               if (i-Si>=0 && i-Si<=info->mx-1 && j-Sj>=0) {
+               if (i-Si>=0 && i-Si<=info->mx-1 && j-Sj>=0 && j-Sj <= info->my-1) {
                   // backward stencil point in the kth direction is in range
                   uBak[k] = au[j-Sj][i-Si];
                   hBak[k] = hx*PetscSqrtReal(Sj*Sj + Si*Si);
                } else {
                   // otherwise get the coordinates of the projection
-                  ComputeProjectionIndeces(&di,&dj,i,j,-Si,-Sj,info->mx-1,info->my-1);
+                  ComputeProjectionIndeces(&di,&dj,i,j,-Si,-Sj,info->mx,info->my);
                   uBak[k] = user->g_bdry(x+hx*di,y+hx*dj,0.0,user);
                   hBak[k] = hx*PetscSqrtReal(di*di + dj*dj);
-                  PetscPrintf(PETSC_COMM_WORLD,"Stencil direction = (%2d,%2d), Projected Point (%5.2f,%5.2f), Projection Stencil (%5.2f,%5.2f)\n",-Si,-Sj,x+hx*di,y+hx*dj,di,dj);
+                  // PetscPrintf(PETSC_COMM_WORLD,"Bak: Stencil direction = (%2d,%2d), Original Point (%f,%f), Projected Point (%5.2f,%5.2f), Projection Stencil (%5.2f,%5.2f)\n",-Si,-Sj,x,y,x+hx*di,y+hx*dj,di,dj);
                }
             }
          }
@@ -745,6 +746,7 @@ PetscErrorCode ComputeProjectionIndeces(PetscReal *di, PetscReal *dj, PetscInt i
    PetscReal m;
    PetscBool check;
 
+
    if (Si==0) {
       *di = 0;
       *dj = (Sj>0)? Ny-j : -(1+j);
@@ -754,19 +756,20 @@ PetscErrorCode ComputeProjectionIndeces(PetscReal *di, PetscReal *dj, PetscInt i
    } else {
       m = Sj/(PetscReal)Si; 
       if (Si>0 && Sj>0) {
-         check = PetscAbsReal((Ny-j)/m) > PetscAbsReal(Nx-i);
+
+         check = PetscAbsReal((Ny-j)/m) < PetscAbsReal(Nx-i);
          *di = (check)? (Ny-j)/m : Nx-i; 
          *dj = (check)?     Ny-j : m*(Nx-i);
       } else if (Si>0 && Sj<0) {
-         check = PetscAbsReal(Nx-i) > PetscAbsReal((1+j)/m);
+         check = PetscAbsReal(Nx-i) < PetscAbsReal((1+j)/m);
          *di = (check)?     Nx-i : -(1+j)/m; 
          *dj = (check)? m*(Nx-i) : -(1+j);
       } else if (Si<0 && Sj<0) {
-         check = PetscAbsReal((1+j)/m) > PetscAbsReal(1+i);
+         check = PetscAbsReal((1+j)/m) < PetscAbsReal(1+i);
          *di = (check)? -(1+j)/m : -(1+i); 
          *dj = (check)?   -(1+j) : -m*(1+i);
       } else if (Si<0 && Sj>0) {
-         check = PetscAbsReal(1+i) > PetscAbsReal((Ny-j)/m); 
+         check = PetscAbsReal(1+i) < PetscAbsReal((Ny-j)/m); 
          *di = (check)?   -(1+i) : -(Ny-j)/m;
          *dj = (check)? -m*(1+i) : Ny - j;
       } else {
