@@ -9,9 +9,9 @@ typedef struct {
    // epsilon is the regularization term
    PetscReal epsilon;
    // quadrature weights
-   PetscReal *weights; 
+   PetscReal *weights;
    // Forward stencil directions in i and j (only 2D)
-   PetscInt  *Si, *Sj; 
+   PetscInt  *Si, *Sj;
    // right-hand-side f(x,y,z)
    PetscReal (*f_rhs)(PetscReal x, PetscReal y, PetscReal z, void *ctx);
    // Dirichlet boundary condition g(x,y,z)
@@ -50,6 +50,8 @@ PetscErrorCode ComputeWeights(PetscInt width, PetscInt order, MACtx *user);
 PetscErrorCode ComputeFwdStencilDirs(PetscInt width, MACtx *user);
 
 PetscErrorCode ComputeProjectionIndeces(PetscReal *di, PetscReal *dj, PetscInt i, PetscInt j, PetscInt Si, PetscInt Sj, PetscInt Nx, PetscInt Ny);
+
+PetscErrorCode ApproxDetD2u(PetscReal *DetD2u, PetscInt dim, PetscReal *SDD, MACtx *user);
 
 PetscErrorCode PrintProjection(DM da, MACtx *user);
 
