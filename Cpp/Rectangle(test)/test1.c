@@ -139,18 +139,16 @@ int main(int argc,char **args) {
    DM             da, da_after;
    SNES           snes;
    KSP            ksp;
-   Vec            u_initial, u, u_exact, err;
+   Vec            u_initial,u,u_exact,err;
    MACtx          user; // see header file
    DMDALocalInfo  info;
    PetscReal      errinf, normconst2h, err2h;
    char           gridstr[99];
    ExactFcnVec    getuexact;
-
    PetscInt       dim = 2;                  // 2D
    ProblemType    problem = ex10;           // manufactured problem using exp()
    InitialType    initial = ZEROS;          // set u=0 for initial iterate
    PetscBool      gonboundary = PETSC_TRUE; // initial iterate has u=g on boundary
-
    PetscInt  i;  // iteration
    PetscInt  s = 1;  // Stencil width
    PetscInt  N = 2;  // We want an interior domain that is N by N
@@ -221,7 +219,7 @@ int main(int argc,char **args) {
                               DM_BOUNDARY_NONE,  // periodicity in  x
                               DM_BOUNDARY_NONE,  // periodicity in y
                               DMDA_STENCIL_BOX, // stencil type: box vs star
-                              N,N,           // mesh size in x & y directions
+                              N,N,              // mesh size in x & y directions
                               PETSC_DECIDE,PETSC_DECIDE, // local mesh size
                               1,                 // degree of freedom
                               s,                 // stencil width
@@ -280,7 +278,7 @@ int main(int argc,char **args) {
       }
    }
 
-   // Precompute projections for stencil points that are outside of the domain 
+   // Precompute projections for stencil points that are outside of the domain
    // PrintProjection(da, &user);
 
 

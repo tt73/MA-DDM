@@ -57,7 +57,7 @@ PetscErrorCode MA2DFunctionLocal(DMDALocalInfo *info, PetscReal **au, PetscReal 
    // allocate mem for derivative stuff
    width = info->sw;
    M     = 2*width;
-   
+
    PetscMalloc1(M,&SDD);          //
    PetscMalloc2(M,&uFwd,M,&uBak); //
    PetscMalloc2(M,&hFwd,M,&hBak); //
@@ -99,7 +99,6 @@ PetscErrorCode MA2DFunctionLocal(DMDALocalInfo *info, PetscReal **au, PetscReal 
             hBak[3] = PetscSqrtReal(hx*hx+hy*hy); // doesn't change for width=2
          } else { // Figure out how to compute SDD for general width
             // loop over first 2*width directions
-            // PetscPrintf(PETSC_COMM_WORLD,"Index = (%d,%d)\n",i,j);
             for (k=0; k<M; k++) {
                Si = user->Si[k];
                Sj = user->Sj[k];
@@ -113,13 +112,8 @@ PetscErrorCode MA2DFunctionLocal(DMDALocalInfo *info, PetscReal **au, PetscReal 
                   ComputeProjectionIndeces(&di,&dj,i,j,Si,Sj,info->mx,info->my);
                   uFwd[k] = user->g_bdry(x+hx*di,y+hx*dj,0.0,user);
                   hFwd[k] = hx*PetscSqrtReal(di*di + dj*dj);
-<<<<<<< HEAD
                   // PetscPrintf(PETSC_COMM_WORLD,"Stencil direction = (%2d,%2d), Projected Point (%5.2f,%5.2f), Projection Stencil (%5.2f,%5.2f)\n",Si,Sj,x+hx*di,y+hx*dj,di,dj);
 
-=======
-                  // PetscPrintf(PETSC_COMM_WORLD,"Fwd: Stencil direction = (%2d,%2d), Original Point (%f,%f), Projected Point (%5.2f,%5.2f), Projection Stencil (%5.2f,%5.2f)\n",Si,Sj,x,y,x+hx*di,y+hx*dj,di,dj);
-                  
->>>>>>> 4b20e456d15b9b1592478fd9a893cc6acdedb22a
                }
                // Backward point for direction k
                if (i-Si>=0 && i-Si<=info->mx-1 && j-Sj>=0 && j-Sj <= info->my-1) {
@@ -131,16 +125,12 @@ PetscErrorCode MA2DFunctionLocal(DMDALocalInfo *info, PetscReal **au, PetscReal 
                   ComputeProjectionIndeces(&di,&dj,i,j,-Si,-Sj,info->mx,info->my);
                   uBak[k] = user->g_bdry(x+hx*di,y+hx*dj,0.0,user);
                   hBak[k] = hx*PetscSqrtReal(di*di + dj*dj);
-<<<<<<< HEAD
                   // PetscPrintf(PETSC_COMM_WORLD,"Stencil direction = (%2d,%2d), Projected Point (%5.2f,%5.2f), Projection Stencil (%5.2f,%5.2f)\n",-Si,-Sj,x+hx*di,y+hx*dj,di,dj);
-=======
-                  // PetscPrintf(PETSC_COMM_WORLD,"Bak: Stencil direction = (%2d,%2d), Original Point (%f,%f), Projected Point (%5.2f,%5.2f), Projection Stencil (%5.2f,%5.2f)\n",-Si,-Sj,x,y,x+hx*di,y+hx*dj,di,dj);
->>>>>>> 4b20e456d15b9b1592478fd9a893cc6acdedb22a
                }
             }
          }
          // Use formula for generalized centered difference
-         for (k=0; k<2*width; k++) {
+         for (k=0; k<M; k++) {
             SDD[k] = 2*(hBak[k]*uFwd[k] - (hBak[k]+hFwd[k])*au[j][i] + hFwd[k]*uBak[k])/(hBak[k]*hFwd[k]*(hBak[k]+hFwd[k]));
          }
          ApproxDetD2u(&DetD2u,M,SDD,user);
@@ -249,8 +239,8 @@ PetscErrorCode MA1DJacobianLocal(DMDALocalInfo *info, PetscScalar *au, Mat J, Ma
 */
 PetscErrorCode MA2DJacobianLocal(DMDALocalInfo *info, PetscScalar **au, Mat J, Mat Jpre, MACtx *user) {
    PetscErrorCode  ierr;
-   PetscInt     i,j,k,di,dj,ncols,width,min_k,count,Nk,Ns; // Nk = # of directions, Ns = # of stencil pts
-   PetscReal    xymin[2], xymax[2], x, y, hx, hy, h2;
+   PetscInt     i,j,k,Si,Sj,ncols,width,min_k,count,Nk,Ns; // Nk = # of directions, Ns = # of stencil pts
+   PetscReal    xymin[2],xymax[2],x,y,hx,hy,h2,di,dj;
    PetscReal    *v;
    MatStencil   *col;
    MatStencil   row;
@@ -259,7 +249,7 @@ PetscErrorCode MA2DJacobianLocal(DMDALocalInfo *info, PetscScalar **au, Mat J, M
    PetscReal    *hFwd, *hBak; // magnitude of step in forward and backward dirs for each direction k
    PetscReal    *SDD;   // second directional deriv
    PetscBool    *SGTE;  // stands for "SDD[k] greather than epsilon"
-   PetscReal    **dDt; // Jacobian of SDD operator for each direction and for the fwd, center, and bak
+   PetscBool    regularize; // true if epsilon is the smallest type
 
    // Retrieve info from DMDA
    ierr  = DMGetBoundingBox(info->da,xymin,xymax); CHKERRQ(ierr);
@@ -268,28 +258,12 @@ PetscErrorCode MA2DJacobianLocal(DMDALocalInfo *info, PetscScalar **au, Mat J, M
    h2    = hx*hy;
    width = info->sw;
    Nk    = 2*width; // number of angular forward directions
-   Ns    = 4*width + 1; // total number of stencil points
+   Ns    = 4*width+1; // total number of stencil points
    // Allocate memory
    PetscMalloc2(Ns,&v,Ns,&col);
    PetscCalloc2(Nk,&SDD,Nk,&SGTE);
    PetscCalloc2(Nk,&uFwd,Nk,&uBak);
    PetscCalloc2(Nk,&hFwd,Nk,&hBak);
-   PetscMalloc1(Ns,&dDt);
-   for (i=0; i<Ns; i++) {      // dDt is a 2D array, so
-      PetscCalloc1(4,&dDt[i]); // mem allocated in a loop
-   }
-   /*
-      dDt is the partial derivative of the SDD at a stencil point.
-      dDt[i][j] represents the derivative wrt
-   */
-   if (width==1) {
-      // Jacobian is independent of position for width=1 case
-      dDt[0][0] = -2.0/h2; dDt[0][1] = -2.0/h2; dDt[0][2] = -2.0/h2; dDt[0][3] = 0; // center
-      dDt[1][0] = 1/h2;    dDt[1][1] = 0;       dDt[1][2] = 1/h2;    dDt[1][3] = 0; // east
-      dDt[2][0] = 1/h2;    dDt[2][1] = 0;       dDt[2][2] = 1/h2;    dDt[2][3] = 0; // west
-      dDt[3][0] = 0;       dDt[3][1] = 1/h2;    dDt[3][2] = 0;       dDt[3][3] = 0; // north
-      dDt[4][0] = 0;       dDt[4][1] = 1/h2;    dDt[4][2] = 0;       dDt[4][3] = 0; // south
-   }
    // loop over each row of J
    for (j = info->ys; j < info->ys+info->ym; j++) {
       row.j = j;
@@ -314,38 +288,37 @@ PetscErrorCode MA2DJacobianLocal(DMDALocalInfo *info, PetscScalar **au, Mat J, M
             // stencil step sizes
             hFwd[0] = hx; hBak[0] = hx;
             hFwd[1] = hy; hBak[1] = hy;
-         } else if (width==2) {
-            // get fwd & bak u for north direction
-            uFwd[width] = (j+2 > info->my-1) ? user->g_bdry(x,xymax[1],0.0,user) : au[j+2][i]; // north
-            uBak[width] = (j-2 < 0)          ? user->g_bdry(x,xymin[1],0.0,user) : au[j-2][i]; // south
-            hFwd[width] = (j+2 > info->my-1) ? hy : 2*hy; // north
-            hBak[width] = (j-2 < 0)          ? hy : 2*hy; // south
-            // get fwd & bak u for east and west
-            uFwd[0]   = (i+2 > info->mx-1) ? user->g_bdry(xymax[0],y,0.0,user) : au[j][i+2];  // east
-            uBak[0]   = (i-2 < 0)          ? user->g_bdry(xymin[0],y,0.0,user) : au[j][i-2];  // west
-            uFwd[Nk-1] = uBak[0];
-            uBak[Nk-1] = uFwd[0];
-            hFwd[0]   = (i+2 > info->mx-1) ? hx : 2*hx;  // east
-            hBak[0]   = (i-2 < 0)          ? hx : 2*hx;  // west
-            hFwd[Nk-1] = hBak[0];
-            hBak[Nk-1] = hFwd[0];
-            // NE direction
-            uFwd[1] = (i<info->mx-1 && j<info->my-1)? au[j+1][i+1] : user->g_bdry(x+hx,y+hy,0.0,user);
-            hFwd[1] = PetscSqrtReal(hx*hx+hy*hy); // doesn't change for width=2
-            // NW direction
-            uFwd[Nk-2] = (i>0 && j<info->my-1)? au[j+1][i-1] : user->g_bdry(x-hx,y+hy,0.0,user);
-            hFwd[Nk-2] = PetscSqrtReal(hx*hx+hy*hy); // doesn't change for width=2
-            // SW
-            uBak[1] = (i>0 && j>0)? au[j-1][i-1] : user->g_bdry(x-hx,y-hy,0.0,user);
-            hBak[1] = PetscSqrtReal(hx*hx+hy*hy); // doesn't change for width=2
-            // SE
-            uBak[Nk-2] = (i<info->mx-1 && j>0)? au[j-1][i+1] : user->g_bdry(x+hx,y-hy,0.0,user);
-            hBak[Nk-2] = PetscSqrtReal(hx*hx+hy*hy); // doesn't change for width=2
-            // Compute SDD
-            for (k=0; k<2*width+1; k++) {
-               // Use formula for generalized centered difference
-               SDD[k] = (hBak[k]*uFwd[k] - (hBak[k]+hFwd[k])*au[j][i] + hFwd[k]*uBak[k])/(hBak[k]*hFwd[k]*(hBak[k]+hFwd[k]));
+         } else {
+            for (k=0; k<Nk; k++) {
+               Si = user->Si[k];
+               Sj = user->Sj[k];
+               // Forward point for direction k
+               if (i+Si>=0 && i+Si<=info->mx-1 && j+Sj<=info->my-1 && j+Sj>=0) {
+                  // forward stencil point in the kth direction is in range
+                  uFwd[k] = au[j+Sj][i+Si];
+                  hFwd[k] = hx*PetscSqrtReal(Sj*Sj + Si*Si);
+               } else {
+                  // otherwise get the coordinates of the projection
+                  ComputeProjectionIndeces(&di,&dj,i,j,Si,Sj,info->mx,info->my);
+                  uFwd[k] = user->g_bdry(x+hx*di,y+hx*dj,0.0,user);
+                  hFwd[k] = hx*PetscSqrtReal(di*di + dj*dj);
+               }
+               // Backward point for direction k
+               if (i-Si>=0 && i-Si<=info->mx-1 && j-Sj>=0 && j-Sj <= info->my-1) {
+                  // backward stencil point in the kth direction is in range
+                  uBak[k] = au[j-Sj][i-Si];
+                  hBak[k] = hx*PetscSqrtReal(Sj*Sj + Si*Si);
+               } else {
+                  // otherwise get the coordinates of the projection
+                  ComputeProjectionIndeces(&di,&dj,i,j,-Si,-Sj,info->mx,info->my);
+                  uBak[k] = user->g_bdry(x+hx*di,y+hx*dj,0.0,user);
+                  hBak[k] = hx*PetscSqrtReal(di*di + dj*dj);
+               }
             }
+         }
+         // Use formula for generalized centered difference
+         for (k=0; k<Nk; k++) {
+            SDD[k] = 2.0*(hBak[k]*uFwd[k] - (hBak[k]+hFwd[k])*au[j][i] + hFwd[k]*uBak[k])/(hBak[k]*hFwd[k]*(hBak[k]+hFwd[k]));
          }
          // Comparison against SDD and espilon
          for (k=0; k<Nk; k++) {
@@ -357,7 +330,8 @@ PetscErrorCode MA2DJacobianLocal(DMDALocalInfo *info, PetscScalar **au, Mat J, M
             if (SDD[min_k] > SDD[k]) min_k = k;
          }
          if (SDD[min_k]>user->epsilon) {
-            min_k = 3;
+            min_k = Nk;
+            regularize = PETSC_TRUE;
          }
          // Compute the common factor 2*pi^2*sum(w[k]/max(SDD[k],eps))^(-3)
          common = 0;
@@ -365,50 +339,80 @@ PetscErrorCode MA2DJacobianLocal(DMDALocalInfo *info, PetscScalar **au, Mat J, M
             common += user->weights[k]/(SGTE[k]? SDD[k]:user->epsilon);
          }
          common = PetscPowReal(common,-3.0);
-         common *= 2*PETSC_PI*PETSC_PI;
+         common *= 2.0*PETSC_PI*PETSC_PI;
          // Compute center value
          v[0] = 0;
          for (k=0; k<Nk; k++) {
             if(SGTE[k]) {
-               // v[0] += user->weights[k]/(SDD[k]*SDD[k])*dDt[0][k];
                v[0] += user->weights[k]/(SDD[k]*SDD[k])*(-2.0/(hFwd[k]*hBak[k]));
             }
          }
-         v[0] = common*v[0] + dDt[0][min_k]; // jacobian = (common term)*(summation term) + (min-min term)
-         if (width==1) {
-            // Compute other values for remaining 4*width stencil pts
-            count = 1;
-            for (di=width; di>-width; di--) {
-               dj = -PetscAbsReal(di)+width;
-               // forward
-               if (i+di<=info->mx-1 && j+dj<=info->my-1) {
-                  col[ncols].j = j+dj;
-                  col[ncols].i = i+di;
-                  v[ncols] = 0;
-                  for (k = 0; k<Nk; k++) {
-                     if(SGTE[k]) {
-                        v[ncols] += user->weights[k]/(SDD[k]*SDD[k])*dDt[count][k];
-                     }
+         v[0] += user->weights[0]/(SDD[0]*SDD[0])*(-2.0/(hFwd[0]*hBak[0]));
+         v[0] = common*v[0] + (regularize)? 0 : -2.0/(hFwd[min_k]*hBak[min_k]);
+         // Compute partial at remaining 4*width stencil points
+         for (k=0; k<Nk; k++) {
+            Si = user->Si[k];
+            Sj = user->Sj[k];
+            if (i+Si>=0 && i+Si<=info->mx-1 && j+Sj<=info->my-1 && j+Sj>=0) {
+               col[ncols].j = j+Sj;
+               col[ncols].i = i+Si;
+               v[ncols] = 0;
+               for (k = 0; k<Nk; k++) {
+                  if(SGTE[k]) {
+                     v[ncols] += user->weights[k]/(SDD[k]*SDD[k])*(2.0/(hFwd[k]*(hFwd[k]+hBak[k])));
                   }
-                  v[ncols] = common*v[ncols] + dDt[count][min_k];
-                  ncols++;
                }
-               // backward
-               if (i-di>=0 && j-dj>=0) {
-                  col[ncols].j = j-dj;
-                  col[ncols].i = i-di;
-                  v[ncols] = 0;
-                  for (k = 0; k<Nk; k++) {
-                     if(SGTE[k]) {
-                        v[ncols] += user->weights[k]/(SDD[k]*SDD[k])*dDt[count+1][k];
-                     }
+               v[ncols] = common*v[ncols] + (regularize)? 0 : (2.0/(hFwd[min_k]*(hFwd[min_k]+hBak[min_k])));
+               ncols++;
+            }
+            if (i-Si>=0 && i-Si<=info->mx-1 && j-Sj>=0 && j-Sj<=info->my-1) {
+               col[ncols].j = j-Sj;
+               col[ncols].i = i-Si;
+               v[ncols] = 0;
+               for (k = 0; k<Nk; k++) {
+                  if(SGTE[k]) {
+                     v[ncols] += user->weights[k]/(SDD[k]*SDD[k])*(2.0/(hBak[k]*(hFwd[k]+hBak[k])));
                   }
-                  v[ncols] = common*v[ncols] + dDt[count+1][min_k];
-                  ncols++;
                }
-               count += 2;
+               v[ncols] = common*v[ncols] + (regularize)? 0 : (2.0/(hBak[min_k]*(hFwd[min_k]+hBak[min_k])));
+               ncols++;
             }
          }
+
+         // if (width==1) {
+         //    // Compute other values for remaining 4*width stencil pts
+         //    count = 1;
+         //    for (di=width; di>-width; di--) {
+         //       dj = -PetscAbsReal(di)+width;
+         //       // forward
+         //       if (i+di<=info->mx-1 && j+dj<=info->my-1) {
+         //          col[ncols].j = j+dj;
+         //          col[ncols].i = i+di;
+         //          v[ncols] = 0;
+         //          for (k = 0; k<Nk; k++) {
+         //             if(SGTE[k]) {
+         //                v[ncols] += user->weights[k]/(SDD[k]*SDD[k])*dDt[count][k];
+         //             }
+         //          }
+         //          v[ncols] = common*v[ncols] + dDt[count][min_k];
+         //          ncols++;
+         //       }
+         //       // backward
+         //       if (i-di>=0 && j-dj>=0) {
+         //          col[ncols].j = j-dj;
+         //          col[ncols].i = i-di;
+         //          v[ncols] = 0;
+         //          for (k = 0; k<Nk; k++) {
+         //             if(SGTE[k]) {
+         //                v[ncols] += user->weights[k]/(SDD[k]*SDD[k])*dDt[count+1][k];
+         //             }
+         //          }
+         //          v[ncols] = common*v[ncols] + dDt[count+1][min_k];
+         //          ncols++;
+         //       }
+         //       count += 2;
+         //    }
+         // }
          // Insert values
          // PetscPrintf(PETSC_COMM_WORLD, "Now inserting values for i,j = (%d,%d)\n",i,j);
          // for (k=0; k<ncols; k++) {
@@ -755,7 +759,6 @@ PetscErrorCode ComputeProjectionIndeces(PetscReal *di, PetscReal *dj, PetscInt i
    PetscReal m;
    PetscBool check;
 
-
    if (Si==0) {
       *di = 0;
       *dj = (Sj>0)? Ny-j : -(1+j);
@@ -765,7 +768,6 @@ PetscErrorCode ComputeProjectionIndeces(PetscReal *di, PetscReal *dj, PetscInt i
    } else {
       m = Sj/(PetscReal)Si;
       if (Si>0 && Sj>0) {
-<<<<<<< HEAD
          // check = PetscAbsReal((Ny-j)/m) > PetscAbsReal(Nx-i);
          check = Sj > Si;
          *di = (check)? (Ny-j)/m : Nx-i;
@@ -783,22 +785,6 @@ PetscErrorCode ComputeProjectionIndeces(PetscReal *di, PetscReal *dj, PetscInt i
       } else if (Si<0 && Sj>0) {
          // check = PetscAbsReal(1+i) > PetscAbsReal((Ny-j)/m);
          check = -Si > Sj;
-=======
-
-         check = PetscAbsReal((Ny-j)/m) < PetscAbsReal(Nx-i);
-         *di = (check)? (Ny-j)/m : Nx-i; 
-         *dj = (check)?     Ny-j : m*(Nx-i);
-      } else if (Si>0 && Sj<0) {
-         check = PetscAbsReal(Nx-i) < PetscAbsReal((1+j)/m);
-         *di = (check)?     Nx-i : -(1+j)/m; 
-         *dj = (check)? m*(Nx-i) : -(1+j);
-      } else if (Si<0 && Sj<0) {
-         check = PetscAbsReal((1+j)/m) < PetscAbsReal(1+i);
-         *di = (check)? -(1+j)/m : -(1+i); 
-         *dj = (check)?   -(1+j) : -m*(1+i);
-      } else if (Si<0 && Sj>0) {
-         check = PetscAbsReal(1+i) < PetscAbsReal((Ny-j)/m); 
->>>>>>> 4b20e456d15b9b1592478fd9a893cc6acdedb22a
          *di = (check)?   -(1+i) : -(Ny-j)/m;
          *dj = (check)? -m*(1+i) : Ny-j;
       } else {
