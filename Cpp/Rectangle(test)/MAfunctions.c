@@ -76,29 +76,8 @@ PetscErrorCode MA2DFunctionLocal(DMDALocalInfo *info, PetscReal **au, PetscReal 
             // 2nd dir. deriv
             SDD[0] = (uFwd[0] - 2.0*au[j][i] + uBak[0])/(hx*hx); // horizontal centered-diff
             SDD[1] = (uFwd[1] - 2.0*au[j][i] + uBak[1])/(hy*hy); // vertical centered-diff
-         } else if (width==2) { //
-            // get fwd & bak u for east
-            uFwd[0]   = (i+2 > info->mx-1) ? user->g_bdry(xymax[0],y,0.0,user) : au[j][i+2];  // east
-            uBak[0]   = (i-2 < 0)          ? user->g_bdry(xymin[0],y,0.0,user) : au[j][i-2];  // west
-            hFwd[0]   = (i+2 > info->mx-1) ? hx : 2*hx;  // east
-            hBak[0]   = (i-2 < 0)          ? hx : 2*hx;  // west
-            // NE direction
-            uFwd[1] = (i<info->mx-1 && j<info->my-1)? au[j+1][i+1] : user->g_bdry(x+hx,y+hy,0.0,user);
-            hFwd[1] = PetscSqrtReal(hx*hx+hy*hy); // doesn't change for width=2
-            uBak[1] = (i>0 && j>0)? au[j-1][i-1] : user->g_bdry(x-hx,y-hy,0.0,user);
-            hBak[1] = PetscSqrtReal(hx*hx+hy*hy); // doesn't change for width=2
-            // N direction
-            uFwd[2] = (j+2 > info->my-1) ? user->g_bdry(x,xymax[1],0.0,user) : au[j+2][i]; // north
-            uBak[2] = (j-2 < 0)          ? user->g_bdry(x,xymin[1],0.0,user) : au[j-2][i]; // south
-            hFwd[2] = (j+2 > info->my-1) ? hy : 2*hy; // north
-            hBak[2] = (j-2 < 0)          ? hy : 2*hy; // south
-            // NW direction
-            uFwd[3] = (i>0 && j<info->my-1)? au[j+1][i-1] : user->g_bdry(x-hx,y+hy,0.0,user);
-            hFwd[3] = PetscSqrtReal(hx*hx+hy*hy); // doesn't change for width=2
-            uBak[3] = (i<info->mx-1 && j>0)? au[j-1][i+1] : user->g_bdry(x+hx,y-hy,0.0,user);
-            hBak[3] = PetscSqrtReal(hx*hx+hy*hy); // doesn't change for width=2
-         } else { // Figure out how to compute SDD for general width
-            // loop over first 2*width directions
+         } else { // compute SDD for general width 
+            // PetscPrintf(PETSC_COMM_WORLD,"Index = (%d,%d)\n",i,j);
             for (k=0; k<M; k++) {
                Si = user->Si[k];
                Sj = user->Sj[k];
@@ -113,7 +92,6 @@ PetscErrorCode MA2DFunctionLocal(DMDALocalInfo *info, PetscReal **au, PetscReal 
                   uFwd[k] = user->g_bdry(x+hx*di,y+hx*dj,0.0,user);
                   hFwd[k] = hx*PetscSqrtReal(di*di + dj*dj);
                   // PetscPrintf(PETSC_COMM_WORLD,"Stencil direction = (%2d,%2d), Projected Point (%5.2f,%5.2f), Projection Stencil (%5.2f,%5.2f)\n",Si,Sj,x+hx*di,y+hx*dj,di,dj);
-
                }
                // Backward point for direction k
                if (i-Si>=0 && i-Si<=info->mx-1 && j-Sj>=0 && j-Sj <= info->my-1) {
@@ -128,10 +106,10 @@ PetscErrorCode MA2DFunctionLocal(DMDALocalInfo *info, PetscReal **au, PetscReal 
                   // PetscPrintf(PETSC_COMM_WORLD,"Stencil direction = (%2d,%2d), Projected Point (%5.2f,%5.2f), Projection Stencil (%5.2f,%5.2f)\n",-Si,-Sj,x+hx*di,y+hx*dj,di,dj);
                }
             }
-         }
-         // Use formula for generalized centered difference
-         for (k=0; k<M; k++) {
-            SDD[k] = 2*(hBak[k]*uFwd[k] - (hBak[k]+hFwd[k])*au[j][i] + hFwd[k]*uBak[k])/(hBak[k]*hFwd[k]*(hBak[k]+hFwd[k]));
+            // Use formula for generalized centered difference
+            for (k=0; k<M; k++) {
+               SDD[k] = 2.0*(hBak[k]*uFwd[k] - (hBak[k]+hFwd[k])*au[j][i] + hFwd[k]*uBak[k])/(hBak[k]*hFwd[k]*(hBak[k]+hFwd[k]));
+            }
          }
          ierr = ApproxDetD2u(&DetD2u,M,SDD,user);
          aF[j][i] = DetD2u - user->f_rhs(x,y,0.0,user);
@@ -276,19 +254,18 @@ PetscErrorCode MA2DJacobianLocal(DMDALocalInfo *info, PetscScalar **au, Mat J, M
          x = xymin[0] + (i+1)*hx;
          ncols = 1;
          PetscPrintf(PETSC_COMM_WORLD, "Jac i,j = (%d,%d)\n",i,j);
+         // Compute the SDDs
          if (width==1) {
             // width 1 case is hardcoded because it is simple
             uFwd[0] = (i == info->mx-1) ? user->g_bdry(x+hx,y,0.0,user) : au[j][i+1]; // east
             uBak[0] = (i == 0)          ? user->g_bdry(x-hx,y,0.0,user) : au[j][i-1]; // west
             uFwd[1] = (j == info->my-1) ? user->g_bdry(x,y+hy,0.0,user) : au[j+1][i]; // north
-            uBak[1] = (j == 0)          ? user->g_bdry(x,y-hy,0.0,user) : au[j-1][i]; // south
+            uBak[1] = (j == 0)          ? user->g_bdry(x,y-hy,0.0,user) : au[j-1][i]; // south                                                  // east
             // 2nd dir. deriv
             SDD[0] = (uFwd[0] - 2.0*au[j][i] + uBak[0])/(hx*hx); // horizontal centered-diff
             SDD[1] = (uFwd[1] - 2.0*au[j][i] + uBak[1])/(hy*hy); // vertical centered-diff
-            // stencil step sizes
-            hFwd[0] = hx; hBak[0] = hx;
-            hFwd[1] = hy; hBak[1] = hy;
-         } else {
+         } else { // compute SDD for general width 
+            // PetscPrintf(PETSC_COMM_WORLD,"Index = (%d,%d)\n",i,j);
             for (k=0; k<Nk; k++) {
                Si = user->Si[k];
                Sj = user->Sj[k];
@@ -302,6 +279,7 @@ PetscErrorCode MA2DJacobianLocal(DMDALocalInfo *info, PetscScalar **au, Mat J, M
                   ComputeProjectionIndeces(&di,&dj,i,j,Si,Sj,info->mx,info->my);
                   uFwd[k] = user->g_bdry(x+hx*di,y+hx*dj,0.0,user);
                   hFwd[k] = hx*PetscSqrtReal(di*di + dj*dj);
+                  // PetscPrintf(PETSC_COMM_WORLD,"Stencil direction = (%2d,%2d), Projected Point (%5.2f,%5.2f), Projection Stencil (%5.2f,%5.2f)\n",Si,Sj,x+hx*di,y+hx*dj,di,dj);
                }
                // Backward point for direction k
                if (i-Si>=0 && i-Si<=info->mx-1 && j-Sj>=0 && j-Sj <= info->my-1) {
@@ -313,13 +291,13 @@ PetscErrorCode MA2DJacobianLocal(DMDALocalInfo *info, PetscScalar **au, Mat J, M
                   ComputeProjectionIndeces(&di,&dj,i,j,-Si,-Sj,info->mx,info->my);
                   uBak[k] = user->g_bdry(x+hx*di,y+hx*dj,0.0,user);
                   hBak[k] = hx*PetscSqrtReal(di*di + dj*dj);
+                  // PetscPrintf(PETSC_COMM_WORLD,"Stencil direction = (%2d,%2d), Projected Point (%5.2f,%5.2f), Projection Stencil (%5.2f,%5.2f)\n",-Si,-Sj,x+hx*di,y+hx*dj,di,dj);
                }
             }
-         }
-         // Use formula for generalized centered difference
-         for (k=0; k<Nk; k++) {
-            SDD[k] = 2.0*(hBak[k]*uFwd[k] - (hBak[k]+hFwd[k])*au[j][i] + hFwd[k]*uBak[k])/(hBak[k]*hFwd[k]*(hBak[k]+hFwd[k]));
-            PetscPrintf(PETSC_COMM_WORLD, "SDD[%d] = %6.2f, hFwd = %6.2f, hBak = %6.2f\n",k,SDD[k],hFwd[k],hBak[k]);
+            // Use formula for generalized centered difference
+            for (k=0; k<Nk; k++) {
+               SDD[k] = 2.0*(hBak[k]*uFwd[k] - (hBak[k]+hFwd[k])*au[j][i] + hFwd[k]*uBak[k])/(hBak[k]*hFwd[k]*(hBak[k]+hFwd[k]));
+            }
          }
          // Comparison against SDD and espilon
          for (k=0; k<Nk; k++) {
@@ -781,24 +759,24 @@ PetscErrorCode ComputeProjectionIndeces(PetscReal *di, PetscReal *dj, PetscInt i
    } else {
       m = Sj/(PetscReal)Si;
       if (Si>0 && Sj>0) {
-         // check = PetscAbsReal((Ny-j)/m) > PetscAbsReal(Nx-i);
-         check = Sj > Si;
+         check = PetscAbsReal((Ny-j)/m) < PetscAbsReal(Nx-i);
+         // check = Sj > Si;
          *di = (check)? (Ny-j)/m : Nx-i;
          *dj = (check)?     Ny-j : m*(Nx-i);
       } else if (Si>0 && Sj<0) {
-         // check = PetscAbsReal(Nx-i) > PetscAbsReal((1+j)/m);
-         check = -Sj < Si;
+         check = PetscAbsReal(Nx-i) < PetscAbsReal((1+j)/m);
+         // check = -Sj < Si;
          *di = (check)?     Nx-i : -(1+j)/m;
          *dj = (check)? m*(Nx-i) : -(1+j);
       } else if (Si<0 && Sj<0) {
-         // check = PetscAbsReal((1+j)/m) > PetscAbsReal(1+i);
-         check = Si > Sj;
+         check = PetscAbsReal((1+j)/m) < PetscAbsReal(1+i);
+         // check = Si > Sj;
          *di = (check)? -(1+j)/m : -(1+i);
          *dj = (check)?   -(1+j) : -m*(1+i);
       } else if (Si<0 && Sj>0) {
-         // check = PetscAbsReal(1+i) > PetscAbsReal((Ny-j)/m);
-         check = -Si > Sj;
-         *di = (check)?   -(1+i) : -(Ny-j)/m;
+         check = PetscAbsReal(1+i) < PetscAbsReal((Ny-j)/m);
+         // check = -Si > Sj;
+         *di = (check)?   -(1+i) : (Ny-j)/m;
          *dj = (check)? -m*(1+i) : Ny-j;
       } else {
          PetscPrintf(PETSC_COMM_WORLD," -- Unexpected error in projection");
