@@ -217,7 +217,7 @@ PetscErrorCode MA1DJacobianLocal(DMDALocalInfo *info, PetscScalar *au, Mat J, Ma
 */
 PetscErrorCode MA2DJacobianLocal(DMDALocalInfo *info, PetscScalar **au, Mat J, Mat Jpre, MACtx *user) {
    PetscErrorCode  ierr;
-   PetscInt     i,j,k,Si,Sj,ncols,width,min_k,Nk,Ns; // Nk = # of directions, Ns = # of stencil pts
+   PetscInt     i,j,k,l,Si,Sj,ncols,width,min_k,Nk,Ns; // Nk = # of directions, Ns = # of stencil pts
    PetscReal    xymin[2],xymax[2],x,y,hx,hy,di,dj;
    PetscReal    *v;
    MatStencil   *col;
@@ -253,7 +253,7 @@ PetscErrorCode MA2DJacobianLocal(DMDALocalInfo *info, PetscScalar **au, Mat J, M
          col[0].i = i;
          x = xymin[0] + (i+1)*hx;
          ncols = 1;
-         PetscPrintf(PETSC_COMM_WORLD, "Jac i,j = (%d,%d)\n",i,j);
+         // PetscPrintf(PETSC_COMM_WORLD, "Jac i,j = (%d,%d)\n",i,j);
          // Compute the SDDs
          if (width==1) {
             // width 1 case is hardcoded because it is simple
@@ -261,6 +261,9 @@ PetscErrorCode MA2DJacobianLocal(DMDALocalInfo *info, PetscScalar **au, Mat J, M
             uBak[0] = (i == 0)          ? user->g_bdry(x-hx,y,0.0,user) : au[j][i-1]; // west
             uFwd[1] = (j == info->my-1) ? user->g_bdry(x,y+hy,0.0,user) : au[j+1][i]; // north
             uBak[1] = (j == 0)          ? user->g_bdry(x,y-hy,0.0,user) : au[j-1][i]; // south                                                  // east
+            // steps
+            hFwd[0] = hx;  hBak[0] = hx;
+            hFwd[1] = hy;  hBak[1] = hy;
             // 2nd dir. deriv
             SDD[0] = (uFwd[0] - 2.0*au[j][i] + uBak[0])/(hx*hx); // horizontal centered-diff
             SDD[1] = (uFwd[1] - 2.0*au[j][i] + uBak[1])/(hy*hy); // vertical centered-diff
@@ -299,6 +302,8 @@ PetscErrorCode MA2DJacobianLocal(DMDALocalInfo *info, PetscScalar **au, Mat J, M
                SDD[k] = 2.0*(hBak[k]*uFwd[k] - (hBak[k]+hFwd[k])*au[j][i] + hFwd[k]*uBak[k])/(hBak[k]*hFwd[k]*(hBak[k]+hFwd[k]));
             }
          }
+
+
          // Comparison against SDD and espilon
          for (k=0; k<Nk; k++) {
             SGTE[k] = SDD[k] > user->epsilon;
@@ -306,7 +311,9 @@ PetscErrorCode MA2DJacobianLocal(DMDALocalInfo *info, PetscScalar **au, Mat J, M
          // Find the smallest SDD, then check it against eps
          min_k = 0;
          for(k=1; k<Nk; k++) {
-            if (SDD[min_k] > SDD[k]) min_k = k;
+            if (SDD[min_k] > SDD[k]) {
+               min_k = k;
+            }
          }
          if (SDD[min_k]>user->epsilon) {
             min_k = Nk;
@@ -319,7 +326,6 @@ PetscErrorCode MA2DJacobianLocal(DMDALocalInfo *info, PetscScalar **au, Mat J, M
          }
          common = PetscPowReal(common,-3.0);
          common *= 2.0*PETSC_PI*PETSC_PI;
-         PetscPrintf(PETSC_COMM_WORLD, "Common = %f\n",common);
          // Compute center value
          v[0] = 0;
          for (k=0; k<Nk; k++) {
@@ -327,22 +333,21 @@ PetscErrorCode MA2DJacobianLocal(DMDALocalInfo *info, PetscScalar **au, Mat J, M
                v[0] += user->weights[k]/(SDD[k]*SDD[k])*(-2.0/(hFwd[k]*hBak[k]));
             }
          }
-         PetscPrintf(PETSC_COMM_WORLD, "v[0] = %f\n",v[0]);
          v[0] += user->weights[0]/(SDD[0]*SDD[0])*(-2.0/(hFwd[0]*hBak[0]));
          v[0] *= common;
          v[0] += (regularize)? 0 : -2.0/(hFwd[min_k]*hBak[min_k]);
-         PetscPrintf(PETSC_COMM_WORLD, "v[0] = %f\n",v[0]);
          // Compute partial at remaining 4*width stencil points
          for (k=0; k<Nk; k++) {
             Si = user->Si[k];
             Sj = user->Sj[k];
+            // PetscPrintf(PETSC_COMM_WORLD, "\tStencilDir = (%d,%d)\n",Si,Sj);
             if (i+Si>=0 && i+Si<=info->mx-1 && j+Sj<=info->my-1 && j+Sj>=0) {
                col[ncols].j = j+Sj;
                col[ncols].i = i+Si;
                v[ncols] = 0;
-               for (k = 0; k<Nk; k++) {
-                  if(SGTE[k]) {
-                     v[ncols] += user->weights[k]/(SDD[k]*SDD[k])*(2.0/(hFwd[k]*(hFwd[k]+hBak[k])));
+               for (l=0; l<Nk; l++) {
+                  if(SGTE[l]) {
+                     v[ncols] += user->weights[l]/(SDD[l]*SDD[l])*(2.0/(hFwd[l]*(hFwd[l]+hBak[l])));
                   }
                }
                if(SGTE[0]) {
@@ -350,15 +355,17 @@ PetscErrorCode MA2DJacobianLocal(DMDALocalInfo *info, PetscScalar **au, Mat J, M
                }
                v[ncols] *= common;
                v[ncols] += (regularize)? 0 : (2.0/(hFwd[min_k]*(hFwd[min_k]+hBak[min_k])));
+               // PetscPrintf(PETSC_COMM_WORLD, "\t\tPartial = %f\n",v[ncols]);
                ncols++;
             }
+            // PetscPrintf(PETSC_COMM_WORLD, "\tStencilDir = (%d,%d)\n",-Si,-Sj);
             if (i-Si>=0 && i-Si<=info->mx-1 && j-Sj>=0 && j-Sj<=info->my-1) {
                col[ncols].j = j-Sj;
                col[ncols].i = i-Si;
                v[ncols] = 0;
-               for (k = 0; k<Nk; k++) {
-                  if(SGTE[k]) {
-                     v[ncols] += user->weights[k]/(SDD[k]*SDD[k])*(2.0/(hBak[k]*(hFwd[k]+hBak[k])));
+               for (l=0; l<Nk; l++) {
+                  if(SGTE[l]) {
+                     v[ncols] += user->weights[l]/(SDD[l]*SDD[l])*(2.0/(hBak[l]*(hFwd[l]+hBak[l])));
                   }
                }
                if(SGTE[0]) {
@@ -366,6 +373,7 @@ PetscErrorCode MA2DJacobianLocal(DMDALocalInfo *info, PetscScalar **au, Mat J, M
                }
                v[ncols] *= common;
                v[ncols] += (regularize)? 0 : (2.0/(hBak[min_k]*(hFwd[min_k]+hBak[min_k])));
+               // PetscPrintf(PETSC_COMM_WORLD, "\t\tPartial = %f\n",v[ncols]);
                ncols++;
             }
          }
@@ -405,10 +413,10 @@ PetscErrorCode MA2DJacobianLocal(DMDALocalInfo *info, PetscScalar **au, Mat J, M
          //    }
          // }
          // Insert values
-         PetscPrintf(PETSC_COMM_WORLD, "Now inserting values for i,j = (%d,%d)\n",i,j);
-         for (k=0; k<ncols; k++) {
-            PetscPrintf(PETSC_COMM_WORLD, "v[%d][%d] = %f\n",col[k].i,col[k].j,v[k]);
-         }
+         // PetscPrintf(PETSC_COMM_WORLD, "Now inserting values for i,j = (%d,%d)\n",i,j);
+         // for (k=0; k<ncols; k++) {
+         //    PetscPrintf(PETSC_COMM_WORLD, "v[%d][%d] = %f\n",col[k].i,col[k].j,v[k]);
+         // }
          ierr = MatSetValuesStencil(Jpre,1,&row,ncols,col,v,INSERT_VALUES); CHKERRQ(ierr);
       }
    }
