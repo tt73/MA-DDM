@@ -187,6 +187,7 @@ int main(int argc,char **args) {
 
    user.g_bdry = g_bdry_ptr[dim-1][problem];
    user.f_rhs = f_rhs_ptr[dim-1][problem];
+   user.width = s;
 
    /*
       Only doing dim = 1 and 2.

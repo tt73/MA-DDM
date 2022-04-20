@@ -4,6 +4,8 @@
 
 */
 typedef struct {
+   // Stencil width
+   PetscInt  width;
    // domain dimensions
    PetscReal Lx, Ly, Lz;
    // epsilon is the regularization term
@@ -52,6 +54,10 @@ PetscErrorCode ComputeFwdStencilDirs(PetscInt width, MACtx *user);
 PetscErrorCode ComputeProjectionIndeces(PetscReal *di, PetscReal *dj, PetscInt i, PetscInt j, PetscInt Si, PetscInt Sj, PetscInt Nx, PetscInt Ny);
 
 PetscErrorCode ApproxDetD2u(PetscReal *DetD2u, PetscInt dim, PetscReal *SDD, MACtx *user);
+
+PetscErrorCode ComputeSDD(DMDALocalInfo *info, PetscReal **au, MACtx *user, 
+                          PetscInt i, PetscInt j, PetscReal x, PetscReal y, 
+                          PetscReal *SDD, PetscReal *hFwd, PetscReal *hBak);
 
 PetscErrorCode PrintProjection(DM da, MACtx *user);
 
