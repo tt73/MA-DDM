@@ -22,15 +22,11 @@ typedef struct {
    void   *addctx;
 } MACtx;
 
-PetscErrorCode MA1DFunctionLocal(DMDALocalInfo *info,
-    PetscReal *au, PetscReal *aF, MACtx *user);
+PetscErrorCode MA1DFunctionLocal(DMDALocalInfo *info, PetscReal *au, PetscReal *aF, MACtx *user);
 
-PetscErrorCode MA2DFunctionLocal(DMDALocalInfo *info,
-    PetscReal **au, PetscReal **aF, MACtx *user);
+PetscErrorCode MA2DFunctionLocal(DMDALocalInfo *info, PetscReal **au, PetscReal **aF, MACtx *user);
 
-PetscErrorCode MA3DFunctionLocal(DMDALocalInfo *info,
-    PetscReal ***au, PetscReal ***aF, MACtx *user);
-//ENDDECLARE
+PetscErrorCode MA3DFunctionLocal(DMDALocalInfo *info, PetscReal ***au, PetscReal ***aF, MACtx *user);
 
 PetscErrorCode MA1DJacobianLocal(DMDALocalInfo *info, PetscReal *au, Mat J, Mat Jpre, MACtx *user);
 
@@ -55,9 +51,7 @@ PetscErrorCode ComputeProjectionIndeces(PetscReal *di, PetscReal *dj, PetscInt i
 
 PetscErrorCode ApproxDetD2u(PetscReal *DetD2u, PetscInt dim, PetscReal *SDD, MACtx *user);
 
-PetscErrorCode ComputeSDD(DMDALocalInfo *info, PetscReal **au, MACtx *user, 
-                          PetscInt i, PetscInt j, PetscReal x, PetscReal y, 
-                          PetscReal *SDD, PetscReal *hFwd, PetscReal *hBak);
+PetscErrorCode ComputeSDD(DMDALocalInfo *info, PetscReal **au, MACtx *user, PetscInt i, PetscInt j, PetscReal x, PetscReal y, PetscReal *SDD, PetscReal *hFwd, PetscReal *hBak);
 
 PetscErrorCode PrintProjection(DM da, MACtx *user);
 

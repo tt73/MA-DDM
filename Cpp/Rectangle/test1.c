@@ -208,7 +208,7 @@ int main(int argc,char **args) {
             ierr = DMDACreate2d(PETSC_COMM_WORLD,   // MPI not important
                               DM_BOUNDARY_NONE,  // periodicity in  x
                               DM_BOUNDARY_NONE,  // periodicity in y
-                              DMDA_STENCIL_STAR, // stencil type: box vs star
+                              DMDA_STENCIL_STAR, // stencil type: star (like a plus sign)
                               N,N,           // mesh size in x & y directions
                               PETSC_DECIDE,PETSC_DECIDE, // local mesh size
                               1,                 // degree of freedom
@@ -219,7 +219,7 @@ int main(int argc,char **args) {
             ierr = DMDACreate2d(PETSC_COMM_WORLD,   // MPI not important
                               DM_BOUNDARY_NONE,  // periodicity in  x
                               DM_BOUNDARY_NONE,  // periodicity in y
-                              DMDA_STENCIL_BOX, // stencil type: box vs star
+                              DMDA_STENCIL_BOX, // stencil type: box (needs diagonal points)
                               N,N,              // mesh size in x & y directions
                               PETSC_DECIDE,PETSC_DECIDE, // local mesh size
                               1,                 // degree of freedom
