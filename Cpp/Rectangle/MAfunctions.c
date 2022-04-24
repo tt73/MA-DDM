@@ -10,7 +10,8 @@
    PetscInt  gxm,gym,gzm;    number of grid points on this processor including ghosts
 */
 
-/*
+/* 1D Version of the Residue Function
+
    This is the residue function for the 1D Monge-Ampere. Which is actually just
       det(D^2u) = u''.
    So we wish to find the root of
@@ -33,8 +34,8 @@ PetscErrorCode MA1DFunctionLocal(DMDALocalInfo *info, PetscReal *u, PetscReal *F
    return 0;
 }
 
+/* 2D Version of the Residue Function
 
-/*
    The equation we want to find the root of is F(u). F is the discretized version of the nonlinear system:
       F(u) =  det(D^2(u)) - f
    The 2nd arg **au is a 2D array representing the discretization of u i.e. au[i][j] ~ u(x_i,y_j)
@@ -53,13 +54,11 @@ PetscErrorCode MA2DFunctionLocal(DMDALocalInfo *info, PetscReal **au, PetscReal 
    ierr = DMGetBoundingBox(info->da,xymin,xymax); CHKERRQ(ierr);
    hx   = (xymax[0] - xymin[0])/(info->mx + 1);
    hy   = (xymax[1] - xymin[1])/(info->my + 1);
-
    // allocate mem for derivative stuff
    width = info->sw;
    M     = 2*width;
-
-   PetscMalloc1(M,&SDD);          //
-   PetscMalloc2(M,&hFwd,M,&hBak); //
+   PetscMalloc1(M,&SDD);
+   PetscMalloc2(M,&hFwd,M,&hBak);
    // begin loop over all local interior nodes
    for (j = info->ys; j < info->ys + info->ym; j++) {
       y = xymin[1] + (j+1)*hy;
@@ -119,8 +118,7 @@ PetscErrorCode MA3DFunctionLocal(DMDALocalInfo *info, PetscReal ***au, PetscReal
    return 0;
 }
 
-/*
-   The 1D Jacobian
+/* 1D Jacobian
 
    The au is the input of size mx.
    The output J is a matrix of size mx by mx.
@@ -162,8 +160,7 @@ PetscErrorCode MA1DJacobianLocal(DMDALocalInfo *info, PetscScalar *au, Mat J, Ma
    return 0;
 }
 
-/*
-   The 2D Jacobian
+/* 2D Jacobian
 
    The input au is a 2D array of size my by mx.
    The ouptut J is a matrix of size mx*my by mx*my.
@@ -184,8 +181,8 @@ PetscErrorCode MA2DJacobianLocal(DMDALocalInfo *info, PetscScalar **au, Mat J, M
 
    // Retrieve info from DMDA
    ierr  = DMGetBoundingBox(info->da,xymin,xymax); CHKERRQ(ierr);
-   hx    = (xymax[0] - xymin[0]) / (info->mx + 1);
-   hy    = (xymax[1] - xymin[1]) / (info->my + 1);
+   hx    = (xymax[0] - xymin[0])/(info->mx + 1);
+   hy    = (xymax[1] - xymin[1])/(info->my + 1);
    width = info->sw;
    Nk    = 2*width; // number of angular forward directions
    Ns    = 4*width+1; // total number of stencil points
@@ -277,7 +274,6 @@ PetscErrorCode MA2DJacobianLocal(DMDALocalInfo *info, PetscScalar **au, Mat J, M
          ierr = MatSetValuesStencil(Jpre,1,&row,ncols,col,v,INSERT_VALUES); CHKERRQ(ierr);
       }
    }
-
    ierr = MatAssemblyBegin(Jpre,MAT_FINAL_ASSEMBLY); CHKERRQ(ierr);
    ierr = MatAssemblyEnd(Jpre,MAT_FINAL_ASSEMBLY); CHKERRQ(ierr);
    if (J != Jpre) {
@@ -289,7 +285,6 @@ PetscErrorCode MA2DJacobianLocal(DMDALocalInfo *info, PetscScalar **au, Mat J, M
    PetscFree2(hFwd,hBak);
    return 0;
 }
-
 
 // Placeholder for 3D Jacobian
 PetscErrorCode MA3DJacobianLocal(DMDALocalInfo *info, PetscScalar ***au, Mat J, Mat Jpre, MACtx *user) {
@@ -357,7 +352,6 @@ PetscErrorCode MA3DJacobianLocal(DMDALocalInfo *info, PetscScalar ***au, Mat J, 
    return 0;
 }
 
-
 /*
    We use the approximation
                   ⎛2d + 1            ⎞-2
@@ -386,8 +380,7 @@ PetscErrorCode ApproxDetD2u(PetscReal *DetD2u, PetscInt dim, PetscReal *SDD, MAC
       left += user->weights[k]/PetscMax(SDD[k],user->epsilon);
    }
    left += user->weights[0]/PetscMax(SDD[0],user->epsilon); // last SDD is same as first SDD
-   left =  PetscPowReal(left,-2.0);
-   left *= PETSC_PI*PETSC_PI;
+   left =  PETSC_PI*PETSC_PI*PetscPowReal(left,-2.0);
    // calculate the right term
    right = user->epsilon;
    for (k=0; k<dim; k++) {
@@ -400,6 +393,9 @@ PetscErrorCode ApproxDetD2u(PetscReal *DetD2u, PetscInt dim, PetscReal *SDD, MAC
 }
 
 
+/*
+
+*/
 PetscErrorCode InitialState(DM da, InitialType it, PetscBool gbdry, Vec u, MACtx *user) {
    PetscErrorCode ierr;
    DMDALocalInfo  info;
@@ -413,6 +409,9 @@ PetscErrorCode InitialState(DM da, InitialType it, PetscBool gbdry, Vec u, MACtx
          ierr = VecSetRandom(u,rctx); CHKERRQ(ierr);
          ierr = PetscRandomDestroy(&rctx); CHKERRQ(ierr);
          break;
+      case POISSON:
+
+         break;
       default:
          SETERRQ(PETSC_COMM_SELF,4,"invalid InitialType ... how did I get here?\n");
    }
@@ -423,8 +422,9 @@ PetscErrorCode InitialState(DM da, InitialType it, PetscBool gbdry, Vec u, MACtx
    switch (info.dim) {
       case 1:
       {
-      PetscInt  i;
-         PetscReal xmax[1], xmin[1], h, x, *au;
+         PetscInt  i;
+         PetscReal xmax[1],xmin[1],h,x,*au;
+
          ierr = DMDAVecGetArray(da, u, &au); CHKERRQ(ierr);
          ierr = DMGetBoundingBox(da,xmin,xmax); CHKERRQ(ierr);
          h = (xmax[0] - xmin[0]) / (info.mx + 1);
@@ -440,7 +440,8 @@ PetscErrorCode InitialState(DM da, InitialType it, PetscBool gbdry, Vec u, MACtx
       case 2:
       {
          PetscInt   i, j;
-         PetscReal  xymin[2], xymax[2], hx, hy, x, y, **au;
+         PetscReal  xymin[2],xymax[2],hx,hy,x,y,**au;
+
          ierr = DMDAVecGetArray(da, u, &au); CHKERRQ(ierr);
          ierr = DMGetBoundingBox(da,xymin,xymax); CHKERRQ(ierr);
          hx = (xymax[0]-xymin[0])/(info.mx+1);
@@ -460,7 +461,8 @@ PetscErrorCode InitialState(DM da, InitialType it, PetscBool gbdry, Vec u, MACtx
       case 3:
       {
          PetscInt   i, j, k;
-         PetscReal  xyzmin[3], xyzmax[3], hx, hy, hz, x, y, z, ***au;
+         PetscReal  xyzmin[3],xyzmax[3],hx,hy,hz,x,y,z,***au;
+
          ierr = DMDAVecGetArray(da, u, &au); CHKERRQ(ierr);
          ierr = DMGetBoundingBox(da,xyzmin,xyzmax); CHKERRQ(ierr);
          hx = (xyzmax[0] - xyzmin[0]) / (info.mx + 1);
@@ -608,6 +610,7 @@ PetscErrorCode ComputeFwdStencilDirs(PetscInt width, MACtx *user) {
    return 0;
 }
 
+
 /* Compute di and dj
    This is Algorithm 5 in the Appendix.
    This function computes the projected version of Si and Sj when near the boundary.
@@ -651,35 +654,35 @@ PetscErrorCode ComputeProjectionIndeces(PetscReal *di, PetscReal *dj, PetscInt i
    return 0;
 }
 
+
 /* Computes SDD, hFwd, and hBak
    This gets used in the residue function and the Jacobian.
 */
-PetscErrorCode ComputeSDD(DMDALocalInfo *info, PetscReal **au, MACtx *user,
-                          PetscInt i, PetscInt j, PetscReal x, PetscReal y,
-                          PetscReal *SDD, PetscReal *hFwd, PetscReal *hBak) {
+PetscErrorCode ComputeSDD(DMDALocalInfo *info, PetscReal **au, MACtx *user, PetscInt i, PetscInt j, PetscReal x, PetscReal y, PetscReal *SDD, PetscReal *hFwd, PetscReal *hBak) {
    PetscInt       d,k,M,Ny,Nx,Si,Sj;
-   PetscReal      h,xymin[2],xymax[2],di,dj;
+   PetscReal      hx,hy,xymin[2],xymax[2],di,dj;
    PetscReal      *uFwd, *uBak; // u in the the forward and backward position for each direction k
 
    // get info from DA
    DMGetBoundingBox(info->da,xymin,xymax);
    Nx = info->mx; Ny = info->my;
-   h  = (xymax[0] - xymin[0])/(Nx + 1);
+   hx  = (xymax[0] - xymin[0])/(Nx + 1);
+   hy  = (xymax[1] - xymin[1])/(Ny + 1);
    d  = info->sw;
    M  = d*2;
-   PetscMalloc2(M,&uFwd,M,&uBak); //
-
+   PetscMalloc2(M,&uFwd,M,&uBak);
    if (d==1) {
       // width 1 case is hardcoded because it is simple
-      uFwd[0] = (i == Nx-1) ? user->g_bdry(x+h,y,0.0,user) : au[j][i+1]; // east
-      uBak[0] = (i == 0)    ? user->g_bdry(x-h,y,0.0,user) : au[j][i-1]; // west
-      uFwd[1] = (j == Ny-1) ? user->g_bdry(x,y+h,0.0,user) : au[j+1][i]; // north
-      uBak[1] = (j == 0)    ? user->g_bdry(x,y-h,0.0,user) : au[j-1][i]; // south                                                  // east
+      uFwd[0] = (i == Nx-1) ? user->g_bdry(x+hx,y,0.0,user) : au[j][i+1]; // east
+      uBak[0] = (i == 0)    ? user->g_bdry(x-hx,y,0.0,user) : au[j][i-1]; // west
+      uFwd[1] = (j == Ny-1) ? user->g_bdry(x,y+hy,0.0,user) : au[j+1][i]; // north
+      uBak[1] = (j == 0)    ? user->g_bdry(x,y-hy,0.0,user) : au[j-1][i]; // south                                                  // east
       // 2nd dir. deriv
-      SDD[0] = (uFwd[0] - 2.0*au[j][i] + uBak[0])/(h*h); // horizontal centered-diff
-      SDD[1] = (uFwd[1] - 2.0*au[j][i] + uBak[1])/(h*h); // vertical centered-diff
-      hFwd[0] = h; hFwd[1] = h;
-      hBak[0] = h; hBak[1] = h;
+      SDD[0] = (uFwd[0] - 2.0*au[j][i] + uBak[0])/(hx*hx); // horizontal centered-diff
+      SDD[1] = (uFwd[1] - 2.0*au[j][i] + uBak[1])/(hy*hy); // vertical centered-diff
+      // step sizes are static
+      hFwd[0] = hx; hFwd[1] = hx;
+      hBak[0] = hy; hBak[1] = hy;
    } else { // compute SDD for general width
       for (k=0; k<M; k++) {
          Si = user->Si[k];
@@ -688,25 +691,23 @@ PetscErrorCode ComputeSDD(DMDALocalInfo *info, PetscReal **au, MACtx *user,
          if (i+Si>=0 && i+Si<=Ny-1 && j+Sj<=Ny-1 && j+Sj>=0) {
             // forward stencil point in the kth direction is in range
             uFwd[k] = au[j+Sj][i+Si];
-            hFwd[k] = h*PetscSqrtReal(Sj*Sj + Si*Si);
+            hFwd[k] = PetscSqrtReal(hx*hx*Si*Si + hy*hy*Sj*Sj);
          } else {
             // otherwise get the coordinates of the projection
             ComputeProjectionIndeces(&di,&dj,i,j,Si,Sj,Nx,Ny);
-            uFwd[k] = user->g_bdry(x+h*di,y+h*dj,0.0,user);
-            hFwd[k] = h*PetscSqrtReal(di*di + dj*dj);
-            // PetscPrintf(PETSC_COMM_WORLD,"Stencil direction = (%2d,%2d), Projected Point (%5.2f,%5.2f), Projection Stencil (%5.2f,%5.2f)\n",Si,Sj,x+hx*di,y+hx*dj,di,dj);
+            uFwd[k] = user->g_bdry(x+hx*di,y+hy*dj,0.0,user);
+            hFwd[k] = PetscSqrtReal(hx*hx*di*di + hy*hy*dj*dj);
          }
          // Backward point for direction k
          if (i-Si>=0 && i-Si<=Ny-1 && j-Sj>=0 && j-Sj <= Ny-1) {
             // backward stencil point in the kth direction is in range
             uBak[k] = au[j-Sj][i-Si];
-            hBak[k] = h*PetscSqrtReal(Sj*Sj + Si*Si);
+            hBak[k] = PetscSqrtReal(hx*hx*Si*Si + hy*hy*Sj*Sj);
          } else {
             // otherwise get the coordinates of the projection
             ComputeProjectionIndeces(&di,&dj,i,j,-Si,-Sj,Ny,Ny);
-            uBak[k] = user->g_bdry(x+h*di,y+h*dj,0.0,user);
-            hBak[k] = h*PetscSqrtReal(di*di + dj*dj);
-            // PetscPrintf(PETSC_COMM_WORLD,"Stencil direction = (%2d,%2d), Projected Point (%5.2f,%5.2f), Projection Stencil (%5.2f,%5.2f)\n",-Si,-Sj,x+hx*di,y+hx*dj,di,dj);
+            uBak[k] = user->g_bdry(x+hx*di,y+hy*dj,0.0,user);
+            hBak[k] = PetscSqrtReal(hx*hx*di*di + hy*hy*dj*dj);
          }
       }
       // Use formula for generalized centered difference
