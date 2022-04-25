@@ -409,8 +409,8 @@ PetscErrorCode InitialState(DM da, InitialType it, PetscBool gbdry, Vec u, MACtx
          ierr = VecSetRandom(u,rctx); CHKERRQ(ierr);
          ierr = PetscRandomDestroy(&rctx); CHKERRQ(ierr);
          break;
-      case POISSON:
-
+      case POISSON: // do we need this?
+         ierr = VecSet(u,0.0); CHKERRQ(ierr);
          break;
       default:
          SETERRQ(PETSC_COMM_SELF,4,"invalid InitialType ... how did I get here?\n");
@@ -429,10 +429,10 @@ PetscErrorCode InitialState(DM da, InitialType it, PetscBool gbdry, Vec u, MACtx
          ierr = DMGetBoundingBox(da,xmin,xmax); CHKERRQ(ierr);
          h = (xmax[0] - xmin[0]) / (info.mx + 1);
          for (i = info.xs; i < info.xs + info.xm; i++) {
-               if (i==0 || i==info.mx-1) {
-                  x = xmin[0] + (i+1)*h;
-                  au[i] = user->g_bdry(x,0.0,0.0,user);
-               }
+            if (i==0 || i==info.mx-1) {
+               x = xmin[0] + (i+1)*h;
+               au[i] = user->g_bdry(x,0.0,0.0,user);
+            }
          }
          ierr = DMDAVecRestoreArray(da, u, &au); CHKERRQ(ierr);
          break;
@@ -666,8 +666,8 @@ PetscErrorCode ComputeSDD(DMDALocalInfo *info, PetscReal **au, MACtx *user, Pets
    // get info from DA
    DMGetBoundingBox(info->da,xymin,xymax);
    Nx = info->mx; Ny = info->my;
-   hx  = (xymax[0] - xymin[0])/(Nx + 1);
-   hy  = (xymax[1] - xymin[1])/(Ny + 1);
+   hx = (xymax[0] - xymin[0])/(Nx + 1);
+   hy = (xymax[1] - xymin[1])/(Ny + 1);
    d  = info->sw;
    M  = d*2;
    PetscMalloc2(M,&uFwd,M,&uBak);

@@ -39,7 +39,7 @@ PetscErrorCode MA3DJacobianLocal(DMDALocalInfo *info, PetscReal ***au, Mat J, Ma
   * a random function (white noise; *no* smoothness)
 In addition, one can initialize either using the boundary function g for
 the boundary locations in the initial state, or not.                      */
-typedef enum {ZEROS, RANDOM} InitialType;
+typedef enum {ZEROS, RANDOM, POISSON} InitialType;
 
 PetscErrorCode InitialState(DM da, InitialType it, PetscBool gbdry, Vec u, MACtx *user);
 

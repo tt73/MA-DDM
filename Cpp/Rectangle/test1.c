@@ -144,14 +144,14 @@ int main(int argc,char **args) {
    InitialType    initial;
    ProblemType    problem;           // manufactured problem using exp()
    PetscBool      debug,gonboundary; // initial iterate has u=g on boundary
-   PetscReal      h,errinf,normconst2h,err2h;
+   PetscReal      h,eps,errinf,normconst2h,err2h;
    char           gridstr[99];
    PetscInt       i,dim,width,N,order;
 
    ierr = PetscInitialize(&argc,&args,NULL,help); if (ierr) return ierr;
 
    // Default Values
-   N           = 2; // # of interior points
+   N           = 3; // # of interior points
    dim         = 2; // PDE space dimension
    width       = 1; // stencil width
    order       = 2; // guadrature order
@@ -165,7 +165,6 @@ int main(int argc,char **args) {
    // command args for this programa need a 't1_' prefix
    ierr = PetscOptionsBegin(PETSC_COMM_WORLD,"t1_", "options for test1.c", ""); CHKERRQ(ierr);
    ierr = PetscOptionsInt("-dim","dimension of problem (=1,2,3 only)","test1.c",dim,&dim,NULL);CHKERRQ(ierr);
-   ierr = PetscOptionsInt("-width","stencil width (=1,2)","test1.c",width,&width,NULL);CHKERRQ(ierr);
    ierr = PetscOptionsInt("-N","number of rows of interior nodes (default is 2)","test1.c",N,&N,NULL);CHKERRQ(ierr);
    ierr = PetscOptionsInt("-order","order of quadrature (default is 2)","test1.c",order,&order,NULL);CHKERRQ(ierr);
    ierr = PetscOptionsBool("-debug","print out extra info","test1.c",debug,&debug,NULL);CHKERRQ(ierr);
@@ -175,11 +174,21 @@ int main(int argc,char **args) {
    ierr = PetscOptionsReal("-Ly","set Ly in domain ([-Lx,Lx] x [-Ly,Ly] x [-Lz,Lz], etc.)","test1.c",user.Ly,&user.Ly,NULL);CHKERRQ(ierr);
    ierr = PetscOptionsReal("-Lz","set Ly in domain ([-Lx,Lx] x [-Ly,Ly] x [-Lz,Lz], etc.)","test1.c",user.Lz,&user.Lz,NULL);CHKERRQ(ierr);
    ierr = PetscOptionsEnum("-problem","problem type; determines exact solution and RHS","test1.c",ProblemTypes,(PetscEnum)problem,(PetscEnum*)&problem,NULL); CHKERRQ(ierr);
-   ierr = PetscOptionsEnd(); CHKERRQ(ierr);
-
-   h = 2.0*user.Lx/(N+1);
-   user.epsilon = h*h*width*width;// epsilon = (hd)^2
+   
+   /* Dynamically choose width 
+      It's optimal to choose depth = ceil(h^(-1/3)) where h is the stepsize. 
+      However, you can choose during runtime with "-t1_width <d>", where <d> is an integer. 
+      Epsilon is the regularization constant. We choose epsilon = (hd)^2 by default.
+      We may change epsilon during runtime with "-t1_epsilon <f>", where <f> is a float  
+   */
+   h     = 2.0*user.Lx/(N+1);
+   width = PetscCeilReal(PetscPowReal(h,-0.333));
+   ierr  = PetscOptionsInt("-width","stencil width","test1.c",width,&width,NULL);CHKERRQ(ierr);
+   eps   = h*h*width*width;// epsilon = (hd)^2
+   ierr  = PetscOptionsReal("-eps","regularization constant epsilon","test1.c",eps,&eps,NULL);CHKERRQ(ierr);
+   ierr  = PetscOptionsEnd(); CHKERRQ(ierr);
    user.width   = width;
+   user.epsilon = eps; 
    user.g_bdry  = g_bdry_ptr[dim-1][problem];
    user.f_rhs   = f_rhs_ptr[dim-1][problem];
    /* Call DMDACreate to construct a mesh
@@ -300,9 +309,9 @@ int main(int argc,char **args) {
          SETERRQ(PETSC_COMM_SELF,4,"invalid dim value in final report\n");
    }
    err2h /= normconst2h; // like continuous L2
-   ierr = PetscPrintf(PETSC_COMM_WORLD, "problem %s on %s grid:\n"
+   ierr = PetscPrintf(PETSC_COMM_WORLD, "problem %s on %s grid with d = %d, and eps = %.3f:\n"
                "  error |u-uexact|_inf = %.3e, |u-uexact|_h = %.3e\n",
-               ProblemTypes[problem],gridstr,errinf,err2h); CHKERRQ(ierr);
+               ProblemTypes[problem],gridstr,width,user.epsilon,errinf,err2h); CHKERRQ(ierr);
    /* Print solution
 
       Create MATLAB files load_u.m and load_exact.m which loads
