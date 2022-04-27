@@ -143,29 +143,31 @@ int main(int argc,char **args) {
    ExactFcnVec    getuexact;
    InitialType    initial;
    ProblemType    problem;           // manufactured problem using exp()
-   PetscBool      debug,gonboundary; // initial iterate has u=g on boundary
-   PetscReal      h,eps,errinf,normconst2h,err2h;
+   PetscBool      debug,gonboundary,set_N,set_eps,set_width;
+   PetscReal      h_eff,hx,hy,eps,errinf,normconst2h,err2h;
    char           gridstr[99];
-   PetscInt       i,dim,width,N,order;
+   PetscInt       i,dim,width,N,Nx,Ny,order;
 
    ierr = PetscInitialize(&argc,&args,NULL,help); if (ierr) return ierr;
-
-   // Default Values
-   N           = 3; // # of interior points
+   // Default independent parameters 
+   N = Nx = Ny = 3; // # of interior points
    dim         = 2; // PDE space dimension
    width       = 1; // stencil width
+   eps         = 0.25;  // epsilon = (hd)^2
    order       = 2; // guadrature order
    initial     = ZEROS;
-   debug       = PETSC_FALSE;
-   gonboundary = PETSC_FALSE;
    problem     = ex10;
    user.Lx     = 1.0;
    user.Ly     = 1.0;
    user.Lz     = 1.0;
-   // command args for this programa need a 't1_' prefix
+   debug       = PETSC_FALSE;
+   gonboundary = PETSC_FALSE;
+   // Get command args 
    ierr = PetscOptionsBegin(PETSC_COMM_WORLD,"t1_", "options for test1.c", ""); CHKERRQ(ierr);
    ierr = PetscOptionsInt("-dim","dimension of problem (=1,2,3 only)","test1.c",dim,&dim,NULL);CHKERRQ(ierr);
-   ierr = PetscOptionsInt("-N","number of rows of interior nodes (default is 2)","test1.c",N,&N,NULL);CHKERRQ(ierr);
+   ierr = PetscOptionsInt("-N","make the interior N by N","test1.c",N,&N,&set_N);CHKERRQ(ierr);
+   ierr = PetscOptionsInt("-Nx","number of interior nodes horizontally","test1.c",Nx,&Nx,NULL);CHKERRQ(ierr);
+   ierr = PetscOptionsInt("-Ny","number of interior nodes vertically","test1.c",Ny,&Ny,NULL);CHKERRQ(ierr);
    ierr = PetscOptionsInt("-order","order of quadrature (default is 2)","test1.c",order,&order,NULL);CHKERRQ(ierr);
    ierr = PetscOptionsBool("-debug","print out extra info","test1.c",debug,&debug,NULL);CHKERRQ(ierr);
    ierr = PetscOptionsBool("-initial_gonboundary","set initial iterate to have correct boundary values","test1.c",gonboundary,&gonboundary,NULL);CHKERRQ(ierr);
@@ -174,19 +176,28 @@ int main(int argc,char **args) {
    ierr = PetscOptionsReal("-Ly","set Ly in domain ([-Lx,Lx] x [-Ly,Ly] x [-Lz,Lz], etc.)","test1.c",user.Ly,&user.Ly,NULL);CHKERRQ(ierr);
    ierr = PetscOptionsReal("-Lz","set Ly in domain ([-Lx,Lx] x [-Ly,Ly] x [-Lz,Lz], etc.)","test1.c",user.Lz,&user.Lz,NULL);CHKERRQ(ierr);
    ierr = PetscOptionsEnum("-problem","problem type; determines exact solution and RHS","test1.c",ProblemTypes,(PetscEnum)problem,(PetscEnum*)&problem,NULL); CHKERRQ(ierr);
-   
-   /* Dynamically choose width 
+   ierr = PetscOptionsInt("-width","stencil width","test1.c",width,&width,&set_width);CHKERRQ(ierr);
+   ierr = PetscOptionsReal("-eps","regularization constant epsilon","test1.c",eps,&eps,&set_eps);CHKERRQ(ierr);
+   ierr = PetscOptionsEnd(); CHKERRQ(ierr);
+   /* Update dependent params
       It's optimal to choose depth = ceil(h^(-1/3)) where h is the stepsize. 
       However, you can choose during runtime with "-t1_width <d>", where <d> is an integer. 
       Epsilon is the regularization constant. We choose epsilon = (hd)^2 by default.
-      We may change epsilon during runtime with "-t1_epsilon <f>", where <f> is a float  
+      We may change epsilon during runtime with "-t1_eps <f>", where <f> is a float  
    */
-   h     = 2.0*user.Lx/(N+1);
-   width = PetscCeilReal(PetscPowReal(h,-0.333));
-   ierr  = PetscOptionsInt("-width","stencil width","test1.c",width,&width,NULL);CHKERRQ(ierr);
-   eps   = h*h*width*width;// epsilon = (hd)^2
-   ierr  = PetscOptionsReal("-eps","regularization constant epsilon","test1.c",eps,&eps,NULL);CHKERRQ(ierr);
-   ierr  = PetscOptionsEnd(); CHKERRQ(ierr);
+   if (set_N) { 
+      Nx = Ny = N; 
+   }
+   hx    = 2.0*user.Lx/(Nx+1);  
+   hy    = 2.0*user.Ly/(Ny+1);
+   h_eff = PetscMax(hx,hy);
+   if (!set_width) {
+      width = PetscCeilReal(PetscPowReal(h_eff,-0.333));
+   }
+   h_eff *= width;
+   if (!set_eps) {
+      eps = h_eff*h_eff; // epsilon = (h*d)^2 
+   }
    user.width   = width;
    user.epsilon = eps; 
    user.g_bdry  = g_bdry_ptr[dim-1][problem];
@@ -196,9 +207,10 @@ int main(int argc,char **args) {
       The memory is automatically distributed when this code is
       run with mpiexec.
    */
+   ierr  = DMCreate(PETSC_COMM_WORLD, &da); CHKERRQ(ierr);
    switch (dim) {
       case 1:
-         ierr = DMDACreate1d(PETSC_COMM_WORLD,DM_BOUNDARY_NONE,N,1,width,NULL,&da); CHKERRQ(ierr);
+         ierr = DMDACreate1d(PETSC_COMM_WORLD,DM_BOUNDARY_NONE,Nx,1,width,NULL,&da); CHKERRQ(ierr);
          break;
       case 2:
          if(width==1){
@@ -206,7 +218,7 @@ int main(int argc,char **args) {
                               DM_BOUNDARY_NONE,  // periodicity in  x
                               DM_BOUNDARY_NONE,  // periodicity in y
                               DMDA_STENCIL_STAR, // stencil type: star (like a plus sign)
-                              N,N,               // mesh size in x & y directions
+                              Nx,Ny,               // mesh size in x & y directions
                               PETSC_DECIDE,PETSC_DECIDE, // local mesh size
                               1,                   // degree of freedom
                               width,               // stencil width
@@ -217,7 +229,7 @@ int main(int argc,char **args) {
                               DM_BOUNDARY_NONE,  // periodicity in  x
                               DM_BOUNDARY_NONE,  // periodicity in y
                               DMDA_STENCIL_BOX, // stencil type: box (needs diagonal points)
-                              N,N,              // mesh size in x & y directions
+                              Nx,Ny,              // mesh size in x & y directions
                               PETSC_DECIDE,PETSC_DECIDE, // local mesh size
                               1,                 // degree of freedom
                               width,             // stencil width
@@ -227,20 +239,12 @@ int main(int argc,char **args) {
          break;
       case 3:
          SETERRQ(PETSC_COMM_SELF,1,"dim = 3 not supported\n");
-         ierr = DMDACreate3d(PETSC_COMM_WORLD,DM_BOUNDARY_NONE,DM_BOUNDARY_NONE,DM_BOUNDARY_NONE,
-               DMDA_STENCIL_STAR,3,3,3,PETSC_DECIDE,PETSC_DECIDE,PETSC_DECIDE,1,width,NULL,NULL,NULL,&da); CHKERRQ(ierr);
+         ierr = DMDACreate3d(PETSC_COMM_WORLD,DM_BOUNDARY_NONE,DM_BOUNDARY_NONE,DM_BOUNDARY_NONE,DMDA_STENCIL_STAR,3,3,3,PETSC_DECIDE,PETSC_DECIDE,PETSC_DECIDE,1,width,NULL,NULL,NULL,&da); CHKERRQ(ierr);
          break;
       default:
          SETERRQ(PETSC_COMM_SELF,1,"invalid dim for DMDA creation\n");
    }
    ierr = DMSetApplicationContext(da,&user); CHKERRQ(ierr);
-   /* Get runtime args for DA
-      Runtime options include:
-       -da_grid_x <m>, which changes the number of cols of points to m
-       -da_grid_y <n>, which changes the number of rows of points to n
-       -da_refine <s>, which multiplies the default N+2 x N+2 grid by a factor of s+1
-   */
-   ierr = DMSetFromOptions(da); CHKERRQ(ierr);
    ierr = DMSetUp(da); CHKERRQ(ierr);
    ierr = DMDASetUniformCoordinates(da,-user.Lx,user.Lx,-user.Ly,user.Ly,-user.Lz,user.Lz); CHKERRQ(ierr);
    // Compute the stencil directions based on the L1 norm
@@ -259,7 +263,6 @@ int main(int argc,char **args) {
    }
    // Precompute projections for stencil points that are outside of the domain
    // PrintProjection(da, &user);
-
    /*
       SetFuntionLocal - link the custom residue function to `da`
       SetJacobianLocal - link the custom Jacobian function to `da`
@@ -268,7 +271,9 @@ int main(int argc,char **args) {
    ierr = SNESSetDM(snes,da); CHKERRQ(ierr);
    ierr = DMDASNESSetFunctionLocal(da,INSERT_VALUES,(DMDASNESFunction)(residual_ptr[dim-1]),&user); CHKERRQ(ierr);
    ierr = DMDASNESSetJacobianLocal(da,(DMDASNESJacobian)(jacobian_ptr[dim-1]),&user); CHKERRQ(ierr);
-
+   /* SNES Settings 
+      
+   */
    // ierr = SNESSetType(snes,SNESKSPONLY); CHKERRQ(ierr);
    // ierr = SNESGetKSP(snes,&ksp); CHKERRQ(ierr);
    // ierr = KSPSetType(ksp,KSPGMRES); CHKERRQ(ierr);

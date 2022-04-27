@@ -571,7 +571,6 @@ PetscErrorCode PrintProjection(DM da, MACtx *user) {
    //    PetscPrintf(PETSC_COMM_WORLD,"(%d) di,dj = (%d,%d)\n",k,di[k],dj[k]);
    // }
 
-
    // for (i=0; i<M; i++) {
    //    for (j=0; j<N; j++) {
    //       for (k=0; k<Nk; k++) {
