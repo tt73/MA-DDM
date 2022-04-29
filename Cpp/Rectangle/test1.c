@@ -136,7 +136,9 @@ int main(int argc,char **args) {
    PetscErrorCode ierr;
    DM             da, da_after;
    SNES           snes;
-   // KSP            ksp;
+   KSP            ksp;
+   PC             pc; 
+   SNESLineSearch ls; 
    DMDALocalInfo  info;
    Vec            u_initial,u,u_exact,err;
    MACtx          user; // see header file
@@ -272,12 +274,21 @@ int main(int argc,char **args) {
    ierr = DMDASNESSetFunctionLocal(da,INSERT_VALUES,(DMDASNESFunction)(residual_ptr[dim-1]),&user); CHKERRQ(ierr);
    ierr = DMDASNESSetJacobianLocal(da,(DMDASNESJacobian)(jacobian_ptr[dim-1]),&user); CHKERRQ(ierr);
    /* SNES Settings 
-      
+      KSP - krylov linear subspace solver 
+      PC  - preconditioning for krylov problem 
+      SNES - nonlinear solver 
    */
-   // ierr = SNESSetType(snes,SNESKSPONLY); CHKERRQ(ierr);
-   // ierr = SNESGetKSP(snes,&ksp); CHKERRQ(ierr);
-   // ierr = KSPSetType(ksp,KSPGMRES); CHKERRQ(ierr);
-   ierr = SNESSetType(snes,SNESNEWTONTR); CHKERRQ(ierr);
+   ierr = SNESGetKSP(snes,&ksp);CHKERRQ(ierr);
+   ierr = KSPGetPC(ksp,&pc);CHKERRQ(ierr);
+   ierr = KSPSetType(ksp,KSPGMRES); CHKERRQ(ierr);
+   // ierr = PCSetType(pc,PCNONE);CHKERRQ(ierr);
+
+   ierr = SNESSetType(snes,SNESNASM); CHKERRQ(ierr);
+   ierr = SNESNASMSetType(snes,PC_ASM_BASIC);
+   
+   // SNESGetLineSearch(snes,&ls);
+   // SNESLineSearchSetType(ls,SNESLINESEARCHBASIC);
+
    ierr = SNESSetFromOptions(snes); CHKERRQ(ierr);
    // set initial iterate and then solve
    ierr = DMGetGlobalVector(da,&u_initial); CHKERRQ(ierr);
@@ -285,6 +296,7 @@ int main(int argc,char **args) {
    ierr = SNESSolve(snes,NULL,u_initial); CHKERRQ(ierr);
    // Get the numerical and exact solution as Vecs
    ierr = SNESGetDM(snes,&da_after); // let DM da_after hold the data management info (possibly different than original da)
+   // ierr = DMDAGetInfo(da_after,NULL,&M,&N,NULL,NULL,NULL,NULL,NULL,&width,NULL,NULL,NULL,NULL);
    ierr = SNESGetSolution(snes,&u); // let Vec u hold the solution
    ierr = DMDAGetLocalInfo(da_after,&info); // retrieve local process info from DA
    ierr = DMCreateGlobalVector(da_after,&u_exact);
@@ -316,9 +328,8 @@ int main(int argc,char **args) {
    err2h /= normconst2h; // like continuous L2
    ierr = PetscPrintf(PETSC_COMM_WORLD, "problem %s on %s grid with d = %d, and eps = %.3f:\n"
                "  error |u-uexact|_inf = %.3e, |u-uexact|_h = %.3e\n",
-               ProblemTypes[problem],gridstr,width,user.epsilon,errinf,err2h); CHKERRQ(ierr);
+               ProblemTypes[problem],gridstr,info.sw,user.epsilon,errinf,err2h); CHKERRQ(ierr);
    /* Print solution
-
       Create MATLAB files load_u.m and load_exact.m which loads
       the numerical and exact solutions into a workspace.
    */
