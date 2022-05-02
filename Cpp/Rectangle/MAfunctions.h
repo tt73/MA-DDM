@@ -18,7 +18,9 @@ typedef struct {
    PetscReal (*f_rhs)(PetscReal x, PetscReal y, PetscReal z, void *ctx);
    // Dirichlet boundary condition g(x,y,z)
    PetscReal (*g_bdry)(PetscReal x, PetscReal y, PetscReal z, void *ctx);
-   // additional context; see example usage in ch7/minimal.c
+   // Debugging flag 
+   PetscBool debug; 
+   // additional context; s
    void   *addctx;
 } MACtx;
 

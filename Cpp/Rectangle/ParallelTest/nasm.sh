@@ -9,6 +9,13 @@ N=20
 # solutions is also automatic. It is handled with snes type NASM.
 printf "\n\nNon-linear additive schwarz options\n"
 ../test1 -help | grep nasm
+#   -snes_nasm_type <now BASIC : formerly BASIC> Type of restriction/extension (choose one of) NONE RESTRICT INTERPOLATE BASIC ()
+#   -snes_nasm_damping <1. : 1.>: The new solution is obtained as old solution plus dmp times (sum of the solutions on the subdomains) (SNESNASMSetDamping)
+#   -snes_nasm_finaljacobian: <FALSE : FALSE> Compute the global jacobian of the final iterate (for ASPIN) ()
+#   -snes_nasm_finaljacobian_type <now FINALOUTER : formerly FINALOUTER> The type of the final jacobian computed. (choose one of) FINALOUTER FINALINNER INITIAL ()
+#   -snes_nasm_log: <TRUE : TRUE> Log times for subSNES solves and restriction ()
+
+
 
 printf "\n\nTest 1: One domain\n"
 mpiexec -n 1 ../test1 -t1_N ${1:-$N} -snes_view -snes_type nasm
@@ -35,3 +42,6 @@ printf "\n\nTest 6: Try the final jacobian setting\n"
 mpiexec -n 2 ../test1 -t1_N ${1:-$N} -snes_converged_reason -snes_type nasm -snes_max_it 50 -snes_nasm_finaljacobian_type finalinner -snes_view -snes_nasm_finaljacobian
 # no
 
+printf "\n\nTest 6: Try the trust region\n"
+mpiexec -n 2 ../test1 -t1_N ${1:-$N} -snes_converged_reason -snes_type nasm -snes_max_it 50 -sub_snes_type newtontr -snes_monitor -snes_nasm_finaljacobian -snes_nasm_finaljacobian_type initial -snes_view -da_overlap 0
+# no

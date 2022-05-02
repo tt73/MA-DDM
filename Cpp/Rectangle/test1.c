@@ -200,6 +200,7 @@ int main(int argc,char **args) {
    if (!set_eps) {
       eps = h_eff*h_eff; // epsilon = (h*d)^2 
    }
+   user.debug   = debug; 
    user.width   = width;
    user.epsilon = eps; 
    user.g_bdry  = g_bdry_ptr[dim-1][problem];
@@ -212,7 +213,7 @@ int main(int argc,char **args) {
    ierr  = DMCreate(PETSC_COMM_WORLD, &da); CHKERRQ(ierr);
    switch (dim) {
       case 1:
-         ierr = DMDACreate1d(PETSC_COMM_WORLD,DM_BOUNDARY_NONE,Nx,1,width,NULL,&da); CHKERRQ(ierr);
+         ierr = DMDACreate1d(PETSC_COMM_WORLD,DM_BOUNDARY_NONE,Nx,1,1,NULL,&da); CHKERRQ(ierr);
          break;
       case 2:
          if(width==1){
@@ -296,7 +297,6 @@ int main(int argc,char **args) {
    ierr = SNESSolve(snes,NULL,u_initial); CHKERRQ(ierr);
    // Get the numerical and exact solution as Vecs
    ierr = SNESGetDM(snes,&da_after); // let DM da_after hold the data management info (possibly different than original da)
-   // ierr = DMDAGetInfo(da_after,NULL,&M,&N,NULL,NULL,NULL,NULL,NULL,&width,NULL,NULL,NULL,NULL);
    ierr = SNESGetSolution(snes,&u); // let Vec u hold the solution
    ierr = DMDAGetLocalInfo(da_after,&info); // retrieve local process info from DA
    ierr = DMCreateGlobalVector(da_after,&u_exact);
@@ -329,6 +329,18 @@ int main(int argc,char **args) {
    ierr = PetscPrintf(PETSC_COMM_WORLD, "problem %s on %s grid with d = %d, and eps = %.3f:\n"
                "  error |u-uexact|_inf = %.3e, |u-uexact|_h = %.3e\n",
                ProblemTypes[problem],gridstr,info.sw,user.epsilon,errinf,err2h); CHKERRQ(ierr);
+
+   //Print out debugging info 
+   if (debug) {
+      PetscInt ox, oy; 
+      DMDAGetOverlap(da_after,&ox,&oy,NULL);
+      PetscPrintf(PETSC_COMM_WORLD," Overlap in x: %d, Overlap in y: %d\n",ox,oy);
+
+      PetscInt MM, NN, mm, nn, dof, ss;
+      DMDAGetInfo(da_after,&dim,&MM,&NN,NULL,&mm,&nn,NULL,&dof,&ss,NULL,NULL,NULL,NULL); 
+      PetscPrintf(PETSC_COMM_WORLD," Grid is %d by %d, processors divided in %d by %d format.\n",MM,NN,mm,nn);
+      PetscPrintf(PETSC_COMM_WORLD," Dof = %d, Stencil = %d\n",dof,ss);
+   }
    /* Print solution
       Create MATLAB files load_u.m and load_exact.m which loads
       the numerical and exact solutions into a workspace.

@@ -20,11 +20,23 @@
    Since this is 1D, the ouptut F is represented as an array and so is the input u.
 */
 PetscErrorCode MA1DFunctionLocal(DMDALocalInfo *info, PetscReal *u, PetscReal *F, MACtx *user) {
-   PetscInt   i;
-   PetscReal  xmax[1], xmin[1], h, x, ue, uw;
+   PetscInt     i;
+   PetscReal    xmax[1], xmin[1], h, x, ue, uw;
+   PetscMPIInt  rank,size;
 
    DMGetBoundingBox(info->da,xmin,xmax);
    h = (xmax[0] - xmin[0])/(info->mx + 1);
+
+   MPI_Comm_size(PETSC_COMM_WORLD,&size);
+   MPI_Comm_rank(PETSC_COMM_WORLD,&rank);
+
+   if (user->debug) {
+      // PetscPrintf(PETSC_COMM_WORLD, "weight[%d]: %f\n",i,user.weights[i]);
+      printf("I'm processor %d of %d\n",rank+1,size);
+      printf("  I'm in charge of indeces %d through %d (excluding ghosts)\n",info->xs,info->xs+info->xm-1);
+      printf("  I'm in charge of indeces %d through %d (including ghosts)\n",info->gxs,info->gxs+info->gxm-1);
+   }
+
    for (i = info->xs; i < info->xs + info->xm; i++) {
       x = xmin[0] + (1+i)*h;
       ue = (i == info->mx-1) ? user->g_bdry(x+h,0.0,0.0,user) : u[i+1];

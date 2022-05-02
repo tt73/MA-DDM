@@ -1,4 +1,7 @@
 #!/bin/bash
+#
+# Run this code with `bash basic_tests.sh`
+# You can pass an integer as an arg to change N. 
 
 # N = Number of interior points
 N=20
@@ -29,7 +32,6 @@ printf "\n\nShow list of availables SNES types:\n"
 ../test1 -help | grep snes_type
 
 snes_types="newtonls newtontr nrichardson ksponly ksptransposeonly vinewtonssls ngmres qn ncg fas nasm anderson aspin"
-
 for s in $snes_types
 do
    printf "\nTrying out $s:\n"
