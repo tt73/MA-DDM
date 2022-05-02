@@ -352,7 +352,7 @@ PetscErrorCode MA3DJacobianLocal(DMDALocalInfo *info, PetscScalar ***au, Mat J, 
    return 0;
 }
 
-/*
+/* Compute the approximation of the det using the SDD.
    We use the approximation
                   ⎛2d + 1            ⎞-2
                   ⎜ ____             ⎟
