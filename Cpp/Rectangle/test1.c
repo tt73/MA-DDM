@@ -137,8 +137,8 @@ int main(int argc,char **args) {
    DM             da, da_after;
    SNES           snes;
    KSP            ksp;
-   PC             pc; 
-   SNESLineSearch ls; 
+   PC             pc;
+   SNESLineSearch ls;
    DMDALocalInfo  info;
    Vec            u_initial,u,u_exact,err;
    MACtx          user; // see header file
@@ -151,7 +151,7 @@ int main(int argc,char **args) {
    PetscInt       i,dim,width,N,Nx,Ny,order;
 
    ierr = PetscInitialize(&argc,&args,NULL,help); if (ierr) return ierr;
-   // Default independent parameters 
+   // Default independent parameters
    N = Nx = Ny = 3; // # of interior points
    dim         = 2; // PDE space dimension
    width       = 1; // stencil width
@@ -164,7 +164,7 @@ int main(int argc,char **args) {
    user.Lz     = 1.0;
    debug       = PETSC_FALSE;
    gonboundary = PETSC_FALSE;
-   // Get command args 
+   // Get command args
    ierr = PetscOptionsBegin(PETSC_COMM_WORLD,"t1_", "options for test1.c", ""); CHKERRQ(ierr);
    ierr = PetscOptionsInt("-dim","dimension of problem (=1,2,3 only)","test1.c",dim,&dim,NULL);CHKERRQ(ierr);
    ierr = PetscOptionsInt("-N","make the interior N by N","test1.c",N,&N,&set_N);CHKERRQ(ierr);
@@ -182,15 +182,15 @@ int main(int argc,char **args) {
    ierr = PetscOptionsReal("-eps","regularization constant epsilon","test1.c",eps,&eps,&set_eps);CHKERRQ(ierr);
    ierr = PetscOptionsEnd(); CHKERRQ(ierr);
    /* Update dependent params
-      It's optimal to choose depth = ceil(h^(-1/3)) where h is the stepsize. 
-      However, you can choose during runtime with "-t1_width <d>", where <d> is an integer. 
+      It's optimal to choose depth = ceil(h^(-1/3)) where h is the stepsize.
+      However, you can choose during runtime with "-t1_width <d>", where <d> is an integer.
       Epsilon is the regularization constant. We choose epsilon = (hd)^2 by default.
-      We may change epsilon during runtime with "-t1_eps <f>", where <f> is a float  
+      We may change epsilon during runtime with "-t1_eps <f>", where <f> is a float
    */
-   if (set_N) { 
-      Nx = Ny = N; 
+   if (set_N) {
+      Nx = Ny = N;
    }
-   hx    = 2.0*user.Lx/(Nx+1);  
+   hx    = 2.0*user.Lx/(Nx+1);
    hy    = 2.0*user.Ly/(Ny+1);
    h_eff = PetscMax(hx,hy);
    if (!set_width) {
@@ -198,11 +198,11 @@ int main(int argc,char **args) {
    }
    h_eff *= width;
    if (!set_eps) {
-      eps = h_eff*h_eff; // epsilon = (h*d)^2 
+      eps = h_eff*h_eff; // epsilon = (h*d)^2
    }
-   user.debug   = debug; 
+   user.debug   = debug;
    user.width   = width;
-   user.epsilon = eps; 
+   user.epsilon = eps;
    user.g_bdry  = g_bdry_ptr[dim-1][problem];
    user.f_rhs   = f_rhs_ptr[dim-1][problem];
    /* Call DMDACreate to construct a mesh
@@ -248,17 +248,21 @@ int main(int argc,char **args) {
          SETERRQ(PETSC_COMM_SELF,1,"invalid dim for DMDA creation\n");
    }
    ierr = DMSetApplicationContext(da,&user); CHKERRQ(ierr);
+   if (dim==1) {
+      ierr = DMDASetOverlap(da,1,0,0);
+   }
+   ierr = DMSetFromOptions(da); CHKERRQ(ierr);
    ierr = DMSetUp(da); CHKERRQ(ierr);
    ierr = DMDASetUniformCoordinates(da,-user.Lx,user.Lx,-user.Ly,user.Ly,-user.Lz,user.Lz); CHKERRQ(ierr);
    // Compute the stencil directions based on the L1 norm
-   ComputeFwdStencilDirs(width, &user);
+   ComputeFwdStencilDirs(width,&user);
    if (debug) {
       for (i=0; i<2*width; i++) {
          PetscPrintf(PETSC_COMM_WORLD, "Si[%2d]=%4d  Sj[%2d]=%4d\n",i,user.Si[i],i,user.Sj[i]);
       }
    }
    // Compute quadrature weights
-   ComputeWeights(width, order, &user);
+   ComputeWeights(width,order,&user);
    if (debug) {
       for (i=0; i<2*width+1; i++) {
          PetscPrintf(PETSC_COMM_WORLD, "weight[%d]: %f\n",i,user.weights[i]);
@@ -274,10 +278,10 @@ int main(int argc,char **args) {
    ierr = SNESSetDM(snes,da); CHKERRQ(ierr);
    ierr = DMDASNESSetFunctionLocal(da,INSERT_VALUES,(DMDASNESFunction)(residual_ptr[dim-1]),&user); CHKERRQ(ierr);
    ierr = DMDASNESSetJacobianLocal(da,(DMDASNESJacobian)(jacobian_ptr[dim-1]),&user); CHKERRQ(ierr);
-   /* SNES Settings 
-      KSP - krylov linear subspace solver 
-      PC  - preconditioning for krylov problem 
-      SNES - nonlinear solver 
+   /* SNES Settings
+      KSP - krylov linear subspace solver
+      PC  - preconditioning for krylov problem
+      SNES - nonlinear solver
    */
    ierr = SNESGetKSP(snes,&ksp);CHKERRQ(ierr);
    ierr = KSPGetPC(ksp,&pc);CHKERRQ(ierr);
@@ -286,7 +290,7 @@ int main(int argc,char **args) {
 
    ierr = SNESSetType(snes,SNESNASM); CHKERRQ(ierr);
    ierr = SNESNASMSetType(snes,PC_ASM_BASIC);
-   
+
    // SNESGetLineSearch(snes,&ls);
    // SNESLineSearchSetType(ls,SNESLINESEARCHBASIC);
 
@@ -330,14 +334,14 @@ int main(int argc,char **args) {
                "  error |u-uexact|_inf = %.3e, |u-uexact|_h = %.3e\n",
                ProblemTypes[problem],gridstr,info.sw,user.epsilon,errinf,err2h); CHKERRQ(ierr);
 
-   //Print out debugging info 
+   //Print out debugging info
    if (debug) {
-      PetscInt ox, oy; 
+      PetscInt ox, oy;
       DMDAGetOverlap(da_after,&ox,&oy,NULL);
       PetscPrintf(PETSC_COMM_WORLD," Overlap in x: %d, Overlap in y: %d\n",ox,oy);
 
       PetscInt MM, NN, mm, nn, dof, ss;
-      DMDAGetInfo(da_after,&dim,&MM,&NN,NULL,&mm,&nn,NULL,&dof,&ss,NULL,NULL,NULL,NULL); 
+      DMDAGetInfo(da_after,&dim,&MM,&NN,NULL,&mm,&nn,NULL,&dof,&ss,NULL,NULL,NULL,NULL);
       PetscPrintf(PETSC_COMM_WORLD," Grid is %d by %d, processors divided in %d by %d format.\n",MM,NN,mm,nn);
       PetscPrintf(PETSC_COMM_WORLD," Dof = %d, Stencil = %d\n",dof,ss);
    }
