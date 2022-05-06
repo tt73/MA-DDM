@@ -42,11 +42,11 @@ printf "\n\nNon-linear additive schwarz options\n"
 # mpiexec -n 2 ../test1 -t1_N ${1:-$N} -snes_converged_reason -snes_type nasm -snes_max_it 50 -snes_nasm_finaljacobian_type finalinner -snes_view -snes_nasm_finaljacobian
 ## no
 
-# printf "\n\nTest 6: Try the trust region\n"
+# printf "\n\nTest 7: Try the trust region\n"
 # mpiexec -n 2 ../test1 -t1_N ${1:-$N} -snes_converged_reason -snes_type nasm -snes_max_it 50 -sub_snes_type newtontr -snes_monitor -snes_nasm_finaljacobian -snes_nasm_finaljacobian_type initial -snes_view
 ## no
 
-printf "\n\nTest 7: Vary the overlap\n"
+printf "\n\nTest 8: Vary the overlap\n"
 mpiexec -n 4 ../test1 -t1_N ${1:-$N} -snes_converged_reason -snes_type aspin -sub_snes_linesearch_type basic -snes_max_it 50 -snes_monitor -snes_view -da_overlap 3
 ## no
 
