@@ -18,8 +18,8 @@ typedef struct {
    PetscReal (*f_rhs)(PetscReal x, PetscReal y, PetscReal z, void *ctx);
    // Dirichlet boundary condition g(x,y,z)
    PetscReal (*g_bdry)(PetscReal x, PetscReal y, PetscReal z, void *ctx);
-   // Debugging flag 
-   PetscBool debug; 
+   // Debugging flag
+   PetscBool debug;
    // additional context; s
    void   *addctx;
 } MACtx;
@@ -41,9 +41,9 @@ PetscErrorCode MA3DJacobianLocal(DMDALocalInfo *info, PetscReal ***au, Mat J, Ma
   * a random function (white noise; *no* smoothness)
 In addition, one can initialize either using the boundary function g for
 the boundary locations in the initial state, or not.                      */
-typedef enum {ZEROS, RANDOM, POISSON} InitialType;
+typedef enum {ZEROS, RANDOM, CONE, LINMAX} InitialType;
 
-PetscErrorCode InitialState(DM da, InitialType it, PetscBool gbdry, Vec u, MACtx *user);
+PetscErrorCode InitialState(DM da, InitialType it, Vec u, MACtx *user);
 
 PetscErrorCode ComputeWeights(PetscInt width, PetscInt order, MACtx *user);
 
