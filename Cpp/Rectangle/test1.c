@@ -1,11 +1,10 @@
-/*
-   This is a test code to solve the Monge-Ampere on a 2D rectangular domain
-   with the stencil of width 1.
-
-   This is the serial version, but most of it is ready to be
-   done in parallel.
-*/
-static char help[] = "Create a wide-stencil grid in 2D.\n\n";
+/* Test1 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+   This is the main function for the Monge-Ampere solver.
+   Three different examples are available.
+   The domain is a rectangle and the mesh size is free to choose.
+   The stencil width is also free to choose but it scales with h by default.
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+static char help[] = "Solve the Monge-Ampere equation using a wide-stencil scheme.\n\n";
 
 #include <petsc.h>
 #include "MAfunctions.h"
@@ -123,7 +122,7 @@ static PointwiseFcn f_rhs_ptr[3][3]
        {&f_rhs_2Dex10, &f_rhs_2Dex11, &f_rhs_2Dex12},
        {&f_rhs_3Dex10, &f_rhs_3Dex11, &f_rhs_3Dex12}};
 
-static const char* InitialTypes[] = {"zeros","random","cone","linmax","InitialType","", NULL};
+static const char* InitialTypes[] = {"zeros","random","cone","linmax","corner","InitialType","", NULL};
 
 
 int main(int argc,char **args) {
@@ -153,7 +152,7 @@ int main(int argc,char **args) {
    width       = 1; // stencil width
    eps         = 0.25;  // epsilon = (hd)^2
    order       = 2; // guadrature order
-   initial     = CONE;
+   initial     = CORNER;
    problem     = ex10;
    user.Lx     = 1.0;
    user.Ly     = 1.0;
@@ -241,12 +240,13 @@ int main(int argc,char **args) {
 
    - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
    ierr = SNESCreate(PETSC_COMM_WORLD,&snes); CHKERRQ(ierr);
+   ierr = SNESSetCountersReset(snes,PETSC_FALSE);CHKERRQ(ierr);
    ierr = SNESSetDM(snes,da); CHKERRQ(ierr);
    ierr = DMDASNESSetFunctionLocal(da,INSERT_VALUES,(DMDASNESFunction)(residual_ptr[dim-1]),&user); CHKERRQ(ierr);
    ierr = DMDASNESSetJacobianLocal(da,(DMDASNESJacobian)(jacobian_ptr[dim-1]),&user); CHKERRQ(ierr);
-   ierr = SNESGetKSP(snes,&ksp);CHKERRQ(ierr);
-   ierr = KSPGetPC(ksp,&pc);CHKERRQ(ierr);
-   ierr = KSPSetType(ksp,KSPGMRES); CHKERRQ(ierr);
+   // ierr = SNESGetKSP(snes,&ksp);CHKERRQ(ierr);
+   // ierr = KSPGetPC(ksp,&pc);CHKERRQ(ierr);
+   // ierr = KSPSetType(ksp,KSPGMRES); CHKERRQ(ierr);
    // ierr = PCSetType(pc,PCNONE);CHKERRQ(ierr);
    ierr = SNESSetType(snes,SNESNASM); CHKERRQ(ierr);
    ierr = SNESNASMSetType(snes,PC_ASM_RESTRICT);
@@ -261,7 +261,6 @@ int main(int argc,char **args) {
    ComputeWeights(width,order,&user);  // Quadrature weights
    /* Solve - - - - - - - - - - - - - - - - - - - - - - - - - - - -
       Set up the inital guess on each sub-domain
-
    - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
    ierr = DMGetGlobalVector(da,&u_initial); CHKERRQ(ierr);
    ierr = InitialState(da,initial,u_initial,&user); CHKERRQ(ierr);

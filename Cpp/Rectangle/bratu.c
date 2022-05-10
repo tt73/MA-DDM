@@ -181,7 +181,7 @@ int main(int argc,char **argv)
 
    /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
       Customize nonlinear solver; set runtime options
-      Default is NASM
+      Default is NASM with restriction on the overlap.
       - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
    ierr = SNESSetType(snes,SNESNASM); CHKERRQ(ierr);
    ierr = SNESNASMSetType(snes,PC_ASM_RESTRICT);

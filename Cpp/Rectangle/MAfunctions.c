@@ -10,6 +10,175 @@
    PetscInt  gxm,gym,gzm;    number of grid points on this processor including ghosts
 */
 
+/* [ title ] - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+PetscErrorCode InitialState(DM da, InitialType it, Vec u, MACtx *user) {
+   PetscErrorCode ierr;
+   DMDALocalInfo  info;
+   PetscRandom    rctx;
+
+   PetscFunctionBeginUser;
+   switch (it) {
+      case ZEROS:
+         ierr = VecSet(u,0.0); CHKERRQ(ierr);
+         break;
+      case RANDOM:
+         ierr = PetscRandomCreate(PETSC_COMM_WORLD,&rctx); CHKERRQ(ierr);
+         ierr = VecSetRandom(u,rctx); CHKERRQ(ierr);
+         ierr = PetscRandomDestroy(&rctx); CHKERRQ(ierr);
+         break;
+      case CONE:
+         ierr = DMDAGetLocalInfo(da,&info); CHKERRQ(ierr);
+         switch (info.dim) {
+            case 1:
+            {
+               PetscInt  i;
+               PetscReal xmax[1],xmin[1],h,x,*au,gx,m;
+
+               ierr = DMDAVecGetArray(da, u, &au); CHKERRQ(ierr);
+               ierr = DMGetBoundingBox(da,xmin,xmax); CHKERRQ(ierr);
+               h = (xmax[0] - xmin[0]) / (info.mx - 1);
+               /*
+                  For a < x < b and u(a) = ga and u(b) = gb.
+                  Let gx = min(ga,gb).
+                  Let m = 2gx/(b-a).
+                  Let the initial guess be u(x) = max(-m(x-a)+gx,m(x-b+gx)).
+               */
+               gx = PetscMin(user->g_bdry(xmin[0],0.0,0.0,user),user->g_bdry(xmax[0],0.0,0.0,user));
+               m = 2.0*gx/(xmax[0]-xmin[0]);
+               for (i=info.xs; i<info.xs+info.xm; i++) {
+                  x = xmin[0] + i*h;
+                  au[i] = m*PetscMax(xmin[0]-x,x-xmax[0])+gx;
+               }
+               ierr = DMDAVecRestoreArray(da, u, &au); CHKERRQ(ierr);
+               break;
+            }
+            case 2:
+            {
+               PetscInt   i, j;
+               PetscReal  xymin[2],xymax[2],hx,hy,x,y,**au,gx,gy,mx,my;
+
+               ierr = DMDAVecGetArray(da, u, &au); CHKERRQ(ierr);
+               ierr = DMGetBoundingBox(da,xymin,xymax); CHKERRQ(ierr);
+               hx = (xymax[0]-xymin[0])/(info.mx-1);
+               hy = (xymax[1]-xymin[1])/(info.my-1);
+               for (j = info.ys; j < info.ys + info.ym; j++) {
+                  y = xymin[1] + j*hy;
+                  gy = PetscMin(user->g_bdry(xymin[0],y,0.0,user),user->g_bdry(xymax[0],y,0.0,user));
+                  my = 2.0*gy/(xymax[0]-xymin[0]);
+                  for (i = info.xs; i < info.xs + info.xm; i++) {
+                     x = xymin[0] + i*hx;
+                     gx = PetscMin(user->g_bdry(x,xymin[1],0.0,user),user->g_bdry(x,xymax[1],0.0,user));
+                     mx = 2.0*gx/(xymax[1]-xymin[1]);
+                     au[j][i] = PetscMax(mx*PetscMax(xymin[0]-x,x-xymax[0])+gx,my*PetscMax(xymin[1]-y,y-xymax[1])+gy);
+                  }
+               }
+               ierr = DMDAVecRestoreArray(da, u, &au); CHKERRQ(ierr);
+               break;
+            }
+            case 3:
+            {
+               SETERRQ(PETSC_COMM_SELF,3,"dim = 3 not yet supported\n");
+               break;
+            }
+            default:
+               SETERRQ(PETSC_COMM_SELF,5,"invalid dim from DMDALocalInfo\n");
+         }
+         break;
+      case LINMAX:
+         ierr = DMDAGetLocalInfo(da,&info); CHKERRQ(ierr);
+         switch (info.dim) {
+            case 1:
+            {
+               PetscInt  i;
+               PetscReal xmax[1],xmin[1],h,x,*au,ga,gb,m;
+
+               ierr = DMDAVecGetArray(da, u, &au); CHKERRQ(ierr);
+               ierr = DMGetBoundingBox(da,xmin,xmax); CHKERRQ(ierr);
+               h = (xmax[0] - xmin[0])/(info.mx - 1);
+               /*
+                  For a < x < b and u(a) = ga and u(b) = gb.
+                  Let gx = min(ga,gb).
+                  Let m = 2gx/(b-a).
+                  Let the initial guess be u(x) = max(-m(x-a)+gx,m(x-b+gx)).
+               */
+               ga = user->g_bdry(xmin[0],0.0,0.0,user);
+               gb = user->g_bdry(xmax[0],0.0,0.0,user);
+               m = (gb-ga)/(xmax[0]-xmin[0]);
+               ierr = DMDAVecRestoreArray(da, u, &au); CHKERRQ(ierr);
+               break;
+            }
+            case 2:
+            {
+               PetscInt   i, j;
+               PetscReal  xymin[2],xymax[2],hx,hy,x,y,**au;
+
+               ierr = DMDAVecGetArray(da, u, &au); CHKERRQ(ierr);
+               ierr = DMGetBoundingBox(da,xymin,xymax); CHKERRQ(ierr);
+               hx = (xymax[0]-xymin[0])/(info.mx-1);
+               hy = (xymax[1]-xymin[1])/(info.my-1);
+               for (j = info.ys; j < info.ys + info.ym; j++) {
+                  y = xymin[1] + j*hy;
+                  for (i = info.xs; i < info.xs + info.xm; i++) {
+                     if (i==0 || i==info.mx-1 || j==0 || j==info.my-1) {
+                        x = xymin[0] + i*hx;
+                        au[j][i] = user->g_bdry(x,y,0.0,user);
+                     }
+                  }
+               }
+               ierr = DMDAVecRestoreArray(da, u, &au); CHKERRQ(ierr);
+               break;
+            }
+            case 3:
+            {
+               SETERRQ(PETSC_COMM_SELF,3,"dim = 3 not yet supported\n");
+               break;
+            }
+            default:
+               SETERRQ(PETSC_COMM_SELF,5,"invalid dim from DMDALocalInfo\n");
+         }
+         break;
+      case CORNER:
+         ierr = DMDAGetLocalInfo(da,&info); CHKERRQ(ierr);
+         switch (info.dim) {
+            case 1:
+            {
+               PetscReal xmax[1],xmin[1],h,ga,gb;
+               ierr = DMGetBoundingBox(da,xmin,xmax); CHKERRQ(ierr);
+               h = (xmax[0] - xmin[0])/(info.mx - 1);
+               ga = user->g_bdry(xmin[0]-h,0.0,0.0,user);
+               gb = user->g_bdry(xmax[0]+h,0.0,0.0,user);
+               VecSet(u,PetscMax(ga,gb));
+               break;
+            }
+            case 2:
+            {
+               PetscReal xymin[2],xymax[2],hx,hy,gx,gy;
+               ierr = DMGetBoundingBox(da,xymin,xymax); CHKERRQ(ierr);
+               hx = (xymax[0]-xymin[0])/(info.mx-1);
+               hy = (xymax[1]-xymin[1])/(info.my-1);
+               gy = PetscMax(user->g_bdry(xymin[0]-hx,xymin[1]-hy,0.0,user),user->g_bdry(xymax[0]+hx,xymin[1]-hy,0.0,user));
+               gx = PetscMax(user->g_bdry(xymax[0]+hx,xymin[1]-hy,0.0,user),user->g_bdry(xymax[0]+hx,xymax[1]+hy,0.0,user));
+               VecSet(u,PetscMax(gx,gy));
+               break;
+            }
+            case 3:
+            {
+               SETERRQ(PETSC_COMM_SELF,3,"dim = 3 not yet supported\n");
+               break;
+            }
+            default:
+               SETERRQ(PETSC_COMM_SELF,5,"invalid dim from DMDALocalInfo\n");
+         }
+         break;
+      default:
+         SETERRQ(PETSC_COMM_SELF,4,"invalid InitialType ... how did I get here?\n");
+   }
+   PetscFunctionReturn(0);
+}
+
+
 /* 1D Version of the Residue Function
 
    This is the residue function for the 1D Monge-Ampere. Which is actually just
@@ -31,15 +200,13 @@ PetscErrorCode MA1DFunctionLocal(DMDALocalInfo *info, PetscReal *u, PetscReal *F
       PetscMPIInt  rank,size;
       MPI_Comm_size(PETSC_COMM_WORLD,&size);
       MPI_Comm_rank(PETSC_COMM_WORLD,&rank);
-      printf("I'm processor %d of %d\n",rank+1,size);
-      printf("  I'm in charge of indeces %d through %d (excluding ghosts)\n",info->xs,info->xs+info->xm-1);
-      printf("  I'm in charge of indeces %d through %d (including ghosts)\n",info->gxs,info->gxs+info->gxm-1);
+      printf("Rank %d of %d\n   x-ind: %d to %d\n   x-ind: %d to %d (w/ ghosts)\n",rank+1,size,info->xs,info->xs+info->xm-1,info->gxs,info->gxs+info->gxm-1);
    }
 
    for (i = info->xs; i<info->xs+info->xm; i++) {
       x = xmin[0] + i*h;
-      ue = (i == info->mx-1) ? user->g_bdry(xmin[0]-h,0.0,0.0,user) : u[i+1];
-      uw = (i == 0)          ? user->g_bdry(xmax[0]+h,0.0,0.0,user) : u[i-1];
+      ue = (i == info->mx-1) ? user->g_bdry(x-h,0.0,0.0,user) : u[i+1];
+      uw = (i == 0)          ? user->g_bdry(x+h,0.0,0.0,user) : u[i-1];
       F[i] = (-uw + 2.0*u[i] - ue)/(h*h) + user->f_rhs(x,0.0,0.0,user);
    }
    PetscFunctionReturn(0);
@@ -77,7 +244,7 @@ PetscErrorCode MA2DFunctionLocal(DMDALocalInfo *info, PetscReal **au, PetscReal 
       for (i=info->xs; i<info->xs+info->xm; i++) {
          x = xymin[0] + i*hx;
          ComputeSDD(info,au,user,i,j,x,y,SDD,hFwd,hBak);
-         ierr = ApproxDetD2u(&DetD2u,M,SDD,user);
+         ApproxDetD2u(&DetD2u,M,SDD,user);
          aF[j][i] = DetD2u - user->f_rhs(x,y,0.0,user);
       }
    }
@@ -407,146 +574,6 @@ PetscErrorCode ApproxDetD2u(PetscReal *DetD2u, PetscInt dim, PetscReal *SDD, MAC
       }
    }
    *DetD2u = left + right;
-   PetscFunctionReturn(0);
-}
-
-
-/*
-
-*/
-PetscErrorCode InitialState(DM da, InitialType it, Vec u, MACtx *user) {
-   PetscErrorCode ierr;
-   DMDALocalInfo  info;
-   PetscRandom    rctx;
-
-   PetscFunctionBeginUser;
-   switch (it) {
-      case ZEROS:
-         ierr = VecSet(u,0.0); CHKERRQ(ierr);
-         break;
-      case RANDOM:
-         ierr = PetscRandomCreate(PETSC_COMM_WORLD,&rctx); CHKERRQ(ierr);
-         ierr = VecSetRandom(u,rctx); CHKERRQ(ierr);
-         ierr = PetscRandomDestroy(&rctx); CHKERRQ(ierr);
-         break;
-      case CONE:
-         ierr = DMDAGetLocalInfo(da,&info); CHKERRQ(ierr);
-         switch (info.dim) {
-            case 1:
-            {
-               PetscInt  i;
-               PetscReal xmax[1],xmin[1],h,x,*au,gx,m;
-
-               ierr = DMDAVecGetArray(da, u, &au); CHKERRQ(ierr);
-               ierr = DMGetBoundingBox(da,xmin,xmax); CHKERRQ(ierr);
-               h = (xmax[0] - xmin[0]) / (info.mx - 1);
-               /*
-                  For a < x < b and u(a) = ga and u(b) = gb.
-                  Let gx = min(ga,gb).
-                  Let m = 2gx/(b-a).
-                  Let the initial guess be u(x) = max(-m(x-a)+gx,m(x-b+gx)).
-               */
-               gx = PetscMin(user->g_bdry(xmin[0],0.0,0.0,user),user->g_bdry(xmax[0],0.0,0.0,user));
-               m = 2.0*gx/(xmax[0]-xmin[0]);
-               for (i=info.xs; i<info.xs+info.xm; i++) {
-                  x = xmin[0] + i*h;
-                  au[i] = m*PetscMax(xmin[0]-x,x-xmax[0])+gx;
-               }
-               ierr = DMDAVecRestoreArray(da, u, &au); CHKERRQ(ierr);
-               break;
-            }
-            case 2:
-            {
-               PetscInt   i, j;
-               PetscReal  xymin[2],xymax[2],hx,hy,x,y,**au,gx,gy,mx,my;
-
-               ierr = DMDAVecGetArray(da, u, &au); CHKERRQ(ierr);
-               ierr = DMGetBoundingBox(da,xymin,xymax); CHKERRQ(ierr);
-               hx = (xymax[0]-xymin[0])/(info.mx-1);
-               hy = (xymax[1]-xymin[1])/(info.my-1);
-               for (j = info.ys; j < info.ys + info.ym; j++) {
-                  y = xymin[1] + j*hy;
-                  gy = PetscMin(user->g_bdry(xymin[0],y,0.0,user),user->g_bdry(xymax[0],y,0.0,user));
-                  my = 2.0*gy/(xymax[0]-xymin[0]);
-                  for (i = info.xs; i < info.xs + info.xm; i++) {
-                     x = xymin[0] + i*hx;
-                     gx = PetscMin(user->g_bdry(x,xymin[1],0.0,user),user->g_bdry(x,xymax[1],0.0,user));
-                     mx = 2.0*gx/(xymax[1]-xymin[1]);
-                     au[j][i] = PetscMax(mx*PetscMax(xymin[0]-x,x-xymax[0])+gx,my*PetscMax(xymin[1]-y,y-xymax[1])+gy);
-                  }
-               }
-               ierr = DMDAVecRestoreArray(da, u, &au); CHKERRQ(ierr);
-               break;
-            }
-            case 3:
-            {
-               SETERRQ(PETSC_COMM_SELF,3,"dim = 3 not yet supported\n");
-               break;
-            }
-            default:
-               SETERRQ(PETSC_COMM_SELF,5,"invalid dim from DMDALocalInfo\n");
-         }
-         break;
-      case LINMAX:
-         ierr = DMDAGetLocalInfo(da,&info); CHKERRQ(ierr);
-         switch (info.dim) {
-            case 1:
-            {
-               PetscInt  i;
-               PetscReal xmax[1],xmin[1],h,x,*au,ga,gb,m;
-
-               ierr = DMDAVecGetArray(da, u, &au); CHKERRQ(ierr);
-               ierr = DMGetBoundingBox(da,xmin,xmax); CHKERRQ(ierr);
-               h = (xmax[0] - xmin[0])/(info.mx - 1);
-               /*
-                  For a < x < b and u(a) = ga and u(b) = gb.
-                  Let gx = min(ga,gb).
-                  Let m = 2gx/(b-a).
-                  Let the initial guess be u(x) = max(-m(x-a)+gx,m(x-b+gx)).
-               */
-               ga = user->g_bdry(xmin[0],0.0,0.0,user);
-               gb = user->g_bdry(xmax[0],0.0,0.0,user);
-               m = (gb-ga)/(xmax[0]-xmin[0]);
-               for (i=info.xs; i<info.xs+info.xm; i++) {
-                  x = xmin[0] + i*h;
-                  au[i] = m*(x-xmin[0])+ga;
-               }
-               ierr = DMDAVecRestoreArray(da, u, &au); CHKERRQ(ierr);
-               break;
-            }
-            case 2:
-            {
-               PetscInt   i, j;
-               PetscReal  xymin[2],xymax[2],hx,hy,x,y,**au;
-
-               ierr = DMDAVecGetArray(da, u, &au); CHKERRQ(ierr);
-               ierr = DMGetBoundingBox(da,xymin,xymax); CHKERRQ(ierr);
-               hx = (xymax[0]-xymin[0])/(info.mx-1);
-               hy = (xymax[1]-xymin[1])/(info.my-1);
-               for (j = info.ys; j < info.ys + info.ym; j++) {
-                  y = xymin[1] + j*hy;
-                  for (i = info.xs; i < info.xs + info.xm; i++) {
-                     if (i==0 || i==info.mx-1 || j==0 || j==info.my-1) {
-                        x = xymin[0] + i*hx;
-                        au[j][i] = user->g_bdry(x,y,0.0,user);
-                     }
-                  }
-               }
-               ierr = DMDAVecRestoreArray(da, u, &au); CHKERRQ(ierr);
-               break;
-            }
-            case 3:
-            {
-               SETERRQ(PETSC_COMM_SELF,3,"dim = 3 not yet supported\n");
-               break;
-            }
-            default:
-               SETERRQ(PETSC_COMM_SELF,5,"invalid dim from DMDALocalInfo\n");
-         }
-         break;
-      default:
-         SETERRQ(PETSC_COMM_SELF,4,"invalid InitialType ... how did I get here?\n");
-   }
    PetscFunctionReturn(0);
 }
 

@@ -10,6 +10,7 @@ The command line options include:\n\
   -kappa <1e-3>: diffusivity in odd regions\n\
 \n";
 
+
 /*F
     The $p$-Bratu problem is a combination of the $p$-Laplacian (nonlinear diffusion) and the Brutu solid fuel ignition problem.
     This problem is modeled by the partial differential equation
