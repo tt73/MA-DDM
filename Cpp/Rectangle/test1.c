@@ -145,8 +145,10 @@ int main(int argc,char **args) {
    PetscInt       dim,width,N,Nx,Ny,order;
 
    ierr = PetscInitialize(&argc,&args,NULL,help); if (ierr) return ierr;
-   // Default independent parameters
-   N = Nx = Ny = 3; // # of interior points
+   /*  Default params  - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+   - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+   N = Nx = Ny = 4; // # of interior points
    dim         = 2; // PDE space dimension
    width       = 1; // stencil width
    eps         = 0.25;  // epsilon = (hd)^2
@@ -202,7 +204,6 @@ int main(int argc,char **args) {
       The memory is automatically distributed when this code is
       run with mpiexec.
    */
-   ierr  = DMCreate(PETSC_COMM_WORLD, &da); CHKERRQ(ierr);
    switch (dim) {
       case 1:
          ierr = DMDACreate1d(PETSC_COMM_WORLD,DM_BOUNDARY_NONE,Nx,1,1,NULL,&da); CHKERRQ(ierr);
@@ -226,28 +227,23 @@ int main(int argc,char **args) {
       default:
          SETERRQ(PETSC_COMM_SELF,1,"invalid dim for DMDA creation\n");
    }
-   ierr = DMSetApplicationContext(da,&user); CHKERRQ(ierr);
+   /* DA setup - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+   - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
    if (dim==1) {
       ierr = DMDASetOverlap(da,1,0,0);
    }
    ierr = DMSetFromOptions(da); CHKERRQ(ierr);
    ierr = DMSetUp(da); CHKERRQ(ierr);
-   ierr = DMDASetUniformCoordinates(da,-user.Lx,user.Lx,-user.Ly,user.Ly,-user.Lz,user.Lz); CHKERRQ(ierr);
-   ComputeFwdStencilDirs(width,&user); // Stencil directions based on the L1 norm
-   ComputeWeights(width,order,&user);  // Quadrature weights
-   /*
-      SetFuntionLocal - link the custom residue function to `da`
-      SetJacobianLocal - link the custom Jacobian function to `da`
-   */
+   ierr = DMDASetUniformCoordinates(da,-user.Lx+hx,user.Lx-hx,-user.Ly+hy,user.Ly-hy,-user.Lz,user.Lz); CHKERRQ(ierr);
+   ierr = DMSetApplicationContext(da,&user); CHKERRQ(ierr);
+   /* SNES setup - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+   - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
    ierr = SNESCreate(PETSC_COMM_WORLD,&snes); CHKERRQ(ierr);
    ierr = SNESSetDM(snes,da); CHKERRQ(ierr);
    ierr = DMDASNESSetFunctionLocal(da,INSERT_VALUES,(DMDASNESFunction)(residual_ptr[dim-1]),&user); CHKERRQ(ierr);
    ierr = DMDASNESSetJacobianLocal(da,(DMDASNESJacobian)(jacobian_ptr[dim-1]),&user); CHKERRQ(ierr);
-   /* SNES Settings - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-      KSP - krylov linear subspace solver
-      PC  - preconditioning for krylov problem
-      SNES - nonlinear solver
-   - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
    ierr = SNESGetKSP(snes,&ksp);CHKERRQ(ierr);
    ierr = KSPGetPC(ksp,&pc);CHKERRQ(ierr);
    ierr = KSPSetType(ksp,KSPGMRES); CHKERRQ(ierr);
@@ -258,6 +254,11 @@ int main(int argc,char **args) {
    // SNESLineSearchSetType(ls,SNESLINESEARCHBASIC);
    ierr = SNESSetTolerances(snes,PETSC_DEFAULT,PETSC_DEFAULT,PETSC_DEFAULT,500,PETSC_DEFAULT);
    ierr = SNESSetFromOptions(snes); CHKERRQ(ierr);
+   /* Wide-stencil params - - - - - - - - - - - - - - - - - - - - - - - - - - -
+      Compute forward stencil directions for the determinant
+   - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+   ComputeFwdStencilDirs(width,&user); // Stencil directions based on the L1 norm
+   ComputeWeights(width,order,&user);  // Quadrature weights
    /* Solve - - - - - - - - - - - - - - - - - - - - - - - - - - - -
       Set up the inital guess on each sub-domain
 
@@ -265,7 +266,11 @@ int main(int argc,char **args) {
    ierr = DMGetGlobalVector(da,&u_initial); CHKERRQ(ierr);
    ierr = InitialState(da,initial,u_initial,&user); CHKERRQ(ierr);
    ierr = SNESSolve(snes,NULL,u_initial); CHKERRQ(ierr);
-   // Get the numerical and exact solution as Vecs
+   /* Error info - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+      Get the solution from DA.
+      Get the exact solution with g.
+      Compute the norm of the error.
+   - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
    ierr = SNESGetDM(snes,&da_after); // let DM da_after hold the data management info (possibly different than original da)
    ierr = SNESGetSolution(snes,&u); // let Vec u hold the solution
    ierr = DMDAGetLocalInfo(da_after,&info); // retrieve local process info from DA
@@ -274,11 +279,12 @@ int main(int argc,char **args) {
    ierr = (*getuexact)(&info,u_exact,&user); // compute exact solution using g(x,y)
    ierr = VecDuplicate(u_exact,&err);        // allocated mem for `err`
    ierr = VecCopy(u_exact,err);              // make a copy of exact solution to `err`
-   // Compute the error
    ierr = VecAYPX(err,-1.0,u); CHKERRQ(ierr);   // err <- u + (-1.0)*uexact
    ierr = VecNorm(err,NORM_INFINITY,&errinf); CHKERRQ(ierr);
    ierr = VecNorm(err,NORM_2,&err2h); CHKERRQ(ierr);
-   // Print results
+   /* Print Message - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+      Problem type, grid size, stencil width, epsilon, and error
+   - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
    switch (dim) {
       case 1:
          normconst2h = PetscSqrtReal((PetscReal)(info.mx-1));
@@ -305,26 +311,25 @@ int main(int argc,char **args) {
       PetscInt ox, oy;
       DMDAGetOverlap(da_after,&ox,&oy,NULL);
       PetscPrintf(PETSC_COMM_WORLD," Overlap in x: %d, Overlap in y: %d\n",ox,oy);
-
       PetscInt MM, NN, mm, nn, dof, ss;
       DMDAGetInfo(da_after,&dim,&MM,&NN,NULL,&mm,&nn,NULL,&dof,&ss,NULL,NULL,NULL,NULL);
       PetscPrintf(PETSC_COMM_WORLD," Grid is %d by %d, processors divided in %d by %d format.\n",MM,NN,mm,nn);
       PetscPrintf(PETSC_COMM_WORLD," Dof = %d, Stencil = %d\n",dof,ss);
    }
-   /* Print solution
+   /* MATLAB  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
       Create MATLAB files load_u.m and load_exact.m which loads
       the numerical and exact solutions into a workspace.
-   */
+   - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
    PetscViewer viewer;  // Viewer object fascilitates printing out solution
-   PetscViewerCreate(PETSC_COMM_WORLD, &viewer); // initialize the viewer object
-   PetscViewerASCIIOpen(PETSC_COMM_WORLD,"load_u.m",&viewer);  // set the file name
-   PetscViewerPushFormat(viewer,PETSC_VIEWER_ASCII_MATLAB); // except its for u
-   PetscObjectSetName((PetscObject)u,"u");
-   VecView(u,viewer);
-   PetscViewerASCIIOpen(PETSC_COMM_WORLD,"load_exact.m",&viewer);  // set the file name
-   PetscViewerPushFormat(viewer,PETSC_VIEWER_ASCII_MATLAB); // except its for u
-   PetscObjectSetName((PetscObject)u_exact,"u_exact");
-   VecView(u_exact,viewer);
+   ierr = PetscViewerCreate(PETSC_COMM_WORLD, &viewer); // initialize the viewer object
+   ierr = PetscViewerASCIIOpen(PETSC_COMM_WORLD,"load_u.m",&viewer);  // set the file name
+   ierr = PetscViewerPushFormat(viewer,PETSC_VIEWER_ASCII_MATLAB); // except its for u
+   ierr = PetscObjectSetName((PetscObject)u,"u");
+   ierr = VecView(u,viewer);
+   ierr = PetscViewerASCIIOpen(PETSC_COMM_WORLD,"load_exact.m",&viewer);  // set the file name
+   ierr = PetscViewerPushFormat(viewer,PETSC_VIEWER_ASCII_MATLAB); // except its for u
+   ierr = PetscObjectSetName((PetscObject)u_exact,"u_exact");
+   ierr = VecView(u_exact,viewer);
    // Free memory
    ierr = DMDestroy(&da); CHKERRQ(ierr);
    ierr = VecDestroy(&err); CHKERRQ(ierr);
@@ -339,10 +344,10 @@ PetscErrorCode Form1DUExact(DMDALocalInfo *info, Vec u, MACtx* user) {
    PetscInt   i;
    PetscReal  xmax[1],xmin[1],hx,x,*au;
    ierr = DMGetBoundingBox(info->da,xmin,xmax); CHKERRQ(ierr);
-   hx = (xmax[0] - xmin[0])/(info->mx + 1);
+   hx = (xmax[0] - xmin[0])/(info->mx - 1);
    ierr = DMDAVecGetArray(info->da, u, &au);CHKERRQ(ierr);
    for (i=info->xs; i<info->xs+info->xm; i++) {
-      x = xmin[0] + (i+1)*hx;
+      x = xmin[0] + i*hx;
       au[i] = user->g_bdry(x,0.0,0.0,user);
    }
    ierr = DMDAVecRestoreArray(info->da, u, &au);CHKERRQ(ierr);
@@ -355,13 +360,13 @@ PetscErrorCode Form2DUExact(DMDALocalInfo *info, Vec u, MACtx* user) {
    PetscReal      xymin[2],xymax[2],hx,hy,x,y,**au;
 
    ierr = DMGetBoundingBox(info->da,xymin,xymax); CHKERRQ(ierr);
-   hx = (xymax[0] - xymin[0])/(info->mx + 1);
-   hy = (xymax[1] - xymin[1])/(info->my + 1); // mx = my = 2
+   hx = (xymax[0] - xymin[0])/(info->mx - 1);
+   hy = (xymax[1] - xymin[1])/(info->my - 1); // mx = my = 2
    ierr = DMDAVecGetArray(info->da, u, &au);CHKERRQ(ierr);
    for (j=info->ys; j<info->ys+info->ym; j++) {
-      y = xymin[1] + (j+1)*hy;
+      y = xymin[1] + j*hy;
       for (i=info->xs; i<info->xs+info->xm; i++) {
-         x = xymin[0] + (i+1)*hx;
+         x = xymin[0] + i*hx;
          au[j][i] = user->g_bdry(x, y,0.0,user);
       }
    }
@@ -374,16 +379,16 @@ PetscErrorCode Form3DUExact(DMDALocalInfo *info, Vec u, MACtx* user) {
    PetscInt  i, j, k;
    PetscReal xyzmin[3], xyzmax[3], hx, hy, hz, x, y, z, ***au;
    ierr = DMGetBoundingBox(info->da,xyzmin,xyzmax); CHKERRQ(ierr);
-   hx = (xyzmax[0] - xyzmin[0])/(info->mx + 1);
-   hy = (xyzmax[1] - xyzmin[1])/(info->my + 1);
-   hz = (xyzmax[2] - xyzmin[2])/(info->mz + 1);
+   hx = (xyzmax[0] - xyzmin[0])/(info->mx - 1);
+   hy = (xyzmax[1] - xyzmin[1])/(info->my - 1);
+   hz = (xyzmax[2] - xyzmin[2])/(info->mz - 1);
    ierr = DMDAVecGetArray(info->da, u, &au);CHKERRQ(ierr);
    for (k=info->zs; k<info->zs+info->zm; k++) {
-      z = xyzmin[2] + (k+1)*hz;
+      z = xyzmin[2] + k*hz;
       for (j=info->ys; j<info->ys+info->ym; j++) {
-         y = xyzmin[1] + (j+1)*hy;
+         y = xyzmin[1] + j*hy;
          for (i=info->xs; i<info->xs+info->xm; i++) {
-            x = xyzmin[0] + (i+1)*hx;
+            x = xyzmin[0] + i*hx;
             au[k][j][i] = user->g_bdry(x,y,z,user);
          }
       }

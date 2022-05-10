@@ -107,12 +107,11 @@ int main(int argc,char **argv)
       Initialize program
       - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
    ierr = PetscInitialize(&argc,&argv,(char*)0,help);if (ierr) return ierr;
-
    /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
       Initialize problem parameters
    - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
    ierr = PetscOptionsGetBool(NULL,NULL,"-debug",&flg,NULL);CHKERRQ(ierr);
-   debug = flg;
+   debug      = flg;
    user.debug = debug;
    user.param = 6.0;
    ierr       = PetscOptionsGetReal(NULL,NULL,"-par",&user.param,NULL);CHKERRQ(ierr);
@@ -126,7 +125,6 @@ int main(int argc,char **argv)
       user.m = PetscPowInt(2,mPar);
       user.n = PetscPowInt(2,nPar);
    }
-
    /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
       Create nonlinear solver context
       - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
@@ -451,7 +449,6 @@ PetscErrorCode FormFunctionLocal(DMDALocalInfo *info,PetscScalar **x,PetscScalar
    /*
       Compute function over the locally owned part of the grid
    */
-
    if (user->debug) {
       PetscMPIInt  rank,size;
       MPI_Comm_size(PETSC_COMM_WORLD,&size);
@@ -460,7 +457,6 @@ PetscErrorCode FormFunctionLocal(DMDALocalInfo *info,PetscScalar **x,PetscScalar
       printf("  I'm in charge of indeces %d through %d (excluding ghosts)\n",info->xs,info->xs+info->xm-1);
       printf("  I'm in charge of indeces %d through %d (including ghosts)\n",info->gxs,info->gxs+info->gxm-1);
    }
-
    for (j=info->ys; j<info->ys+info->ym; j++) {
       for (i=info->xs; i<info->xs+info->xm; i++) {
          if (i == 0 || j == 0 || i == info->mx-1 || j == info->my-1) {

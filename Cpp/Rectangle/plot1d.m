@@ -20,11 +20,10 @@ x = h:h:1-h;
 
 figure
 plot(x,u,'o-')
-title('Numerical solution')
-
-figure 
+hold on 
 plot(x,u_exact,'o-');
 title('Exact solution')
+legend('numerical','exact')
 
 figure
 plot(x,u-u_exact)

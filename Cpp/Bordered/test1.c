@@ -238,7 +238,6 @@ int main(int argc,char **args) {
    ierr = DMSetUp(da); CHKERRQ(ierr);
    ierr = DMDASetUniformCoordinates(da,0.0,user.Lx,0.0,user.Ly,0.0,user.Lz); CHKERRQ(ierr);
    ierr = DMSetApplicationContext(da,&user); CHKERRQ(ierr);
-   ierr = SNESSetDM(snes,da); CHKERRQ(ierr);
 
    // set SNES call-backs
    /*
@@ -247,10 +246,13 @@ int main(int argc,char **args) {
       I am not going to write an explicit Jacobian.
    */
    ierr = SNESCreate(PETSC_COMM_WORLD,&snes); CHKERRQ(ierr);
+   ierr = SNESSetDM(snes,da); CHKERRQ(ierr);
    ierr = DMDASNESSetFunctionLocal(da,INSERT_VALUES,(DMDASNESFunction)(residual_ptr[dim-1]),&user); CHKERRQ(ierr);
    ierr = DMDASNESSetJacobianLocal(da,(DMDASNESJacobian)(jacobian_ptr[dim-1]),&user); CHKERRQ(ierr);
 
    ierr = SNESSetType(snes,SNESNASM); CHKERRQ(ierr);
+   ierr = SNESNASMSetType(snes,PC_ASM_RESTRICT);
+   ierr = SNESSetTolerances(snes,PETSC_DEFAULT,PETSC_DEFAULT,PETSC_DEFAULT,500,PETSC_DEFAULT);
    ierr = SNESGetKSP(snes,&ksp); CHKERRQ(ierr);
    ierr = KSPSetType(ksp,KSPGMRES); CHKERRQ(ierr);
    ierr = SNESSetFromOptions(snes); CHKERRQ(ierr);
