@@ -269,7 +269,7 @@ int main(int argc,char **args) {
    ierr = SNESNASMSetType(snes,PC_ASM_RESTRICT);
    // SNESGetLineSearch(snes,&ls);
    // SNESLineSearchSetType(ls,SNESLINESEARCHBASIC);
-   ierr = SNESSetTolerances(snes,PETSC_DEFAULT,PETSC_DEFAULT,PETSC_DEFAULT,500,PETSC_DEFAULT);
+   ierr = SNESSetTolerances(snes,PETSC_DEFAULT,PETSC_DEFAULT,PETSC_DEFAULT,100,PETSC_DEFAULT);
    ierr = SNESSetFromOptions(snes); CHKERRQ(ierr);
    /* Wide-stencil params - - - - - - - - - - - - - - - - - - - - - - - - - - -
       Compute forward stencil directions for the determinant
@@ -359,12 +359,12 @@ int main(int argc,char **args) {
 PetscErrorCode Form1DUExact(DMDALocalInfo *info, Vec u, MACtx* user) {
    PetscErrorCode ierr;
    PetscInt   i;
-   PetscReal  xmax[1], xmin[1], hx, x, *au,temp;
-   ierr = DMGetBoundingBox(info->da,xmin,xmax); CHKERRQ(ierr);
-   hx = (xmax[0] - xmin[0]) / (info->mx - 1);
+   PetscReal  Lx, hx, x, *au,temp;
+   Lx = user->Lx;
+   hx = 2.0*Lx/(PetscReal)(info->mx-1);
    ierr = DMDAVecGetArray(info->da, u, &au);CHKERRQ(ierr);
    for (i=info->xs; i<info->xs+info->xm; i++) {
-      x = xmin[0] + i*hx;
+      x = -Lx + (i+1)*hx;
       user->g_bdry(x,0.0,0.0,user,&temp);
       au[i] = temp;
    }
@@ -375,16 +375,15 @@ PetscErrorCode Form1DUExact(DMDALocalInfo *info, Vec u, MACtx* user) {
 PetscErrorCode Form2DUExact(DMDALocalInfo *info, Vec u, MACtx* user) {
    PetscErrorCode ierr;
    PetscInt   i, j;
-   PetscReal  xymin[2], xymax[2], hx, hy, x, y, **au,temp;
-   ierr = DMGetBoundingBox(info->da,xymin,xymax); CHKERRQ(ierr);
-   hx = (xymax[0] - xymin[0]) / (info->mx - 1);
-   hy = (xymax[1] - xymin[1]) / (info->my - 1); // mx = my = N+2
-
+   PetscReal  Lx, Ly, hx, hy, x, y, **au,temp;
+   Lx = user->Lx; Ly = user->Ly;
+   hx = 2.0*Lx/(PetscReal)(info->mx + 1);
+   hy = 2.0*Ly/(PetscReal)(info->my + 1);
    ierr = DMDAVecGetArray(info->da, u, &au);CHKERRQ(ierr);
    for (j=info->ys; j<info->ys+info->ym; j++) {
-      y = xymin[1] + j*hy;
+      y = -Ly + (j+1)*hy;
       for (i=info->xs; i<info->xs+info->xm; i++) {
-         x = xymin[0] + i*hx;
+         x = -Lx + (i+1)*hx;
          user->g_bdry(x,y,0.0,user,&temp);
          au[j][i] = temp;
       }

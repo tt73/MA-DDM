@@ -187,7 +187,7 @@ int main(int argc,char **args) {
    PetscInt       dim = 2;                  // 2D
    ProblemType    problem = ex10;        // manufactured problem using exp()
    InitialType    initial = ZEROS;          // set u=0 for initial iterate
-   PetscBool      gonboundary = PETSC_FALSE; // initial iterate has u=g on boundary
+   PetscBool      debug = PETSC_FALSE,gonboundary = PETSC_TRUE; // initial iterate has u=g on boundary
 
    PetscInt s = 1;  // Stencil width
    PetscInt N = 2;  // We want an interior domain that is N by N
@@ -204,6 +204,7 @@ int main(int argc,char **args) {
    ierr = PetscOptionsInt("-dim","dimension of problem (=1,2,3 only)","test1.c",dim,&dim,NULL);CHKERRQ(ierr);
    ierr = PetscOptionsBool("-initial_gonboundary","set initial iterate to have correct boundary values",
       "test1.c",gonboundary,&gonboundary,NULL);CHKERRQ(ierr);
+   ierr = PetscOptionsBool("-debug","print out extra info","test1.c",debug,&debug,NULL);CHKERRQ(ierr);
    ierr = PetscOptionsEnum("-initial_type","type of initial iterate",
       "test1.c",InitialTypes,(PetscEnum)initial,(PetscEnum*)&initial,NULL); CHKERRQ(ierr);
    ierr = PetscOptionsReal("-Lx", "set Lx in domain ([0,Lx] x [0,Ly] x [0,Lz], etc.)",
@@ -218,6 +219,7 @@ int main(int argc,char **args) {
 
    user.g_bdry = g_bdry_ptr[dim-1][problem];
    user.f_rhs = f_rhs_ptr[dim-1][problem];
+   user.debug = debug;
 
    /*
       Only doing dim = 1 and 2.

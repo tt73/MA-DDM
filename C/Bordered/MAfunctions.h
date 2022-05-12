@@ -44,6 +44,7 @@ typedef struct {
     PetscReal cx, cy, cz;
     // epsilon is the regularization term
     PetscReal epsilon;
+    PetscBool debug;
     // right-hand-side f(x,y,z)
     PetscErrorCode (*f_rhs)(PetscReal x, PetscReal y, PetscReal z, void *ctx, PetscReal *f);
     // Dirichlet boundary condition g(x,y,z)

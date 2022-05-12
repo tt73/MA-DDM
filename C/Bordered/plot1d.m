@@ -21,7 +21,7 @@ x = 0:h:1;
 figure
 plot(x,u,'o-')
 hold on 
-plot(x,u_exact,'o-');
+plot(x,u_exact,'x-');
 legend('Numerical solution','Exact solution')
 
 figure

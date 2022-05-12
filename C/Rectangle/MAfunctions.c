@@ -21,14 +21,14 @@
 */
 PetscErrorCode MA1DFunctionLocal(DMDALocalInfo *info, PetscReal *u, PetscReal *F, MACtx *user) {
    PetscInt     i;
-   PetscReal    xmax[1], xmin[1], h, x, ue, uw, f, temp;
+   PetscReal    Lx, h, x, ue, uw, f, temp;
 
    PetscFunctionBeginUser;
-   DMGetBoundingBox(info->da,xmin,xmax);
-   h = (xmax[0] - xmin[0])/(info->mx - 1);
+   Lx = user->Lx;
+   h = 2.0*Lx/(PetscReal)(info->mx+1);
 
    for (i = info->xs; i<info->xs+info->xm; i++) {
-      x = xmin[0] + i*h;
+      x = -Lx + (i+1)*h;
       ue = u[i+1];
       uw = u[i-1];
       if(i == info->mx-1) {user->g_bdry(x+h,0.0,0.0,user,&temp); ue = temp;}
@@ -49,7 +49,7 @@ PetscErrorCode MA1DFunctionLocal(DMDALocalInfo *info, PetscReal *u, PetscReal *F
 PetscErrorCode MA2DFunctionLocal(DMDALocalInfo *info, PetscReal **au, PetscReal **aF, MACtx *user) {
    PetscErrorCode ierr;
    PetscInt       i, j;
-   PetscReal      xymin[2],xymax[2],hx,hy,x,y,f;
+   PetscReal      Lx,Ly,hx,hy,x,y,f;
    PetscReal      DetD2u; // MA operator approximation
    PetscReal     *SDD; // second directional deriv
    PetscReal     *hFwd, *hBak; // magnitude of step in forward and backward dirs for each direction k
@@ -57,9 +57,9 @@ PetscErrorCode MA2DFunctionLocal(DMDALocalInfo *info, PetscReal **au, PetscReal 
 
    PetscFunctionBeginUser;
    // get info from DA
-   ierr = DMGetBoundingBox(info->da,xymin,xymax); CHKERRQ(ierr);
-   hx   = (xymax[0] - xymin[0])/(info->mx - 1);
-   hy   = (xymax[1] - xymin[1])/(info->my - 1);
+   Lx = user->Lx; Ly = user->Ly;
+   hx = 2.0*Lx/(PetscReal)(info->mx + 1);
+   hy = 2.0*Ly/(PetscReal)(info->my + 1);
    // allocate mem for derivative stuff
    width = info->sw;
    M     = 2*width;
@@ -67,9 +67,9 @@ PetscErrorCode MA2DFunctionLocal(DMDALocalInfo *info, PetscReal **au, PetscReal 
    PetscMalloc2(M,&hFwd,M,&hBak);
    // begin loop over all local interior nodes
    for (j = info->ys; j < info->ys + info->ym; j++) {
-      y = xymin[1] + j*hy;
+      y = -Ly + (j+1)*hy;
       for (i=info->xs; i<info->xs+info->xm; i++) {
-         x = xymin[0] + i*hx;
+         x = -Lx + (i+1)*hx;
          ComputeSDD(info,au,user,i,j,x,y,SDD,hFwd,hBak);
          ierr = ApproxDetD2u(&DetD2u,M,SDD,user);
          user->f_rhs(x,y,0.0,user,&f);
@@ -137,12 +137,12 @@ PetscErrorCode MA3DFunctionLocal(DMDALocalInfo *info, PetscReal ***au, PetscReal
 PetscErrorCode MA1DJacobianLocal(DMDALocalInfo *info, PetscScalar *au, Mat J, Mat Jpre, MACtx *user) {
    PetscErrorCode  ierr;
    PetscInt     i,ncols;
-   PetscReal    xmin[1], xmax[1], h, v[3];
+   PetscReal    Lx, h, v[3];
    MatStencil   col[3],row;
 
    PetscFunctionBeginUser;
-   ierr = DMGetBoundingBox(info->da,xmin,xmax); CHKERRQ(ierr);
-   h = (xmax[0]-xmin[0])/(info->mx-1);
+   Lx = user->Lx;
+   h  = 2.0*Lx/(PetscReal)(info->mx+1);
    for (i = info->xs; i < info->xs+info->xm; i++) { // loop over each row of J (mx by mx)
       row.i = i;
       col[0].i = i;
@@ -178,7 +178,7 @@ PetscErrorCode MA1DJacobianLocal(DMDALocalInfo *info, PetscScalar *au, Mat J, Ma
 PetscErrorCode MA2DJacobianLocal(DMDALocalInfo *info, PetscScalar **au, Mat J, Mat Jpre, MACtx *user) {
    PetscErrorCode  ierr;
    PetscInt     i,j,k,Si,Sj,ncols,width,min_k,Nk,Ns,factor; // Nk = # of directions, Ns = # of stencil pts
-   PetscReal    xymin[2],xymax[2],x,y,hx,hy,temp,dSDD;
+   PetscReal    Lx,Ly,x,y,hx,hy,temp,dSDD;
    PetscReal    *v;
    MatStencil   *col;
    MatStencil   row;
@@ -189,10 +189,9 @@ PetscErrorCode MA2DJacobianLocal(DMDALocalInfo *info, PetscScalar **au, Mat J, M
    PetscBool    regularize; // true if epsilon is the smallest among SDD
 
    PetscFunctionBeginUser;
-   // Retrieve info from DMDA
-   ierr  = DMGetBoundingBox(info->da,xymin,xymax); CHKERRQ(ierr);
-   hx    = (xymax[0] - xymin[0])/(info->mx - 1);
-   hy    = (xymax[1] - xymin[1])/(info->my - 1);
+   Lx = user->Lx; Ly = user->Ly;
+   hx = 2.0*Lx/(PetscReal)(info->mx + 1);
+   hy = 2.0*Ly/(PetscReal)(info->my + 1);
    width = info->sw;
    Nk    = 2*width; // number of angular forward directions
    Ns    = 4*width+1; // total number of stencil points
@@ -204,12 +203,12 @@ PetscErrorCode MA2DJacobianLocal(DMDALocalInfo *info, PetscScalar **au, Mat J, M
    for (j = info->ys; j < info->ys+info->ym; j++) {
       row.j = j;
       col[0].j = j;
-      y = xymin[1] + j*hy;
+      y = -Ly + (j+1)*hy;
       // loop over each col of J
       for (i = info->xs; i < info->xs+info->xm; i++) {
          row.i = i;
          col[0].i = i;
-         x = xymin[0] + i*hx;
+         x = -Lx + (i+1)*hx;
          ncols = 1;
          ComputeSDD(info,au,user,i,j,x,y,SDD,hFwd,hBak);
          for (k=0; k<Nk; k++) {
@@ -668,15 +667,15 @@ PetscErrorCode ComputeProjectionIndeces(PetscReal *di, PetscReal *dj, PetscInt i
 */
 PetscErrorCode ComputeSDD(DMDALocalInfo *info, PetscReal **au, MACtx *user, PetscInt i, PetscInt j, PetscReal x, PetscReal y, PetscReal *SDD, PetscReal *hFwd, PetscReal *hBak) {
    PetscInt       d,k,M,Ny,Nx,Si,Sj;
-   PetscReal      hx,hy,xymin[2],xymax[2],di,dj,temp;
+   PetscReal      hx,hy,Lx,Ly,di,dj,temp;
    PetscReal      *uFwd, *uBak; // u in the the forward and backward position for each direction k
 
    PetscFunctionBeginUser;
    // get info from DA
-   DMGetBoundingBox(info->da,xymin,xymax);
    Nx = info->mx; Ny = info->my;
-   hx = (xymax[0] - xymin[0])/(Nx - 1);
-   hy = (xymax[1] - xymin[1])/(Ny - 1);
+   Lx = user->Lx; Ly = user->Ly;
+   hx = 2.0*Lx/(PetscReal)(Nx + 1);
+   hy = 2.0*Ly/(PetscReal)(Ny + 1);
    d  = info->sw;
    M  = d*2;
    PetscMalloc2(M,&uFwd,M,&uBak);

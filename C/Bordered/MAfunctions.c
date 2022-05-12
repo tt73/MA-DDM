@@ -12,24 +12,28 @@
 PetscErrorCode MA1DFunctionLocal(DMDALocalInfo *info, PetscReal *u, PetscReal *F, MACtx *user) {
    PetscErrorCode ierr;
    PetscInt   i;
-   PetscReal  xmax[1], xmin[1], h, x, ue, uw, f, temp;
+   PetscReal  Lx, h, x, ue, uw, f, temp;
 
-   ierr = DMGetBoundingBox(info->da,xmin,xmax); CHKERRQ(ierr);
-   h = (xmax[0] - xmin[0]) / (info->mx - 1);
-   for (i = info->xs; i < info->xs + info->xm; i++) {
-      x = xmin[0] + i * h;
+   Lx = user->Lx;
+   h = (Lx)/ (PetscReal)(info->mx-1);
+   for (i = info->xs; i < info->xs+info->xm; i++) {
+      x = i*h;
       if (i==0 || i==info->mx-1) {
          // first and last points correspond to boundary
          user->g_bdry(x,0.0,0.0,user,&temp);
          F[i] = u[i] - temp;
       } else {
          // interior points depend on left and right neighbors
-         uw = u[i-1];
          ue = u[i+1];
-         if(i+1 == info->mx-1) {user->g_bdry(x+h,0.0,0.0,user,&temp); ue = temp;}
-         if(i-1 == 0)          {user->g_bdry(x-h,0.0,0.0,user,&temp); uw = temp;}
+         uw = u[i-1];
+         if(i+1 == info->mx-1) {user->g_bdry(x+h,0.0,0.0,user,&ue);}
+         if(i-1 == 0)          {user->g_bdry(x-h,0.0,0.0,user,&uw);}
          user->f_rhs(x,0.0,0.0,user,&f);
          F[i] = (-uw + 2.0*u[i] - ue)/(h*h) + f;
+
+      }
+      if(user->debug) {
+         printf("F[%2d] = %f\n",i,F[i]);
       }
    }
    ierr = PetscLogFlops(9.0*info->xm);CHKERRQ(ierr);
@@ -51,8 +55,10 @@ PetscErrorCode MA2DFunctionLocal(DMDALocalInfo *info, PetscReal **au, PetscReal 
    PetscReal  left, right; // left and right terms in the MA operator approximation
    PetscReal  weights[3], SDD[3]; // quadrature weight and second directional deriv
    ierr = DMGetBoundingBox(info->da,xymin,xymax); CHKERRQ(ierr);
-   hx = (xymax[0] - xymin[0]) / (info->mx - 1);
-   hy = (xymax[1] - xymin[1]) / (info->my - 1);
+   hx = (user->Lx)/(PetscReal)(info->mx-1);
+   hy = (user->Ly)/(PetscReal)(info->my-1);
+   // printf("hx = (%f - %f)/(%d-1) = %f\n",xymax[0],xymin[0],info->xm,hx);
+   // printf("hx = (%f - %f)/(%d-1) = %f\n",xymax[1],xymin[1],info->ym,hy);
 
    // quad weights for order 1 approx
    weights[0] = PETSC_PI/4.0;
@@ -60,13 +66,13 @@ PetscErrorCode MA2DFunctionLocal(DMDALocalInfo *info, PetscReal **au, PetscReal 
    weights[2] = PETSC_PI/4.0;
 
    for (j = info->ys; j < info->ys + info->ym; j++) {
-      y = xymin[1] + j * hy;
+      y = j*hy;
       for (i = info->xs; i < info->xs + info->xm; i++) {
-         x = xymin[0] + i * hx;
+         x = i*hx;
          if (i==0 || i==info->mx-1 || j==0 || j==info->my-1) {
             // on the boundary dOmega, F(u) = u - g
             // g_bdry(x,y,z) refers to the exact solution
-            user->g_bdry(x,y,0.0,user,&temp);
+            ierr = user->g_bdry(x,y,0.0,user,&temp);CHKERRQ(ierr);
             aF[j][i] = au[j][i] - temp;
          } else {
             un = au[j+1][i];
@@ -128,7 +134,7 @@ PetscErrorCode MA1DJacobianLocal(DMDALocalInfo *info, PetscScalar *au, Mat J, Ma
    MatStencil   col[3],row;
 
    ierr = DMGetBoundingBox(info->da,xmin,xmax); CHKERRQ(ierr);
-   h = (xmax[0] - xmin[0]) / (info->mx - 1);
+   h = (xmax[0] - xmin[0])/(info->mx - 1);
    for (i = info->xs; i < info->xs+info->xm; i++) { // loop over each row of J (mx by mx)
       row.i = i;
       col[0].i = i;
@@ -223,10 +229,10 @@ PetscErrorCode MA2DJacobianLocal(DMDALocalInfo *info, PetscScalar **au, Mat J, M
             ue = au[j][i+1];
             un = au[j+1][i];
             us = au[j-1][i];
-            if(j+1 == info->my-1) {user->g_bdry(x,y+hy,0.0,user,&temp); un = temp;}
-            if(j-1 == 0)          {user->g_bdry(x,y-hy,0.0,user,&temp); us = temp;}
-            if(i+1 == info->mx-1) {user->g_bdry(x+hx,y,0.0,user,&temp); ue = temp;}
-            if(i-1 == 0)          {user->g_bdry(x-hx,y,0.0,user,&temp); uw = temp;}
+            if(j+1 == info->my-1) {user->g_bdry(x,y+hy,0.0,user,&un);}
+            if(j-1 == 0)          {user->g_bdry(x,y-hy,0.0,user,&us);}
+            if(i+1 == info->mx-1) {user->g_bdry(x+hx,y,0.0,user,&ue);}
+            if(i-1 == 0)          {user->g_bdry(x-hx,y,0.0,user,&uw);}
 
             // Directional derivs
             SDD[0] = (uw - 2.0*u + ue)/(hx*hx); // horizontal centered-diff
