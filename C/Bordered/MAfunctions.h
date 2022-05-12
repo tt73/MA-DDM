@@ -45,9 +45,9 @@ typedef struct {
     // epsilon is the regularization term
     PetscReal epsilon;
     // right-hand-side f(x,y,z)
-    PetscReal (*f_rhs)(PetscReal x, PetscReal y, PetscReal z, void *ctx);
+    PetscErrorCode (*f_rhs)(PetscReal x, PetscReal y, PetscReal z, void *ctx, PetscReal *f);
     // Dirichlet boundary condition g(x,y,z)
-    PetscReal (*g_bdry)(PetscReal x, PetscReal y, PetscReal z, void *ctx);
+    PetscErrorCode (*g_bdry)(PetscReal x, PetscReal y, PetscReal z, void *ctx, PetscReal *g);
     // additional context; see example usage in ch7/minimal.c
     void   *addctx;
 } MACtx;

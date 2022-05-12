@@ -21,6 +21,29 @@ load_exact % load exact solution coded in petsc
 s = length(u);
 n = sqrt(s);
 
+%% Mesh 
+% domain [0 1] x [0 1] 
+% h = 1/(n-1), endpoints included
+
+h = 1/(n-1); 
+x = 0:h:1;
+y = x; 
+[X,Y] = meshgrid(x,y); 
+
+%% Exact Solution 
+
+% choose F
+choice = 1;
+switch(choice)
+   case 1
+      U = @(x,y) (exp((x.^2+y.^2)/2));
+   case 2
+      pos = @(x) max(x,0);
+      U = @(x,y) (.5*pos(((x-.5).^2+(y-.5).^2).^.5-.2).^2);
+   case 3
+      U = @(x,y) (-sqrt(2-(x.^2+y.^2)));
+end
+
 %% visualizing the solution
 % The solution is one long M*N by 1 vector.
 % We need to reshape it into a matrix before we plot it.
@@ -40,3 +63,10 @@ surf(u_grid-u_exac)
 title('error')
 
 fprintf('|error|_inf = %f\n',norm(u_grid(:)-u_exac(:),inf))
+
+%% Compare 
+figure 
+title('Compare PETSc sol with MATLAB') 
+h = surf(u_grid);
+hold on 
+e = surf(U(X,Y))

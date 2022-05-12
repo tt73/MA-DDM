@@ -14,17 +14,15 @@ n = length(u);
 
 %% visualizing the solution
 
-% assume x = h:h:1-h
-h = 1/(n+1);
-x = h:h:1-h;
+% assume x = 0:h:1
+h = 1/(n-1);
+x = 0:h:1;
 
 figure
 plot(x,u,'o-')
-title('Numerical solution')
-
-figure 
+hold on 
 plot(x,u_exact,'o-');
-title('Exact solution')
+legend('Numerical solution','Exact solution')
 
 figure
 plot(x,u-u_exact)

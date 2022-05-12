@@ -11,23 +11,13 @@ bratu: bratu.c
 	${CC} $^ ${PETSC_LIB} ${PETSC_CCPPFLAGS} ${CC_FLAGS} -o $@
 
 pbratu: pbratu.c
-	/usr/bin/mpicc $^ -fPIC -Wall -Wwrite-strings -Wno-strict-aliasing -Wno-unknown-pragmas -fstack-protector -fvisibility=hidden -g3 -O0  -fPIC -Wall -Wwrite-strings -Wno-strict-aliasing -Wno-unknown-pragmas -fstack-protector -fvisibility=hidden -g3 -O0    -I/home/takahashi/petsc/include -I/home/takahashi/petsc/linux-gnu-c-debug/include -I/usr/include -Wl,-rpath,/home/takahashi/petsc/linux-gnu-c-debug/lib -L/home/takahashi/petsc/linux-gnu-c-debug/lib -Wl,-rpath,/opt/intel/oneapi/mkl/latest/lib/intel64 -L/opt/intel/oneapi/mkl/latest/lib/intel64 -Wl,-rpath,/opt/intel/oneapi/compiler/2021.1.2/linux/lib -L/opt/intel/oneapi/compiler/2021.1.2/linux/lib -Wl,-rpath,/opt/intel/oneapi/mpi/2021.1.1/libfabric/lib -L/opt/intel/oneapi/mpi/2021.1.1/libfabric/lib -Wl,-rpath,/opt/intel/oneapi/mpi/2021.1.1/lib -L/opt/intel/oneapi/mpi/2021.1.1/lib -Wl,-rpath,/usr/lib/gcc/x86_64-linux-gnu/9 -L/usr/lib/gcc/x86_64-linux-gnu/9 -Wl,-rpath,/opt/intel/oneapi/compiler/2021.1.2/linux/compiler/lib/intel64_lin -L/opt/intel/oneapi/compiler/2021.1.2/linux/compiler/lib/intel64_lin -Wl,-rpath,/opt/intel/oneapi/mpi/2021.1.1/lib/release -L/opt/intel/oneapi/mpi/2021.1.1/lib/release -Wl,-rpath,/opt/intel/oneapi/tbb/2021.1.1/lib/intel64/gcc4.8 -L/opt/intel/oneapi/tbb/2021.1.1/lib/intel64/gcc4.8 -lpetsc -lmkl_intel_lp64 -lmkl_core -lmkl_sequential -lpthread -lm -lstdc++ -ldl -lmpichfort -lmpich -lgfortran -lm -lgfortran -lm -lgcc_s -lquadmath -lstdc++ -ldl -o $@
+	${CC} $^ ${PETSC_LIB} ${PETSC_CCPPFLAGS} ${CC_FLAGS} -o $@
 
+test2: test2.c
+	${CC} $^ ${PETSC_LIB} ${PETSC_CCPPFLAGS} ${CC_FLAGS} -o $@
 
 # etc
 .PHONY: distclean test1
 
 distclean:
 	@rm -f *~ test1 *tmp
-
-print:
-	echo ${PETSC_LIB}
-	echo ${PETSC_CCPPFLAGS}
-	echo
-	echo ${CC_FLAGS}
-
-works:
-	/usr/bin/mpicc -o test1.o -c -fPIC -Wall -Wwrite-strings -Wno-unknown-pragmas -Wno-lto-type-mismatch -fstack-protector -fvisibility=hidden -g3 -O0   -pedantic -std=c99 -I/home/takahashi/Desktop/petsc/include -I/home/takahashi/Desktop/petsc/linux-gnu-c-debug/include -I/usr/include    `pwd`/test1.c
-
-broken:
-	/usr/bin/mpicc bratu.c -Wl,-rpath,/home/takahashi/Desktop/petsc/linux-gnu-c-debug/lib -L/home/takahashi/Desktop/petsc/linux-gnu-c-debug/lib -Wl,-rpath,/home/takahashi/intel/oneapi/mkl/latest/lib/intel64 -L/home/takahashi/intel/oneapi/mkl/latest/lib/intel64 -lpetsc -lmkl_intel_lp64 -lmkl_core -lmkl_sequential -lpthread -lm -lquadmath -lstdc++ -ldl -Wl,-rpath,/home/takahashi/Desktop/petsc/linux-gnu-c-debug/lib -o bratu
