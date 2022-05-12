@@ -140,7 +140,7 @@ static PointwiseFcn f_rhs_ptr[3][3]
        {&f_rhs_2Dex10, &f_rhs_2Dex11, &f_rhs_2Dex12},
        {&f_rhs_3Dex10, &f_rhs_3Dex11, &f_rhs_3Dex12}};
 
-static const char* InitialTypes[] = {"zeros","random","cone","linmax","InitialType","", NULL};
+static const char* InitialTypes[] = {"zeros","random","corner","pyramid","InitialType","", NULL};
 
 
 int main(int argc,char **args) {
@@ -170,7 +170,7 @@ int main(int argc,char **args) {
    width       = 1; // stencil width
    eps         = 0.25;  // epsilon = (hd)^2
    order       = 2; // guadrature order
-   initial     = CONE;
+   initial     = CORNER;
    problem     = ex10;
    user.Lx     = 1.0;
    user.Ly     = 1.0;
@@ -245,11 +245,10 @@ int main(int argc,char **args) {
          SETERRQ(PETSC_COMM_SELF,1,"invalid dim for DMDA creation\n");
    }
    /* DA setup - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-
+      The interior of the domain [-Lx,Lx] x [-Ly,Ly] is meshed uniformly.
+      The subdomains overlap by a width equal
    - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
-   if (dim==1) {
-      ierr = DMDASetOverlap(da,1,0,0);
-   }
+   ierr = DMDASetOverlap(da,width,width,width);
    ierr = DMSetFromOptions(da); CHKERRQ(ierr);
    ierr = DMSetUp(da); CHKERRQ(ierr);
    ierr = DMDASetUniformCoordinates(da,-user.Lx+hx,user.Lx-hx,-user.Ly+hy,user.Ly-hy,-user.Lz,user.Lz); CHKERRQ(ierr);
@@ -267,10 +266,12 @@ int main(int argc,char **args) {
    // ierr = PCSetType(pc,PCNONE);CHKERRQ(ierr);
    ierr = SNESSetType(snes,SNESNASM); CHKERRQ(ierr);
    ierr = SNESNASMSetType(snes,PC_ASM_RESTRICT);
-   // SNESGetLineSearch(snes,&ls);
-   // SNESLineSearchSetType(ls,SNESLINESEARCHBASIC);
-   ierr = SNESSetTolerances(snes,PETSC_DEFAULT,PETSC_DEFAULT,PETSC_DEFAULT,100,PETSC_DEFAULT);
-   ierr = SNESSetFromOptions(snes); CHKERRQ(ierr);
+   /* Linesearch - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+   - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+   ierr = SNESGetLineSearch(snes,&ls);
+   ierr = SNESLineSearchSetType(ls,SNESLINESEARCHBASIC);
+   ierr = SNESLineSearchSetTolerances(ls,PETSC_DEFAULT,PETSC_DEFAULT,PETSC_DEFAULT,PETSC_DEFAULT,PETSC_DEFAULT,1);
    /* Wide-stencil params - - - - - - - - - - - - - - - - - - - - - - - - - - -
       Compute forward stencil directions for the determinant
    - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
@@ -282,6 +283,7 @@ int main(int argc,char **args) {
    - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
    ierr = DMGetGlobalVector(da,&u_initial); CHKERRQ(ierr);
    ierr = InitialState(da,initial,u_initial,&user); CHKERRQ(ierr);
+   ierr = SNESSetFromOptions(snes); CHKERRQ(ierr);
    ierr = SNESSolve(snes,NULL,u_initial); CHKERRQ(ierr);
    /* Error info - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
       Get the solution from DA.

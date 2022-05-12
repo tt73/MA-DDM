@@ -1,14 +1,132 @@
 #include <petsc.h>
 #include "MAfunctions.h"
 
-/*
-   Note on DMDALocalInfo:
-   PetscInt  mx,my,mz;    global number of grid points in each direction
-   PetscInt  xs,ys,zs;    starting point of this processor, excluding ghosts
-   PetscInt  xm,ym,zm;    number of grid points on this processor, excluding ghosts
-   PetscInt  gxs,gys,gzs;    starting point of this processor including ghosts
-   PetscInt  gxm,gym,gzm;    number of grid points on this processor including ghosts
-*/
+
+/* Initial State - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+PetscErrorCode InitialState(DM da, InitialType it, Vec u, MACtx *user) {
+   PetscErrorCode ierr;
+   DMDALocalInfo  info;
+   PetscRandom    rctx;
+   PetscReal      temp,temp1,temp2;
+
+   PetscFunctionBeginUser;
+   switch (it) {
+      case ZEROS:
+         ierr = VecSet(u,0.0); CHKERRQ(ierr);
+         break;
+      case RANDOM:
+         ierr = PetscRandomCreate(PETSC_COMM_WORLD,&rctx); CHKERRQ(ierr);
+         ierr = VecSetRandom(u,rctx); CHKERRQ(ierr);
+         ierr = PetscRandomDestroy(&rctx); CHKERRQ(ierr);
+         break;
+      case CORNER:
+         /* Corner - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+            Get largest Dirichlet data on all corners.
+            Set the initial guess to that constant.
+         - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+         ierr = DMDAGetLocalInfo(da,&info); CHKERRQ(ierr);
+         switch (info.dim) {
+            case 1:
+            {
+               user->g_bdry(-user->Lx,0.0,0.0,user,&temp1);
+               user->g_bdry( user->Lx,0.0,0.0,user,&temp2);
+               temp = PetscMax(temp1,temp2);
+               break;
+            }
+            case 2:
+            {
+               user->g_bdry(-user->Lx,-user->Ly,0.0,user,&temp1);
+               user->g_bdry( user->Lx,-user->Ly,0.0,user,&temp2);
+               temp = PetscMax(temp1,temp2);
+               user->g_bdry(-user->Lx,user->Ly,0.0,user,&temp1);
+               user->g_bdry( user->Lx,user->Ly,0.0,user,&temp2);
+               temp = PetscMax(temp,PetscMax(temp1,temp2));
+               break;
+            }
+            case 3:
+            {
+               SETERRQ(PETSC_COMM_SELF,3,"dim = 3 not yet supported\n");
+               break;
+            }
+            default:
+               SETERRQ(PETSC_COMM_SELF,5,"invalid dim from DMDALocalInfo\n");
+
+         }
+         ierr = VecSet(u,temp); CHKERRQ(ierr);
+         break;
+      case PYRAMID:
+         /*
+            Convex cone (1D)
+            For -L < x < L and u(-L) = ga and u(L) = gb.
+            Let gx = min(ga,gb).
+            Let m = gx/L.
+            Let the initial guess be u(x) = max(-m(x+L)+gx,m(x-L+gx)).
+         */
+         ierr = DMDAGetLocalInfo(da,&info); CHKERRQ(ierr);
+         switch (info.dim) {
+            case 1:
+            {
+               PetscInt  i;
+               PetscReal Lx, hx,x,*au,gx,m;
+
+               ierr = DMDAVecGetArray(da, u, &au); CHKERRQ(ierr);
+               Lx = user->Lx;
+               hx = 2.0*Lx/(PetscReal)(info.mx-1);
+               user->g_bdry(-Lx,0.0,0.0,user,&temp1);
+               user->g_bdry( Lx,0.0,0.0,user,&temp2);
+               gx = PetscMin(temp1,temp2);
+               m = gx/Lx;
+               for (i=info.xs; i<info.xs+info.xm; i++) {
+                  x = -Lx + (i+1)*hx;
+                  au[i] = m*PetscMax(-Lx-x,x-Lx)+gx;
+               }
+               ierr = DMDAVecRestoreArray(da, u, &au); CHKERRQ(ierr);
+               break;
+            }
+            case 2:
+            {
+               PetscInt   i, j;
+               PetscReal  Lx,Ly,hx,hy,x,y,**au,gx,gy,mx,my;
+
+               ierr = DMDAVecGetArray(da, u, &au); CHKERRQ(ierr);
+               Lx = user->Lx; Ly = user->Ly;
+               hx = 2.0*Lx/(PetscReal)(info.mx + 1);
+               hy = 2.0*Ly/(PetscReal)(info.my + 1);
+               for (j = info.ys; j < info.ys + info.ym; j++) {
+                  y = -Ly + (j+1)*hy;
+                  user->g_bdry(-Lx,y,0.0,user,&temp1);
+                  user->g_bdry( Lx,y,0.0,user,&temp2);
+                  gy = PetscMin(temp1,temp2);
+                  my = gy/Ly;
+                  for (i = info.xs; i < info.xs+info.xm; i++) {
+                     x = Lx + (i+1)*hx;
+                     user->g_bdry(x,-Ly,0.0,user,&temp1);
+                     user->g_bdry(x, Ly,0.0,user,&temp2);
+                     gx = PetscMin(temp1,temp2);
+                     mx = gx/Lx;
+                     au[j][i] = PetscMax(mx*PetscMax(-Lx-x,x-Lx)+gx,my*PetscMax(-Ly-y,y-Ly)+gy);
+                  }
+               }
+               ierr = DMDAVecRestoreArray(da, u, &au); CHKERRQ(ierr);
+               break;
+            }
+            case 3:
+            {
+               SETERRQ(PETSC_COMM_SELF,3,"dim = 3 not yet supported\n");
+               break;
+            }
+            default:
+               SETERRQ(PETSC_COMM_SELF,5,"invalid dim from DMDALocalInfo\n");
+         }
+         break;
+      default:
+         SETERRQ(PETSC_COMM_SELF,4,"invalid InitialType ... how did I get here?\n");
+   }
+   PetscFunctionReturn(0);
+}
+
 
 /* 1D Version of the Residue Function
 
@@ -21,18 +139,17 @@
 */
 PetscErrorCode MA1DFunctionLocal(DMDALocalInfo *info, PetscReal *u, PetscReal *F, MACtx *user) {
    PetscInt     i;
-   PetscReal    Lx, h, x, ue, uw, f, temp;
+   PetscReal    Lx, h, x, ue, uw, f;
 
    PetscFunctionBeginUser;
    Lx = user->Lx;
    h = 2.0*Lx/(PetscReal)(info->mx+1);
-
    for (i = info->xs; i<info->xs+info->xm; i++) {
       x = -Lx + (i+1)*h;
       ue = u[i+1];
       uw = u[i-1];
-      if(i == info->mx-1) {user->g_bdry(x+h,0.0,0.0,user,&temp); ue = temp;}
-      if(i == 0)          {user->g_bdry(x-h,0.0,0.0,user,&temp); uw = temp;}
+      if(i == info->mx-1) {user->g_bdry(x+h,0.0,0.0,user,&ue);}
+      if(i == 0)          {user->g_bdry(x-h,0.0,0.0,user,&uw);}
       user->f_rhs(x,0.0,0.0,user,&f);
       F[i] = (-uw + 2.0*u[i] - ue)/(h*h) + f;
    }
@@ -47,13 +164,12 @@ PetscErrorCode MA1DFunctionLocal(DMDALocalInfo *info, PetscReal *u, PetscReal *F
    The 3rd arg **aF is a 2D array representing the discritization of F i.e. aF[i][j] ~ F(u(x_i,y_j))
 */
 PetscErrorCode MA2DFunctionLocal(DMDALocalInfo *info, PetscReal **au, PetscReal **aF, MACtx *user) {
-   PetscErrorCode ierr;
-   PetscInt       i, j;
-   PetscReal      Lx,Ly,hx,hy,x,y,f;
-   PetscReal      DetD2u; // MA operator approximation
-   PetscReal     *SDD; // second directional deriv
-   PetscReal     *hFwd, *hBak; // magnitude of step in forward and backward dirs for each direction k
-   PetscInt       width, M; // stencil width, and total number of directions
+   PetscInt   i,j;
+   PetscReal  Lx,Ly,hx,hy,x,y,f;
+   PetscReal  DetD2u; // MA operator approximation
+   PetscReal *SDD; // second directional deriv
+   PetscReal *hFwd, *hBak; // magnitude of step in forward and backward dirs for each direction k
+   PetscInt   width, M; // stencil width, and total number of directions
 
    PetscFunctionBeginUser;
    // get info from DA
@@ -71,7 +187,7 @@ PetscErrorCode MA2DFunctionLocal(DMDALocalInfo *info, PetscReal **au, PetscReal 
       for (i=info->xs; i<info->xs+info->xm; i++) {
          x = -Lx + (i+1)*hx;
          ComputeSDD(info,au,user,i,j,x,y,SDD,hFwd,hBak);
-         ierr = ApproxDetD2u(&DetD2u,M,SDD,user);
+         ApproxDetD2u(&DetD2u,M,SDD,user);
          user->f_rhs(x,y,0.0,user,&f);
          aF[j][i] = DetD2u - f;
       }
@@ -404,96 +520,6 @@ PetscErrorCode ApproxDetD2u(PetscReal *DetD2u, PetscInt dim, PetscReal *SDD, MAC
 }
 
 
-/*
-
-*/
-PetscErrorCode InitialState(DM da, InitialType it, Vec u, MACtx *user) {
-   PetscErrorCode ierr;
-   DMDALocalInfo  info;
-   PetscRandom    rctx;
-   PetscReal      temp1,temp2;
-
-   PetscFunctionBeginUser;
-   switch (it) {
-      case ZEROS:
-         ierr = VecSet(u,0.0); CHKERRQ(ierr);
-         break;
-      case RANDOM:
-         ierr = PetscRandomCreate(PETSC_COMM_WORLD,&rctx); CHKERRQ(ierr);
-         ierr = VecSetRandom(u,rctx); CHKERRQ(ierr);
-         ierr = PetscRandomDestroy(&rctx); CHKERRQ(ierr);
-         break;
-      case CONE:
-         ierr = DMDAGetLocalInfo(da,&info); CHKERRQ(ierr);
-         switch (info.dim) {
-            case 1:
-            {
-               PetscInt  i;
-               PetscReal xmax[1],xmin[1],h,x,*au,gx,m;
-
-               ierr = DMDAVecGetArray(da, u, &au); CHKERRQ(ierr);
-               ierr = DMGetBoundingBox(da,xmin,xmax); CHKERRQ(ierr);
-               h = (xmax[0] - xmin[0]) / (info.mx - 1);
-               /*
-                  For a < x < b and u(a) = ga and u(b) = gb.
-                  Let gx = min(ga,gb).
-                  Let m = 2gx/(b-a).
-                  Let the initial guess be u(x) = max(-m(x-a)+gx,m(x-b+gx)).
-               */
-               user->g_bdry(xmin[0],0.0,0.0,user,&temp1);
-               user->g_bdry(xmax[0],0.0,0.0,user,&temp2);
-               gx = PetscMin(temp1,temp2);
-               m = 2.0*gx/(xmax[0]-xmin[0]);
-               for (i=info.xs; i<info.xs+info.xm; i++) {
-                  x = xmin[0] + i*h;
-                  au[i] = m*PetscMax(xmin[0]-x,x-xmax[0])+gx;
-               }
-               ierr = DMDAVecRestoreArray(da, u, &au); CHKERRQ(ierr);
-               break;
-            }
-            case 2:
-            {
-               PetscInt   i, j;
-               PetscReal  xymin[2],xymax[2],hx,hy,x,y,**au,gx,gy,mx,my;
-
-               ierr = DMDAVecGetArray(da, u, &au); CHKERRQ(ierr);
-               ierr = DMGetBoundingBox(da,xymin,xymax); CHKERRQ(ierr);
-               hx = (xymax[0]-xymin[0])/(info.mx-1);
-               hy = (xymax[1]-xymin[1])/(info.my-1);
-               for (j = info.ys; j < info.ys + info.ym; j++) {
-                  y = xymin[1] + j*hy;
-                  user->g_bdry(xymin[0],y,0.0,user,&temp1);
-                  user->g_bdry(xymax[0],y,0.0,user,&temp2);
-                  gy = PetscMin(temp1,temp2);
-                  my = 2.0*gy/(xymax[0]-xymin[0]);
-                  for (i = info.xs; i < info.xs + info.xm; i++) {
-                     x = xymin[0] + i*hx;
-                     user->g_bdry(x,xymin[1],0.0,user,&temp1);
-                     user->g_bdry(x,xymax[1],0.0,user,&temp2);
-                     gx = PetscMin(temp1,temp2);
-                     mx = 2.0*gx/(xymax[1]-xymin[1]);
-                     au[j][i] = PetscMax(mx*PetscMax(xymin[0]-x,x-xymax[0])+gx,my*PetscMax(xymin[1]-y,y-xymax[1])+gy);
-                  }
-               }
-               ierr = DMDAVecRestoreArray(da, u, &au); CHKERRQ(ierr);
-               break;
-            }
-            case 3:
-            {
-               SETERRQ(PETSC_COMM_SELF,3,"dim = 3 not yet supported\n");
-               break;
-            }
-            default:
-               SETERRQ(PETSC_COMM_SELF,5,"invalid dim from DMDALocalInfo\n");
-         }
-         break;
-      default:
-         SETERRQ(PETSC_COMM_SELF,4,"invalid InitialType ... how did I get here?\n");
-   }
-   PetscFunctionReturn(0);
-}
-
-
 /* This function computes `weights` variable in the MACtx object.
 */
 PetscErrorCode ComputeWeights(PetscInt width, PetscInt order, MACtx *user) {
@@ -685,10 +711,10 @@ PetscErrorCode ComputeSDD(DMDALocalInfo *info, PetscReal **au, MACtx *user, Pets
       uBak[0] = au[j][i-1];
       uFwd[1] = au[j+1][i];
       uFwd[1] = au[j-1][i];
-      if(j+1 == info->my-1) {user->g_bdry(x,y+hy,0.0,user,&temp); uFwd[0] = temp;}
-      if(j-1 == 0)          {user->g_bdry(x,y-hy,0.0,user,&temp); uBak[0] = temp;}
-      if(i+1 == info->mx-1) {user->g_bdry(x+hx,y,0.0,user,&temp); uFwd[1] = temp;}
-      if(i-1 == 0)          {user->g_bdry(x-hx,y,0.0,user,&temp); uBak[1] = temp;}                                              // east
+      if(j+1 == info->my-1) {user->g_bdry(x,y+hy,0.0,user,&uFwd[0]);}
+      if(j-1 == 0)          {user->g_bdry(x,y-hy,0.0,user,&uBak[0]);}
+      if(i+1 == info->mx-1) {user->g_bdry(x+hx,y,0.0,user,&uFwd[1]);}
+      if(i-1 == 0)          {user->g_bdry(x-hx,y,0.0,user,&uBak[1]);}                                              // east
       // 2nd dir. deriv
       SDD[0] = (uFwd[0] - 2.0*au[j][i] + uBak[0])/(hx*hx); // horizontal centered-diff
       SDD[1] = (uFwd[1] - 2.0*au[j][i] + uBak[1])/(hy*hy); // vertical centered-diff
