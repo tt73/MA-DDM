@@ -15,9 +15,9 @@ typedef struct {
    // Forward stencil directions in i and j (only 2D)
    PetscInt  *Si, *Sj;
    // right-hand-side f(x,y,z)
-   PetscReal (*f_rhs)(PetscReal x, PetscReal y, PetscReal z, void *ctx);
+   PetscErrorCode (*f_rhs)(PetscReal x, PetscReal y, PetscReal z, void *ctx, PetscReal *f);
    // Dirichlet boundary condition g(x,y,z)
-   PetscReal (*g_bdry)(PetscReal x, PetscReal y, PetscReal z, void *ctx);
+   PetscErrorCode (*g_bdry)(PetscReal x, PetscReal y, PetscReal z, void *ctx, PetscReal *g);
    // Debugging flag
    PetscBool debug;
    // additional context; s

@@ -12,7 +12,8 @@
 PetscErrorCode MA1DFunctionLocal(DMDALocalInfo *info, PetscReal *u, PetscReal *F, MACtx *user) {
    PetscErrorCode ierr;
    PetscInt   i;
-   PetscReal  xmax[1], xmin[1], h, x, ue, uw, temp;
+   PetscReal  xmax[1], xmin[1], h, x, ue, uw, f, temp;
+
    ierr = DMGetBoundingBox(info->da,xmin,xmax); CHKERRQ(ierr);
    h = (xmax[0] - xmin[0]) / (info->mx - 1);
    for (i = info->xs; i < info->xs + info->xm; i++) {
@@ -25,10 +26,10 @@ PetscErrorCode MA1DFunctionLocal(DMDALocalInfo *info, PetscReal *u, PetscReal *F
          // interior points depend on left and right neighbors
          uw = u[i-1];
          ue = u[i+1];
-         if(i+1 == info->mx-1) {user->g_bdry(x+h,0.0,0.0,user,&temp); uw = temp;}
-         if(i-1 == 0)          {user->g_bdry(x-h,0.0,0.0,user,&temp); ue = temp;}
-         user->f_rhs(x,0.0,0.0,user,&temp);
-         F[i] = (-uw + 2.0*u[i] - ue)/(h*h) + temp;
+         if(i+1 == info->mx-1) {user->g_bdry(x+h,0.0,0.0,user,&temp); ue = temp;}
+         if(i-1 == 0)          {user->g_bdry(x-h,0.0,0.0,user,&temp); uw = temp;}
+         user->f_rhs(x,0.0,0.0,user,&f);
+         F[i] = (-uw + 2.0*u[i] - ue)/(h*h) + f;
       }
    }
    ierr = PetscLogFlops(9.0*info->xm);CHKERRQ(ierr);

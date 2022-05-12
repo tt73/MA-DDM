@@ -10,85 +10,102 @@ static char help[] = "Create a wide-stencil grid in 2D.\n\n";
 #include <petsc.h>
 #include "MAfunctions.h"
 
-
 // functions simply to put u_exact()=g_bdry() into a grid
 // these are irritatingly-dimension-dependent inside ...
 extern PetscErrorCode Form1DUExact(DMDALocalInfo*, Vec, MACtx*);
 extern PetscErrorCode Form2DUExact(DMDALocalInfo*, Vec, MACtx*);
 extern PetscErrorCode Form3DUExact(DMDALocalInfo*, Vec, MACtx*);
 
-
 /*
    Solution    u(x) = exp(|x|^2/2), for x in Rn
    RHS: Det(D^2u(x)) = (1+|x|^2)*exp(n/2*|x|^2)
 */
-static PetscReal u_exact_1Dex10(PetscReal x, PetscReal y, PetscReal z, void *ctx) {
-   return PetscExpReal((x*x)/2.0);
+PetscErrorCode u_exact_1Dex10(PetscReal x, PetscReal y, PetscReal z, void *ctx, PetscReal * u) {
+   u[0] = PetscExpReal((x*x)/2.0);
+   return 0;
 }
-static PetscReal u_exact_2Dex10(PetscReal x, PetscReal y, PetscReal z, void *ctx) {
-   return PetscExpReal((x*x + y*y)/2.0);
+PetscErrorCode u_exact_2Dex10(PetscReal x, PetscReal y, PetscReal z, void *ctx, PetscReal * u) {
+   u[0] = PetscExpReal((x*x + y*y)/2.0);
+   return 0;
 }
-static PetscReal u_exact_3Dex10(PetscReal x, PetscReal y, PetscReal z, void *ctx) {
-   return PetscExpReal((x*x + y*y + z*z)/2.0);
+PetscErrorCode u_exact_3Dex10(PetscReal x, PetscReal y, PetscReal z, void *ctx, PetscReal * u) {
+   u[0] = PetscExpReal((x*x + y*y + z*z)/2.0);
+   return 0;
 }
 // right-hand-side functions
-static PetscReal f_rhs_1Dex10(PetscReal x, PetscReal y, PetscReal z, void *ctx) {
-   return (1.0 + x*x)*PetscExpReal(x*x*0.5);
+PetscErrorCode f_rhs_1Dex10(PetscReal x, PetscReal y, PetscReal z, void *ctx, PetscReal * f) {
+   f[0] = (1.0 + x*x)*PetscExpReal(x*x*0.5);
+   return 0;
 }
-static PetscReal f_rhs_2Dex10(PetscReal x, PetscReal y, PetscReal z, void *ctx) {
-   return (1.0 + x*x + y*y)*PetscExpReal(x*x + y*y);
+PetscErrorCode f_rhs_2Dex10(PetscReal x, PetscReal y, PetscReal z, void *ctx, PetscReal * f) {
+   f[0] = (1.0 + x*x + y*y)*PetscExpReal(x*x + y*y);
+   return 0;
 }
-static PetscReal f_rhs_3Dex10(PetscReal x, PetscReal y, PetscReal z, void *ctx) {
-   return (1.0 + x*x + y*y + z*z)*PetscExpReal((x*x + y*y + z*z)*1.5);
+PetscErrorCode f_rhs_3Dex10(PetscReal x, PetscReal y, PetscReal z, void *ctx, PetscReal * f) {
+   f[0] = (1.0 + x*x + y*y + z*z)*PetscExpReal((x*x + y*y + z*z)*1.5);
+   return 0;
 }
 
 /*
    Solution    u(x) = 1/2 max(|x-0.5| - 0.2,0)        , for x in Rn
    RHS: Det(D^2u(x)) = max(1-0.2/|x-0.5|, 0)
 */
-static PetscReal u_exact_1Dex11(PetscReal x, PetscReal y, PetscReal z, void *ctx) {
-   return 0.5*PetscPowReal(PetscMax(PetscAbsReal(x-0.5)-0.2,0),2);
+PetscErrorCode u_exact_1Dex11(PetscReal x, PetscReal y, PetscReal z, void *ctx, PetscReal * u) {
+   u[0] = 0.5*PetscPowReal(PetscMax(PetscAbsReal(x-0.5)-0.2,0),2);
+   return 0;
 }
-static PetscReal u_exact_2Dex11(PetscReal x, PetscReal y, PetscReal z, void *ctx) {
-   return 0.5*PetscPowReal(PetscMax(PetscSqrtReal(PetscSqr(x-0.5)+PetscSqr(y-0.5))-0.2,0),2);
+PetscErrorCode u_exact_2Dex11(PetscReal x, PetscReal y, PetscReal z, void *ctx, PetscReal * u) {
+   u[0] = 0.5*PetscPowReal(PetscMax(PetscSqrtReal(PetscSqr(x-0.5)+PetscSqr(y-0.5))-0.2,0),2);
+   return 0;
 }
-static PetscReal u_exact_3Dex11(PetscReal x, PetscReal y, PetscReal z, void *ctx) {
-   return 0.5*PetscPowReal(PetscMax(PetscSqrtReal(PetscSqr(x-0.5)+PetscSqr(y-0.5)+PetscSqr(z-0.5))-0.2,0),2);
+PetscErrorCode u_exact_3Dex11(PetscReal x, PetscReal y, PetscReal z, void *ctx, PetscReal * u) {
+   u[0] = 0.5*PetscPowReal(PetscMax(PetscSqrtReal(PetscSqr(x-0.5)+PetscSqr(y-0.5)+PetscSqr(z-0.5))-0.2,0),2);
+   return 0;
 }
 // RHS
-static PetscReal f_rhs_1Dex11(PetscReal x, PetscReal y, PetscReal z, void *ctx) { // not sure if this is right
-   return PetscMax(1-0.2/PetscAbsReal(x-0.5),0);
+PetscErrorCode f_rhs_1Dex11(PetscReal x, PetscReal y, PetscReal z, void *ctx, PetscReal * f) { // not sure if this is right
+   f[0] = PetscMax(1-0.2/PetscAbsReal(x-0.5),0);
+   return 0;
 }
-static PetscReal f_rhs_2Dex11(PetscReal x, PetscReal y, PetscReal z, void *ctx) {
-   return PetscMax(1-0.2/PetscSqrtReal(PetscSqr(x-0.5)+PetscSqr(y-0.5)),0);
+PetscErrorCode f_rhs_2Dex11(PetscReal x, PetscReal y, PetscReal z, void *ctx, PetscReal * f) {
+   f[0] = PetscMax(1-0.2/PetscSqrtReal(PetscSqr(x-0.5)+PetscSqr(y-0.5)),0);
+   return 0;
 }
-static PetscReal f_rhs_3Dex11(PetscReal x, PetscReal y, PetscReal z, void *ctx) {
-   return PetscMax(1-0.2/PetscSqrtReal(PetscSqr(x-0.5)+PetscSqr(y-0.5)),0);
+PetscErrorCode f_rhs_3Dex11(PetscReal x, PetscReal y, PetscReal z, void *ctx, PetscReal * f) {
+   f[0] = PetscMax(1-0.2/PetscSqrtReal(PetscSqr(x-0.5)+PetscSqr(y-0.5)),0);
+   return 0;
 }
 
 /*
    Solution    u(x) = -sqrt(2 - |x|^2),              for x in Rn
    RHS: Det(D^2u(x)) = 2/(2- |x|^2)^p(n)
 */
-static PetscReal u_exact_1Dex12(PetscReal x, PetscReal y, PetscReal z, void *ctx) {
-   return -PetscSqrtReal(2.0 - x*x);
+PetscErrorCode u_exact_1Dex12(PetscReal x, PetscReal y, PetscReal z, void *ctx, PetscReal * u) {
+   u[0] = -PetscSqrtReal(2.0 - x*x);
+   return 0;
 }
-static PetscReal u_exact_2Dex12(PetscReal x, PetscReal y, PetscReal z, void *ctx) {
-   return -PetscSqrtReal(2.0 - x*x - y*y);
+PetscErrorCode u_exact_2Dex12(PetscReal x, PetscReal y, PetscReal z, void *ctx, PetscReal * u) {
+   u[0] = -PetscSqrtReal(2.0 - x*x - y*y);
+   return 0;
 }
-static PetscReal u_exact_3Dex12(PetscReal x, PetscReal y, PetscReal z, void *ctx) {
-   return -PetscSqrtReal(2.0 - x*x - y*y - z*z);
+PetscErrorCode u_exact_3Dex12(PetscReal x, PetscReal y, PetscReal z, void *ctx, PetscReal * u) {
+   u[0] = -PetscSqrtReal(2.0 - x*x - y*y - z*z);
+   return 0;
 }
 // RHS
-static PetscReal f_rhs_1Dex12(PetscReal x, PetscReal y, PetscReal z, void *ctx) {
-   return 2.0/PetscPowReal(2-x*x,1.5);
+PetscErrorCode f_rhs_1Dex12(PetscReal x, PetscReal y, PetscReal z, void *ctx, PetscReal * f) {
+   f[0] = 2.0/PetscPowReal(2-x*x,1.5);
+   return 0;
 }
-static PetscReal f_rhs_2Dex12(PetscReal x, PetscReal y, PetscReal z, void *ctx) {
-   return 2.0/PetscPowReal(2-x*x-y*y,2.0);
+PetscErrorCode f_rhs_2Dex12(PetscReal x, PetscReal y, PetscReal z, void *ctx, PetscReal * f) {
+   f[0] = 2.0/PetscPowReal(2-x*x-y*y,2.0);
+   return 0;
 }
-static PetscReal f_rhs_3Dex12(PetscReal x, PetscReal y, PetscReal z, void *ctx) {
-   return 2.0/PetscPowReal(2-x*x-y*y-z*z,2.5);
+PetscErrorCode f_rhs_3Dex12(PetscReal x, PetscReal y, PetscReal z, void *ctx, PetscReal * f) {
+   f[0] = 2.0/PetscPowReal(2-x*x-y*y-z*z,2.5);
+   return 0;
 }
+
 
 //STARTPTRARRAYS
 // arrays of pointers to functions
@@ -111,7 +128,7 @@ typedef enum {ex10, ex11, ex12} ProblemType;
 static const char* ProblemTypes[] = {"ex10","ex11","ex12","ProblemType","", NULL};
 
 // more arrays of pointers to functions:   ..._ptr[DIMS][PROBLEMS]
-typedef PetscReal (*PointwiseFcn)(PetscReal,PetscReal,PetscReal,void*);
+typedef PetscErrorCode (*PointwiseFcn)(PetscReal,PetscReal,PetscReal,void*,PetscReal*);
 
 static PointwiseFcn g_bdry_ptr[3][3]
     = {{&u_exact_1Dex10, &u_exact_1Dex11, &u_exact_1Dex12},
@@ -342,13 +359,14 @@ int main(int argc,char **args) {
 PetscErrorCode Form1DUExact(DMDALocalInfo *info, Vec u, MACtx* user) {
    PetscErrorCode ierr;
    PetscInt   i;
-   PetscReal  xmax[1],xmin[1],hx,x,*au;
+   PetscReal  xmax[1], xmin[1], hx, x, *au,temp;
    ierr = DMGetBoundingBox(info->da,xmin,xmax); CHKERRQ(ierr);
-   hx = (xmax[0] - xmin[0])/(info->mx - 1);
+   hx = (xmax[0] - xmin[0]) / (info->mx - 1);
    ierr = DMDAVecGetArray(info->da, u, &au);CHKERRQ(ierr);
    for (i=info->xs; i<info->xs+info->xm; i++) {
       x = xmin[0] + i*hx;
-      au[i] = user->g_bdry(x,0.0,0.0,user);
+      user->g_bdry(x,0.0,0.0,user,&temp);
+      au[i] = temp;
    }
    ierr = DMDAVecRestoreArray(info->da, u, &au);CHKERRQ(ierr);
    return 0;
@@ -356,18 +374,19 @@ PetscErrorCode Form1DUExact(DMDALocalInfo *info, Vec u, MACtx* user) {
 
 PetscErrorCode Form2DUExact(DMDALocalInfo *info, Vec u, MACtx* user) {
    PetscErrorCode ierr;
-   PetscInt       i, j;
-   PetscReal      xymin[2],xymax[2],hx,hy,x,y,**au;
-
+   PetscInt   i, j;
+   PetscReal  xymin[2], xymax[2], hx, hy, x, y, **au,temp;
    ierr = DMGetBoundingBox(info->da,xymin,xymax); CHKERRQ(ierr);
-   hx = (xymax[0] - xymin[0])/(info->mx - 1);
-   hy = (xymax[1] - xymin[1])/(info->my - 1); // mx = my = 2
+   hx = (xymax[0] - xymin[0]) / (info->mx - 1);
+   hy = (xymax[1] - xymin[1]) / (info->my - 1); // mx = my = N+2
+
    ierr = DMDAVecGetArray(info->da, u, &au);CHKERRQ(ierr);
    for (j=info->ys; j<info->ys+info->ym; j++) {
       y = xymin[1] + j*hy;
       for (i=info->xs; i<info->xs+info->xm; i++) {
          x = xymin[0] + i*hx;
-         au[j][i] = user->g_bdry(x, y,0.0,user);
+         user->g_bdry(x,y,0.0,user,&temp);
+         au[j][i] = temp;
       }
    }
    ierr = DMDAVecRestoreArray(info->da, u, &au);CHKERRQ(ierr);
@@ -377,11 +396,11 @@ PetscErrorCode Form2DUExact(DMDALocalInfo *info, Vec u, MACtx* user) {
 PetscErrorCode Form3DUExact(DMDALocalInfo *info, Vec u, MACtx* user) {
    PetscErrorCode ierr;
    PetscInt  i, j, k;
-   PetscReal xyzmin[3], xyzmax[3], hx, hy, hz, x, y, z, ***au;
+   PetscReal xyzmin[3], xyzmax[3], hx, hy, hz, x, y, z, ***au, temp;
    ierr = DMGetBoundingBox(info->da,xyzmin,xyzmax); CHKERRQ(ierr);
-   hx = (xyzmax[0] - xyzmin[0])/(info->mx - 1);
-   hy = (xyzmax[1] - xyzmin[1])/(info->my - 1);
-   hz = (xyzmax[2] - xyzmin[2])/(info->mz - 1);
+   hx = (xyzmax[0] - xyzmin[0]) / (info->mx - 1);
+   hy = (xyzmax[1] - xyzmin[1]) / (info->my - 1);
+   hz = (xyzmax[2] - xyzmin[2]) / (info->mz - 1);
    ierr = DMDAVecGetArray(info->da, u, &au);CHKERRQ(ierr);
    for (k=info->zs; k<info->zs+info->zm; k++) {
       z = xyzmin[2] + k*hz;
@@ -389,7 +408,8 @@ PetscErrorCode Form3DUExact(DMDALocalInfo *info, Vec u, MACtx* user) {
          y = xyzmin[1] + j*hy;
          for (i=info->xs; i<info->xs+info->xm; i++) {
             x = xyzmin[0] + i*hx;
-            au[k][j][i] = user->g_bdry(x,y,z,user);
+            user->g_bdry(x,y,z,user,&temp);
+            au[k][j][i] = temp;
          }
       }
    }

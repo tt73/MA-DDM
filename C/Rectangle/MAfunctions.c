@@ -21,26 +21,20 @@
 */
 PetscErrorCode MA1DFunctionLocal(DMDALocalInfo *info, PetscReal *u, PetscReal *F, MACtx *user) {
    PetscInt     i;
-   PetscReal    xmax[1], xmin[1], h, x, ue, uw;
+   PetscReal    xmax[1], xmin[1], h, x, ue, uw, f, temp;
 
    PetscFunctionBeginUser;
    DMGetBoundingBox(info->da,xmin,xmax);
    h = (xmax[0] - xmin[0])/(info->mx - 1);
 
-   if (user->debug) {
-      PetscMPIInt  rank,size;
-      MPI_Comm_size(PETSC_COMM_WORLD,&size);
-      MPI_Comm_rank(PETSC_COMM_WORLD,&rank);
-      printf("I'm processor %d of %d\n",rank+1,size);
-      printf("  I'm in charge of indeces %d through %d (excluding ghosts)\n",info->xs,info->xs+info->xm-1);
-      printf("  I'm in charge of indeces %d through %d (including ghosts)\n",info->gxs,info->gxs+info->gxm-1);
-   }
-
    for (i = info->xs; i<info->xs+info->xm; i++) {
       x = xmin[0] + i*h;
-      ue = (i == info->mx-1) ? user->g_bdry(xmin[0]-h,0.0,0.0,user) : u[i+1];
-      uw = (i == 0)          ? user->g_bdry(xmax[0]+h,0.0,0.0,user) : u[i-1];
-      F[i] = (-uw + 2.0*u[i] - ue)/(h*h) + user->f_rhs(x,0.0,0.0,user);
+      ue = u[i+1];
+      uw = u[i-1];
+      if(i == info->mx-1) {user->g_bdry(x+h,0.0,0.0,user,&temp); ue = temp;}
+      if(i == 0)          {user->g_bdry(x-h,0.0,0.0,user,&temp); uw = temp;}
+      user->f_rhs(x,0.0,0.0,user,&f);
+      F[i] = (-uw + 2.0*u[i] - ue)/(h*h) + f;
    }
    PetscFunctionReturn(0);
 }
@@ -55,7 +49,7 @@ PetscErrorCode MA1DFunctionLocal(DMDALocalInfo *info, PetscReal *u, PetscReal *F
 PetscErrorCode MA2DFunctionLocal(DMDALocalInfo *info, PetscReal **au, PetscReal **aF, MACtx *user) {
    PetscErrorCode ierr;
    PetscInt       i, j;
-   PetscReal      xymin[2],xymax[2],hx,hy,x,y;
+   PetscReal      xymin[2],xymax[2],hx,hy,x,y,f;
    PetscReal      DetD2u; // MA operator approximation
    PetscReal     *SDD; // second directional deriv
    PetscReal     *hFwd, *hBak; // magnitude of step in forward and backward dirs for each direction k
@@ -78,7 +72,8 @@ PetscErrorCode MA2DFunctionLocal(DMDALocalInfo *info, PetscReal **au, PetscReal 
          x = xymin[0] + i*hx;
          ComputeSDD(info,au,user,i,j,x,y,SDD,hFwd,hBak);
          ierr = ApproxDetD2u(&DetD2u,M,SDD,user);
-         aF[j][i] = DetD2u - user->f_rhs(x,y,0.0,user);
+         user->f_rhs(x,y,0.0,user,&f);
+         aF[j][i] = DetD2u - f;
       }
    }
    PetscFree(SDD);
@@ -165,7 +160,6 @@ PetscErrorCode MA1DJacobianLocal(DMDALocalInfo *info, PetscScalar *au, Mat J, Ma
       // Insert up to 3 values of the Jacobian per row
       ierr = MatSetValuesStencil(Jpre,1,&row,ncols,col,v,INSERT_VALUES); CHKERRQ(ierr);
    }
-
    ierr = MatAssemblyBegin(Jpre,MAT_FINAL_ASSEMBLY); CHKERRQ(ierr);
    ierr = MatAssemblyEnd(Jpre,MAT_FINAL_ASSEMBLY); CHKERRQ(ierr);
    if (J != Jpre) {
@@ -418,6 +412,7 @@ PetscErrorCode InitialState(DM da, InitialType it, Vec u, MACtx *user) {
    PetscErrorCode ierr;
    DMDALocalInfo  info;
    PetscRandom    rctx;
+   PetscReal      temp1,temp2;
 
    PetscFunctionBeginUser;
    switch (it) {
@@ -446,7 +441,9 @@ PetscErrorCode InitialState(DM da, InitialType it, Vec u, MACtx *user) {
                   Let m = 2gx/(b-a).
                   Let the initial guess be u(x) = max(-m(x-a)+gx,m(x-b+gx)).
                */
-               gx = PetscMin(user->g_bdry(xmin[0],0.0,0.0,user),user->g_bdry(xmax[0],0.0,0.0,user));
+               user->g_bdry(xmin[0],0.0,0.0,user,&temp1);
+               user->g_bdry(xmax[0],0.0,0.0,user,&temp2);
+               gx = PetscMin(temp1,temp2);
                m = 2.0*gx/(xmax[0]-xmin[0]);
                for (i=info.xs; i<info.xs+info.xm; i++) {
                   x = xmin[0] + i*h;
@@ -466,70 +463,17 @@ PetscErrorCode InitialState(DM da, InitialType it, Vec u, MACtx *user) {
                hy = (xymax[1]-xymin[1])/(info.my-1);
                for (j = info.ys; j < info.ys + info.ym; j++) {
                   y = xymin[1] + j*hy;
-                  gy = PetscMin(user->g_bdry(xymin[0],y,0.0,user),user->g_bdry(xymax[0],y,0.0,user));
+                  user->g_bdry(xymin[0],y,0.0,user,&temp1);
+                  user->g_bdry(xymax[0],y,0.0,user,&temp2);
+                  gy = PetscMin(temp1,temp2);
                   my = 2.0*gy/(xymax[0]-xymin[0]);
                   for (i = info.xs; i < info.xs + info.xm; i++) {
                      x = xymin[0] + i*hx;
-                     gx = PetscMin(user->g_bdry(x,xymin[1],0.0,user),user->g_bdry(x,xymax[1],0.0,user));
+                     user->g_bdry(x,xymin[1],0.0,user,&temp1);
+                     user->g_bdry(x,xymax[1],0.0,user,&temp2);
+                     gx = PetscMin(temp1,temp2);
                      mx = 2.0*gx/(xymax[1]-xymin[1]);
                      au[j][i] = PetscMax(mx*PetscMax(xymin[0]-x,x-xymax[0])+gx,my*PetscMax(xymin[1]-y,y-xymax[1])+gy);
-                  }
-               }
-               ierr = DMDAVecRestoreArray(da, u, &au); CHKERRQ(ierr);
-               break;
-            }
-            case 3:
-            {
-               SETERRQ(PETSC_COMM_SELF,3,"dim = 3 not yet supported\n");
-               break;
-            }
-            default:
-               SETERRQ(PETSC_COMM_SELF,5,"invalid dim from DMDALocalInfo\n");
-         }
-         break;
-      case LINMAX:
-         ierr = DMDAGetLocalInfo(da,&info); CHKERRQ(ierr);
-         switch (info.dim) {
-            case 1:
-            {
-               PetscInt  i;
-               PetscReal xmax[1],xmin[1],h,x,*au,ga,gb,m;
-
-               ierr = DMDAVecGetArray(da, u, &au); CHKERRQ(ierr);
-               ierr = DMGetBoundingBox(da,xmin,xmax); CHKERRQ(ierr);
-               h = (xmax[0] - xmin[0])/(info.mx - 1);
-               /*
-                  For a < x < b and u(a) = ga and u(b) = gb.
-                  Let gx = min(ga,gb).
-                  Let m = 2gx/(b-a).
-                  Let the initial guess be u(x) = max(-m(x-a)+gx,m(x-b+gx)).
-               */
-               ga = user->g_bdry(xmin[0],0.0,0.0,user);
-               gb = user->g_bdry(xmax[0],0.0,0.0,user);
-               m = (gb-ga)/(xmax[0]-xmin[0]);
-               for (i=info.xs; i<info.xs+info.xm; i++) {
-                  x = xmin[0] + i*h;
-                  au[i] = m*(x-xmin[0])+ga;
-               }
-               ierr = DMDAVecRestoreArray(da, u, &au); CHKERRQ(ierr);
-               break;
-            }
-            case 2:
-            {
-               PetscInt   i, j;
-               PetscReal  xymin[2],xymax[2],hx,hy,x,y,**au;
-
-               ierr = DMDAVecGetArray(da, u, &au); CHKERRQ(ierr);
-               ierr = DMGetBoundingBox(da,xymin,xymax); CHKERRQ(ierr);
-               hx = (xymax[0]-xymin[0])/(info.mx-1);
-               hy = (xymax[1]-xymin[1])/(info.my-1);
-               for (j = info.ys; j < info.ys + info.ym; j++) {
-                  y = xymin[1] + j*hy;
-                  for (i = info.xs; i < info.xs + info.xm; i++) {
-                     if (i==0 || i==info.mx-1 || j==0 || j==info.my-1) {
-                        x = xymin[0] + i*hx;
-                        au[j][i] = user->g_bdry(x,y,0.0,user);
-                     }
                   }
                }
                ierr = DMDAVecRestoreArray(da, u, &au); CHKERRQ(ierr);
@@ -724,7 +668,7 @@ PetscErrorCode ComputeProjectionIndeces(PetscReal *di, PetscReal *dj, PetscInt i
 */
 PetscErrorCode ComputeSDD(DMDALocalInfo *info, PetscReal **au, MACtx *user, PetscInt i, PetscInt j, PetscReal x, PetscReal y, PetscReal *SDD, PetscReal *hFwd, PetscReal *hBak) {
    PetscInt       d,k,M,Ny,Nx,Si,Sj;
-   PetscReal      hx,hy,xymin[2],xymax[2],di,dj;
+   PetscReal      hx,hy,xymin[2],xymax[2],di,dj,temp;
    PetscReal      *uFwd, *uBak; // u in the the forward and backward position for each direction k
 
    PetscFunctionBeginUser;
@@ -738,10 +682,14 @@ PetscErrorCode ComputeSDD(DMDALocalInfo *info, PetscReal **au, MACtx *user, Pets
    PetscMalloc2(M,&uFwd,M,&uBak);
    if (d==1) {
       // width 1 case is hardcoded because it is simple
-      uFwd[0] = (i == Nx-1) ? user->g_bdry(x+hx,y,0.0,user) : au[j][i+1]; // east
-      uBak[0] = (i == 0)    ? user->g_bdry(x-hx,y,0.0,user) : au[j][i-1]; // west
-      uFwd[1] = (j == Ny-1) ? user->g_bdry(x,y+hy,0.0,user) : au[j+1][i]; // north
-      uBak[1] = (j == 0)    ? user->g_bdry(x,y-hy,0.0,user) : au[j-1][i]; // south                                                  // east
+      uFwd[0] = au[j][i+1];
+      uBak[0] = au[j][i-1];
+      uFwd[1] = au[j+1][i];
+      uFwd[1] = au[j-1][i];
+      if(j+1 == info->my-1) {user->g_bdry(x,y+hy,0.0,user,&temp); uFwd[0] = temp;}
+      if(j-1 == 0)          {user->g_bdry(x,y-hy,0.0,user,&temp); uBak[0] = temp;}
+      if(i+1 == info->mx-1) {user->g_bdry(x+hx,y,0.0,user,&temp); uFwd[1] = temp;}
+      if(i-1 == 0)          {user->g_bdry(x-hx,y,0.0,user,&temp); uBak[1] = temp;}                                              // east
       // 2nd dir. deriv
       SDD[0] = (uFwd[0] - 2.0*au[j][i] + uBak[0])/(hx*hx); // horizontal centered-diff
       SDD[1] = (uFwd[1] - 2.0*au[j][i] + uBak[1])/(hy*hy); // vertical centered-diff
@@ -760,7 +708,8 @@ PetscErrorCode ComputeSDD(DMDALocalInfo *info, PetscReal **au, MACtx *user, Pets
          } else {
             // otherwise get the coordinates of the projection
             ComputeProjectionIndeces(&di,&dj,i,j,Si,Sj,Nx,Ny);
-            uFwd[k] = user->g_bdry(x+hx*di,y+hy*dj,0.0,user);
+            user->g_bdry(x+hx*di,y+hy*dj,0.0,user,&temp);
+            uFwd[k] = temp;
             hFwd[k] = PetscSqrtReal(hx*hx*di*di + hy*hy*dj*dj);
          }
          // Backward point for direction k
@@ -771,7 +720,8 @@ PetscErrorCode ComputeSDD(DMDALocalInfo *info, PetscReal **au, MACtx *user, Pets
          } else {
             // otherwise get the coordinates of the projection
             ComputeProjectionIndeces(&di,&dj,i,j,-Si,-Sj,Ny,Ny);
-            uBak[k] = user->g_bdry(x+hx*di,y+hy*dj,0.0,user);
+            user->g_bdry(x+hx*di,y+hy*dj,0.0,user,&temp);
+            uBak[k] = temp;
             hBak[k] = PetscSqrtReal(hx*hx*di*di + hy*hy*dj*dj);
          }
       }
