@@ -1,0 +1,4706 @@
+
+ksp: cg, pc: none
+0
+1.441e+00
+6.144e-01
+
+ksp: cg, pc: jacobi
+0
+1.441e+00
+6.210e-01
+
+ksp: cg, pc: pbjacobi
+0
+1.441e+00
+6.150e-01
+
+ksp: cg, pc: bjacobi
+0
+1.441e+00
+1.235e+00
+
+ksp: cg, pc: sor
+8
+1.707e-02
+3.272e-02
+
+ksp: cg, pc: lu
+8
+1.707e-02
+7.906e-02
+
+ksp: cg, pc: mg
+0
+1.441e+00
+2.396e+00
+
+ksp: cg, pc: eisenstat
+8
+1.707e-02
+2.821e-02
+
+ksp: cg, pc: ilu
+0
+1.441e+00
+1.100e+00
+
+ksp: cg, pc: icc
+0
+1.441e+00
+1.154e+00
+
+ksp: cg, pc: cholesky
+0
+1.441e+00
+4.006e-02
+
+ksp: cg, pc: asm
+0
+1.441e+00
+1.392e+00
+
+ksp: cg, pc: gasm
+0
+1.441e+00
+1.326e+00
+
+ksp: cg, pc: ksp
+8
+1.707e-02
+4.193e-02
+
+ksp: cg, pc: redundant
+8
+1.707e-02
+7.202e-02
+
+ksp: cg, pc: mat
+0
+1.441e+00
+1.097e+00
+
+ksp: cg, pc: cp
+0
+1.441e+00
+1.361e-02
+
+ksp: cg, pc: redistribute
+8
+1.707e-02
+6.305e-02
+
+ksp: cg, pc: svd
+8
+1.707e-02
+6.827e-01
+
+ksp: cg, pc: gamg
+8
+1.707e-02
+1.141e+00
+
+ksp: cg, pc: kaczmarz
+0
+1.441e+00
+2.683e+00
+
+ksp: cg, pc: hmg
+8
+1.707e-02
+2.008e-01
+
+ksp: cg, pc: lmvm
+0
+1.441e+00
+1.202e-02
+ = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = 
+
+ksp: groppcg, pc: none
+0
+1.441e+00
+6.787e-01
+
+ksp: groppcg, pc: jacobi
+0
+1.441e+00
+6.845e-01
+
+ksp: groppcg, pc: pbjacobi
+0
+1.441e+00
+6.746e-01
+
+ksp: groppcg, pc: bjacobi
+0
+1.441e+00
+1.259e+00
+
+ksp: groppcg, pc: sor
+8
+1.707e-02
+3.265e-02
+
+ksp: groppcg, pc: lu
+8
+1.707e-02
+7.176e-02
+
+ksp: groppcg, pc: mg
+0
+1.441e+00
+2.457e+00
+
+ksp: groppcg, pc: eisenstat
+8
+1.707e-02
+2.920e-02
+
+ksp: groppcg, pc: ilu
+0
+1.441e+00
+1.155e+00
+
+ksp: groppcg, pc: icc
+0
+1.441e+00
+1.211e+00
+
+ksp: groppcg, pc: cholesky
+0
+1.441e+00
+2.356e+00
+
+ksp: groppcg, pc: asm
+0
+1.441e+00
+1.473e+00
+
+ksp: groppcg, pc: gasm
+0
+1.441e+00
+1.411e+00
+
+ksp: groppcg, pc: ksp
+8
+1.707e-02
+4.377e-02
+
+ksp: groppcg, pc: redundant
+8
+1.707e-02
+7.282e-02
+
+ksp: groppcg, pc: mat
+0
+1.441e+00
+1.159e+00
+
+ksp: groppcg, pc: cp
+0
+1.441e+00
+3.142e+00
+
+ksp: groppcg, pc: redistribute
+8
+1.707e-02
+6.295e-02
+
+ksp: groppcg, pc: svd
+8
+1.707e-02
+6.842e-01
+
+ksp: groppcg, pc: gamg
+8
+1.707e-02
+1.170e+00
+
+ksp: groppcg, pc: kaczmarz
+0
+1.441e+00
+2.825e+00
+
+ksp: groppcg, pc: hmg
+8
+1.707e-02
+2.114e-01
+
+ksp: groppcg, pc: lmvm
+0
+1.441e+00
+1.355e-02
+ = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = 
+
+ksp: pipecg, pc: none
+0
+1.441e+00
+2.100e-01
+
+ksp: pipecg, pc: jacobi
+0
+1.441e+00
+1.054e-01
+
+ksp: pipecg, pc: pbjacobi
+0
+1.441e+00
+1.046e-01
+
+ksp: pipecg, pc: bjacobi
+0
+1.441e+00
+1.351e+00
+
+ksp: pipecg, pc: sor
+0
+1.441e+00
+1.243e+00
+
+ksp: pipecg, pc: lu
+8
+1.707e-02
+7.412e-02
+
+ksp: pipecg, pc: mg
+0
+1.441e+00
+2.518e+00
+
+ksp: pipecg, pc: eisenstat
+0
+1.441e+00
+8.002e-01
+
+ksp: pipecg, pc: ilu
+0
+1.441e+00
+1.202e+00
+
+ksp: pipecg, pc: icc
+0
+1.441e+00
+6.146e-01
+
+ksp: pipecg, pc: cholesky
+0
+1.441e+00
+6.593e-01
+
+ksp: pipecg, pc: asm
+0
+1.441e+00
+1.524e+00
+
+ksp: pipecg, pc: gasm
+0
+1.441e+00
+1.431e+00
+
+ksp: pipecg, pc: ksp
+8
+1.707e-02
+4.891e-02
+
+ksp: pipecg, pc: redundant
+8
+1.707e-02
+7.663e-02
+
+ksp: pipecg, pc: mat
+0
+1.441e+00
+1.915e-01
+
+ksp: pipecg, pc: cp
+0
+1.441e+00
+2.509e-02
+
+ksp: pipecg, pc: redistribute
+8
+1.707e-02
+7.010e-02
+
+ksp: pipecg, pc: svd
+8
+1.707e-02
+6.950e-01
+
+ksp: pipecg, pc: gamg
+0
+1.441e+00
+7.590e+00
+
+ksp: pipecg, pc: kaczmarz
+0
+1.441e+00
+5.468e-01
+
+ksp: pipecg, pc: hmg
+0
+1.441e+00
+1.141e+01
+
+ksp: pipecg, pc: lmvm
+0
+1.441e+00
+1.283e-02
+ = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = 
+
+ksp: pipecgrr, pc: none
+0
+1.441e+00
+2.340e-01
+
+ksp: pipecgrr, pc: jacobi
+0
+1.441e+00
+1.149e-01
+
+ksp: pipecgrr, pc: pbjacobi
+0
+1.441e+00
+1.167e-01
+
+ksp: pipecgrr, pc: bjacobi
+0
+1.441e+00
+1.394e+00
+
+ksp: pipecgrr, pc: sor
+0
+1.441e+00
+1.321e+00
+
+ksp: pipecgrr, pc: lu
+8
+1.707e-02
+7.408e-02
+
+ksp: pipecgrr, pc: mg
+0
+1.441e+00
+2.591e+00
+
+ksp: pipecgrr, pc: eisenstat
+
+ksp: pipecgrr, pc: ilu
+0
+1.441e+00
+1.288e+00
+
+ksp: pipecgrr, pc: icc
+0
+1.441e+00
+6.534e-01
+
+ksp: pipecgrr, pc: cholesky
+0
+1.441e+00
+6.935e-01
+
+ksp: pipecgrr, pc: asm
+0
+1.441e+00
+1.602e+00
+
+ksp: pipecgrr, pc: gasm
+0
+1.441e+00
+1.547e+00
+
+ksp: pipecgrr, pc: ksp
+8
+1.707e-02
+4.959e-02
+
+ksp: pipecgrr, pc: redundant
+8
+1.707e-02
+7.537e-02
+
+ksp: pipecgrr, pc: mat
+0
+1.441e+00
+2.039e-01
+
+ksp: pipecgrr, pc: cp
+0
+1.441e+00
+2.541e-02
+
+ksp: pipecgrr, pc: redistribute
+8
+1.707e-02
+7.644e-02
+
+ksp: pipecgrr, pc: svd
+8
+1.707e-02
+6.940e-01
+
+ksp: pipecgrr, pc: gamg
+0
+1.441e+00
+7.656e+00
+
+ksp: pipecgrr, pc: kaczmarz
+0
+1.441e+00
+5.679e-01
+
+ksp: pipecgrr, pc: hmg
+0
+1.441e+00
+1.173e+01
+
+ksp: pipecgrr, pc: lmvm
+0
+1.441e+00
+1.221e-02
+ = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = 
+
+ksp: pipelcg, pc: none
+8
+1.707e-02
+1.542e-01
+
+ksp: pipelcg, pc: jacobi
+0
+1.441e+00
+1.167e-02
+
+ksp: pipelcg, pc: pbjacobi
+0
+1.441e+00
+1.147e-02
+
+ksp: pipelcg, pc: bjacobi
+0
+1.441e+00
+1.309e-02
+
+ksp: pipelcg, pc: sor
+0
+1.441e+00
+1.189e-02
+
+ksp: pipelcg, pc: lu
+0
+1.441e+00
+2.141e-02
+
+ksp: pipelcg, pc: mg
+0
+1.441e+00
+1.458e-02
+
+ksp: pipelcg, pc: eisenstat
+0
+1.441e+00
+1.162e-02
+
+ksp: pipelcg, pc: ilu
+0
+1.441e+00
+1.299e-02
+
+ksp: pipelcg, pc: icc
+8
+1.707e-02
+1.891e+00
+
+ksp: pipelcg, pc: cholesky
+0
+1.441e+00
+4.078e-02
+
+ksp: pipelcg, pc: asm
+0
+1.441e+00
+1.435e-02
+
+ksp: pipelcg, pc: gasm
+0
+1.441e+00
+1.352e-02
+
+ksp: pipelcg, pc: ksp
+0
+1.441e+00
+1.548e-02
+
+ksp: pipelcg, pc: redundant
+0
+1.441e+00
+2.120e-02
+
+ksp: pipelcg, pc: mat
+0
+1.441e+00
+1.171e-02
+
+ksp: pipelcg, pc: cp
+0
+1.441e+00
+1.305e-02
+
+ksp: pipelcg, pc: redistribute
+0
+1.441e+00
+1.676e-02
+
+ksp: pipelcg, pc: svd
+0
+1.441e+00
+7.048e-02
+
+ksp: pipelcg, pc: gamg
+0
+1.441e+00
+7.332e-02
+
+ksp: pipelcg, pc: kaczmarz
+0
+1.441e+00
+1.205e-02
+
+ksp: pipelcg, pc: hmg
+0
+1.441e+00
+7.812e-02
+
+ksp: pipelcg, pc: lmvm
+0
+1.441e+00
+1.247e-02
+ = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = 
+
+ksp: pipeprcg, pc: none
+0
+1.441e+00
+1.243e+00
+
+ksp: pipeprcg, pc: jacobi
+0
+1.441e+00
+1.263e+00
+
+ksp: pipeprcg, pc: pbjacobi
+0
+1.441e+00
+1.269e+00
+
+ksp: pipeprcg, pc: bjacobi
+0
+1.441e+00
+2.400e+00
+
+ksp: pipeprcg, pc: sor
+0
+1.441e+00
+2.269e+00
+
+ksp: pipeprcg, pc: lu
+8
+1.707e-02
+7.651e-02
+
+ksp: pipeprcg, pc: mg
+8
+1.707e-02
+7.502e-02
+
+ksp: pipeprcg, pc: eisenstat
+8
+1.707e-02
+3.823e-02
+
+ksp: pipeprcg, pc: ilu
+0
+1.441e+00
+2.247e+00
+
+ksp: pipeprcg, pc: icc
+0
+1.441e+00
+2.319e+00
+
+ksp: pipeprcg, pc: cholesky
+0
+1.441e+00
+4.594e+00
+
+ksp: pipeprcg, pc: asm
+0
+1.441e+00
+2.873e+00
+
+ksp: pipeprcg, pc: gasm
+0
+1.441e+00
+2.668e+00
+
+ksp: pipeprcg, pc: ksp
+8
+1.707e-02
+6.237e-02
+
+ksp: pipeprcg, pc: redundant
+8
+1.707e-02
+7.686e-02
+
+ksp: pipeprcg, pc: mat
+0
+1.441e+00
+5.300e-01
+
+ksp: pipeprcg, pc: cp
+0
+1.441e+00
+6.161e+00
+
+ksp: pipeprcg, pc: redistribute
+8
+1.707e-02
+9.404e-02
+
+ksp: pipeprcg, pc: svd
+8
+1.707e-02
+6.929e-01
+
+ksp: pipeprcg, pc: gamg
+8
+1.707e-02
+1.068e+00
+
+ksp: pipeprcg, pc: kaczmarz
+0
+1.441e+00
+5.443e+00
+
+ksp: pipeprcg, pc: hmg
+1
+2.457e-01
+1.129e+01
+
+ksp: pipeprcg, pc: lmvm
+0
+1.441e+00
+1.222e-02
+ = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = 
+
+ksp: pipecg2, pc: none
+0
+1.441e+00
+6.569e-01
+
+ksp: pipecg2, pc: jacobi
+0
+1.441e+00
+6.755e-01
+
+ksp: pipecg2, pc: pbjacobi
+0
+1.441e+00
+6.643e-01
+
+ksp: pipecg2, pc: bjacobi
+0
+1.441e+00
+1.233e+00
+
+ksp: pipecg2, pc: sor
+0
+1.441e+00
+1.178e+00
+
+ksp: pipecg2, pc: lu
+0
+1.441e+00
+3.071e-02
+
+ksp: pipecg2, pc: mg
+0
+1.441e+00
+2.448e+00
+
+ksp: pipecg2, pc: eisenstat
+0
+1.441e+00
+7.230e-01
+
+ksp: pipecg2, pc: ilu
+0
+1.441e+00
+1.148e+00
+
+ksp: pipecg2, pc: icc
+0
+1.441e+00
+1.195e+00
+
+ksp: pipecg2, pc: cholesky
+0
+1.441e+00
+2.353e+00
+
+ksp: pipecg2, pc: asm
+0
+1.441e+00
+1.444e+00
+
+ksp: pipecg2, pc: gasm
+0
+1.441e+00
+1.358e+00
+
+ksp: pipecg2, pc: ksp
+8
+1.707e-02
+6.896e-02
+
+ksp: pipecg2, pc: redundant
+0
+1.441e+00
+3.127e-02
+
+ksp: pipecg2, pc: mat
+0
+1.441e+00
+1.143e+00
+
+ksp: pipecg2, pc: cp
+0
+1.441e+00
+3.105e+00
+
+ksp: pipecg2, pc: redistribute
+1
+2.457e-01
+2.286e+00
+
+ksp: pipecg2, pc: svd
+4
+1.601e-02
+4.129e-01
+
+ksp: pipecg2, pc: gamg
+0
+1.441e+00
+7.489e+00
+
+ksp: pipecg2, pc: kaczmarz
+0
+1.441e+00
+2.731e+00
+
+ksp: pipecg2, pc: hmg
+0
+1.441e+00
+1.137e+01
+
+ksp: pipecg2, pc: lmvm
+0
+1.441e+00
+1.235e-02
+ = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = 
+
+ksp: nash, pc: none
+0
+1.441e+00
+1.195e-02
+
+ksp: nash, pc: jacobi
+0
+1.441e+00
+1.146e-02
+
+ksp: nash, pc: pbjacobi
+0
+1.441e+00
+1.114e-02
+
+ksp: nash, pc: bjacobi
+0
+1.441e+00
+1.239e-02
+
+ksp: nash, pc: sor
+0
+1.441e+00
+1.131e-02
+
+ksp: nash, pc: lu
+0
+1.441e+00
+2.044e-02
+
+ksp: nash, pc: mg
+0
+1.441e+00
+1.436e-02
+
+ksp: nash, pc: eisenstat
+0
+1.441e+00
+1.150e-02
+
+ksp: nash, pc: ilu
+0
+1.441e+00
+1.208e-02
+
+ksp: nash, pc: icc
+0
+1.441e+00
+1.281e-02
+
+ksp: nash, pc: cholesky
+0
+1.441e+00
+3.993e-02
+
+ksp: nash, pc: asm
+0
+1.441e+00
+1.388e-02
+
+ksp: nash, pc: gasm
+0
+1.441e+00
+1.320e-02
+
+ksp: nash, pc: ksp
+0
+1.441e+00
+1.295e-02
+
+ksp: nash, pc: redundant
+0
+1.441e+00
+2.040e-02
+
+ksp: nash, pc: mat
+0
+1.441e+00
+1.121e-02
+
+ksp: nash, pc: cp
+0
+1.441e+00
+1.204e-02
+
+ksp: nash, pc: redistribute
+0
+1.441e+00
+1.550e-02
+
+ksp: nash, pc: svd
+0
+1.441e+00
+6.987e-02
+
+ksp: nash, pc: gamg
+0
+1.441e+00
+7.931e-02
+
+ksp: nash, pc: kaczmarz
+0
+1.441e+00
+1.277e-02
+
+ksp: nash, pc: hmg
+0
+1.441e+00
+7.517e-02
+
+ksp: nash, pc: lmvm
+0
+1.441e+00
+1.228e-02
+ = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = 
+
+ksp: stcg, pc: none
+0
+1.441e+00
+1.128e-02
+
+ksp: stcg, pc: jacobi
+0
+1.441e+00
+1.121e-02
+
+ksp: stcg, pc: pbjacobi
+0
+1.441e+00
+1.128e-02
+
+ksp: stcg, pc: bjacobi
+0
+1.441e+00
+1.218e-02
+
+ksp: stcg, pc: sor
+0
+1.441e+00
+1.202e-02
+
+ksp: stcg, pc: lu
+0
+1.441e+00
+2.211e-02
+
+ksp: stcg, pc: mg
+0
+1.441e+00
+1.362e-02
+
+ksp: stcg, pc: eisenstat
+0
+1.441e+00
+1.133e-02
+
+ksp: stcg, pc: ilu
+0
+1.441e+00
+1.232e-02
+
+ksp: stcg, pc: icc
+0
+1.441e+00
+1.237e-02
+
+ksp: stcg, pc: cholesky
+0
+1.441e+00
+4.022e-02
+
+ksp: stcg, pc: asm
+0
+1.441e+00
+1.412e-02
+
+ksp: stcg, pc: gasm
+0
+1.441e+00
+1.289e-02
+
+ksp: stcg, pc: ksp
+0
+1.441e+00
+1.366e-02
+
+ksp: stcg, pc: redundant
+0
+1.441e+00
+2.067e-02
+
+ksp: stcg, pc: mat
+0
+1.441e+00
+1.106e-02
+
+ksp: stcg, pc: cp
+0
+1.441e+00
+1.204e-02
+
+ksp: stcg, pc: redistribute
+0
+1.441e+00
+1.442e-02
+
+ksp: stcg, pc: svd
+0
+1.441e+00
+6.857e-02
+
+ksp: stcg, pc: gamg
+0
+1.441e+00
+7.033e-02
+
+ksp: stcg, pc: kaczmarz
+0
+1.441e+00
+1.145e-02
+
+ksp: stcg, pc: hmg
+0
+1.441e+00
+7.641e-02
+
+ksp: stcg, pc: lmvm
+0
+1.441e+00
+1.251e-02
+ = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = 
+
+ksp: gltr, pc: none
+0
+1.441e+00
+1.156e-02
+
+ksp: gltr, pc: jacobi
+0
+1.441e+00
+1.177e-02
+
+ksp: gltr, pc: pbjacobi
+0
+1.441e+00
+1.148e-02
+
+ksp: gltr, pc: bjacobi
+0
+1.441e+00
+1.269e-02
+
+ksp: gltr, pc: sor
+0
+1.441e+00
+1.118e-02
+
+ksp: gltr, pc: lu
+0
+1.441e+00
+2.054e-02
+
+ksp: gltr, pc: mg
+0
+1.441e+00
+1.382e-02
+
+ksp: gltr, pc: eisenstat
+0
+1.441e+00
+1.171e-02
+
+ksp: gltr, pc: ilu
+0
+1.441e+00
+1.223e-02
+
+ksp: gltr, pc: icc
+0
+1.441e+00
+1.266e-02
+
+ksp: gltr, pc: cholesky
+0
+1.441e+00
+4.030e-02
+
+ksp: gltr, pc: asm
+0
+1.441e+00
+1.405e-02
+
+ksp: gltr, pc: gasm
+0
+1.441e+00
+1.325e-02
+
+ksp: gltr, pc: ksp
+0
+1.441e+00
+1.364e-02
+
+ksp: gltr, pc: redundant
+0
+1.441e+00
+2.060e-02
+
+ksp: gltr, pc: mat
+0
+1.441e+00
+1.168e-02
+
+ksp: gltr, pc: cp
+0
+1.441e+00
+1.246e-02
+
+ksp: gltr, pc: redistribute
+0
+1.441e+00
+1.477e-02
+
+ksp: gltr, pc: svd
+0
+1.441e+00
+6.990e-02
+
+ksp: gltr, pc: gamg
+0
+1.441e+00
+7.377e-02
+
+ksp: gltr, pc: kaczmarz
+0
+1.441e+00
+1.132e-02
+
+ksp: gltr, pc: hmg
+0
+1.441e+00
+7.675e-02
+
+ksp: gltr, pc: lmvm
+0
+1.441e+00
+1.212e-02
+ = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = 
+
+ksp: richardson, pc: none
+0
+1.441e+00
+1.159e-02
+
+ksp: richardson, pc: jacobi
+8
+1.707e-02
+7.738e-02
+
+ksp: richardson, pc: pbjacobi
+8
+1.707e-02
+7.726e-02
+
+ksp: richardson, pc: bjacobi
+8
+1.707e-02
+4.149e-02
+
+ksp: richardson, pc: sor
+8
+1.707e-02
+5.867e+00
+
+ksp: richardson, pc: lu
+8
+1.707e-02
+7.269e-02
+
+ksp: richardson, pc: mg
+34
+1.707e-02
+5.890e+01
+
+ksp: richardson, pc: eisenstat
+8
+1.707e-02
+3.906e-02
+
+ksp: richardson, pc: ilu
+8
+1.707e-02
+4.187e-02
+
+ksp: richardson, pc: icc
+0
+1.441e+00
+1.332e-02
+
+ksp: richardson, pc: cholesky
+0
+1.441e+00
+4.314e-02
+
+ksp: richardson, pc: asm
+8
+1.707e-02
+5.042e-02
+
+ksp: richardson, pc: gasm
+8
+1.707e-02
+4.659e-02
+
+ksp: richardson, pc: ksp
+8
+1.707e-02
+4.347e-02
+
+ksp: richardson, pc: redundant
+8
+1.707e-02
+7.583e-02
+
+ksp: richardson, pc: mat
+0
+1.441e+00
+1.277e-02
+
+ksp: richardson, pc: cp
+0
+1.441e+00
+2.477e-02
+
+ksp: richardson, pc: redistribute
+8
+1.707e-02
+6.043e-02
+
+ksp: richardson, pc: svd
+8
+1.707e-02
+7.298e-01
+
+ksp: richardson, pc: gamg
+8
+1.707e-02
+1.837e-01
+
+ksp: richardson, pc: kaczmarz
+8
+1.707e-02
+2.170e+00
+
+ksp: richardson, pc: hmg
+8
+1.707e-02
+1.994e-01
+
+ksp: richardson, pc: lmvm
+0
+1.441e+00
+1.212e-02
+ = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = 
+
+ksp: chebyshev, pc: none
+0
+1.441e+00
+1.387e-02
+
+ksp: chebyshev, pc: jacobi
+8
+1.707e-02
+6.534e-02
+
+ksp: chebyshev, pc: pbjacobi
+8
+1.707e-02
+6.615e-02
+
+ksp: chebyshev, pc: bjacobi
+8
+1.707e-02
+6.195e-02
+
+ksp: chebyshev, pc: sor
+8
+1.707e-02
+5.366e-02
+
+ksp: chebyshev, pc: lu
+8
+1.707e-02
+1.031e-01
+
+ksp: chebyshev, pc: mg
+8
+1.707e-02
+1.049e-01
+
+ksp: chebyshev, pc: eisenstat
+8
+1.707e-02
+4.539e-02
+
+ksp: chebyshev, pc: ilu
+8
+1.707e-02
+6.047e-02
+
+ksp: chebyshev, pc: icc
+0
+1.441e+00
+1.575e-02
+
+ksp: chebyshev, pc: cholesky
+0
+1.441e+00
+4.608e-02
+
+ksp: chebyshev, pc: asm
+8
+1.707e-02
+7.203e-02
+
+ksp: chebyshev, pc: gasm
+8
+1.707e-02
+6.814e-02
+
+ksp: chebyshev, pc: ksp
+8
+1.707e-02
+1.816e-01
+
+ksp: chebyshev, pc: redundant
+8
+1.707e-02
+1.044e-01
+
+ksp: chebyshev, pc: mat
+0
+1.441e+00
+
+ksp: chebyshev, pc: cp
+0
+1.441e+00
+1.827e-02
+
+ksp: chebyshev, pc: redistribute
+8
+1.707e-02
+2.156e-01
+
+ksp: chebyshev, pc: svd
+8
+1.707e-02
+7.302e-01
+
+ksp: chebyshev, pc: gamg
+1
+2.457e-01
+
+ksp: chebyshev, pc: kaczmarz
+8
+1.707e-02
+9.521e-01
+
+ksp: chebyshev, pc: hmg
+8
+1.707e-02
+3.552e-01
+
+ksp: chebyshev, pc: lmvm
+0
+1.441e+00
+1.377e-02
+ = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = 
+
+ksp: gmres, pc: none
+8
+1.707e-02
+4.254e-02
+
+ksp: gmres, pc: jacobi
+8
+1.707e-02
+3.298e-02
+
+ksp: gmres, pc: pbjacobi
+8
+1.707e-02
+3.414e-02
+
+ksp: gmres, pc: bjacobi
+8
+1.707e-02
+3.954e-02
+
+ksp: gmres, pc: sor
+8
+1.707e-02
+3.367e-02
+
+ksp: gmres, pc: lu
+8
+1.707e-02
+7.479e-02
+
+ksp: gmres, pc: mg
+8
+1.707e-02
+5.215e-02
+
+ksp: gmres, pc: eisenstat
+8
+1.707e-02
+2.822e-02
+
+ksp: gmres, pc: ilu
+8
+1.707e-02
+3.567e-02
+
+ksp: gmres, pc: icc
+8
+1.707e-02
+1.059e-01
+
+ksp: gmres, pc: cholesky
+8
+1.707e-02
+1.307e-01
+
+ksp: gmres, pc: asm
+8
+1.707e-02
+4.514e-02
+
+ksp: gmres, pc: gasm
+8
+1.707e-02
+4.012e-02
+
+ksp: gmres, pc: ksp
+8
+1.707e-02
+4.683e-02
+
+ksp: gmres, pc: redundant
+8
+1.707e-02
+7.414e-02
+
+ksp: gmres, pc: mat
+8
+1.707e-02
+5.265e-01
+
+ksp: gmres, pc: cp
+0
+1.441e+00
+3.375e+00
+
+ksp: gmres, pc: redistribute
+8
+1.707e-02
+5.461e-02
+
+ksp: gmres, pc: svd
+8
+1.707e-02
+7.169e-01
+
+ksp: gmres, pc: gamg
+8
+1.707e-02
+1.904e-01
+
+ksp: gmres, pc: kaczmarz
+8
+1.707e-02
+1.253e-01
+
+ksp: gmres, pc: hmg
+8
+1.707e-02
+2.078e-01
+
+ksp: gmres, pc: lmvm
+0
+1.441e+00
+1.317e-02
+ = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = 
+
+ksp: tcqmr, pc: none
+1
+2.457e-01
+2.920e-02
+
+ksp: tcqmr, pc: jacobi
+8
+1.707e-02
+5.514e-02
+
+ksp: tcqmr, pc: pbjacobi
+8
+1.707e-02
+5.587e-02
+
+ksp: tcqmr, pc: bjacobi
+8
+1.707e-02
+5.177e-02
+
+ksp: tcqmr, pc: sor
+8
+1.707e-02
+5.317e-02
+
+ksp: tcqmr, pc: lu
+8
+1.707e-02
+7.729e-02
+
+ksp: tcqmr, pc: mg
+8
+1.707e-02
+8.330e-02
+
+ksp: tcqmr, pc: eisenstat
+8
+1.707e-02
+4.095e-02
+
+ksp: tcqmr, pc: ilu
+8
+1.707e-02
+4.888e-02
+
+ksp: tcqmr, pc: icc
+8
+1.707e-02
+2.941e-01
+
+ksp: tcqmr, pc: cholesky
+8
+1.707e-02
+2.599e-01
+
+ksp: tcqmr, pc: asm
+8
+1.707e-02
+5.893e-02
+
+ksp: tcqmr, pc: gasm
+8
+1.707e-02
+5.542e-02
+
+ksp: tcqmr, pc: ksp
+8
+1.707e-02
+5.804e-02
+
+ksp: tcqmr, pc: redundant
+8
+1.707e-02
+8.507e-02
+
+ksp: tcqmr, pc: mat
+0
+1.441e+00
+8.621e-02
+
+ksp: tcqmr, pc: cp
+0
+1.441e+00
+3.299e+00
+
+ksp: tcqmr, pc: redistribute
+8
+1.707e-02
+8.444e-02
+
+ksp: tcqmr, pc: svd
+8
+1.707e-02
+7.167e-01
+
+ksp: tcqmr, pc: gamg
+8
+1.707e-02
+2.340e-01
+
+ksp: tcqmr, pc: kaczmarz
+8
+1.707e-02
+4.244e-01
+
+ksp: tcqmr, pc: hmg
+8
+1.707e-02
+2.579e-01
+
+ksp: tcqmr, pc: lmvm
+0
+1.441e+00
+1.353e-02
+ = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = 
+
+ksp: fcg, pc: none
+8
+1.707e-02
+1.524e-01
+
+ksp: fcg, pc: jacobi
+8
+1.707e-02
+1.570e-01
+
+ksp: fcg, pc: pbjacobi
+8
+1.707e-02
+1.575e-01
+
+ksp: fcg, pc: bjacobi
+8
+1.707e-02
+2.394e-01
+
+ksp: fcg, pc: sor
+8
+1.707e-02
+1.665e-01
+
+ksp: fcg, pc: lu
+8
+1.707e-02
+7.325e-02
+
+ksp: fcg, pc: mg
+8
+1.707e-02
+2.314e-01
+
+ksp: fcg, pc: eisenstat
+8
+1.707e-02
+9.131e-02
+
+ksp: fcg, pc: ilu
+8
+1.707e-02
+2.280e-01
+
+ksp: fcg, pc: icc
+8
+1.707e-02
+3.755e-01
+
+ksp: fcg, pc: cholesky
+8
+1.707e-02
+9.365e-01
+
+ksp: fcg, pc: asm
+8
+1.707e-02
+2.808e-01
+
+ksp: fcg, pc: gasm
+8
+1.707e-02
+2.673e-01
+
+ksp: fcg, pc: ksp
+8
+1.707e-02
+4.379e-02
+
+ksp: fcg, pc: redundant
+8
+1.707e-02
+7.410e-02
+
+ksp: fcg, pc: mat
+1
+2.457e-01
+1.497e+00
+
+ksp: fcg, pc: cp
+0
+1.441e+00
+3.328e+00
+
+ksp: fcg, pc: redistribute
+8
+1.707e-02
+1.788e-01
+
+ksp: fcg, pc: svd
+8
+1.707e-02
+7.113e-01
+
+ksp: fcg, pc: gamg
+8
+1.707e-02
+5.631e-01
+
+ksp: fcg, pc: kaczmarz
+8
+1.707e-02
+4.589e-01
+
+ksp: fcg, pc: hmg
+8
+1.707e-02
+5.476e-01
+
+ksp: fcg, pc: lmvm
+0
+1.441e+00
+1.267e-02
+ = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = 
+
+ksp: pipefcg, pc: none
+8
+1.707e-02
+1.015e+00
+
+ksp: pipefcg, pc: jacobi
+8
+1.707e-02
+2.564e-01
+
+ksp: pipefcg, pc: pbjacobi
+8
+1.707e-02
+2.549e-01
+
+ksp: pipefcg, pc: bjacobi
+8
+1.707e-02
+6.361e-02
+
+ksp: pipefcg, pc: sor
+8
+1.707e-02
+8.622e-02
+
+ksp: pipefcg, pc: lu
+8
+1.707e-02
+7.546e-02
+
+ksp: pipefcg, pc: mg
+8
+1.707e-02
+8.995e-02
+
+ksp: pipefcg, pc: eisenstat
+8
+1.707e-02
+6.382e-02
+
+ksp: pipefcg, pc: ilu
+8
+1.707e-02
+6.060e-02
+
+ksp: pipefcg, pc: icc
+1
+2.456e-01
+6.611e+00
+
+ksp: pipefcg, pc: cholesky
+0
+1.441e+00
+3.179e-01
+
+ksp: pipefcg, pc: asm
+8
+1.707e-02
+7.235e-02
+
+ksp: pipefcg, pc: gasm
+8
+1.707e-02
+6.757e-02
+
+ksp: pipefcg, pc: ksp
+8
+1.707e-02
+5.055e-02
+
+ksp: pipefcg, pc: redundant
+8
+1.707e-02
+7.602e-02
+
+ksp: pipefcg, pc: mat
+1
+2.440e-01
+4.405e+00
+
+ksp: pipefcg, pc: cp
+0
+1.441e+00
+3.565e-02
+
+ksp: pipefcg, pc: redistribute
+8
+1.707e-02
+8.356e-02
+
+ksp: pipefcg, pc: svd
+8
+1.707e-02
+7.177e-01
+
+ksp: pipefcg, pc: gamg
+8
+1.707e-02
+2.322e-01
+
+ksp: pipefcg, pc: kaczmarz
+8
+1.707e-02
+3.233e+00
+
+ksp: pipefcg, pc: hmg
+8
+1.707e-02
+2.516e-01
+
+ksp: pipefcg, pc: lmvm
+0
+1.441e+00
+1.309e-02
+ = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = 
+
+ksp: bcgs, pc: none
+8
+1.707e-02
+4.365e-02
+
+ksp: bcgs, pc: jacobi
+8
+1.707e-02
+3.394e-02
+
+ksp: bcgs, pc: pbjacobi
+8
+1.707e-02
+3.397e-02
+
+ksp: bcgs, pc: bjacobi
+8
+1.707e-02
+3.858e-02
+
+ksp: bcgs, pc: sor
+8
+1.707e-02
+3.144e-02
+
+ksp: bcgs, pc: lu
+8
+1.707e-02
+7.980e-02
+
+ksp: bcgs, pc: mg
+8
+1.707e-02
+5.341e-02
+
+ksp: bcgs, pc: eisenstat
+8
+1.707e-02
+2.792e-02
+
+ksp: bcgs, pc: ilu
+8
+1.707e-02
+3.591e-02
+
+ksp: bcgs, pc: icc
+8
+1.707e-02
+1.320e-01
+
+ksp: bcgs, pc: cholesky
+8
+1.707e-02
+1.529e-01
+
+ksp: bcgs, pc: asm
+8
+1.707e-02
+4.264e-02
+
+ksp: bcgs, pc: gasm
+8
+1.707e-02
+4.098e-02
+
+ksp: bcgs, pc: ksp
+8
+1.707e-02
+5.067e-02
+
+ksp: bcgs, pc: redundant
+8
+1.707e-02
+7.946e-02
+
+ksp: bcgs, pc: mat
+8
+1.707e-02
+3.088e-01
+
+ksp: bcgs, pc: cp
+0
+1.441e+00
+1.130e-01
+
+ksp: bcgs, pc: redistribute
+8
+1.707e-02
+6.098e-02
+
+ksp: bcgs, pc: svd
+8
+1.707e-02
+7.004e-01
+
+ksp: bcgs, pc: gamg
+8
+1.707e-02
+1.799e-01
+
+ksp: bcgs, pc: kaczmarz
+8
+1.707e-02
+1.415e-01
+
+ksp: bcgs, pc: hmg
+8
+1.707e-02
+2.023e-01
+
+ksp: bcgs, pc: lmvm
+0
+1.441e+00
+1.251e-02
+ = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = 
+
+ksp: ibcgs, pc: none
+8
+1.707e-02
+4.452e-02
+
+ksp: ibcgs, pc: jacobi
+8
+1.707e-02
+3.946e-02
+
+ksp: ibcgs, pc: pbjacobi
+8
+1.707e-02
+4.362e-02
+
+ksp: ibcgs, pc: bjacobi
+8
+1.707e-02
+4.185e-02
+
+ksp: ibcgs, pc: sor
+
+ksp: ibcgs, pc: lu
+8
+1.707e-02
+8.060e-02
+
+ksp: ibcgs, pc: mg
+
+ksp: ibcgs, pc: eisenstat
+
+ksp: ibcgs, pc: ilu
+8
+1.707e-02
+3.869e-02
+
+ksp: ibcgs, pc: icc
+8
+1.707e-02
+1.290e-01
+
+ksp: ibcgs, pc: cholesky
+8
+1.707e-02
+1.490e-01
+
+ksp: ibcgs, pc: asm
+8
+1.707e-02
+4.847e-02
+
+ksp: ibcgs, pc: gasm
+8
+1.707e-02
+4.421e-02
+
+ksp: ibcgs, pc: ksp
+8
+1.707e-02
+6.100e-02
+
+ksp: ibcgs, pc: redundant
+8
+1.707e-02
+7.826e-02
+
+ksp: ibcgs, pc: mat
+8
+1.707e-02
+5.186e-01
+
+ksp: ibcgs, pc: cp
+0
+1.441e+00
+1.914e-02
+
+ksp: ibcgs, pc: redistribute
+
+ksp: ibcgs, pc: svd
+8
+1.707e-02
+7.133e-01
+
+ksp: ibcgs, pc: gamg
+8
+1.707e-02
+1.878e-01
+
+ksp: ibcgs, pc: kaczmarz
+
+ksp: ibcgs, pc: hmg
+
+ksp: ibcgs, pc: lmvm
+0
+1.441e+00
+1.314e-02
+ = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = 
+
+ksp: qmrcgs, pc: none
+10
+1.707e-02
+6.800e-02
+
+ksp: qmrcgs, pc: jacobi
+8
+1.707e-02
+3.837e-02
+
+ksp: qmrcgs, pc: pbjacobi
+8
+1.707e-02
+3.949e-02
+
+ksp: qmrcgs, pc: bjacobi
+8
+1.707e-02
+3.995e-02
+
+ksp: qmrcgs, pc: sor
+8
+1.707e-02
+3.339e-02
+
+ksp: qmrcgs, pc: lu
+8
+1.707e-02
+7.450e-02
+
+ksp: qmrcgs, pc: mg
+8
+1.707e-02
+5.317e-02
+
+ksp: qmrcgs, pc: eisenstat
+8
+1.707e-02
+3.061e-02
+
+ksp: qmrcgs, pc: ilu
+8
+1.707e-02
+3.877e-02
+
+ksp: qmrcgs, pc: icc
+9
+1.707e-02
+1.735e-01
+
+ksp: qmrcgs, pc: cholesky
+9
+1.707e-02
+1.949e-01
+
+ksp: qmrcgs, pc: asm
+8
+1.707e-02
+4.593e-02
+
+ksp: qmrcgs, pc: gasm
+8
+1.707e-02
+4.983e-02
+
+ksp: qmrcgs, pc: ksp
+8
+1.707e-02
+4.723e-02
+
+ksp: qmrcgs, pc: redundant
+8
+1.707e-02
+7.488e-02
+
+ksp: qmrcgs, pc: mat
+2
+2.644e-01
+4.092e-01
+
+ksp: qmrcgs, pc: cp
+0
+1.441e+00
+8.482e-02
+
+ksp: qmrcgs, pc: redistribute
+10
+1.707e-02
+6.276e-02
+
+ksp: qmrcgs, pc: svd
+8
+1.707e-02
+7.197e-01
+
+ksp: qmrcgs, pc: gamg
+8
+1.707e-02
+1.781e-01
+
+ksp: qmrcgs, pc: kaczmarz
+8
+1.707e-02
+1.515e-01
+
+ksp: qmrcgs, pc: hmg
+9
+1.707e-02
+2.204e-01
+
+ksp: qmrcgs, pc: lmvm
+0
+1.441e+00
+1.235e-02
+ = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = 
+
+ksp: fbcgs, pc: none
+8
+1.707e-02
+4.691e-02
+
+ksp: fbcgs, pc: jacobi
+8
+1.707e-02
+3.406e-02
+
+ksp: fbcgs, pc: pbjacobi
+8
+1.707e-02
+3.340e-02
+
+ksp: fbcgs, pc: bjacobi
+8
+1.707e-02
+3.632e-02
+
+ksp: fbcgs, pc: sor
+8
+1.707e-02
+3.067e-02
+
+ksp: fbcgs, pc: lu
+8
+1.707e-02
+7.475e-02
+
+ksp: fbcgs, pc: mg
+8
+1.707e-02
+5.250e-02
+
+ksp: fbcgs, pc: eisenstat
+8
+1.707e-02
+2.939e-02
+
+ksp: fbcgs, pc: ilu
+8
+1.707e-02
+3.642e-02
+
+ksp: fbcgs, pc: icc
+8
+1.707e-02
+1.313e-01
+
+ksp: fbcgs, pc: cholesky
+8
+1.707e-02
+1.588e-01
+
+ksp: fbcgs, pc: asm
+8
+1.707e-02
+4.448e-02
+
+ksp: fbcgs, pc: gasm
+8
+1.707e-02
+3.949e-02
+
+ksp: fbcgs, pc: ksp
+8
+1.707e-02
+4.365e-02
+
+ksp: fbcgs, pc: redundant
+8
+1.707e-02
+8.193e-02
+
+ksp: fbcgs, pc: mat
+8
+1.707e-02
+3.809e-01
+
+ksp: fbcgs, pc: cp
+0
+1.441e+00
+2.199e-01
+
+ksp: fbcgs, pc: redistribute
+8
+1.707e-02
+5.272e-02
+
+ksp: fbcgs, pc: svd
+8
+1.707e-02
+7.144e-01
+
+ksp: fbcgs, pc: gamg
+8
+1.707e-02
+1.815e-01
+
+ksp: fbcgs, pc: kaczmarz
+8
+1.707e-02
+1.488e-01
+
+ksp: fbcgs, pc: hmg
+8
+1.707e-02
+2.071e-01
+
+ksp: fbcgs, pc: lmvm
+0
+1.441e+00
+1.308e-02
+ = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = 
+
+ksp: pipebcgs, pc: none
+8
+1.707e-02
+4.952e-02
+
+ksp: pipebcgs, pc: jacobi
+8
+1.707e-02
+3.626e-02
+
+ksp: pipebcgs, pc: pbjacobi
+8
+1.707e-02
+3.725e-02
+
+ksp: pipebcgs, pc: bjacobi
+8
+1.707e-02
+4.188e-02
+
+ksp: pipebcgs, pc: sor
+8
+1.707e-02
+3.594e-02
+
+ksp: pipebcgs, pc: lu
+8
+1.707e-02
+7.936e-02
+
+ksp: pipebcgs, pc: mg
+8
+1.707e-02
+5.678e-02
+
+ksp: pipebcgs, pc: eisenstat
+8
+1.707e-02
+2.952e-02
+
+ksp: pipebcgs, pc: ilu
+8
+1.707e-02
+3.775e-02
+
+ksp: pipebcgs, pc: icc
+8
+1.707e-02
+1.475e-01
+
+ksp: pipebcgs, pc: cholesky
+8
+1.707e-02
+1.685e-01
+
+ksp: pipebcgs, pc: asm
+8
+1.707e-02
+4.608e-02
+
+ksp: pipebcgs, pc: gasm
+8
+1.707e-02
+4.296e-02
+
+ksp: pipebcgs, pc: ksp
+8
+1.707e-02
+5.804e-02
+
+ksp: pipebcgs, pc: redundant
+8
+1.707e-02
+7.938e-02
+
+ksp: pipebcgs, pc: mat
+8
+1.707e-02
+5.237e-01
+
+ksp: pipebcgs, pc: cp
+0
+1.441e+00
+7.286e-02
+
+ksp: pipebcgs, pc: redistribute
+8
+1.707e-02
+6.929e-02
+
+ksp: pipebcgs, pc: svd
+8
+1.707e-02
+7.322e-01
+
+ksp: pipebcgs, pc: gamg
+8
+1.707e-02
+1.850e-01
+
+ksp: pipebcgs, pc: kaczmarz
+8
+1.707e-02
+1.551e-01
+
+ksp: pipebcgs, pc: hmg
+8
+1.707e-02
+2.133e-01
+
+ksp: pipebcgs, pc: lmvm
+0
+1.441e+00
+1.277e-02
+ = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = 
+
+ksp: fbcgsr, pc: none
+8
+1.707e-02
+4.292e-02
+
+ksp: fbcgsr, pc: jacobi
+8
+1.707e-02
+3.316e-02
+
+ksp: fbcgsr, pc: pbjacobi
+8
+1.707e-02
+3.439e-02
+
+ksp: fbcgsr, pc: bjacobi
+8
+1.707e-02
+3.723e-02
+
+ksp: fbcgsr, pc: sor
+8
+1.707e-02
+3.148e-02
+
+ksp: fbcgsr, pc: lu
+8
+1.707e-02
+7.274e-02
+
+ksp: fbcgsr, pc: mg
+8
+1.707e-02
+5.160e-02
+
+ksp: fbcgsr, pc: eisenstat
+8
+1.707e-02
+2.805e-02
+
+ksp: fbcgsr, pc: ilu
+8
+1.707e-02
+3.577e-02
+
+ksp: fbcgsr, pc: icc
+8
+1.707e-02
+1.320e-01
+
+ksp: fbcgsr, pc: cholesky
+8
+1.707e-02
+1.590e-01
+
+ksp: fbcgsr, pc: asm
+8
+1.707e-02
+4.245e-02
+
+ksp: fbcgsr, pc: gasm
+8
+1.707e-02
+4.077e-02
+
+ksp: fbcgsr, pc: ksp
+8
+1.707e-02
+4.774e-02
+
+ksp: fbcgsr, pc: redundant
+8
+1.707e-02
+7.702e-02
+
+ksp: fbcgsr, pc: mat
+8
+1.707e-02
+3.609e-01
+
+ksp: fbcgsr, pc: cp
+0
+1.441e+00
+1.713e-01
+
+ksp: fbcgsr, pc: redistribute
+8
+1.707e-02
+5.378e-02
+
+ksp: fbcgsr, pc: svd
+8
+1.707e-02
+7.030e-01
+
+ksp: fbcgsr, pc: gamg
+8
+1.707e-02
+1.768e-01
+
+ksp: fbcgsr, pc: kaczmarz
+8
+1.707e-02
+1.478e-01
+
+ksp: fbcgsr, pc: hmg
+8
+1.707e-02
+2.018e-01
+
+ksp: fbcgsr, pc: lmvm
+0
+1.441e+00
+1.235e-02
+ = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = 
+
+ksp: bcgsl, pc: none
+8
+1.707e-02
+4.439e-02
+
+ksp: bcgsl, pc: jacobi
+8
+1.707e-02
+3.646e-02
+
+ksp: bcgsl, pc: pbjacobi
+8
+1.707e-02
+3.605e-02
+
+ksp: bcgsl, pc: bjacobi
+8
+1.707e-02
+4.002e-02
+
+ksp: bcgsl, pc: sor
+8
+1.707e-02
+3.464e-02
+
+ksp: bcgsl, pc: lu
+0
+1.441e+00
+2.263e-02
+
+ksp: bcgsl, pc: mg
+8
+1.707e-02
+5.395e-02
+
+ksp: bcgsl, pc: eisenstat
+8
+1.707e-02
+2.999e-02
+
+ksp: bcgsl, pc: ilu
+8
+1.707e-02
+3.708e-02
+
+ksp: bcgsl, pc: icc
+8
+1.707e-02
+1.249e-01
+
+ksp: bcgsl, pc: cholesky
+8
+1.707e-02
+1.397e-01
+
+ksp: bcgsl, pc: asm
+8
+1.707e-02
+4.374e-02
+
+ksp: bcgsl, pc: gasm
+8
+1.707e-02
+4.357e-02
+
+ksp: bcgsl, pc: ksp
+8
+1.707e-02
+6.481e-02
+
+ksp: bcgsl, pc: redundant
+0
+1.441e+00
+2.265e-02
+
+ksp: bcgsl, pc: mat
+8
+1.707e-02
+3.406e-01
+
+ksp: bcgsl, pc: cp
+0
+1.441e+00
+1.323e-01
+
+ksp: bcgsl, pc: redistribute
+8
+1.707e-02
+7.423e-02
+
+ksp: bcgsl, pc: svd
+0
+1.441e+00
+7.237e-02
+
+ksp: bcgsl, pc: gamg
+8
+1.707e-02
+1.977e-01
+
+ksp: bcgsl, pc: kaczmarz
+8
+1.707e-02
+1.462e-01
+
+ksp: bcgsl, pc: hmg
+8
+1.707e-02
+2.238e-01
+
+ksp: bcgsl, pc: lmvm
+0
+1.441e+00
+1.507e-02
+ = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = 
+
+ksp: cgs, pc: none
+1
+2.457e-01
+1.834e-02
+
+ksp: cgs, pc: jacobi
+8
+1.707e-02
+3.726e-02
+
+ksp: cgs, pc: pbjacobi
+8
+1.707e-02
+3.704e-02
+
+ksp: cgs, pc: bjacobi
+8
+1.707e-02
+3.813e-02
+
+ksp: cgs, pc: sor
+8
+1.707e-02
+3.251e-02
+
+ksp: cgs, pc: lu
+8
+1.707e-02
+7.477e-02
+
+ksp: cgs, pc: mg
+8
+1.707e-02
+5.312e-02
+
+ksp: cgs, pc: eisenstat
+8
+1.707e-02
+2.818e-02
+
+ksp: cgs, pc: ilu
+8
+1.707e-02
+3.720e-02
+
+ksp: cgs, pc: icc
+8
+1.707e-02
+1.221e-01
+
+ksp: cgs, pc: cholesky
+0
+1.441e+00
+4.303e-02
+
+ksp: cgs, pc: asm
+8
+1.707e-02
+4.589e-02
+
+ksp: cgs, pc: gasm
+8
+1.707e-02
+4.212e-02
+
+ksp: cgs, pc: ksp
+8
+1.707e-02
+5.078e-02
+
+ksp: cgs, pc: redundant
+8
+1.707e-02
+7.760e-02
+
+ksp: cgs, pc: mat
+1
+2.457e-01
+3.107e-02
+
+ksp: cgs, pc: cp
+0
+1.441e+00
+3.728e-02
+
+ksp: cgs, pc: redistribute
+8
+1.707e-02
+6.318e-02
+
+ksp: cgs, pc: svd
+8
+1.707e-02
+7.099e-01
+
+ksp: cgs, pc: gamg
+8
+1.707e-02
+1.817e-01
+
+ksp: cgs, pc: kaczmarz
+8
+1.707e-02
+1.562e-01
+
+ksp: cgs, pc: hmg
+8
+1.707e-02
+2.268e-01
+
+ksp: cgs, pc: lmvm
+0
+1.441e+00
+1.283e-02
+ = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = 
+
+ksp: tfqmr, pc: none
+8
+1.707e-02
+5.469e-02
+
+ksp: tfqmr, pc: jacobi
+8
+1.707e-02
+3.909e-02
+
+ksp: tfqmr, pc: pbjacobi
+8
+1.707e-02
+3.880e-02
+
+ksp: tfqmr, pc: bjacobi
+8
+1.707e-02
+3.861e-02
+
+ksp: tfqmr, pc: sor
+8
+1.707e-02
+3.525e-02
+
+ksp: tfqmr, pc: lu
+8
+1.707e-02
+7.511e-02
+
+ksp: tfqmr, pc: mg
+8
+1.707e-02
+6.335e-02
+
+ksp: tfqmr, pc: eisenstat
+8
+1.707e-02
+2.985e-02
+
+ksp: tfqmr, pc: ilu
+8
+1.707e-02
+4.027e-02
+
+ksp: tfqmr, pc: icc
+8
+1.707e-02
+1.518e-01
+
+ksp: tfqmr, pc: cholesky
+8
+1.707e-02
+1.747e-01
+
+ksp: tfqmr, pc: asm
+8
+1.707e-02
+4.535e-02
+
+ksp: tfqmr, pc: gasm
+8
+1.707e-02
+4.254e-02
+
+ksp: tfqmr, pc: ksp
+8
+1.707e-02
+5.372e-02
+
+ksp: tfqmr, pc: redundant
+8
+1.707e-02
+8.846e-02
+
+ksp: tfqmr, pc: mat
+1
+2.457e-01
+5.483e-01
+
+ksp: tfqmr, pc: cp
+0
+1.441e+00
+1.032e+00
+
+ksp: tfqmr, pc: redistribute
+8
+1.707e-02
+7.165e-02
+
+ksp: tfqmr, pc: svd
+8
+1.707e-02
+7.118e-01
+
+ksp: tfqmr, pc: gamg
+8
+1.707e-02
+1.831e-01
+
+ksp: tfqmr, pc: kaczmarz
+8
+1.707e-02
+1.687e-01
+
+ksp: tfqmr, pc: hmg
+8
+1.707e-02
+2.090e-01
+
+ksp: tfqmr, pc: lmvm
+0
+1.441e+00
+1.369e-02
+ = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = 
+
+ksp: cr, pc: none
+0
+1.441e+00
+6.556e-01
+
+ksp: cr, pc: jacobi
+0
+1.441e+00
+1.247e-02
+
+ksp: cr, pc: pbjacobi
+0
+1.441e+00
+1.201e-02
+
+ksp: cr, pc: bjacobi
+0
+1.441e+00
+1.297e-02
+
+ksp: cr, pc: sor
+0
+1.441e+00
+1.171e-02
+
+ksp: cr, pc: lu
+0
+1.441e+00
+2.304e-02
+
+ksp: cr, pc: mg
+0
+1.441e+00
+1.596e-02
+
+ksp: cr, pc: eisenstat
+0
+1.441e+00
+1.175e-02
+
+ksp: cr, pc: ilu
+0
+1.441e+00
+1.243e-02
+
+ksp: cr, pc: icc
+0
+1.441e+00
+1.214e+00
+
+ksp: cr, pc: cholesky
+0
+1.441e+00
+4.058e-02
+
+ksp: cr, pc: asm
+0
+1.441e+00
+1.548e-02
+
+ksp: cr, pc: gasm
+0
+1.441e+00
+1.379e-02
+
+ksp: cr, pc: ksp
+0
+1.441e+00
+1.432e-02
+
+ksp: cr, pc: redundant
+0
+1.441e+00
+2.285e-02
+
+ksp: cr, pc: mat
+0
+1.441e+00
+1.173e-02
+
+ksp: cr, pc: cp
+0
+1.441e+00
+2.999e-02
+
+ksp: cr, pc: redistribute
+0
+1.441e+00
+1.620e-02
+
+ksp: cr, pc: svd
+0
+1.441e+00
+7.133e-02
+
+ksp: cr, pc: gamg
+0
+1.441e+00
+7.475e-02
+
+ksp: cr, pc: kaczmarz
+0
+1.441e+00
+1.280e-02
+
+ksp: cr, pc: hmg
+0
+1.441e+00
+8.236e-02
+
+ksp: cr, pc: lmvm
+0
+1.441e+00
+1.393e-02
+ = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = 
+
+ksp: pipecr, pc: none
+0
+1.441e+00
+6.094e-01
+
+ksp: pipecr, pc: jacobi
+0
+1.441e+00
+2.502e-01
+
+ksp: pipecr, pc: pbjacobi
+0
+1.441e+00
+2.478e-01
+
+ksp: pipecr, pc: bjacobi
+0
+1.441e+00
+1.290e+00
+
+ksp: pipecr, pc: sor
+0
+1.441e+00
+1.554e-01
+
+ksp: pipecr, pc: lu
+8
+1.707e-02
+9.018e-02
+
+ksp: pipecr, pc: mg
+0
+1.441e+00
+6.045e-01
+
+ksp: pipecr, pc: eisenstat
+0
+1.441e+00
+7.479e-01
+
+ksp: pipecr, pc: ilu
+0
+1.441e+00
+1.191e+00
+
+ksp: pipecr, pc: icc
+0
+1.441e+00
+1.247e+00
+
+ksp: pipecr, pc: cholesky
+0
+1.441e+00
+2.477e+00
+
+ksp: pipecr, pc: asm
+0
+1.441e+00
+1.533e+00
+
+ksp: pipecr, pc: gasm
+0
+1.441e+00
+1.427e+00
+
+ksp: pipecr, pc: ksp
+8
+1.707e-02
+5.162e-02
+
+ksp: pipecr, pc: redundant
+8
+1.707e-02
+7.902e-02
+
+ksp: pipecr, pc: mat
+0
+1.441e+00
+3.174e-01
+
+ksp: pipecr, pc: cp
+0
+1.441e+00
+3.220e+00
+
+ksp: pipecr, pc: redistribute
+8
+1.707e-02
+8.104e-02
+
+ksp: pipecr, pc: svd
+8
+1.707e-02
+7.049e-01
+
+ksp: pipecr, pc: gamg
+0
+1.441e+00
+7.747e+00
+
+ksp: pipecr, pc: kaczmarz
+0
+1.441e+00
+7.413e-01
+
+ksp: pipecr, pc: hmg
+0
+1.441e+00
+1.168e+01
+
+ksp: pipecr, pc: lmvm
+0
+1.441e+00
+1.276e-02
+ = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = 
+
+ksp: lsqr, pc: none
+8
+1.707e-02
+1.879e-01
+
+ksp: lsqr, pc: jacobi
+0
+1.441e+00
+1.179e-02
+
+ksp: lsqr, pc: pbjacobi
+0
+1.441e+00
+1.184e-02
+
+ksp: lsqr, pc: bjacobi
+0
+1.441e+00
+1.285e-02
+
+ksp: lsqr, pc: sor
+0
+1.441e+00
+1.197e-02
+
+ksp: lsqr, pc: lu
+0
+1.441e+00
+2.077e-02
+
+ksp: lsqr, pc: mg
+0
+1.441e+00
+1.513e-02
+
+ksp: lsqr, pc: eisenstat
+
+ksp: lsqr, pc: ilu
+0
+1.441e+00
+1.406e-02
+
+ksp: lsqr, pc: icc
+8
+1.707e-02
+5.145e-01
+
+ksp: lsqr, pc: cholesky
+0
+1.441e+00
+4.092e-02
+
+ksp: lsqr, pc: asm
+0
+1.441e+00
+1.447e-02
+
+ksp: lsqr, pc: gasm
+0
+1.441e+00
+1.386e-02
+
+ksp: lsqr, pc: ksp
+0
+1.441e+00
+1.420e-02
+
+ksp: lsqr, pc: redundant
+0
+1.441e+00
+2.141e-02
+
+ksp: lsqr, pc: mat
+0
+1.441e+00
+1.240e-02
+
+ksp: lsqr, pc: cp
+6
+1.461e+00
+7.755e-02
+
+ksp: lsqr, pc: redistribute
+0
+1.441e+00
+1.556e-02
+
+ksp: lsqr, pc: svd
+0
+1.441e+00
+6.977e-02
+
+ksp: lsqr, pc: gamg
+0
+1.441e+00
+7.237e-02
+
+ksp: lsqr, pc: kaczmarz
+0
+1.441e+00
+1.273e-02
+
+ksp: lsqr, pc: hmg
+0
+1.441e+00
+7.722e-02
+
+ksp: lsqr, pc: lmvm
+0
+1.441e+00
+1.401e-02
+ = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = 
+
+ksp: preonly, pc: none
+0
+1.441e+00
+1.835e-02
+
+ksp: preonly, pc: jacobi
+243
+1.707e-02
+3.520e-01
+
+ksp: preonly, pc: pbjacobi
+243
+1.707e-02
+3.664e-01
+
+ksp: preonly, pc: bjacobi
+32
+1.707e-02
+8.924e-02
+
+ksp: preonly, pc: sor
+58
+1.707e-02
+9.918e-02
+
+ksp: preonly, pc: lu
+8
+1.707e-02
+7.161e-02
+
+ksp: preonly, pc: mg
+34
+1.707e-02
+1.327e-01
+
+ksp: preonly, pc: eisenstat
+58
+1.707e-02
+9.704e-02
+
+ksp: preonly, pc: ilu
+32
+1.707e-02
+8.728e-02
+
+ksp: preonly, pc: icc
+0
+1.441e+00
+1.888e-02
+
+ksp: preonly, pc: cholesky
+5
+1.432e+00
+8.077e-02
+
+ksp: preonly, pc: asm
+32
+1.707e-02
+1.065e-01
+
+ksp: preonly, pc: gasm
+32
+1.707e-02
+9.541e-02
+
+ksp: preonly, pc: ksp
+8
+1.707e-02
+3.538e-02
+
+ksp: preonly, pc: redundant
+8
+1.707e-02
+7.576e-02
+
+ksp: preonly, pc: mat
+868
+1.162e+00
+4.137e+00
+
+ksp: preonly, pc: cp
+0
+1.441e+00
+2.011e-02
+
+ksp: preonly, pc: redistribute
+9
+1.707e-02
+4.316e-02
+
+ksp: preonly, pc: svd
+8
+1.707e-02
+7.055e-01
+
+ksp: preonly, pc: gamg
+19
+1.707e-02
+2.894e-01
+
+ksp: preonly, pc: kaczmarz
+79
+1.195e+00
+1.708e-01
+
+ksp: preonly, pc: hmg
+15
+1.707e-02
+2.825e-01
+
+ksp: preonly, pc: lmvm
+0
+1.441e+00
+1.242e-02
+ = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = 
+
+ksp: bicg, pc: none
+8
+1.707e-02
+5.615e-02
+
+ksp: bicg, pc: jacobi
+8
+1.707e-02
+4.322e-02
+
+ksp: bicg, pc: pbjacobi
+8
+1.707e-02
+4.370e-02
+
+ksp: bicg, pc: bjacobi
+8
+1.707e-02
+4.736e-02
+
+ksp: bicg, pc: sor
+
+ksp: bicg, pc: lu
+8
+1.707e-02
+7.868e-02
+
+ksp: bicg, pc: mg
+
+ksp: bicg, pc: eisenstat
+
+ksp: bicg, pc: ilu
+8
+1.707e-02
+4.525e-02
+
+ksp: bicg, pc: icc
+8
+1.707e-02
+1.635e-01
+
+ksp: bicg, pc: cholesky
+8
+1.707e-02
+1.620e-01
+
+ksp: bicg, pc: asm
+8
+1.707e-02
+5.404e-02
+
+ksp: bicg, pc: gasm
+8
+1.707e-02
+4.809e-02
+
+ksp: bicg, pc: ksp
+8
+1.707e-02
+6.230e-02
+
+ksp: bicg, pc: redundant
+8
+1.707e-02
+7.922e-02
+
+ksp: bicg, pc: mat
+8
+1.707e-02
+3.348e-01
+
+ksp: bicg, pc: cp
+0
+1.441e+00
+6.280e+00
+
+ksp: bicg, pc: redistribute
+
+ksp: bicg, pc: svd
+8
+1.707e-02
+7.270e-01
+
+ksp: bicg, pc: gamg
+8
+1.707e-02
+2.192e-01
+
+ksp: bicg, pc: kaczmarz
+
+ksp: bicg, pc: hmg
+
+ksp: bicg, pc: lmvm
+ = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = 
+
+ksp: fgmres, pc: none
+8
+1.707e-02
+4.374e-02
+
+ksp: fgmres, pc: jacobi
+8
+1.707e-02
+3.283e-02
+
+ksp: fgmres, pc: pbjacobi
+8
+1.707e-02
+3.322e-02
+
+ksp: fgmres, pc: bjacobi
+8
+1.707e-02
+4.165e-02
+
+ksp: fgmres, pc: sor
+8
+1.707e-02
+2.957e-02
+
+ksp: fgmres, pc: lu
+8
+1.707e-02
+7.344e-02
+
+ksp: fgmres, pc: mg
+8
+1.707e-02
+4.831e-02
+
+ksp: fgmres, pc: eisenstat
+8
+1.707e-02
+2.776e-02
+
+ksp: fgmres, pc: ilu
+8
+1.707e-02
+3.545e-02
+
+ksp: fgmres, pc: icc
+8
+1.707e-02
+1.106e-01
+
+ksp: fgmres, pc: cholesky
+8
+1.707e-02
+1.376e-01
+
+ksp: fgmres, pc: asm
+8
+1.707e-02
+4.105e-02
+
+ksp: fgmres, pc: gasm
+8
+1.707e-02
+3.905e-02
+
+ksp: fgmres, pc: ksp
+8
+1.707e-02
+5.034e-02
+
+ksp: fgmres, pc: redundant
+8
+1.707e-02
+7.907e-02
+
+ksp: fgmres, pc: mat
+8
+1.707e-02
+1.088e+00
+
+ksp: fgmres, pc: cp
+0
+1.441e+00
+3.272e+00
+
+ksp: fgmres, pc: redistribute
+8
+1.707e-02
+5.057e-02
+
+ksp: fgmres, pc: svd
+8
+1.707e-02
+7.112e-01
+
+ksp: fgmres, pc: gamg
+8
+1.707e-02
+1.742e-01
+
+ksp: fgmres, pc: kaczmarz
+8
+1.707e-02
+1.405e-01
+
+ksp: fgmres, pc: hmg
+8
+1.707e-02
+2.030e-01
+
+ksp: fgmres, pc: lmvm
+0
+1.441e+00
+1.269e-02
+ = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = 
+
+ksp: pipefgmres, pc: none
+8
+1.707e-02
+5.287e-02
+
+ksp: pipefgmres, pc: jacobi
+8
+1.707e-02
+3.718e-02
+
+ksp: pipefgmres, pc: pbjacobi
+8
+1.707e-02
+3.876e-02
+
+ksp: pipefgmres, pc: bjacobi
+8
+1.707e-02
+3.845e-02
+
+ksp: pipefgmres, pc: sor
+8
+1.707e-02
+3.379e-02
+
+ksp: pipefgmres, pc: lu
+8
+1.707e-02
+7.420e-02
+
+ksp: pipefgmres, pc: mg
+8
+1.707e-02
+5.035e-02
+
+ksp: pipefgmres, pc: eisenstat
+8
+1.707e-02
+2.869e-02
+
+ksp: pipefgmres, pc: ilu
+8
+1.707e-02
+3.653e-02
+
+ksp: pipefgmres, pc: icc
+8
+1.707e-02
+1.486e-01
+
+ksp: pipefgmres, pc: cholesky
+8
+1.707e-02
+1.518e-01
+
+ksp: pipefgmres, pc: asm
+8
+1.707e-02
+4.207e-02
+
+ksp: pipefgmres, pc: gasm
+8
+1.707e-02
+3.990e-02
+
+ksp: pipefgmres, pc: ksp
+8
+1.707e-02
+4.369e-02
+
+ksp: pipefgmres, pc: redundant
+8
+1.707e-02
+7.460e-02
+
+ksp: pipefgmres, pc: mat
+8
+1.707e-02
+1.420e+00
+
+ksp: pipefgmres, pc: cp
+0
+1.441e+00
+3.847e+00
+
+ksp: pipefgmres, pc: redistribute
+8
+1.707e-02
+6.054e-02
+
+ksp: pipefgmres, pc: svd
+8
+1.707e-02
+7.655e-01
+
+ksp: pipefgmres, pc: gamg
+8
+1.707e-02
+1.816e-01
+
+ksp: pipefgmres, pc: kaczmarz
+8
+1.707e-02
+1.614e-01
+
+ksp: pipefgmres, pc: hmg
+8
+1.707e-02
+2.164e-01
+
+ksp: pipefgmres, pc: lmvm
+0
+1.441e+00
+1.565e-02
+ = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = 
+
+ksp: minres, pc: none
+0
+1.441e+00
+7.686e-01
+
+ksp: minres, pc: jacobi
+0
+1.441e+00
+1.235e-02
+
+ksp: minres, pc: pbjacobi
+0
+1.441e+00
+1.246e-02
+
+ksp: minres, pc: bjacobi
+0
+1.441e+00
+1.382e-02
+
+ksp: minres, pc: sor
+0
+1.441e+00
+1.288e-02
+
+ksp: minres, pc: lu
+0
+1.441e+00
+2.206e-02
+
+ksp: minres, pc: mg
+0
+1.441e+00
+1.517e-02
+
+ksp: minres, pc: eisenstat
+0
+1.441e+00
+1.213e-02
+
+ksp: minres, pc: ilu
+0
+1.441e+00
+1.231e-02
+
+ksp: minres, pc: icc
+0
+1.441e+00
+1.283e+00
+
+ksp: minres, pc: cholesky
+0
+1.441e+00
+4.015e-02
+
+ksp: minres, pc: asm
+0
+1.441e+00
+1.491e-02
+
+ksp: minres, pc: gasm
+0
+1.441e+00
+1.481e-02
+
+ksp: minres, pc: ksp
+0
+1.441e+00
+1.519e-02
+
+ksp: minres, pc: redundant
+0
+1.441e+00
+2.197e-02
+
+ksp: minres, pc: mat
+0
+1.441e+00
+1.330e-02
+
+ksp: minres, pc: cp
+0
+1.441e+00
+1.309e-02
+
+ksp: minres, pc: redistribute
+0
+1.441e+00
+1.619e-02
+
+ksp: minres, pc: svd
+0
+1.441e+00
+7.538e-02
+
+ksp: minres, pc: gamg
+0
+1.441e+00
+7.490e-02
+
+ksp: minres, pc: kaczmarz
+0
+1.441e+00
+1.213e-02
+
+ksp: minres, pc: hmg
+0
+1.441e+00
+8.340e-02
+
+ksp: minres, pc: lmvm
+0
+1.441e+00
+1.294e-02
+ = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = 
+
+ksp: symmlq, pc: none
+0
+1.441e+00
+2.067e-01
+
+ksp: symmlq, pc: jacobi
+0
+1.441e+00
+1.420e-02
+
+ksp: symmlq, pc: pbjacobi
+0
+1.441e+00
+1.151e-02
+
+ksp: symmlq, pc: bjacobi
+0
+1.441e+00
+1.258e-02
+
+ksp: symmlq, pc: sor
+0
+1.441e+00
+1.157e-02
+
+ksp: symmlq, pc: lu
+0
+1.441e+00
+2.057e-02
+
+ksp: symmlq, pc: mg
+0
+1.441e+00
+1.399e-02
+
+ksp: symmlq, pc: eisenstat
+0
+1.441e+00
+1.217e-02
+
+ksp: symmlq, pc: ilu
+0
+1.441e+00
+1.232e-02
+
+ksp: symmlq, pc: icc
+0
+1.441e+00
+4.761e-01
+
+ksp: symmlq, pc: cholesky
+0
+1.441e+00
+4.180e-02
+
+ksp: symmlq, pc: asm
+0
+1.441e+00
+1.419e-02
+
+ksp: symmlq, pc: gasm
+0
+1.441e+00
+1.434e-02
+
+ksp: symmlq, pc: ksp
+0
+1.441e+00
+1.397e-02
+
+ksp: symmlq, pc: redundant
+0
+1.441e+00
+2.259e-02
+
+ksp: symmlq, pc: mat
+0
+1.441e+00
+1.187e-02
+
+ksp: symmlq, pc: cp
+0
+1.441e+00
+1.406e-02
+
+ksp: symmlq, pc: redistribute
+0
+1.441e+00
+1.555e-02
+
+ksp: symmlq, pc: svd
+0
+1.441e+00
+7.439e-02
+
+ksp: symmlq, pc: gamg
+0
+1.441e+00
+7.445e-02
+
+ksp: symmlq, pc: kaczmarz
+0
+1.441e+00
+1.214e-02
+
+ksp: symmlq, pc: hmg
+0
+1.441e+00
+7.927e-02
+
+ksp: symmlq, pc: lmvm
+0
+1.441e+00
+1.479e-02
+ = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = 
+
+ksp: lgmres, pc: none
+8
+1.707e-02
+4.666e-02
+
+ksp: lgmres, pc: jacobi
+8
+1.707e-02
+4.366e-02
+
+ksp: lgmres, pc: pbjacobi
+8
+1.707e-02
+3.546e-02
+
+ksp: lgmres, pc: bjacobi
+8
+1.707e-02
+3.906e-02
+
+ksp: lgmres, pc: sor
+8
+1.707e-02
+3.075e-02
+
+ksp: lgmres, pc: lu
+8
+1.707e-02
+7.571e-02
+
+ksp: lgmres, pc: mg
+8
+1.707e-02
+5.023e-02
+
+ksp: lgmres, pc: eisenstat
+8
+1.707e-02
+2.751e-02
+
+ksp: lgmres, pc: ilu
+8
+1.707e-02
+3.558e-02
+
+ksp: lgmres, pc: icc
+8
+1.707e-02
+1.070e-01
+
+ksp: lgmres, pc: cholesky
+8
+1.707e-02
+1.214e-01
+
+ksp: lgmres, pc: asm
+8
+1.707e-02
+4.104e-02
+
+ksp: lgmres, pc: gasm
+8
+1.707e-02
+3.836e-02
+
+ksp: lgmres, pc: ksp
+8
+1.707e-02
+4.198e-02
+
+ksp: lgmres, pc: redundant
+8
+1.707e-02
+7.308e-02
+
+ksp: lgmres, pc: mat
+8
+1.707e-02
+2.609e-01
+
+ksp: lgmres, pc: cp
+0
+1.441e+00
+3.129e+00
+
+ksp: lgmres, pc: redistribute
+8
+1.707e-02
+5.313e-02
+
+ksp: lgmres, pc: svd
+8
+1.707e-02
+6.913e-01
+
+ksp: lgmres, pc: gamg
+8
+1.707e-02
+1.737e-01
+
+ksp: lgmres, pc: kaczmarz
+8
+1.707e-02
+1.375e-01
+
+ksp: lgmres, pc: hmg
+8
+1.707e-02
+1.961e-01
+
+ksp: lgmres, pc: lmvm
+0
+1.441e+00
+1.207e-02
+ = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = 
+
+ksp: lcd, pc: none
+8
+1.707e-02
+5.767e-02
+
+ksp: lcd, pc: jacobi
+8
+1.707e-02
+3.669e-02
+
+ksp: lcd, pc: pbjacobi
+8
+1.707e-02
+3.829e-02
+
+ksp: lcd, pc: bjacobi
+8
+1.707e-02
+3.669e-02
+
+ksp: lcd, pc: sor
+8
+1.707e-02
+3.067e-02
+
+ksp: lcd, pc: lu
+8
+1.707e-02
+7.421e-02
+
+ksp: lcd, pc: mg
+8
+1.707e-02
+5.163e-02
+
+ksp: lcd, pc: eisenstat
+8
+1.707e-02
+2.861e-02
+
+ksp: lcd, pc: ilu
+8
+1.707e-02
+3.539e-02
+
+ksp: lcd, pc: icc
+8
+1.707e-02
+1.243e-01
+
+ksp: lcd, pc: cholesky
+8
+1.707e-02
+1.361e-01
+
+ksp: lcd, pc: asm
+8
+1.707e-02
+4.204e-02
+
+ksp: lcd, pc: gasm
+8
+1.707e-02
+3.888e-02
+
+ksp: lcd, pc: ksp
+8
+1.707e-02
+4.213e-02
+
+ksp: lcd, pc: redundant
+8
+1.707e-02
+7.381e-02
+
+ksp: lcd, pc: mat
+8
+1.707e-02
+4.592e-01
+
+ksp: lcd, pc: cp
+0
+1.441e+00
+1.266e-01
+
+ksp: lcd, pc: redistribute
+8
+1.707e-02
+5.459e-02
+
+ksp: lcd, pc: svd
+8
+1.707e-02
+6.855e-01
+
+ksp: lcd, pc: gamg
+8
+1.707e-02
+1.717e-01
+
+ksp: lcd, pc: kaczmarz
+8
+1.707e-02
+1.367e-01
+
+ksp: lcd, pc: hmg
+8
+1.707e-02
+1.943e-01
+
+ksp: lcd, pc: lmvm
+0
+1.441e+00
+1.266e-02
+ = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = 
+
+ksp: gcr, pc: none
+8
+1.707e-02
+4.567e-02
+
+ksp: gcr, pc: jacobi
+8
+1.707e-02
+3.315e-02
+
+ksp: gcr, pc: pbjacobi
+8
+1.707e-02
+3.401e-02
+
+ksp: gcr, pc: bjacobi
+8
+1.707e-02
+3.537e-02
+
+ksp: gcr, pc: sor
+8
+1.707e-02
+2.925e-02
+
+ksp: gcr, pc: lu
+8
+1.707e-02
+7.143e-02
+
+ksp: gcr, pc: mg
+8
+1.707e-02
+4.709e-02
+
+ksp: gcr, pc: eisenstat
+8
+1.707e-02
+2.776e-02
+
+ksp: gcr, pc: ilu
+8
+1.707e-02
+3.449e-02
+
+ksp: gcr, pc: icc
+8
+1.707e-02
+1.152e-01
+
+ksp: gcr, pc: cholesky
+8
+1.707e-02
+1.352e-01
+
+ksp: gcr, pc: asm
+8
+1.707e-02
+4.050e-02
+
+ksp: gcr, pc: gasm
+8
+1.707e-02
+3.945e-02
+
+ksp: gcr, pc: ksp
+8
+1.707e-02
+3.598e-02
+
+ksp: gcr, pc: redundant
+8
+1.707e-02
+7.204e-02
+
+ksp: gcr, pc: mat
+8
+1.707e-02
+1.304e+00
+
+ksp: gcr, pc: cp
+3534
+7.496e-01
+1.180e+04
+
+ksp: gcr, pc: redistribute
+8
+1.707e-02
+4.683e-02
+
+ksp: gcr, pc: svd
+8
+1.707e-02
+6.783e-01
+
+ksp: gcr, pc: gamg
+8
+1.707e-02
+1.742e-01
+
+ksp: gcr, pc: kaczmarz
+8
+1.707e-02
+1.420e-01
+
+ksp: gcr, pc: hmg
+8
+1.707e-02
+1.893e-01
+
+ksp: gcr, pc: lmvm
+0
+1.441e+00
+1.262e-02
+ = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = 
+
+ksp: pipegcr, pc: none
+8
+1.707e-02
+5.117e-02
+
+ksp: pipegcr, pc: jacobi
+8
+1.707e-02
+3.998e-02
+
+ksp: pipegcr, pc: pbjacobi
+8
+1.707e-02
+3.923e-02
+
+ksp: pipegcr, pc: bjacobi
+8
+1.707e-02
+3.926e-02
+
+ksp: pipegcr, pc: sor
+8
+1.707e-02
+3.313e-02
+
+ksp: pipegcr, pc: lu
+8
+1.707e-02
+7.538e-02
+
+ksp: pipegcr, pc: mg
+8
+1.707e-02
+5.483e-02
+
+ksp: pipegcr, pc: eisenstat
+8
+1.707e-02
+3.003e-02
+
+ksp: pipegcr, pc: ilu
+8
+1.707e-02
+3.771e-02
+
+ksp: pipegcr, pc: icc
+8
+1.707e-02
+1.330e-01
+
+ksp: pipegcr, pc: cholesky
+8
+1.707e-02
+1.586e-01
+
+ksp: pipegcr, pc: asm
+8
+1.707e-02
+4.406e-02
+
+ksp: pipegcr, pc: gasm
+8
+1.707e-02
+4.131e-02
+
+ksp: pipegcr, pc: ksp
+8
+1.707e-02
+5.659e-02
+
+ksp: pipegcr, pc: redundant
+8
+1.707e-02
+7.598e-02
+
+ksp: pipegcr, pc: mat
+8
+1.707e-02
+2.465e-01
+
+ksp: pipegcr, pc: cp
+29
+1.446e+00
+1.655e+00
+
+ksp: pipegcr, pc: redistribute
+8
+1.707e-02
+6.942e-02
+
+ksp: pipegcr, pc: svd
+8
+1.707e-02
+6.871e-01
+
+ksp: pipegcr, pc: gamg
+8
+1.707e-02
+1.794e-01
+
+ksp: pipegcr, pc: kaczmarz
+8
+1.707e-02
+1.480e-01
+
+ksp: pipegcr, pc: hmg
+8
+1.707e-02
+2.031e-01
+
+ksp: pipegcr, pc: lmvm
+0
+1.441e+00
+1.241e-02
+ = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = 
+
+ksp: pgmres, pc: none
+8
+1.707e-02
+4.760e-02
+
+ksp: pgmres, pc: jacobi
+8
+1.707e-02
+3.444e-02
+
+ksp: pgmres, pc: pbjacobi
+8
+1.707e-02
+3.481e-02
+
+ksp: pgmres, pc: bjacobi
+8
+1.707e-02
+3.752e-02
+
+ksp: pgmres, pc: sor
+8
+1.707e-02
+3.210e-02
+
+ksp: pgmres, pc: lu
+8
+1.707e-02
+7.445e-02
+
+ksp: pgmres, pc: mg
+8
+1.707e-02
+5.144e-02
+
+ksp: pgmres, pc: eisenstat
+8
+1.707e-02
+2.780e-02
+
+ksp: pgmres, pc: ilu
+8
+1.707e-02
+3.781e-02
+
+ksp: pgmres, pc: icc
+8
+1.707e-02
+1.165e-01
+
+ksp: pgmres, pc: cholesky
+8
+1.707e-02
+1.348e-01
+
+ksp: pgmres, pc: asm
+8
+1.707e-02
+4.260e-02
+
+ksp: pgmres, pc: gasm
+8
+1.707e-02
+4.006e-02
+
+ksp: pgmres, pc: ksp
+8
+1.707e-02
+5.557e-02
+
+ksp: pgmres, pc: redundant
+8
+1.707e-02
+7.458e-02
+
+ksp: pgmres, pc: mat
+8
+1.707e-02
+4.880e-01
+
+ksp: pgmres, pc: cp
+0
+1.441e+00
+3.574e+00
+
+ksp: pgmres, pc: redistribute
+8
+1.707e-02
+7.014e-02
+
+ksp: pgmres, pc: svd
+8
+1.707e-02
+6.808e-01
+
+ksp: pgmres, pc: gamg
+8
+1.707e-02
+1.762e-01
+
+ksp: pgmres, pc: kaczmarz
+8
+1.707e-02
+1.329e-01
+
+ksp: pgmres, pc: hmg
+8
+1.707e-02
+2.040e-01
+
+ksp: pgmres, pc: lmvm
+0
+1.441e+00
+1.202e-02
+ = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = 
+
+ksp: dgmres, pc: none
+8
+1.707e-02
+4.175e-02
+
+ksp: dgmres, pc: jacobi
+8
+1.707e-02
+3.155e-02
+
+ksp: dgmres, pc: pbjacobi
+8
+1.707e-02
+3.169e-02
+
+ksp: dgmres, pc: bjacobi
+8
+1.707e-02
+3.447e-02
+
+ksp: dgmres, pc: sor
+8
+1.707e-02
+2.975e-02
+
+ksp: dgmres, pc: lu
+8
+1.707e-02
+7.133e-02
+
+ksp: dgmres, pc: mg
+8
+1.707e-02
+4.709e-02
+
+ksp: dgmres, pc: eisenstat
+8
+1.707e-02
+2.641e-02
+
+ksp: dgmres, pc: ilu
+8
+1.707e-02
+3.377e-02
+
+ksp: dgmres, pc: icc
+8
+1.707e-02
+1.031e-01
+
+ksp: dgmres, pc: cholesky
+8
+1.707e-02
+1.256e-01
+
+ksp: dgmres, pc: asm
+8
+1.707e-02
+4.085e-02
+
+ksp: dgmres, pc: gasm
+8
+1.707e-02
+3.833e-02
+
+ksp: dgmres, pc: ksp
+8
+1.707e-02
+4.128e-02
+
+ksp: dgmres, pc: redundant
+8
+1.707e-02
+7.122e-02
+
+ksp: dgmres, pc: mat
+6
+1.858e-01
+1.419e-01
+
+ksp: dgmres, pc: cp
+0
+1.441e+00
+3.500e+00
+
+ksp: dgmres, pc: redistribute
+8
+1.707e-02
+5.243e-02
+
+ksp: dgmres, pc: svd
+8
+1.707e-02
+6.835e-01
+
+ksp: dgmres, pc: gamg
+8
+1.707e-02
+1.687e-01
+
+ksp: dgmres, pc: kaczmarz
+8
+1.707e-02
+1.214e-01
+
+ksp: dgmres, pc: hmg
+8
+1.707e-02
+1.917e-01
+
+ksp: dgmres, pc: lmvm
+0
+1.441e+00
+1.247e-02
+ = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = 
+
+ksp: cgls, pc: none
+8
+1.707e-02
+1.552e-01
+
+ksp: cgls, pc: jacobi
+8
+1.707e-02
+1.608e-01
+
+ksp: cgls, pc: pbjacobi
+8
+1.707e-02
+1.555e-01
+
+ksp: cgls, pc: bjacobi
+8
+1.707e-02
+1.637e-01
+
+ksp: cgls, pc: sor
+8
+1.707e-02
+1.547e-01
+
+ksp: cgls, pc: lu
+8
+1.707e-02
+2.058e-01
+
+ksp: cgls, pc: mg
+8
+1.707e-02
+1.679e-01
+
+ksp: cgls, pc: eisenstat
+
+ksp: cgls, pc: ilu
+8
+1.707e-02
+1.636e-01
+
+ksp: cgls, pc: icc
+8
+1.707e-02
+1.614e-01
+
+ksp: cgls, pc: cholesky
+8
+1.707e-02
+2.047e-01
+
+ksp: cgls, pc: asm
+8
+1.707e-02
+1.663e-01
+
+ksp: cgls, pc: gasm
+8
+1.707e-02
+1.647e-01
+
+ksp: cgls, pc: ksp
+8
+1.707e-02
+1.638e-01
+
+ksp: cgls, pc: redundant
+8
+1.707e-02
+2.023e-01
+
+ksp: cgls, pc: mat
+8
+1.707e-02
+1.599e-01
+
+ksp: cgls, pc: cp
+8
+1.707e-02
+1.583e-01
+
+ksp: cgls, pc: redistribute
+8
+1.707e-02
+1.661e-01
+
+ksp: cgls, pc: svd
+8
+1.707e-02
+8.054e-01
+
+ksp: cgls, pc: gamg
+8
+1.707e-02
+2.797e-01
+
+ksp: cgls, pc: kaczmarz
+8
+1.707e-02
+1.548e-01
+
+ksp: cgls, pc: hmg
+8
+1.707e-02
+3.102e-01
+
+ksp: cgls, pc: lmvm
+8
+1.707e-02
+1.560e-01
+ = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = 
