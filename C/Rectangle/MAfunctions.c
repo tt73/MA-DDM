@@ -707,14 +707,10 @@ PetscErrorCode ComputeSDD(DMDALocalInfo *info, PetscReal **au, MACtx *user, Pets
    PetscMalloc2(M,&uFwd,M,&uBak);
    if (d==1) {
       // width 1 case is hardcoded because it is simple
-      uFwd[0] = au[j][i+1];
-      uBak[0] = au[j][i-1];
-      uFwd[1] = au[j+1][i];
-      uFwd[1] = au[j-1][i];
-      if(j+1 == info->my-1) {user->g_bdry(x,y+hy,0.0,user,&uFwd[0]);}
-      if(j-1 == 0)          {user->g_bdry(x,y-hy,0.0,user,&uBak[0]);}
-      if(i+1 == info->mx-1) {user->g_bdry(x+hx,y,0.0,user,&uFwd[1]);}
-      if(i-1 == 0)          {user->g_bdry(x-hx,y,0.0,user,&uBak[1]);}                                              // east
+      if(j == info->my-1) {user->g_bdry(x,y+hy,0.0,user,&uFwd[1]);} else {uFwd[1] = au[j+1][i];}
+      if(j == 0)          {user->g_bdry(x,y-hy,0.0,user,&uBak[1]);} else {uBak[1] = au[j-1][i];}
+      if(i == info->mx-1) {user->g_bdry(x+hx,y,0.0,user,&uFwd[0]);} else {uFwd[0] = au[j][i+1];}
+      if(i == 0)          {user->g_bdry(x-hx,y,0.0,user,&uBak[0]);} else {uBak[0] = au[j][i-1];}                                  // east
       // 2nd dir. deriv
       SDD[0] = (uFwd[0] - 2.0*au[j][i] + uBak[0])/(hx*hx); // horizontal centered-diff
       SDD[1] = (uFwd[1] - 2.0*au[j][i] + uBak[1])/(hy*hy); // vertical centered-diff

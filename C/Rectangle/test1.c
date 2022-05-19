@@ -333,7 +333,6 @@ int main(int argc,char **args) {
    /* Debugging Info - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
       To print out debugging info, add the option -t1_debug.
       The goal is to get info about the subdomains.
-      Unfortunately, da and da_after lose local info by this point.
    - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
    if (debug) {
       PetscInt MM, NN, mm, nn, dof, ss;
@@ -343,16 +342,17 @@ int main(int argc,char **args) {
       PetscInt ox, oy;
       DMDAGetOverlap(da_after,&ox,&oy,NULL);
       PetscPrintf(PETSC_COMM_WORLD,"-- Overlap in x: %d, Overlap in y: %d\n",ox,oy);
-      // PetscMPIInt    rank, size;
-      // DMDALocalInfo  info;
-      // MPI_Comm_size(PETSC_COMM_WORLD,&size);
-      // MPI_Comm_rank(PETSC_COMM_WORLD,&rank);
-      // for (int i=0; i<size; i++) {
-      //    if (i==rank) {
-      //       DMDAGetLocalInfo(da_after,&info);
-      //       printf("-- Rank %d: x indeces [%d to %d], y indeces [%d to %d]\n",rank,info.xs,i<info.xs+info.xm,info.ys,i<info.ys+info.ym);
-      //    }
-      // }
+      PetscMPIInt    rank, size;
+      DMDALocalInfo  info;
+      MPI_Comm_size(PETSC_COMM_WORLD,&size);
+      MPI_Comm_rank(PETSC_COMM_WORLD,&rank);
+      MPI_Barrier(PETSC_COMM_WORLD);
+      for (int i=0; i<size; i++) {
+         if (i==rank) {
+            DMDAGetLocalInfo(da,&info);
+            printf("-- Rank %2d: x indeces [%2d (%2d) to %2d (%2d)], y indeces [%2d (%2d) to %2d (%2d)] (ghost)\n",rank,info.xs,info.gxs,info.xs+info.xm-1,info.gxs+info.gxm-1,info.ys,info.gys,info.ys+info.ym-1,info.gys+info.gym-1);
+         }
+      }
    }
    /* MATLAB  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
       Create MATLAB files load_u.m and load_exact.m which loads
