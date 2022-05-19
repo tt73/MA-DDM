@@ -22,10 +22,12 @@ printf "\n\nOther types of Krylov methods: \n"
 
 # Trying out ksp types that do not give an error
 printf "\n\nTrying out bunch of available ksp types\n"
-ksps="pipecg pipecgrr pipelcg pipeprcg pipecg2 cgne nash stcg gltr richardson chebyshev gmres tcqmr fcg pipefcg bcgs ibcgs fbcgs pipebcgs fbcgsr bcgsl cgs tfqmr cr pipecr lsqr preonly bicg fgmres pipefgmres minres symmlq lgmres lcd gcr pipegcr pgmres dgmres cgls"
+ksps="pipecg pipecgrr pipelcg pipeprcg pipecg2 cgne richardson chebyshev gmres tcqmr fcg pipefcg bcgs ibcgs fbcgs pipebcgs fbcgsr bcgsl cgs tfqmr pipecr lsqr preonly bicg fgmres pipefgmres symmlq lgmres lcd gcr pipegcr pgmres dgmres cgls"
 for s in $ksps
 do
    printf "\nTrying out $s:\n"
    mpiexec -n 2 ../test1 -t1_N ${1:-$N} -snes_converged_reason -snes_type newtonls -ksp_type $s -log_view | grep 'error\|Nonlinear\|Time (sec):'
 done
-# they either diverge with 0 itersations or converges with 8-10 iterations 
+# The ksp is changed but the pc is left alone.
+# In the serial test, we have checked which combinations of KSPs and PCs.
+# There are many combinations that make the code diverge. Some ksp methods just flat-out don't work for any PCs. These require some additional coding or require a symmetry in the Jacobian matrix.

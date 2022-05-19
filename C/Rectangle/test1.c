@@ -216,11 +216,11 @@ int main(int argc,char **args) {
    user.epsilon = eps;
    user.g_bdry  = g_bdry_ptr[dim-1][problem];
    user.f_rhs   = f_rhs_ptr[dim-1][problem];
-   /* Call DMDACreate to construct a mesh
-      DMDACreate creates a lattice of nodes of size N^dim.
-      The memory is automatically distributed when this code is
-      run with mpiexec.
-   */
+   /* DMDACreate - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+      Set up a system of indexed nodes configured in a 1d, 2d, or 3d lattice.
+      The dimensions are free to choose and the distribution of nodes is
+      handled automatically.
+   - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
    switch (dim) {
       case 1:
          ierr = DMDACreate1d(PETSC_COMM_WORLD,DM_BOUNDARY_NONE,Nx,1,1,NULL,&da); CHKERRQ(ierr);
@@ -244,9 +244,11 @@ int main(int argc,char **args) {
       default:
          SETERRQ(PETSC_COMM_SELF,1,"invalid dim for DMDA creation\n");
    }
-   /* DA setup - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-      The interior of the domain [-Lx,Lx] x [-Ly,Ly] is meshed uniformly.
-      The subdomains overlap by a width equal
+   /* DM setup - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+      The code is set up to mesh a domain [-Lx,Lx] x [-Ly,Ly]
+      with uniformly distributed points. Nx and Ny are the number
+      of interior points. You can adjust the overlapping nodes
+      with -da_overlap <int>.
    - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
    ierr = DMDASetOverlap(da,width,width,width);
    ierr = DMSetFromOptions(da); CHKERRQ(ierr);
@@ -254,7 +256,10 @@ int main(int argc,char **args) {
    ierr = DMDASetUniformCoordinates(da,-user.Lx+hx,user.Lx-hx,-user.Ly+hy,user.Ly-hy,-user.Lz,user.Lz); CHKERRQ(ierr);
    ierr = DMSetApplicationContext(da,&user); CHKERRQ(ierr);
    /* SNES setup - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-
+      By default, we use Nonlinear Additive Schwarz method (NASM) for the
+      nonlinear solver. On the local subdomains, we use one step of basic
+      newton method. For the Jacobian solve, we use GMRES with multigrid
+      preconditioning.
    - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
    ierr = SNESCreate(PETSC_COMM_WORLD,&snes); CHKERRQ(ierr);
    ierr = SNESSetDM(snes,da); CHKERRQ(ierr);
@@ -325,15 +330,29 @@ int main(int argc,char **args) {
                "  error |u-uexact|_inf = %.3e, |u-uexact|_h = %.3e\n",
                ProblemTypes[problem],gridstr,info.sw,user.epsilon,errinf,err2h); CHKERRQ(ierr);
 
-   //Print out debugging info
+   /* Debugging Info - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+      To print out debugging info, add the option -t1_debug.
+      The goal is to get info about the subdomains.
+      Unfortunately, da and da_after lose local info by this point.
+   - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
    if (debug) {
-      PetscInt ox, oy;
-      DMDAGetOverlap(da_after,&ox,&oy,NULL);
-      PetscPrintf(PETSC_COMM_WORLD," Overlap in x: %d, Overlap in y: %d\n",ox,oy);
       PetscInt MM, NN, mm, nn, dof, ss;
       DMDAGetInfo(da_after,&dim,&MM,&NN,NULL,&mm,&nn,NULL,&dof,&ss,NULL,NULL,NULL,NULL);
-      PetscPrintf(PETSC_COMM_WORLD," Grid is %d by %d, processors divided in %d by %d format.\n",MM,NN,mm,nn);
-      PetscPrintf(PETSC_COMM_WORLD," Dof = %d, Stencil = %d\n",dof,ss);
+      PetscPrintf(PETSC_COMM_WORLD,"-- Grid is %d by %d, processors divided in %d by %d format.\n",MM,NN,mm,nn);
+      PetscPrintf(PETSC_COMM_WORLD,"-- Dof = %d, Stencil = %d\n",dof,ss);
+      PetscInt ox, oy;
+      DMDAGetOverlap(da_after,&ox,&oy,NULL);
+      PetscPrintf(PETSC_COMM_WORLD,"-- Overlap in x: %d, Overlap in y: %d\n",ox,oy);
+      // PetscMPIInt    rank, size;
+      // DMDALocalInfo  info;
+      // MPI_Comm_size(PETSC_COMM_WORLD,&size);
+      // MPI_Comm_rank(PETSC_COMM_WORLD,&rank);
+      // for (int i=0; i<size; i++) {
+      //    if (i==rank) {
+      //       DMDAGetLocalInfo(da_after,&info);
+      //       printf("-- Rank %d: x indeces [%d to %d], y indeces [%d to %d]\n",rank,info.xs,i<info.xs+info.xm,info.ys,i<info.ys+info.ym);
+      //    }
+      // }
    }
    /* MATLAB  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
       Create MATLAB files load_u.m and load_exact.m which loads

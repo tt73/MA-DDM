@@ -73,3 +73,17 @@ times(find(P_list == "mg"),find(K_list == "richardson")) = nan;
 figure 
 heatmap(K_list,P_list,times,'colormethod','median');
 title("Times")
+
+%% Best for each PC 
+
+disp('Best pc for each ksp:')
+for k = 1:nk 
+    [mtime,ind] = min(times(:,k));
+    fprintf('ksp = %10s, best pc = %12s, best time = %f\n',K_list(k),P_list(ind),mtime);
+end
+
+%% Notes 
+
+% 
+
+
