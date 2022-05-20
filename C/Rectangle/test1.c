@@ -337,7 +337,7 @@ int main(int argc,char **args) {
    if (debug) {
       PetscInt MM, NN, mm, nn, dof, ss;
       DMDAGetInfo(da_after,&dim,&MM,&NN,NULL,&mm,&nn,NULL,&dof,&ss,NULL,NULL,NULL,NULL);
-      PetscPrintf(PETSC_COMM_WORLD,"-- Grid is %d by %d, processors divided in %d by %d format.\n",MM,NN,mm,nn);
+      PetscPrintf(PETSC_COMM_WORLD,"-- Grid is %d by %d, processors, and the domain is divided into %d stacks of %d.\n",MM,NN,mm,nn);
       PetscPrintf(PETSC_COMM_WORLD,"-- Dof = %d, Stencil = %d\n",dof,ss);
       PetscInt ox, oy;
       DMDAGetOverlap(da_after,&ox,&oy,NULL);
