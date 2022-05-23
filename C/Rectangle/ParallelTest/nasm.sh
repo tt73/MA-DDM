@@ -18,7 +18,7 @@ printf "\n\nNon-linear additive schwarz options\n"
 
 printf "\n\nTest 1: No DDM, just linesearch\n"
 mpiexec -n 1 ../test1 -t1_N ${1:-$N} -snes_view
-mpiexec -n 1 ../test1 -t1_N ${1:-$N} -log_view | grep 'problem\|error\|Nonlinear\|Time (sec):'
+mpiexec -n 1 ../test1 -t1_N ${1:-$N} -log_view | grep 'Problem\|Error\|WTime\|Nonlinear\|Time (sec):'
 ## The -snes_view shows exactly what's happening on the subdomains. They have the prefix
 ## Use the output for this as reference for the error
 

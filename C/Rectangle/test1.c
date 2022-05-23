@@ -160,6 +160,7 @@ int main(int argc,char **args) {
    PetscReal      h_eff,hx,hy,eps,errinf,normconst2h,err2h;
    char           gridstr[99];
    PetscInt       dim,width,N,Nx,Ny,order;
+   PetscLogDouble t1,t2;
 
    ierr = PetscInitialize(&argc,&args,NULL,help); if (ierr) return ierr;
    /*  Default params  - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -289,7 +290,9 @@ int main(int argc,char **args) {
    ierr = DMGetGlobalVector(da,&u_initial); CHKERRQ(ierr);
    ierr = InitialState(da,initial,u_initial,&user); CHKERRQ(ierr);
    ierr = SNESSetFromOptions(snes); CHKERRQ(ierr);
+   ierr = PetscTime(&t1); CHKERRQ(ierr);
    ierr = SNESSolve(snes,NULL,u_initial); CHKERRQ(ierr);
+   ierr = PetscTime(&t2); CHKERRQ(ierr);
    /* Error info - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
       Get the solution from DA.
       Get the exact solution with g.
@@ -326,9 +329,10 @@ int main(int argc,char **args) {
          SETERRQ(PETSC_COMM_SELF,4,"invalid dim value in final report\n");
    }
    err2h /= normconst2h; // like continuous L2
-   ierr = PetscPrintf(PETSC_COMM_WORLD, "problem %s on %s grid with d = %d, and eps = %.3f:\n"
-               "  error |u-uexact|_inf = %.3e, |u-uexact|_h = %.3e\n",
-               ProblemTypes[problem],gridstr,info.sw,user.epsilon,errinf,err2h); CHKERRQ(ierr);
+   ierr = PetscPrintf(PETSC_COMM_WORLD, "*Problem: %s on %s grid with d = %d, and eps = %.3f:\n"
+               "*Error:   |u-uexact|_inf = %.3e, |u-uexact|_h = %.3e\n"
+               "*WTime:   %.6f\n",
+               ProblemTypes[problem],gridstr,info.sw,user.epsilon,errinf,err2h,t2-t1); CHKERRQ(ierr);
 
    /* Debugging Info - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
       To print out debugging info, add the option -t1_debug.

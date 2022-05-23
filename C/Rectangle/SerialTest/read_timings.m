@@ -6,17 +6,18 @@ P_list = split(pc_types);
 nk = length(K_list);
 np = length(P_list);
 
-%% data to get 
+%% data to get
 
 iters  = zeros(np,nk);
 errors = zeros(np,nk);
-times  = zeros(np,nk); 
+wtimes = zeros(np,nk);
+ltimes  = zeros(np,nk);
 
 %% read file
 
 fid = fopen('timing.out');
 tline = fgetl(fid);
-K_count = 1; 
+K_count = 1;
 P_count = 0;
 while ischar(tline)
     tline = fgetl(fid);
@@ -24,21 +25,24 @@ while ischar(tline)
         break
     end
     if(startsWith(tline,'ksp'))
-        P_count = P_count+1; 
+        P_count = P_count+1;
         tline = fgetl(fid);
         if(strcmp(tline,""))
             iters(P_count,K_count) = nan;
             errors(P_count,K_count) = nan;
-            times(P_count,K_count) = nan;
+            wtimes(P_count,K_count) = nan;
+            ltimes(P_count,K_count) = nan;
         else
             iters(P_count,K_count) = str2double(tline);
             tline = fgetl(fid);
             errors(P_count,K_count) = str2double(tline);
             tline = fgetl(fid);
-            times(P_count,K_count) = str2double(tline);
+            wtimes(P_count,K_count) = str2double(tline);
+            tline = fgetl(fid);
+            ltimes(P_count,K_count) = str2double(tline);
         end
     end
-    if (P_count == np) 
+    if (P_count == np)
         P_count = 0;
         K_count = K_count + 1;
     end
@@ -46,11 +50,11 @@ end
 
 %% heatmap
 
-figure 
+figure
 heatmap(K_list,P_list,iters);
 title("Iterations")
 
-figure 
+figure
 heatmap(K_list,P_list,errors);
 title("Errors")
 
@@ -59,31 +63,37 @@ minerr = min(errors(:,1));
 
 for k = 1:nk
     for p = 1:np
-        if (iters(p,k) == 0) 
-            times(p,k) = nan;
-        elseif(errors(p,k)~=minerr) 
-            times(p,k) = nan;
+        if (iters(p,k) == 0)
+            ltimes(p,k) = nan;
+            wtimes(p,k) = nan;
+        elseif(errors(p,k)~=minerr)
+            ltimes(p,k) = nan;
+            wtimes(p,k) = nan;
         end
     end
 end
-times(find(P_list == "mat"),find(K_list == "gcr")) = nan; % blank out gcr/mat 
-times(find(P_list == "mg"),find(K_list == "richardson")) = nan; 
+ltimes(find(P_list == "mat"),find(K_list == "gcr")) = nan; % blank out gcr/mat
+ltimes(find(P_list == "mg"),find(K_list == "richardson")) = nan;
+
+figure
+heatmap(K_list,P_list,wtimes,'colormethod','median');
+title("Wallclock Times")
 
 
-figure 
-heatmap(K_list,P_list,times,'colormethod','median');
-title("Times")
+figure
+heatmap(K_list,P_list,ltimes,'colormethod','median');
+title("Log Times")
 
-%% Best for each PC 
+%% Best for each PC
 
 disp('Best pc for each ksp:')
-for k = 1:nk 
-    [mtime,ind] = min(times(:,k));
+for k = 1:nk
+    [mtime,ind] = min(ltimes(:,k));
     fprintf('ksp = %10s, best pc = %12s, best time = %f\n',K_list(k),P_list(ind),mtime);
 end
 
-%% Notes 
+%% Notes
 
-% 
+%
 
 

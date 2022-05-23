@@ -11,7 +11,7 @@ do
    for p in $pc_types
    do
       printf "\nksp: $k, pc: $p\n"
-      ../test1 -t1_N ${1:-$N} -snes_type newtonls -ksp_type $k -pc_type $p -snes_converged_reason -log_view | grep 'Trying\|Nonlinear\|error\|Time (sec):' | awk '{print $NF}'
+      ../test1 -t1_N ${1:-$N} -snes_type newtonls -ksp_type $k -pc_type $p -snes_converged_reason -log_view | grep 'Trying\|Nonlinear\|*Error\|*WTime\|Time (sec):' | awk '{print $NF}'
    done
    printf " = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = \n"
 done

@@ -54,7 +54,7 @@ snes_types="newtonls newtontr nrichardson ksponly ksptransposeonly vinewtonssls 
 for s in $snes_types
 do
    printf "Trying out ${s}: "
-   ../test1 -t1_N ${1:-$N} -snes_type $s | grep 'error'
+   ../test1 -t1_N ${1:-$N} -snes_type $s
 done
 ## You can see which methods worked based on the error.
 ## Converge: newtonls newtontr vinewtonssls fas nasm aspin
@@ -62,30 +62,42 @@ done
 ##
 ## ksponly diverges because that is only meant for linear problems.
 ## nrichardson, ngmres, qn, ncg, and anderson all converge for the bratue example. Not sure whey it doesn't work for our code.
-## nasm and aspin are parallel codes so they are only doing linesearch in the serial test.
+## nasm and aspin are parallel codes so they are effectively the same as newtonls in the serial case.
 
 
-printf "\n\nTest 7: Various KSP types\n"
+printf "\n\nTest 7: Various SNES types with Nonlinear preconditioning\n"
+snes_types="newtonls newtontr nrichardson ksponly ksptransposeonly vinewtonssls ngmres qn ncg nasm anderson"
+for s in $snes_types
+do
+   printf "Trying out ${s}: "
+   ../test1 -t1_N ${1:-$N} -snes_type $s -npc_snes_type fas
+done
+## The snes types that did not converge earlier: nrichardson, ngmres, qn, ncg, and anderson all converge.
+## The
+
+
+
+printf "\n\nTest 8: Various KSP types\n"
 printf "List of availables SNES types:\n"
 ../test1 -help | grep 'ksp_type'
 ksp_types="cg groppcg pipecg pipecgrr pipelcg pipeprcg pipecg2 cgne nash stcg gltr richardson chebyshev gmres tcqmr fcg pipefcg bcgs ibcgs qmrcgs fbcgs pipebcgs fbcgsr bcgsl cgs tfqmr cr pipecr lsqr preonly bicg fgmres pipefgmres minres symmlq lgmres lcd gcr pipegcr pgmres dgmres cgls"
 for k in $ksp_types
 do
    printf "Trying out $k: "
-   ../test1 -t1_N ${1:-$N} -snes_type newtonls -ksp_type $k | grep 'error'
+   ../test1 -t1_N ${1:-$N} -snes_type newtonls -ksp_type $k | grep '*Error'
 done
 ## We use newton linesearch for the nonlinear solver, and vary the linear solver option.
 ## Converge: cgne richardson chebyshev gmres tcqmr fcg pipefcg bcgs ibcgs qmrcgs fbcgs pipebcgs fbcgsr bcgsl cgs tfqmr preonly bicg fgmres pipefgmres lgmres lcd gcr pipegcr pgmres dgmres cgls
 
 
-printf "\n\nTest 8: Various PC types\n"
+printf "\n\nTest 9: Various PC types\n"
 printf "List of availables PC types:\n"
 ../test1 -help | grep 'pc_type'
 pc_types="none jacobi pbjacobi bjacobi sor lu mg eisenstat ilu icc cholesky asm gasm ksp redundant mat cp redistribute svd gamg kaczmarz hmg lmvm deflation"
 for p in $pc_types
 do
    printf "Trying out $p: "
-   ../test1 -t1_N ${1:-$N} -snes_type newtonls -pc_type $p | grep 'error'
+   ../test1 -t1_N ${1:-$N} -snes_type newtonls -pc_type $p | grep '*Error'
 done
 ## We use newton linesearch for the nonlinear solver, gmres for the Krylov method, and vary the preconditioner.
 ## Converge: none jacobi pbjacobi bjacobi sor lu mg eisenstat ilu icc cholesky asm gasm ksp redundant mat redistribute svd gamg kaczmarz hmg deflation
