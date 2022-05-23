@@ -16,7 +16,6 @@ printf "\n\nNon-linear additive schwarz options\n"
 #   -snes_nasm_log: <TRUE : TRUE> Log times for subSNES solves and restriction ()
 
 
-
 printf "\n\nTest 1: No DDM, just linesearch\n"
 mpiexec -n 1 ../test1 -t1_N ${1:-$N} -snes_view
 mpiexec -n 1 ../test1 -t1_N ${1:-$N} -log_view | grep 'problem\|error\|Nonlinear\|Time (sec):'
@@ -24,8 +23,9 @@ mpiexec -n 1 ../test1 -t1_N ${1:-$N} -log_view | grep 'problem\|error\|Nonlinear
 ## Use the output for this as reference for the error
 
 printf "\n\nTest 2: Two domains\n"
-mpiexec -n 2 ../test1 -t1_N ${1:-$N} -snes_converged_reason -snes_type nasm -snes_monitor -da_overlap 0
-## It converges. For N = 20, it takes 20 schwarz iterations to converge. Overlap 0 is default. It has nothing to do with stencil width
+mpiexec -n 2 ../test1 -t1_N ${1:-$N} -snes_converged_reason -snes_type nasm -da_overlap 0
+## It converges. For N = 20, it takes 20 schwarz iterations to converge. We can set overlap to 0 (whatever that means).
+
 
 printf "\n\nTest 3: Two domains again with simple single-step newton for each subdomain\n"
 mpiexec -n 2 ../test1 -t1_N ${1:-$N} -snes_converged_reason -snes_type nasm -sub_snes_linesearch_type basic -sub_snes_linesearch_max_it 1
@@ -46,9 +46,8 @@ done
 ## Full overlap leads to a single schwarz iteration.
 
 
-
 printf "\n\nTest 5: Speed up\n"
-M=50
+M=60
 for nd in 1 2 4 6 8
 do
    printf "Running with n = $nd subdomains\n"
