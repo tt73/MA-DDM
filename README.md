@@ -14,11 +14,3 @@ There are many challenges to this problem, most notably being fully non-linear. 
 
 ## Method 
 To handle the non-linearity, we use Newton's method. For the convexity, we use a monotonic wide-stencil discretization. For speed and memory distribution we wrap the entire method in a domain decomposition method. We have a stable implementation of the Jacobi-type DDM iteration. We also want to implement a Kyrlove-type DDM iteration to accelerate the convergence. 
-
-
-## Todo List 
-- [x] 1D Matlab Implementation 
-- [x] 2D Matlab Jacobi Implementation on a rectangle
-- [ ] 2D Matlad Krylov Implementation on a rectangle  
-- [ ] 2D Solver in C++ on a rectangle with N vertical strips 
-- [ ] 2D Solver in C++ for other domain splitting 
