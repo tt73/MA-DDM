@@ -156,7 +156,7 @@ int main(int argc,char **args) {
    ExactFcnVec    getuexact;
    InitialType    initial;
    ProblemType    problem;           // manufactured problem using exp()
-   PetscBool      debug,set_N,set_eps,set_width;
+   PetscBool      debug,set_N,set_eps,set_width,printSol;
    PetscReal      h_eff,hx,hy,eps,errinf,normconst2h,err2h;
    char           gridstr[99];
    PetscInt       dim,width,N,Nx,Ny,order;
@@ -177,6 +177,7 @@ int main(int argc,char **args) {
    user.Ly     = 1.0;
    user.Lz     = 1.0;
    debug       = PETSC_FALSE;
+   printSol    = PETSC_FALSE;
    // Get command args
    ierr = PetscOptionsBegin(PETSC_COMM_WORLD,"t1_", "options for test1.c", ""); CHKERRQ(ierr);
    ierr = PetscOptionsInt("-dim","dimension of problem (=1,2,3 only)","test1.c",dim,&dim,NULL);CHKERRQ(ierr);
@@ -185,6 +186,7 @@ int main(int argc,char **args) {
    ierr = PetscOptionsInt("-Ny","number of interior nodes vertically","test1.c",Ny,&Ny,NULL);CHKERRQ(ierr);
    ierr = PetscOptionsInt("-order","order of quadrature (default is 2)","test1.c",order,&order,NULL);CHKERRQ(ierr);
    ierr = PetscOptionsBool("-debug","print out extra info","test1.c",debug,&debug,NULL);CHKERRQ(ierr);
+   ierr = PetscOptionsBool("-print","print out extra info","test1.c",printSol,&printSol,NULL);CHKERRQ(ierr);
    ierr = PetscOptionsEnum("-init_type","type of initial iterate","test1.c",InitialTypes,(PetscEnum)initial,(PetscEnum*)&initial,NULL); CHKERRQ(ierr);
    ierr = PetscOptionsReal("-Lx","set Lx in domain ([-Lx,Lx] x [-Ly,Ly] x [-Lz,Lz], etc.)","test1.c",user.Lx,&user.Lx,NULL);CHKERRQ(ierr);
    ierr = PetscOptionsReal("-Ly","set Ly in domain ([-Lx,Lx] x [-Ly,Ly] x [-Lz,Lz], etc.)","test1.c",user.Ly,&user.Ly,NULL);CHKERRQ(ierr);
@@ -362,22 +364,24 @@ int main(int argc,char **args) {
       Create MATLAB files load_u.m and load_exact.m which loads
       the numerical and exact solutions into a workspace.
    - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
-   PetscViewer viewer;  // Viewer object fascilitates printing out solution
-   ierr = PetscViewerCreate(PETSC_COMM_WORLD, &viewer); // initialize the viewer object
-   ierr = PetscViewerASCIIOpen(PETSC_COMM_WORLD,"load_u.m",&viewer);  // set the file name
-   ierr = PetscViewerPushFormat(viewer,PETSC_VIEWER_ASCII_MATLAB); // except its for u
-   ierr = PetscObjectSetName((PetscObject)u,"u");
-   ierr = VecView(u,viewer);
-   ierr = PetscViewerASCIIOpen(PETSC_COMM_WORLD,"load_exact.m",&viewer);  // set the file name
-   ierr = PetscViewerPushFormat(viewer,PETSC_VIEWER_ASCII_MATLAB); // except its for u
-   ierr = PetscObjectSetName((PetscObject)u_exact,"u_exact");
-   ierr = VecView(u_exact,viewer);
-   // Free memory
-   ierr = DMDestroy(&da); CHKERRQ(ierr);
-   ierr = VecDestroy(&err); CHKERRQ(ierr);
-   ierr = VecDestroy(&u_exact); CHKERRQ(ierr);
-   ierr = PetscViewerDestroy(&viewer); CHKERRQ(ierr);
-   ierr = SNESDestroy(&snes); CHKERRQ(ierr);
+   if (printSol) {
+      PetscViewer viewer;  // Viewer object fascilitates printing out solution
+      ierr = PetscViewerCreate(PETSC_COMM_WORLD, &viewer); // initialize the viewer object
+      ierr = PetscViewerASCIIOpen(PETSC_COMM_WORLD,"load_u.m",&viewer);  // set the file name
+      ierr = PetscViewerPushFormat(viewer,PETSC_VIEWER_ASCII_MATLAB); // except its for u
+      ierr = PetscObjectSetName((PetscObject)u,"u");
+      ierr = VecView(u,viewer);
+      ierr = PetscViewerASCIIOpen(PETSC_COMM_WORLD,"load_exact.m",&viewer);  // set the file name
+      ierr = PetscViewerPushFormat(viewer,PETSC_VIEWER_ASCII_MATLAB); // except its for u
+      ierr = PetscObjectSetName((PetscObject)u_exact,"u_exact");
+      ierr = VecView(u_exact,viewer);
+      // Free memory
+      ierr = DMDestroy(&da); CHKERRQ(ierr);
+      ierr = VecDestroy(&err); CHKERRQ(ierr);
+      ierr = VecDestroy(&u_exact); CHKERRQ(ierr);
+      ierr = PetscViewerDestroy(&viewer); CHKERRQ(ierr);
+      ierr = SNESDestroy(&snes); CHKERRQ(ierr);
+   }
    return PetscFinalize();
 }
 
