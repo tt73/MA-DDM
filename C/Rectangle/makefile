@@ -1,3 +1,5 @@
+## uncomment below if compiling on cluster
+# PETSC_DIR=/opt/ohpc/pub/libs/gnu8/mpich/petsc/3.12.0
 include ${PETSC_DIR}/lib/petsc/conf/variables
 include ${PETSC_DIR}/lib/petsc/conf/rules
 CFLAGS += -pedantic -std=c99
