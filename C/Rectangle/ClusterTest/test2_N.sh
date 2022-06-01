@@ -1,5 +1,5 @@
 
-np=4
+np=2
 
 printf "Increasing N with fixed overlap percentage. np = $np subdomains.\n"
 
