@@ -3,7 +3,7 @@
 # Submit this by typing `sbatch shjob`
 
 ## NAMING
-#SBATCH -J OL4
+#SBATCH -J doms
 #SBATCH -p public
 #SBATCH -o test.output
 #SBATCH -e test.output
@@ -18,11 +18,11 @@
 
 ## RUNTIME  HOURS:MIN:SEC and MEMORY
 #SBATCH -t 8:0:0
-#SBATCH --mem=8G
-#SBATCH -N 4
+#SBATCH --mem=16G
+#SBATCH -N 9
 
 module load gnu8
 module load mpich
 module load petsc
 
-bash test1_overlap_np4.sh >> out_test1_overlap_np4
+bash test3_doms.sh >> out_test3_doms
