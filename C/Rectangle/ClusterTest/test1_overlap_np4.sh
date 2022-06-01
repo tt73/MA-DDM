@@ -4,6 +4,7 @@ N1=200
 ## Four subdomains
 np=4
 
+printf " test with np = $np\n"
 printf " - - - - - - - N=100 - - - - - - - - - \n"
 ## 0% overlap
 # mpiexec -np $np ../test1 -t1_N $N1 -snes_converged_reason -da_overlap 0
