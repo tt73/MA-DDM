@@ -2,63 +2,82 @@ N=100
 np=4
 ol=10
 
-printf "base of comparison:\n"
+printf "base of comparison - GMRES + ILU:\n"
 mpiexec -np $np ../test1 -t1_N $N -da_overlap $ol -t1_problem ex10 -sub_ksp_type gmres -sub_pc_type ilu -snes_converged_reason -log_view | grep '*Problem\|*Error\|WTime\|Nonlinear solve'
 ## Tests 1, 2, and 3 were run with this type of subsolve.
 ## It's performs well. Almost works for all N and Nd.
 
 ## PC TYPES ============================
-## none jacobi pbjacobi vpbjacobi bjacobi sor lu qr mg eisenstat ilu casm gasm composite cp lsc redistribute svd gamg kaczmarz telescope patch hmg tfs bddc lmvm deflation (PCSetType)
-## I removed ones that don't work with GMRES from the list.
-##
-
-printf "PC - multigrid:\n"
-mpiexec -np $np ../test1 -t1_N $N -da_overlap $ol -t1_problem ex10 -sub_ksp_type gmres -sub_pc_type mg -snes_converged_reason -log_view | grep '*Problem\|*Error\|WTime\|Nonlinear solve'
-## Not that good.
-
-printf "\nPC - jacobi:\n"
-mpiexec -np $np ../test1 -t1_N $N -da_overlap $ol -t1_problem ex10 -sub_ksp_type gmres -sub_pc_type jacobi -snes_converged_reason -log_view | grep '*Problem\|*Error\|WTime\|Nonlinear solve'
-## This one works buts its a bit slower.
-
-printf "\nPC - SOR:\n"
-mpiexec -np $np ../test1 -t1_N $N -da_overlap $ol -t1_problem ex10 -sub_ksp_type gmres -sub_pc_type sor -snes_converged_reason -log_view | grep '*Problem\|*Error\|WTime\|Nonlinear solve'
-## This one is decent.
-
-printf "\nPC - block jacobi:\n"
-mpiexec -np $np ../test1 -t1_N $N -da_overlap $ol -t1_problem ex10 -sub_ksp_type gmres -sub_pc_type bjacobi -snes_converged_reason -log_view | grep '*Problem\|*Error\|WTime\|Nonlinear solve'
-## This works but its actually just the same as ILU.
+## none jacobi bjacobi sor lu mg eisenstat ilu asm gasm gamg
+## I removed ones that don't work with GMRES from the list, like icc.
 
 
+# printf "\nGMRES + multigrid:\n"
+# mpiexec -np $np ../test1 -t1_N $N -da_overlap $ol -t1_problem ex10 -sub_ksp_type gmres -sub_pc_type mg -snes_converged_reason -log_view | grep '*Problem\|*Error\|WTime\|Nonlinear solve'
+# ## Not that good.
+
+# printf "\nGMRES + jacobi:\n"
+# mpiexec -np $np ../test1 -t1_N $N -da_overlap $ol -t1_problem ex10 -sub_ksp_type gmres -sub_pc_type jacobi -snes_converged_reason -log_view | grep '*Problem\|*Error\|WTime\|Nonlinear solve'
+# ## This one works buts its a bit slower.
+
+# printf "\nGMRES + SOR:\n"
+# mpiexec -np $np ../test1 -t1_N $N -da_overlap $ol -t1_problem ex10 -sub_ksp_type gmres -sub_pc_type sor -snes_converged_reason -log_view | grep '*Problem\|*Error\|WTime\|Nonlinear solve'
+# ## This one is decent.
+
+# printf "\nGMRES + eisenstat:\n"
+# mpiexec -np $np ../test1 -t1_N $N -da_overlap $ol -t1_problem ex10 -sub_ksp_type gmres -sub_pc_type eisenstat -snes_converged_reason -log_view | grep '*Problem\|*Error\|WTime\|Nonlinear solve'
+# ## This works but its actually just the same as ILU.
 
 
 ## KSP TYPES ============================
-## cg groppcg pipecg pipecgrr pipelcg pipeprcg pipecg2 cgne nash stcg gltr richardson chebyshev gmres tcqmr fcg pipefcg bcgs ibcgs qmrcgs fbcgs pipebcgs fbcgsr bcgsl cgs tfqmr cr pipecr lsqr preonly qcg bicg fgmres pipefgmres minres symmlq lgmres lcd gcr pipegcr pgmres dgmres tsirm cgls fetidp
+## richardson chebyshev gmres tcqmr fcg pipefcg bcgs ibcgs qmrcgs fbcgs pipebcgs fbcgsr bcgsl cgs tfqmr cr pipecr lsqr preonly qcg bicg fgmres pipefgmres minres symmlq lgmres lcd gcr pipegcr pgmres dgmres cgls
+##
 
-# printf "\nKSP - CG:\n"
-# mpiexec -np $np ../test1 -t1_N $N -da_overlap $ol -t1_problem ex10 -sub_ksp_type cg -sub_pc_type sor -snes_converged_reason -log_view | grep '*Problem\|*Error\|WTime\|Nonlinear solve'
-## Conjugate gradient is not working.
+# printf "\nPFGMRES + ILU:\n"
+# mpiexec -np $np ../test1 -t1_N $N -da_overlap $ol -t1_problem ex10 -sub_ksp_type pipefgmres -sub_pc_type ilu -snes_converged_reason -log_view | grep '*Problem\|*Error\|WTime\|Nonlinear solve'
+# ## pipelined flexible GMRES
+# ## its close to GMRES speed
 
-# printf "\nKSP - Richardson:\n"
-# mpiexec -np $np ../test1 -t1_N $N -da_overlap $ol -t1_problem ex10 -sub_ksp_type richardson -sub_pc_type gasm -snes_converged_reason -log_view | grep '*Problem\|*Error\|WTime\|Nonlinear solve'
-## It works but it's actually quite a bit slower.
+# printf "\nRichardson + ILU:\n"
+# mpiexec -np $np ../test1 -t1_N $N -da_overlap $ol -t1_problem ex10 -sub_ksp_type richardson -sub_pc_type ilu -snes_converged_reason -log_view | grep '*Problem\|*Error\|WTime\|Nonlinear solve'
+# ## It works but it's actually quite a bit slower.
 
-# printf "\nKSP - genralized conjugate residual:\n"
-# mpiexec -np $np ../test1 -t1_N $N -da_overlap $ol -t1_problem ex10 -sub_ksp_type richardson -sub_pc_type gasm -snes_converged_reason -log_view | grep '*Problem\|*Error\|WTime\|Nonlinear solve'
-## This method is for non-symmetric matrices.
-## Too slow.
+# printf "\nChebyshev + ILU:\n"
+# mpiexec -np $np ../test1 -t1_N $N -da_overlap $ol -t1_problem ex10 -sub_ksp_type chebyshev -sub_pc_type ilu -snes_converged_reason -log_view | grep '*Problem\|*Error\|WTime\|Nonlinear solve'
+# ##
 
-# printf "\nKSP - deflated gmres:\n"
+# printf "\nGCR+ ILU:\n"
+# mpiexec -np $np ../test1 -t1_N $N -da_overlap $ol -t1_problem ex10 -sub_ksp_type gcr -sub_pc_type ilu -snes_converged_reason -log_view | grep '*Problem\|*Error\|WTime\|Nonlinear solve'
+# ##
+
+# printf "\nDGMRES + ILU:\n"
 # mpiexec -np $np ../test1 -t1_N $N -da_overlap $ol -t1_problem ex10 -sub_ksp_type dgmres -sub_pc_type ilu -snes_converged_reason -log_view | grep '*Problem\|*Error\|WTime\|Nonlinear solve'
-## This method is a variation of gmres.
-## Its
 
+# printf "\nLGMRES + ILU:\n"
+# mpiexec -np $np ../test1 -t1_N $N -da_overlap $ol -t1_problem ex10 -sub_ksp_type lgmres -sub_pc_type ilu -snes_converged_reason -log_view | grep '*Problem\|*Error\|WTime\|Nonlinear solve'
 
+## Linesearch types:
+## shell basic l2 bt nleqerr cp ncglinear
 
-# printf "\nlinesearch l2:\n"
-# mpiexec -np $np ../test1 -t1_N $N -da_overlap $ol -t1_problem ex10 -sub_ksp_type gmres -sub_pc_type ilu -sub_snes_linesearch_type l2 -snes_converged_reason -log_view | grep '*Problem\|*Error\|WTime\|Nonlinear solve'
-## I tried changing the linesearch method to a lower order method.
-## Number of iterations doesn not change.
-## It's actually a bit faster than bt used in the base settings in terms of wtime.
+printf "\nlinesearch bt with FAS NPC:\n"
+mpiexec -np $np ../test1 -t1_N $N -da_overlap $ol -t1_problem ex10 -sub_ksp_type gmres -sub_pc_type ilu -sub_snes_linesearch_type bt -sub_npc_snes_type fas  -snes_converged_reason -log_view | grep '*Problem\|*Error\|WTime\|Nonlinear solve'
+#
+
+printf "\nlinesearch l2:\n"
+mpiexec -np $np ../test1 -t1_N $N -da_overlap $ol -t1_problem ex10 -sub_ksp_type gmres -sub_pc_type ilu -sub_snes_linesearch_type l2 -sub_npc_snes_type fas  -snes_converged_reason -log_view | grep '*Problem\|*Error\|WTime\|Nonlinear solve'
+# I tried changing the linesearch method to a lower order method.
+# Number of iterations doesn not change.
+# It's actually a bit faster than bt used in the base settings in terms of wtime.
+
+printf "\nlinesearch basic:\n"
+mpiexec -np $np ../test1 -t1_N $N -da_overlap $ol -t1_problem ex10 -sub_ksp_type gmres -sub_pc_type ilu -sub_snes_linesearch_type basic -sub_npc_snes_type newtontr -snes_converged_reason -log_view | grep '*Problem\|*Error\|WTime\|Nonlinear solve'
+
+printf "\nlinesearch nleqerr:\n"
+mpiexec -np $np ../test1 -t1_N $N -da_overlap $ol -t1_problem ex10 -sub_ksp_type gmres -sub_pc_type ilu -sub_snes_linesearch_type nleqerr -sub_npc_snes_type fas -snes_converged_reason -log_view | grep '*Problem\|*Error\|WTime\|Nonlinear solve'
+
+printf "\nlinesearch ncglinear:\n"
+mpiexec -np $np ../test1 -t1_N $N -da_overlap $ol -t1_problem ex10 -sub_ksp_type gmres -sub_pc_type ilu -sub_snes_linesearch_type ncglinear -sub_npc_snes_type fas -snes_converged_reason -log_view | grep '*Problem\|*Error\|WTime\|Nonlinear solve'
+
 
 # printf "\ntolerance 4e-4 (h^2):\n"
 # tol=4e-4
