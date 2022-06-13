@@ -1,135 +1,135 @@
  test with np = 2
- - - - - - - - N=100 - - - - - - - - -
+ - - - - - - - N=100 - - - - - - - - - 
 0% overlap
-Nonlinear solve converged due to CONVERGED_FNORM_RELATIVE iterations 194
+Nonlinear solve converged due to CONVERGED_FNORM_RELATIVE iterations 195
 *Problem: ex10 on 100 x 100 point 2D grid with d = 4, and eps = 0.006:
 *Error:   |u-uexact|_inf = 2.476e-03, |u-uexact|_h = 1.482e-03
-*WTime:   8.526963
-Nonlinear solve converged due to CONVERGED_FNORM_RELATIVE iterations 147
+*WTime:   7.016233
+Nonlinear solve converged due to CONVERGED_FNORM_RELATIVE iterations 148
 *Problem: ex11 on 100 x 100 point 2D grid with d = 4, and eps = 0.006:
 *Error:   |u-uexact|_inf = 2.382e-03, |u-uexact|_h = 1.317e-03
-*WTime:   6.202844
-Nonlinear solve converged due to CONVERGED_FNORM_RELATIVE iterations 180
+*WTime:   5.253250
+Nonlinear solve converged due to CONVERGED_FNORM_RELATIVE iterations 179
 *Problem: ex12 on 100 x 100 point 2D grid with d = 4, and eps = 0.006:
 *Error:   |u-uexact|_inf = 2.940e-03, |u-uexact|_h = 1.787e-03
-*WTime:   7.603690
+*WTime:   6.177903
 5% overlap
 Nonlinear solve converged due to CONVERGED_FNORM_RELATIVE iterations 86
 *Problem: ex10 on 100 x 100 point 2D grid with d = 4, and eps = 0.006:
 *Error:   |u-uexact|_inf = 2.476e-03, |u-uexact|_h = 1.482e-03
-*WTime:   4.217260
-Nonlinear solve converged due to CONVERGED_FNORM_RELATIVE iterations 63
+*WTime:   3.437806
+Nonlinear solve converged due to CONVERGED_FNORM_RELATIVE iterations 62
 *Problem: ex11 on 100 x 100 point 2D grid with d = 4, and eps = 0.006:
 *Error:   |u-uexact|_inf = 2.382e-03, |u-uexact|_h = 1.317e-03
-*WTime:   2.928449
-Nonlinear solve converged due to CONVERGED_FNORM_RELATIVE iterations 83
+*WTime:   2.420003
+Nonlinear solve converged due to CONVERGED_FNORM_RELATIVE iterations 90
 *Problem: ex12 on 100 x 100 point 2D grid with d = 4, and eps = 0.006:
 *Error:   |u-uexact|_inf = 2.940e-03, |u-uexact|_h = 1.787e-03
-*WTime:   3.895012
+*WTime:   3.457232
 10% overlap
-Nonlinear solve converged due to CONVERGED_FNORM_RELATIVE iterations 47
+Nonlinear solve converged due to CONVERGED_FNORM_RELATIVE iterations 45
 *Problem: ex10 on 100 x 100 point 2D grid with d = 4, and eps = 0.006:
 *Error:   |u-uexact|_inf = 2.476e-03, |u-uexact|_h = 1.482e-03
-*WTime:   2.466768
+*WTime:   1.942331
 Nonlinear solve converged due to CONVERGED_FNORM_RELATIVE iterations 33
 *Problem: ex11 on 100 x 100 point 2D grid with d = 4, and eps = 0.006:
 *Error:   |u-uexact|_inf = 2.382e-03, |u-uexact|_h = 1.317e-03
-*WTime:   1.702015
+*WTime:   1.431734
 Nonlinear solve converged due to CONVERGED_FNORM_RELATIVE iterations 54
 *Problem: ex12 on 100 x 100 point 2D grid with d = 4, and eps = 0.006:
 *Error:   |u-uexact|_inf = 2.940e-03, |u-uexact|_h = 1.787e-03
-*WTime:   2.767430
+*WTime:   2.256965
 15% overlap
 Nonlinear solve converged due to CONVERGED_FNORM_RELATIVE iterations 35
 *Problem: ex10 on 100 x 100 point 2D grid with d = 4, and eps = 0.006:
 *Error:   |u-uexact|_inf = 2.476e-03, |u-uexact|_h = 1.482e-03
-*WTime:   1.932605
-Nonlinear solve converged due to CONVERGED_FNORM_RELATIVE iterations 25
+*WTime:   1.603423
+Nonlinear solve converged due to CONVERGED_FNORM_RELATIVE iterations 26
 *Problem: ex11 on 100 x 100 point 2D grid with d = 4, and eps = 0.006:
 *Error:   |u-uexact|_inf = 2.382e-03, |u-uexact|_h = 1.317e-03
-*WTime:   1.348095
+*WTime:   1.201999
 Nonlinear solve converged due to CONVERGED_FNORM_RELATIVE iterations 44
 *Problem: ex12 on 100 x 100 point 2D grid with d = 4, and eps = 0.006:
 *Error:   |u-uexact|_inf = 2.940e-03, |u-uexact|_h = 1.787e-03
-*WTime:   2.358543
+*WTime:   1.977365
 20% overlap
 Nonlinear solve converged due to CONVERGED_FNORM_RELATIVE iterations 26
 *Problem: ex10 on 100 x 100 point 2D grid with d = 4, and eps = 0.006:
 *Error:   |u-uexact|_inf = 2.476e-03, |u-uexact|_h = 1.482e-03
-*WTime:   1.522233
-Nonlinear solve converged due to CONVERGED_FNORM_RELATIVE iterations 18
+*WTime:   1.258712
+Nonlinear solve converged due to CONVERGED_FNORM_RELATIVE iterations 19
 *Problem: ex11 on 100 x 100 point 2D grid with d = 4, and eps = 0.006:
 *Error:   |u-uexact|_inf = 2.382e-03, |u-uexact|_h = 1.317e-03
-*WTime:   1.049385
-Nonlinear solve converged due to CONVERGED_FNORM_RELATIVE iterations 35
+*WTime:   0.952313
+Nonlinear solve converged due to CONVERGED_FNORM_RELATIVE iterations 34
 *Problem: ex12 on 100 x 100 point 2D grid with d = 4, and eps = 0.006:
 *Error:   |u-uexact|_inf = 2.940e-03, |u-uexact|_h = 1.787e-03
-*WTime:   2.026025
+*WTime:   1.619907
 
 
- - - - - - - - N=200 - - - - - - - - -
+ - - - - - - - N=200 - - - - - - - - - 
 0% overlap
-Nonlinear solve converged due to CONVERGED_FNORM_RELATIVE iterations 284
+Nonlinear solve converged due to CONVERGED_FNORM_RELATIVE iterations 283
 *Problem: ex10 on 200 x 200 point 2D grid with d = 5, and eps = 0.002:
 *Error:   |u-uexact|_inf = 9.271e-04, |u-uexact|_h = 5.260e-04
-*WTime:   106.207321
+*WTime:   89.089736
 Nonlinear solve converged due to CONVERGED_FNORM_RELATIVE iterations 218
 *Problem: ex11 on 200 x 200 point 2D grid with d = 5, and eps = 0.002:
 *Error:   |u-uexact|_inf = 9.555e-04, |u-uexact|_h = 5.175e-04
-*WTime:   81.338131
+*WTime:   75.062277
 Nonlinear solve converged due to CONVERGED_FNORM_RELATIVE iterations 263
 *Problem: ex12 on 200 x 200 point 2D grid with d = 5, and eps = 0.002:
 *Error:   |u-uexact|_inf = 1.114e-03, |u-uexact|_h = 6.479e-04
-*WTime:   97.226472
+*WTime:   80.752028
 5% overlap
-Nonlinear solve converged due to CONVERGED_FNORM_RELATIVE iterations 83
+Nonlinear solve converged due to CONVERGED_FNORM_RELATIVE iterations 81
 *Problem: ex10 on 200 x 200 point 2D grid with d = 5, and eps = 0.002:
 *Error:   |u-uexact|_inf = 9.270e-04, |u-uexact|_h = 5.259e-04
-*WTime:   33.359249
+*WTime:   29.286603
 Nonlinear solve converged due to CONVERGED_FNORM_RELATIVE iterations 58
 *Problem: ex11 on 200 x 200 point 2D grid with d = 5, and eps = 0.002:
 *Error:   |u-uexact|_inf = 9.554e-04, |u-uexact|_h = 5.174e-04
-*WTime:   23.136777
-Nonlinear solve converged due to CONVERGED_FNORM_RELATIVE iterations 91
+*WTime:   22.704375
+Nonlinear solve converged due to CONVERGED_FNORM_RELATIVE iterations 86
 *Problem: ex12 on 200 x 200 point 2D grid with d = 5, and eps = 0.002:
-*Error:   |u-uexact|_inf = 1.114e-03, |u-uexact|_h = 6.478e-04
-*WTime:   36.044293
+*Error:   |u-uexact|_inf = 1.114e-03, |u-uexact|_h = 6.479e-04
+*WTime:   30.475693
 10% overlap
-Nonlinear solve converged due to CONVERGED_FNORM_RELATIVE iterations 46
+Nonlinear solve converged due to CONVERGED_FNORM_RELATIVE iterations 48
 *Problem: ex10 on 200 x 200 point 2D grid with d = 5, and eps = 0.002:
 *Error:   |u-uexact|_inf = 9.269e-04, |u-uexact|_h = 5.259e-04
-*WTime:   19.875077
-Nonlinear solve converged due to CONVERGED_FNORM_RELATIVE iterations 32
+*WTime:   19.088507
+Nonlinear solve converged due to CONVERGED_FNORM_RELATIVE iterations 33
 *Problem: ex11 on 200 x 200 point 2D grid with d = 5, and eps = 0.002:
 *Error:   |u-uexact|_inf = 9.554e-04, |u-uexact|_h = 5.174e-04
-*WTime:   13.930418
-Nonlinear solve converged due to CONVERGED_FNORM_RELATIVE iterations 51
+*WTime:   14.151775
+Nonlinear solve converged due to CONVERGED_FNORM_RELATIVE iterations 54
 *Problem: ex12 on 200 x 200 point 2D grid with d = 5, and eps = 0.002:
-*Error:   |u-uexact|_inf = 1.114e-03, |u-uexact|_h = 6.478e-04
-*WTime:   21.740988
+*Error:   |u-uexact|_inf = 1.114e-03, |u-uexact|_h = 6.479e-04
+*WTime:   20.945669
 15% overlap
-Nonlinear solve converged due to CONVERGED_FNORM_RELATIVE iterations 34
+Nonlinear solve converged due to CONVERGED_FNORM_RELATIVE iterations 33
 *Problem: ex10 on 200 x 200 point 2D grid with d = 5, and eps = 0.002:
-*Error:   |u-uexact|_inf = 9.269e-04, |u-uexact|_h = 5.259e-04
-*WTime:   15.252554
-Nonlinear solve converged due to CONVERGED_FNORM_RELATIVE iterations 24
+*Error:   |u-uexact|_inf = 9.268e-04, |u-uexact|_h = 5.259e-04
+*WTime:   14.418783
+Nonlinear solve converged due to CONVERGED_FNORM_RELATIVE iterations 23
 *Problem: ex11 on 200 x 200 point 2D grid with d = 5, and eps = 0.002:
-*Error:   |u-uexact|_inf = 9.554e-04, |u-uexact|_h = 5.174e-04
-*WTime:   10.978789
-Nonlinear solve converged due to CONVERGED_FNORM_RELATIVE iterations 42
+*Error:   |u-uexact|_inf = 9.553e-04, |u-uexact|_h = 5.173e-04
+*WTime:   10.831946
+Nonlinear solve converged due to CONVERGED_FNORM_RELATIVE iterations 43
 *Problem: ex12 on 200 x 200 point 2D grid with d = 5, and eps = 0.002:
 *Error:   |u-uexact|_inf = 1.114e-03, |u-uexact|_h = 6.478e-04
-*WTime:   18.906566
+*WTime:   18.008590
 20% overlap
-Nonlinear solve converged due to CONVERGED_FNORM_RELATIVE iterations 27
+Nonlinear solve converged due to CONVERGED_FNORM_RELATIVE iterations 28
 *Problem: ex10 on 200 x 200 point 2D grid with d = 5, and eps = 0.002:
-*Error:   |u-uexact|_inf = 9.267e-04, |u-uexact|_h = 5.259e-04
-*WTime:   12.759684
-Nonlinear solve converged due to CONVERGED_FNORM_RELATIVE iterations 19
+*Error:   |u-uexact|_inf = 9.267e-04, |u-uexact|_h = 5.258e-04
+*WTime:   13.506762
+Nonlinear solve converged due to CONVERGED_FNORM_RELATIVE iterations 20
 *Problem: ex11 on 200 x 200 point 2D grid with d = 5, and eps = 0.002:
-*Error:   |u-uexact|_inf = 9.552e-04, |u-uexact|_h = 5.172e-04
-*WTime:   9.221044
+*Error:   |u-uexact|_inf = 9.552e-04, |u-uexact|_h = 5.173e-04
+*WTime:   10.056029
 Nonlinear solve converged due to CONVERGED_FNORM_RELATIVE iterations 38
 *Problem: ex12 on 200 x 200 point 2D grid with d = 5, and eps = 0.002:
-*Error:   |u-uexact|_inf = 1.113e-03, |u-uexact|_h = 6.477e-04
-*WTime:   18.104247
+*Error:   |u-uexact|_inf = 1.113e-03, |u-uexact|_h = 6.476e-04
+*WTime:   16.740235

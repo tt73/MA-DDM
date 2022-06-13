@@ -25,4 +25,4 @@ module load gnu8
 module load mpich
 module load petsc
 
-bash test1_overlap_np4.sh >> out_test1_overlap_np4
+bash test1_overlap_np4.sh > out_test1_overlap_np4
