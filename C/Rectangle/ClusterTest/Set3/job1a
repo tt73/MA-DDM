@@ -25,8 +25,8 @@ module load gnu8
 module load mpich
 module load petsc
 
-bash test4.sh >> out4
+bash test4.sh > out4
 
-bash test5.sh >> out5
+bash test5.sh > out5
 
-bash test6.sh >> out6
+bash test6.sh > out6
