@@ -119,6 +119,14 @@ mpiexec -np $np ../test1 -t1_N $N -da_overlap $ol -t1_problem ex12 -sub_ksp_type
 # mpiexec -np $np ../test1 -t1_N $N -da_overlap $ol -t1_problem ex10 -sub_ksp_type gmres -sub_pc_type ilu -sub_snes_linesearch_type l2 -sub_snes_max_it 1 -snes_converged_reason -log_view | grep '*Problem\|*Error\|WTime\|Nonlinear solve'
 # # This looks like the fastest way to do newton linesearch on the subdomain.
 
+printf "\nInexact method: \n"
+mpiexec -np $np ../test1 -t1_N $N -da_overlap $ol -t1_problem ex10 -sub_ksp_type preonly -sub_pc_type ilu -sub_snes_linesearch_type l2 -sub_snes_max_it 1 -snes_converged_reason -log_view | grep '*Problem\|*Error\|WTime\|Nonlinear solve'
+mpiexec -np $np ../test1 -t1_N $N -da_overlap $ol -t1_problem ex11 -sub_ksp_type preonly -sub_pc_type ilu -sub_snes_linesearch_type l2 -sub_snes_max_it 1 -snes_converged_reason -log_view | grep '*Problem\|*Error\|WTime\|Nonlinear solve'
+mpiexec -np $np ../test1 -t1_N $N -da_overlap $ol -t1_problem ex12 -sub_ksp_type preonly -sub_pc_type ilu -sub_snes_linesearch_type l2 -sub_snes_max_it 1 -snes_converged_reason -log_view | grep '*Problem\|*Error\|WTime\|Nonlinear solve'
+## KSP - gmres
+## PC - eisenstat
+## Linesearch - l2
+## iterations - 1
 
 printf "\nFastest method: \n"
 mpiexec -np $np ../test1 -t1_N $N -da_overlap $ol -t1_problem ex10 -sub_ksp_type gmres -sub_pc_type eisenstat -sub_snes_linesearch_type l2 -sub_snes_max_it 1 -snes_converged_reason -log_view | grep '*Problem\|*Error\|WTime\|Nonlinear solve'
