@@ -7,7 +7,7 @@ typedef struct {
    // Stencil width
    PetscInt  width;
    // domain dimensions
-   PetscReal Lx, Ly, Lz;
+   PetscReal xmin, xmax, ymin, ymax, zmin, zmax;
    // epsilon is the regularization term
    PetscReal epsilon;
    // quadrature weights

@@ -159,7 +159,7 @@ int main(int argc,char **args) {
    PetscBool      debug,set_N,set_eps,set_width,printSol;
    PetscReal      h_eff,hx,hy,eps,errinf,normconst2h,err2h;
    char           gridstr[99];
-   PetscInt       dim,width,N,Nx,Ny,order;
+   PetscInt       dim,width,N,Nx,Ny,order,its;
    PetscLogDouble t1,t2;
 
    ierr = PetscInitialize(&argc,&args,NULL,help); if (ierr) return ierr;
@@ -173,9 +173,12 @@ int main(int argc,char **args) {
    order       = 2; // guadrature order
    initial     = CORNER;
    problem     = ex10;
-   user.Lx     = 1.0;
-   user.Ly     = 1.0;
-   user.Lz     = 1.0;
+   user.xmin   = -1.0; // default limits [-1,1]^dim
+   user.xmax   = 1.0;
+   user.ymin   = -1.0;
+   user.ymax   = 1.0;
+   user.zmin   = -1.0;
+   user.zmax   = 1.0;
    debug       = PETSC_FALSE;
    printSol    = PETSC_FALSE;
    // Get command args
@@ -188,9 +191,12 @@ int main(int argc,char **args) {
    ierr = PetscOptionsBool("-debug","print out extra info","test1.c",debug,&debug,NULL);CHKERRQ(ierr);
    ierr = PetscOptionsBool("-print","print out extra info","test1.c",printSol,&printSol,NULL);CHKERRQ(ierr);
    ierr = PetscOptionsEnum("-init_type","type of initial iterate","test1.c",InitialTypes,(PetscEnum)initial,(PetscEnum*)&initial,NULL); CHKERRQ(ierr);
-   ierr = PetscOptionsReal("-Lx","set Lx in domain ([-Lx,Lx] x [-Ly,Ly] x [-Lz,Lz], etc.)","test1.c",user.Lx,&user.Lx,NULL);CHKERRQ(ierr);
-   ierr = PetscOptionsReal("-Ly","set Ly in domain ([-Lx,Lx] x [-Ly,Ly] x [-Lz,Lz], etc.)","test1.c",user.Ly,&user.Ly,NULL);CHKERRQ(ierr);
-   ierr = PetscOptionsReal("-Lz","set Ly in domain ([-Lx,Lx] x [-Ly,Ly] x [-Lz,Lz], etc.)","test1.c",user.Lz,&user.Lz,NULL);CHKERRQ(ierr);
+   ierr = PetscOptionsReal("-xmin","set limit of domain ([xmin,1] x [-1,1] x [-1,1])","test1.c",user.xmin,&user.xmin,NULL);CHKERRQ(ierr);
+   ierr = PetscOptionsReal("-xmax","set limit of domain ([-1,xmax] x [-1,1] x [-1,1])","test1.c",user.xmax,&user.xmax,NULL);CHKERRQ(ierr);
+   ierr = PetscOptionsReal("-ymin","set limit of domain ([-1,1] x [ymin,1] x [-1,1])","test1.c",user.ymin,&user.ymin,NULL);CHKERRQ(ierr);
+   ierr = PetscOptionsReal("-ymax","set limit of domain ([-1,1] x [-1,ymax] x [-1,1])","test1.c",user.ymax,&user.ymax,NULL);CHKERRQ(ierr);
+   ierr = PetscOptionsReal("-zmin","set limit of domain ([-1,1] x [-1,1] x [zmin,1])","test1.c",user.zmin,&user.zmin,NULL);CHKERRQ(ierr);
+   ierr = PetscOptionsReal("-zmax","set limit of domain ([-1,1] x [-1,1] x [-1,zmax])","test1.c",user.zmax,&user.zmax,NULL);CHKERRQ(ierr);
    ierr = PetscOptionsEnum("-problem","problem type; determines exact solution and RHS","test1.c",ProblemTypes,(PetscEnum)problem,(PetscEnum*)&problem,NULL); CHKERRQ(ierr);
    ierr = PetscOptionsInt("-width","stencil width","test1.c",width,&width,&set_width);CHKERRQ(ierr);
    ierr = PetscOptionsReal("-eps","regularization constant epsilon","test1.c",eps,&eps,&set_eps);CHKERRQ(ierr);
@@ -204,8 +210,8 @@ int main(int argc,char **args) {
    if (set_N) {
       Nx = Ny = N;
    }
-   hx    = 2.0*user.Lx/(Nx+1);
-   hy    = 2.0*user.Ly/(Ny+1);
+   hx    = (user.xmax - user.xmin)/(Nx+1);
+   hy    = (user.ymax - user.ymin)/(Ny+1);
    h_eff = PetscMax(hx,hy);
    if (!set_width) {
       width = PetscCeilReal(PetscPowReal(h_eff,-0.333));
@@ -256,7 +262,7 @@ int main(int argc,char **args) {
    ierr = DMDASetOverlap(da,width,width,width);
    ierr = DMSetFromOptions(da); CHKERRQ(ierr);
    ierr = DMSetUp(da); CHKERRQ(ierr);
-   ierr = DMDASetUniformCoordinates(da,-user.Lx+hx,user.Lx-hx,-user.Ly+hy,user.Ly-hy,-user.Lz,user.Lz); CHKERRQ(ierr);
+   ierr = DMDASetUniformCoordinates(da,user.xmin+hx,user.xmax-hx,user.ymin+hy,user.ymax-hy,user.zmin,user.zmax); CHKERRQ(ierr);
    ierr = DMSetApplicationContext(da,&user); CHKERRQ(ierr);
    /* SNES setup - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
       By default, we use Nonlinear Additive Schwarz method (NASM) for the
@@ -295,6 +301,7 @@ int main(int argc,char **args) {
    ierr = PetscTime(&t1); CHKERRQ(ierr);
    ierr = SNESSolve(snes,NULL,u_initial); CHKERRQ(ierr);
    ierr = PetscTime(&t2); CHKERRQ(ierr);
+   ierr = SNESGetIterationNumber(snes,&its); CHKERRQ(ierr);
    /* Error info - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
       Get the solution from DA.
       Get the exact solution with g.
@@ -312,7 +319,7 @@ int main(int argc,char **args) {
    ierr = VecNorm(err,NORM_INFINITY,&errinf); CHKERRQ(ierr);
    ierr = VecNorm(err,NORM_2,&err2h); CHKERRQ(ierr);
    /* Print Message - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-      Problem type, grid size, stencil width, epsilon, and error
+      Problem type, grid size, stencil width, epsilon, iterations, and error
    - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
    switch (dim) {
       case 1:
@@ -333,8 +340,9 @@ int main(int argc,char **args) {
    err2h /= normconst2h; // like continuous L2
    ierr = PetscPrintf(PETSC_COMM_WORLD, "*Problem: %s on %s grid with d = %d, and eps = %.3f:\n"
                "*Error:   |u-uexact|_inf = %.3e, |u-uexact|_h = %.3e\n"
-               "*WTime:   %.6f\n",
-               ProblemTypes[problem],gridstr,info.sw,user.epsilon,errinf,err2h,t2-t1); CHKERRQ(ierr);
+               "*WTime:   %.6f\n"
+               "*Iters:   %d\n",
+               ProblemTypes[problem],gridstr,info.sw,user.epsilon,errinf,err2h,t2-t1,its); CHKERRQ(ierr);
 
    /* Debugging Info - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
       To print out debugging info, add the option -t1_debug.
@@ -389,11 +397,11 @@ PetscErrorCode Form1DUExact(DMDALocalInfo *info, Vec u, MACtx* user) {
    PetscErrorCode ierr;
    PetscInt   i;
    PetscReal  Lx, hx, x, *au,temp;
-   Lx = user->Lx;
-   hx = 2.0*Lx/(PetscReal)(info->mx-1);
+   Lx = user->xmax - user->xmin;
+   hx = Lx/(PetscReal)(info->mx-1);
    ierr = DMDAVecGetArray(info->da, u, &au);CHKERRQ(ierr);
    for (i=info->xs; i<info->xs+info->xm; i++) {
-      x = -Lx + (i+1)*hx;
+      x = user->xmin + (i+1)*hx;
       user->g_bdry(x,0.0,0.0,user,&temp);
       au[i] = temp;
    }
@@ -405,14 +413,15 @@ PetscErrorCode Form2DUExact(DMDALocalInfo *info, Vec u, MACtx* user) {
    PetscErrorCode ierr;
    PetscInt   i, j;
    PetscReal  Lx, Ly, hx, hy, x, y, **au,temp;
-   Lx = user->Lx; Ly = user->Ly;
-   hx = 2.0*Lx/(PetscReal)(info->mx + 1);
-   hy = 2.0*Ly/(PetscReal)(info->my + 1);
+   Lx = user->xmax - user->xmin;
+   Ly = user->ymax - user->ymin;
+   hx = Lx/(PetscReal)(info->mx + 1);
+   hy = Ly/(PetscReal)(info->my + 1);
    ierr = DMDAVecGetArray(info->da, u, &au);CHKERRQ(ierr);
    for (j=info->ys; j<info->ys+info->ym; j++) {
-      y = -Ly + (j+1)*hy;
+      y = user->ymin + (j+1)*hy;
       for (i=info->xs; i<info->xs+info->xm; i++) {
-         x = -Lx + (i+1)*hx;
+         x = user->xmin + (i+1)*hx;
          user->g_bdry(x,y,0.0,user,&temp);
          au[j][i] = temp;
       }
