@@ -147,9 +147,6 @@ int main(int argc,char **args) {
    PetscErrorCode ierr;
    DM             da, da_after;
    SNES           snes;
-   KSP            ksp;
-   PC             pc;
-   SNESLineSearch ls;
    DMDALocalInfo  info;
    Vec            u_initial,u,u_exact,err;
    MACtx          user; // see header file
@@ -274,18 +271,8 @@ int main(int argc,char **args) {
    ierr = SNESSetDM(snes,da); CHKERRQ(ierr);
    ierr = DMDASNESSetFunctionLocal(da,INSERT_VALUES,(DMDASNESFunction)(residual_ptr[dim-1]),&user); CHKERRQ(ierr);
    ierr = DMDASNESSetJacobianLocal(da,(DMDASNESJacobian)(jacobian_ptr[dim-1]),&user); CHKERRQ(ierr);
-   ierr = SNESGetKSP(snes,&ksp);CHKERRQ(ierr);
-   ierr = KSPGetPC(ksp,&pc);CHKERRQ(ierr);
-   ierr = KSPSetType(ksp,KSPGMRES); CHKERRQ(ierr);
-   // ierr = PCSetType(pc,PCNONE);CHKERRQ(ierr);
    ierr = SNESSetType(snes,SNESNASM); CHKERRQ(ierr);
    ierr = SNESNASMSetType(snes,PC_ASM_RESTRICT);
-   /* Linesearch - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-
-   - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
-   ierr = SNESGetLineSearch(snes,&ls);
-   ierr = SNESLineSearchSetType(ls,SNESLINESEARCHBASIC);
-   ierr = SNESLineSearchSetTolerances(ls,PETSC_DEFAULT,PETSC_DEFAULT,PETSC_DEFAULT,PETSC_DEFAULT,PETSC_DEFAULT,1);
    /* Wide-stencil params - - - - - - - - - - - - - - - - - - - - - - - - - - -
       Compute forward stencil directions for the determinant
    - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
@@ -293,7 +280,6 @@ int main(int argc,char **args) {
    ComputeWeights(width,order,&user);  // Quadrature weights
    /* Solve - - - - - - - - - - - - - - - - - - - - - - - - - - - -
       Set up the inital guess on each sub-domain
-
    - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
    ierr = DMGetGlobalVector(da,&u_initial); CHKERRQ(ierr);
    ierr = InitialState(da,initial,u_initial,&user); CHKERRQ(ierr);
@@ -301,7 +287,7 @@ int main(int argc,char **args) {
    ierr = PetscTime(&t1); CHKERRQ(ierr);
    ierr = SNESSolve(snes,NULL,u_initial); CHKERRQ(ierr);
    ierr = PetscTime(&t2); CHKERRQ(ierr);
-   ierr = SNESGetIterationNumber(snes,&its); CHKERRQ(ierr);
+   ierr = SNESGetIterationNumber(snes,&its); CHKERRQ(ierr); // get the number of outer snes iterations
    /* Error info - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
       Get the solution from DA.
       Get the exact solution with g.
