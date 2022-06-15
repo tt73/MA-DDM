@@ -303,8 +303,8 @@ PetscErrorCode MA2DJacobianLocal(DMDALocalInfo *info, PetscScalar **au, Mat J, M
    PetscReal    common;
    PetscReal    *hFwd, *hBak; // magnitude of step in forward and backward dirs for each direction k
    PetscReal    *SDD;   // second directional deriv
-   // bool         *SGTE;  // stands for "SDD[k] greather than epsilon"
-   PetscBool    *SGTE;  // stands for "SDD[k] greather than epsilon"
+   bool         *SGTE;  // for Stheno
+   // PetscBool    *SGTE;  // for latest PETSc
    PetscBool    regularize; // true if epsilon is the smallest among SDD
 
    PetscFunctionBeginUser;
@@ -653,8 +653,8 @@ PetscErrorCode ComputeFwdStencilDirs(PetscInt width, MACtx *user) {
 */
 PetscErrorCode ComputeProjectionIndeces(PetscReal *di, PetscReal *dj, PetscInt i, PetscInt j, PetscInt Si, PetscInt Sj, PetscInt Nx, PetscInt Ny) {
    PetscReal m;
-   // bool      check;  // for Stheno
-   PetscBool check; // for newest PETSc release
+   bool      check;  // for Stheno
+   // PetscBool check; // for newest PETSc release
 
    PetscFunctionBeginUser;
    if (Si==0) {

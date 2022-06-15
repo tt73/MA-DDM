@@ -1,0 +1,11 @@
+Domain test with N = 512
+
+One domain
+*Problem: ex10 on 512 x 512 point 2D grid with d = 7, and eps = 0.001:
+*Error:   |u-uexact|_inf = 2.787e-04, |u-uexact|_h = 1.572e-04
+*WTime:   378.116322
+*Iters:   19
+*Problem: ex11 on 512 x 512 point 2D grid with d = 8, and eps = 0.000:
+*Error:   |u-uexact|_inf = 4.321e-05, |u-uexact|_h = 2.345e-05
+*WTime:   612.579918
+*Iters:   23
