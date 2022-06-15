@@ -1,0 +1,25 @@
+Domain test with N = 301
+
+One domain
+*Problem: ex10 on 301 x 301 point 2D grid with d = 6, and eps = 0.002:
+*Error:   |u-uexact|_inf = 5.676e-04, |u-uexact|_h = 3.129e-04
+*WTime:   57.409097
+*Iters:   17
+*Problem: ex11 on 301 x 301 point 2D grid with d = 7, and eps = 0.001:
+*Error:   |u-uexact|_inf = 9.248e-05, |u-uexact|_h = 5.056e-05
+*WTime:   107.194308
+*Iters:   22
+*Problem: ex12 on 301 x 301 point 2D grid with d = 7, and eps = 0.001:
+*Error:   |u-uexact|_inf = 1.995e-02, |u-uexact|_h = 7.776e-04
+*WTime:   20754.978171
+*Iters:   9999
+
+Two-domain, ox = 0, oy = 15
+*Problem: ex10 on 301 x 301 point 2D grid with d = 6, and eps = 0.002:
+*Error:   |u-uexact|_inf = 5.682e-04, |u-uexact|_h = 3.131e-04
+*WTime:   135.245070
+*Iters:   49
+*Problem: ex11 on 301 x 301 point 2D grid with d = 7, and eps = 0.001:
+*Error:   |u-uexact|_inf = 9.251e-05, |u-uexact|_h = 5.057e-05
+*WTime:   143.458085
+*Iters:   44
