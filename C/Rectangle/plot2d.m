@@ -21,9 +21,26 @@ load_exact % load exact solution coded in petsc
 s = length(u);
 n = sqrt(s);
 
+%% 
+
+choice = 3;
+switch(choice)
+   case 1
+      DirBC = @(x,y) (exp((x.^2+y.^2)/2));
+      contF = @(x,y) ((1+x.^2+y.^2).*exp(x.^2+y.^2));
+   case 2
+      pos = @(x) max(x,0);
+      DirBC = @(x,y) (.5*pos(((x-.5).^2+(y-.5).^2).^.5-.2).^2);
+      contF = @(x,y) (pos(1-.2./sqrt((x-.5).^2+(y-.5).^2)));
+   case 3
+      DirBC = @(x,y) (-sqrt(2-(x.^2+y.^2)));
+      contF = @(x,y) (2*(2-(x.^2+y.^2)).^-2);
+end
+
 %% visualizing the solution
 % The solution is one long M*N by 1 vector.
 % We need to reshape it into a matrix before we plot it.
+
 
 figure
 u_grid = reshape(u,n,n);
