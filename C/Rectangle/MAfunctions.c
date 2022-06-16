@@ -13,7 +13,7 @@ PetscErrorCode InitialState(DM da, InitialType it, Vec u, MACtx *user) {
 
    PetscFunctionBeginUser;
    switch (it) {
-      case ZEROS:
+      case ZEROS: // just set u = 0
          ierr = VecSet(u,0.0); CHKERRQ(ierr);
          break;
       case RANDOM:
@@ -56,12 +56,12 @@ PetscErrorCode InitialState(DM da, InitialType it, Vec u, MACtx *user) {
          }
          ierr = VecSet(u,temp); CHKERRQ(ierr);
          break;
-      case PYRAMID:
+      case PYRAMID: // needs fixing
          /*
             Convex cone (1D)
-            For -L < x < L and u(-L) = ga and u(L) = gb.
+            For xmin < x < xmax and u(xmin) = ga and u(xmax) = gb.
             Let gx = min(ga,gb).
-            Let m = gx/L.
+            Let m = gx/.
             Let the initial guess be u(x) = max(-m(x+L)+gx,m(x-L+gx)).
          */
          ierr = DMDAGetLocalInfo(da,&info); CHKERRQ(ierr);
@@ -303,8 +303,8 @@ PetscErrorCode MA2DJacobianLocal(DMDALocalInfo *info, PetscScalar **au, Mat J, M
    PetscReal    common;
    PetscReal    *hFwd, *hBak; // magnitude of step in forward and backward dirs for each direction k
    PetscReal    *SDD;   // second directional deriv
-   bool         *SGTE;  // for Stheno
-   // PetscBool    *SGTE;  // for latest PETSc
+   // bool         *SGTE;  // for Stheno
+   PetscBool    *SGTE;  // for latest PETSc
    PetscBool    regularize; // true if epsilon is the smallest among SDD
 
    PetscFunctionBeginUser;
@@ -653,8 +653,8 @@ PetscErrorCode ComputeFwdStencilDirs(PetscInt width, MACtx *user) {
 */
 PetscErrorCode ComputeProjectionIndeces(PetscReal *di, PetscReal *dj, PetscInt i, PetscInt j, PetscInt Si, PetscInt Sj, PetscInt Nx, PetscInt Ny) {
    PetscReal m;
-   bool      check;  // for Stheno
-   // PetscBool check; // for newest PETSc release
+   // bool      check;  // for Stheno
+   PetscBool check; // for newest PETSc release
 
    PetscFunctionBeginUser;
    if (Si==0) {

@@ -170,12 +170,9 @@ int main(int argc,char **args) {
    order       = 2; // guadrature order
    initial     = CORNER;
    problem     = ex10;
-   user.xmin   = -1.0; // default limits [-1,1]^dim
-   user.xmax   = 1.0;
-   user.ymin   = -1.0;
-   user.ymax   = 1.0;
-   user.zmin   = -1.0;
-   user.zmax   = 1.0;
+   user.xmin   = -1.0; user.xmax = 1.0; // x limits [-1, 1]
+   user.ymin   = -1.0; user.ymax = 1.0; // y limits [-1, 1]
+   user.zmin   = -1.0; user.zmax = 1.0; // z limits [-1, 1]
    debug       = PETSC_FALSE;
    printSol    = PETSC_FALSE;
    // Get command args
