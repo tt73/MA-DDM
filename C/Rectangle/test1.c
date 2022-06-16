@@ -15,6 +15,7 @@ static char help[] = "Create a wide-stencil grid in 2D.\n\n";
 extern PetscErrorCode Form1DUExact(DMDALocalInfo*, Vec, MACtx*);
 extern PetscErrorCode Form2DUExact(DMDALocalInfo*, Vec, MACtx*);
 extern PetscErrorCode Form3DUExact(DMDALocalInfo*, Vec, MACtx*);
+extern PetscErrorCode ComputeRHS(DMDALocalInfo*, Vec, MACtx*);
 
 /*
    Solution    u(x) = exp(|x|^2/2), for x in Rn
@@ -94,15 +95,15 @@ PetscErrorCode u_exact_3Dex12(PetscReal x, PetscReal y, PetscReal z, void *ctx, 
 }
 // RHS
 PetscErrorCode f_rhs_1Dex12(PetscReal x, PetscReal y, PetscReal z, void *ctx, PetscReal * f) {
-   f[0] = 2.0/PetscPowReal(2-x*x,1.5);
+   f[0] = 2.0/PetscPowReal(2.0-x*x,1.5);
    return 0;
 }
 PetscErrorCode f_rhs_2Dex12(PetscReal x, PetscReal y, PetscReal z, void *ctx, PetscReal * f) {
-   f[0] = 2.0/PetscPowReal(2-x*x-y*y,2.0);
+   f[0] = 2.0*PetscPowReal(2.0 - x*x-y*y,-2.0);
    return 0;
 }
 PetscErrorCode f_rhs_3Dex12(PetscReal x, PetscReal y, PetscReal z, void *ctx, PetscReal * f) {
-   f[0] = 2.0/PetscPowReal(2-x*x-y*y-z*z,2.5);
+   f[0] = 2.0/PetscPowReal(2.0-x*x-y*y-z*z,2.5);
    return 0;
 }
 
@@ -146,7 +147,7 @@ static const char* InitialTypes[] = {"zeros","random","corner","pyramid","Initia
 int main(int argc,char **args) {
    PetscErrorCode ierr;
    DM             da, da_after;
-   SNES           snes;
+   SNES           snes, *subsnes;
    DMDALocalInfo  info;
    Vec            u_initial,u,u_exact,err;
    MACtx          user; // see header file
@@ -158,10 +159,14 @@ int main(int argc,char **args) {
    char           gridstr[99];
    PetscInt       dim,width,N,Nx,Ny,order,its;
    PetscLogDouble t1,t2;
+   PetscMPIInt    rank, size;
 
    ierr = PetscInitialize(&argc,&args,NULL,help); if (ierr) return ierr;
-   /*  Default params  - - - - - - - - - - - - - - - - - - - - - - - - - - -
-
+   MPI_Comm_size(PETSC_COMM_WORLD,&size); // get # of processors
+   MPI_Comm_rank(PETSC_COMM_WORLD,&rank); // get index of individual procs
+   /*  Get parameters  - - - - - - - - - - - - - - - - - - - - - - - - - - -
+      The defualt parameters are initialized below.
+      Most of them can be changed during runtime.
    - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
    N = Nx = Ny = 4; // # of interior points
    dim         = 2; // PDE space dimension
@@ -264,12 +269,15 @@ int main(int argc,char **args) {
       newton method. For the Jacobian solve, we use GMRES with multigrid
       preconditioning.
    - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+   // PetscInt Nd; // number of subsolvers
    ierr = SNESCreate(PETSC_COMM_WORLD,&snes); CHKERRQ(ierr);
    ierr = SNESSetDM(snes,da); CHKERRQ(ierr);
    ierr = DMDASNESSetFunctionLocal(da,INSERT_VALUES,(DMDASNESFunction)(residual_ptr[dim-1]),&user); CHKERRQ(ierr);
    ierr = DMDASNESSetJacobianLocal(da,(DMDASNESJacobian)(jacobian_ptr[dim-1]),&user); CHKERRQ(ierr);
    ierr = SNESSetType(snes,SNESNASM); CHKERRQ(ierr);
    ierr = SNESNASMSetType(snes,PC_ASM_RESTRICT);
+   // ierr = SNESNASMGetNumber(snes,&Nd);
+   // PetscPrintf(PETSC_COMM_WORLD,"Nd = %d\n",Nd);
    /* Wide-stencil params - - - - - - - - - - - - - - - - - - - - - - - - - - -
       Compute forward stencil directions for the determinant
    - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
@@ -366,12 +374,20 @@ int main(int argc,char **args) {
       ierr = PetscViewerPushFormat(viewer,PETSC_VIEWER_ASCII_MATLAB); // except its for u
       ierr = PetscObjectSetName((PetscObject)u_exact,"u_exact");
       ierr = VecView(u_exact,viewer);
-      if (debug) { // option to print out intial guess
+      if (debug) { // extras for sanity check
+         // print out intial guess in matlab format
          InitialState(da,initial,u_initial,&user);
          ierr = PetscViewerASCIIOpen(PETSC_COMM_WORLD,"load_initial.m",&viewer);  // set the file name
-         ierr = PetscViewerPushFormat(viewer,PETSC_VIEWER_ASCII_MATLAB); // except its for u
+         ierr = PetscViewerPushFormat(viewer,PETSC_VIEWER_ASCII_MATLAB);
          ierr = PetscObjectSetName((PetscObject)u_initial,"u_initial");
          ierr = VecView(u_initial,viewer);
+         Vec  RHS; // print out the source term or the RHS
+         ierr = VecDuplicate(u_exact,&RHS);
+         ierr = ComputeRHS(&info,RHS,&user);
+         ierr = PetscViewerASCIIOpen(PETSC_COMM_WORLD,"load_rhs.m",&viewer);  // set the file name
+         ierr = PetscViewerPushFormat(viewer,PETSC_VIEWER_ASCII_MATLAB);
+         ierr = PetscObjectSetName((PetscObject)RHS,"rhs");
+         ierr = VecView(RHS,viewer);
       }
       // Free memory
       ierr = DMDestroy(&da); CHKERRQ(ierr);
@@ -438,6 +454,28 @@ PetscErrorCode Form3DUExact(DMDALocalInfo *info, Vec u, MACtx* user) {
             user->g_bdry(x,y,z,user,&temp);
             au[k][j][i] = temp;
          }
+      }
+   }
+   ierr = DMDAVecRestoreArray(info->da, u, &au);CHKERRQ(ierr);
+   return 0;
+}
+
+// Compute the RHS and store it in u. This exists as a sanity check.
+PetscErrorCode ComputeRHS(DMDALocalInfo *info, Vec u, MACtx* user) {
+   PetscErrorCode ierr;
+   PetscInt   i, j;
+   PetscReal  Lx, Ly, hx, hy, x, y, **au,temp;
+   Lx = user->xmax - user->xmin;
+   Ly = user->ymax - user->ymin;
+   hx = Lx/(PetscReal)(info->mx + 1);
+   hy = Ly/(PetscReal)(info->my + 1);
+   ierr = DMDAVecGetArray(info->da, u, &au);CHKERRQ(ierr);
+   for (j=info->ys; j<info->ys+info->ym; j++) {
+      y = user->ymin + (j+1)*hy;
+      for (i=info->xs; i<info->xs+info->xm; i++) {
+         x = user->xmin + (i+1)*hx;
+         user->f_rhs(x,y,0.0,user,&temp);
+         au[j][i] = temp;
       }
    }
    ierr = DMDAVecRestoreArray(info->da, u, &au);CHKERRQ(ierr);
