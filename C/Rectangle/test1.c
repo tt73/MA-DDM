@@ -168,7 +168,7 @@ int main(int argc,char **args) {
    width       = 1; // stencil width
    eps         = 0.25;  // epsilon = (hd)^2
    order       = 2; // guadrature order
-   initial     = CORNER;
+   initial     = ZEROS;
    problem     = ex10;
    user.xmin   = -1.0; user.xmax = 1.0; // x limits [-1, 1]
    user.ymin   = -1.0; user.ymax = 1.0; // y limits [-1, 1]
@@ -366,6 +366,13 @@ int main(int argc,char **args) {
       ierr = PetscViewerPushFormat(viewer,PETSC_VIEWER_ASCII_MATLAB); // except its for u
       ierr = PetscObjectSetName((PetscObject)u_exact,"u_exact");
       ierr = VecView(u_exact,viewer);
+      if (debug) { // option to print out intial guess
+         InitialState(da,initial,u_initial,&user);
+         ierr = PetscViewerASCIIOpen(PETSC_COMM_WORLD,"load_initial.m",&viewer);  // set the file name
+         ierr = PetscViewerPushFormat(viewer,PETSC_VIEWER_ASCII_MATLAB); // except its for u
+         ierr = PetscObjectSetName((PetscObject)u_initial,"u_initial");
+         ierr = VecView(u_initial,viewer);
+      }
       // Free memory
       ierr = DMDestroy(&da); CHKERRQ(ierr);
       ierr = VecDestroy(&err); CHKERRQ(ierr);

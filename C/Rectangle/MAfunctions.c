@@ -3,20 +3,22 @@
 
 
 /* Initial State - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-
+   This function sets up the intial guess for the outer SNES method.
+   The available options are: zeros, random, corner, and pyramid.
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 PetscErrorCode InitialState(DM da, InitialType it, Vec u, MACtx *user) {
    PetscErrorCode ierr;
    DMDALocalInfo  info;
    PetscRandom    rctx;
    PetscReal      temp,temp1,temp2;
-
    PetscFunctionBeginUser;
+
    switch (it) {
       case ZEROS: // just set u = 0
          ierr = VecSet(u,0.0); CHKERRQ(ierr);
          break;
       case RANDOM:
+
          ierr = PetscRandomCreate(PETSC_COMM_WORLD,&rctx); CHKERRQ(ierr);
          ierr = VecSetRandom(u,rctx); CHKERRQ(ierr);
          ierr = PetscRandomDestroy(&rctx); CHKERRQ(ierr);
@@ -25,7 +27,9 @@ PetscErrorCode InitialState(DM da, InitialType it, Vec u, MACtx *user) {
          /* Corner - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
             Get largest Dirichlet data on all corners.
             Set the initial guess to that constant.
+            We may want to experiment with the smallest values of the 4 corners.
          - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+
          ierr = DMDAGetLocalInfo(da,&info); CHKERRQ(ierr);
          switch (info.dim) {
             case 1:
@@ -58,56 +62,71 @@ PetscErrorCode InitialState(DM da, InitialType it, Vec u, MACtx *user) {
          break;
       case PYRAMID: // needs fixing
          /*
-            Convex cone (1D)
-            For xmin < x < xmax and u(xmin) = ga and u(xmax) = gb.
-            Let gx = min(ga,gb).
-            Let m = gx/.
-            Let the initial guess be u(x) = max(-m(x+L)+gx,m(x-L+gx)).
+            Convex pyramid:
+
+            In 1D we have, a < x < b and u(a) = ga and u(b) = gb.
+            We want the initial guess to be two line segments connecting
+            (a,ga) to ((a+b)/2, gm ) to (b,gb). The midpoint is slightly
+            lower than ga and gb. We will let gm = min(ga,gb) - (ga+gb)/2.
+            This is equivalent to letting u0(x) = max(ma*(x-a)+ga,mb*(x-b)+gb)
+            where the slopes are given by ma = 2(gm-ga)/(b-a), and
+            mb = 2(gb-gm)/(b-a).
+
+            In 1D, u0 is shaped like a V. We can generalize this shape to a convex
+            pyramid in 2D. We let u0 be the max of 4 lines:
+            u0(x,y) = max( mxa*(x-xmin)+gxa,
+                           mxb*(x-xmax)+gxb,
+                           mya*(y-ymin)+gya,
+                           myb*(y-ymax)+gyb)
+            In 2D, we let gm = min(gxa,gxb,gya,gyb) - avg(gxa,gxb,gya,gyb).
          */
          ierr = DMDAGetLocalInfo(da,&info); CHKERRQ(ierr);
          switch (info.dim) {
-            case 1:
+            case 1: // 1D V-shape
             {
                PetscInt  i;
-               PetscReal Lx, hx,x,*au,gx,m;
+               PetscReal hx,x,*au,ga,gb,gm,ma,mb;
 
                ierr = DMDAVecGetArray(da, u, &au); CHKERRQ(ierr);
-               Lx = user->xmin - user->xmax;
-               hx = Lx/(PetscReal)(info.mx-1);
-               user->g_bdry(user->xmin,0.0,0.0,user,&temp1);
-               user->g_bdry(user->xmax,0.0,0.0,user,&temp2);
-               gx = PetscMin(temp1,temp2);
-               m = gx/Lx;
+               hx = (user->xmax - user->xmin)/(PetscReal)(info.mx + 1);
+               user->g_bdry(user->xmin,0.0,0.0,user,&ga);
+               user->g_bdry(user->xmax,0.0,0.0,user,&gb);
+               gm = PetscMin(ga,gb) - (ga+gb)/2.0;
+               ma = 2.0*(gm-ga)/(user->xmax-user->xmin);
+               mb = 2.0*(gb-gm)/(user->xmax-user->xmin);
                for (i=info.xs; i<info.xs+info.xm; i++) {
                   x = user->xmin + (i+1)*hx;
-                  au[i] = m*PetscMax(user->xmin-x,x-user->xmax)+gx;
+                  au[i] = PetscMax(ma*(x-user->xmin)+ga,mb*(x-user->xmax)+gb);
                }
                ierr = DMDAVecRestoreArray(da, u, &au); CHKERRQ(ierr);
                break;
             }
-            case 2:
+            case 2: // 2D pyramid-shape
             {
                PetscInt   i, j;
-               PetscReal  Lx,Ly,hx,hy,x,y,**au,gx,gy,mx,my;
+               PetscReal  hx,hy,x,y,**au,gxa,gxb,gya,gyb,gmin,gm,mxa,mxb,mya,myb,temp;
 
                ierr = DMDAVecGetArray(da, u, &au); CHKERRQ(ierr);
-               Lx = user->xmin - user->xmax;
-               Ly = user->ymin - user->ymax;
-               hx = Lx/(PetscReal)(info.mx + 1);
-               hy = Ly/(PetscReal)(info.my + 1);
+               hx = (user->xmax - user->xmin)/(PetscReal)(info.mx + 1);
+               hy = (user->ymax - user->ymin)/(PetscReal)(info.my + 1);
                for (j = info.ys; j < info.ys + info.ym; j++) {
                   y = user->ymin + (j+1)*hy;
-                  user->g_bdry(user->xmin,y,0.0,user,&temp1);
-                  user->g_bdry(user->xmax,y,0.0,user,&temp2);
-                  gy = PetscMin(temp1,temp2);
-                  my = gy/Ly;
+                  user->g_bdry(user->xmin,y,0.0,user,&gya);
+                  user->g_bdry(user->xmax,y,0.0,user,&gyb);
                   for (i = info.xs; i < info.xs+info.xm; i++) {
-                     x = Lx + (i+1)*hx;
-                     user->g_bdry(x,user->ymin,0.0,user,&temp1);
-                     user->g_bdry(x,user->ymax,0.0,user,&temp2);
-                     gx = PetscMin(temp1,temp2);
-                     mx = gx/Lx;
-                     au[j][i] = PetscMax(mx*PetscMax(user->xmin-x,x-user->xmax)+gx,my*PetscMax(user->ymin-y,y-user->ymax)+gy);
+                     x    = user->xmin + (i+1)*hx;
+                     temp = PetscMin(gya,gyb);
+                     user->g_bdry(x,user->ymin,0.0,user,&gxa);
+                     user->g_bdry(x,user->ymax,0.0,user,&gxb);
+                     gmin = PetscMin(temp,PetscMin(gxa,gxb));
+                     gm   = gmin - (gxa+gxb+gya+gyb)/4.0;
+                     // gxm = PetscMin(gxa,gxb) - (gxa+gxb)/2.0;
+                     mya = 2.0*(gm-gya)/(user->xmax - user->xmin);
+                     myb = 2.0*(gyb-gm)/(user->xmax - user->xmin);
+                     mxa = 2.0*(gm-gxa)/(user->ymax - user->ymin);
+                     mxb = 2.0*(gxb-gm)/(user->ymax - user->ymin);
+                     temp = PetscMax(mya*(y-user->ymin)+gya,myb*(y-user->ymax)+gyb);
+                     au[j][i] = PetscMax(temp,PetscMax(mxa*(x-user->xmin)+gxa,mxb*(x-user->xmax)+gxb));
                   }
                }
                ierr = DMDAVecRestoreArray(da, u, &au); CHKERRQ(ierr);
