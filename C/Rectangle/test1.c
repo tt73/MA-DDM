@@ -5,13 +5,12 @@
    This is the serial version, but most of it is ready to be
    done in parallel.
 */
-static char help[] = "Create a wide-stencil grid in 2D.\n\n";
+static char help[] = "Solve the Monge-Ampere equation for one of three example problems in 1D or 2D using a wide-stencil discretization scheme on a rectangular grid.\n\n";
 
 #include <petsc.h>
 #include "MAfunctions.h"
 
-// functions simply to put u_exact()=g_bdry() into a grid
-// these are irritatingly-dimension-dependent inside ...
+//
 extern PetscErrorCode Form1DUExact(DMDALocalInfo*, Vec, MACtx*);
 extern PetscErrorCode Form2DUExact(DMDALocalInfo*, Vec, MACtx*);
 extern PetscErrorCode Form3DUExact(DMDALocalInfo*, Vec, MACtx*);
@@ -86,7 +85,8 @@ PetscErrorCode u_exact_1Dex12(PetscReal x, PetscReal y, PetscReal z, void *ctx, 
    return 0;
 }
 PetscErrorCode u_exact_2Dex12(PetscReal x, PetscReal y, PetscReal z, void *ctx, PetscReal * u) {
-   u[0] = -PetscSqrtReal(2.0 - x*x - y*y);
+   PetscReal temp = -PetscSqrtReal(2.0 - x*x - y*y);
+   u[0] = PetscIsInfOrNanScalar(temp) ? 0.0 : temp;
    return 0;
 }
 PetscErrorCode u_exact_3Dex12(PetscReal x, PetscReal y, PetscReal z, void *ctx, PetscReal * u) {
@@ -107,7 +107,6 @@ PetscErrorCode f_rhs_3Dex12(PetscReal x, PetscReal y, PetscReal z, void *ctx, Pe
    return 0;
 }
 
-
 //STARTPTRARRAYS
 // arrays of pointers to functions
 static DMDASNESFunction residual_ptr[3]
@@ -123,7 +122,6 @@ static DMDASNESJacobian jacobian_ptr[3]
 typedef PetscErrorCode (*ExactFcnVec)(DMDALocalInfo*,Vec,MACtx*);
 
 static ExactFcnVec getuexact_ptr[3] = {&Form1DUExact, &Form2DUExact, &Form3DUExact};
-
 
 typedef enum {ex10, ex11, ex12} ProblemType;
 static const char* ProblemTypes[] = {"ex10","ex11","ex12","ProblemType","", NULL};
@@ -146,24 +144,25 @@ static const char* InitialTypes[] = {"zeros","random","corner","pyramid","Initia
 
 int main(int argc,char **args) {
    PetscErrorCode ierr;
-   DM             da, da_after;
-   SNES           snes, *subsnes;
+   DM             da,da_after;
+   SNES           snes,subsnes;
+   SNESLineSearch subls;
+   KSP            subksp;
+   PC             subpc;
    DMDALocalInfo  info;
    Vec            u_initial,u,u_exact,err;
    MACtx          user; // see header file
    ExactFcnVec    getuexact;
    InitialType    initial;
    ProblemType    problem;           // manufactured problem using exp()
-   PetscBool      debug,set_N,set_eps,set_width,printSol;
+   PetscBool      debug,set_N,set_eps,set_width,printSol,mixed;
    PetscReal      h_eff,hx,hy,eps,errinf,normconst2h,err2h;
    char           gridstr[99];
    PetscInt       dim,width,N,Nx,Ny,order,its;
    PetscLogDouble t1,t2;
-   PetscMPIInt    rank, size;
+   PetscMPIInt    rank,size;
 
    ierr = PetscInitialize(&argc,&args,NULL,help); if (ierr) return ierr;
-   MPI_Comm_size(PETSC_COMM_WORLD,&size); // get # of processors
-   MPI_Comm_rank(PETSC_COMM_WORLD,&rank); // get index of individual procs
    /*  Get parameters  - - - - - - - - - - - - - - - - - - - - - - - - - - -
       The defualt parameters are initialized below.
       Most of them can be changed during runtime.
@@ -180,6 +179,7 @@ int main(int argc,char **args) {
    user.zmin   = -1.0; user.zmax = 1.0; // z limits [-1, 1]
    debug       = PETSC_FALSE;
    printSol    = PETSC_FALSE;
+   mixed      = PETSC_FALSE;
    // Get command args
    ierr = PetscOptionsBegin(PETSC_COMM_WORLD,"t1_", "options for test1.c", ""); CHKERRQ(ierr);
    ierr = PetscOptionsInt("-dim","dimension of problem (=1,2,3 only)","test1.c",dim,&dim,NULL);CHKERRQ(ierr);
@@ -189,6 +189,7 @@ int main(int argc,char **args) {
    ierr = PetscOptionsInt("-order","order of quadrature (default is 2)","test1.c",order,&order,NULL);CHKERRQ(ierr);
    ierr = PetscOptionsBool("-debug","print out extra info","test1.c",debug,&debug,NULL);CHKERRQ(ierr);
    ierr = PetscOptionsBool("-print","print out extra info","test1.c",printSol,&printSol,NULL);CHKERRQ(ierr);
+   ierr = PetscOptionsBool("-mixed","sub-index the local domains and use FAS on the last subdomain","test1.c",mixed,&mixed,NULL);CHKERRQ(ierr);
    ierr = PetscOptionsEnum("-init_type","type of initial iterate","test1.c",InitialTypes,(PetscEnum)initial,(PetscEnum*)&initial,NULL); CHKERRQ(ierr);
    ierr = PetscOptionsReal("-xmin","set limit of domain ([xmin,1] x [-1,1] x [-1,1])","test1.c",user.xmin,&user.xmin,NULL);CHKERRQ(ierr);
    ierr = PetscOptionsReal("-xmax","set limit of domain ([-1,xmax] x [-1,1] x [-1,1])","test1.c",user.xmax,&user.xmax,NULL);CHKERRQ(ierr);
@@ -266,33 +267,67 @@ int main(int argc,char **args) {
    /* SNES setup - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
       By default, we use Nonlinear Additive Schwarz method (NASM) for the
       nonlinear solver. On the local subdomains, we use one step of basic
-      newton method. For the Jacobian solve, we use GMRES with multigrid
-      preconditioning.
+      newton method. For the Jacobian solve, we use GMRES with a SSOR
+      preconditioner.
    - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
-   // PetscInt Nd; // number of subsolvers
    ierr = SNESCreate(PETSC_COMM_WORLD,&snes); CHKERRQ(ierr);
+   ierr = SNESSetType(snes,SNESNASM); CHKERRQ(ierr);
+   ierr = SNESNASMSetType(snes,PC_ASM_RESTRICT); CHKERRQ(ierr);
    ierr = SNESSetDM(snes,da); CHKERRQ(ierr);
    ierr = DMDASNESSetFunctionLocal(da,INSERT_VALUES,(DMDASNESFunction)(residual_ptr[dim-1]),&user); CHKERRQ(ierr);
    ierr = DMDASNESSetJacobianLocal(da,(DMDASNESJacobian)(jacobian_ptr[dim-1]),&user); CHKERRQ(ierr);
-   ierr = SNESSetType(snes,SNESNASM); CHKERRQ(ierr);
-   ierr = SNESNASMSetType(snes,PC_ASM_RESTRICT);
-   // ierr = SNESNASMGetNumber(snes,&Nd);
-   // PetscPrintf(PETSC_COMM_WORLD,"Nd = %d\n",Nd);
+   ierr = SNESSetUp(snes); CHKERRQ(ierr);
+   SNESNASMGetSNES(snes,0,&subsnes); // get the local SNES
+   SNESGetLineSearch(subsnes,&subls); // get local linesearch
+   SNESGetKSP(subsnes,&subksp); // get the local KSP
+   KSPGetPC(subksp,&subpc); // get the local PC
+   /* Subdomain Solve - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+      We can choose the local solver for each MPI rank.
+      For most cases, doing Newton's method for the local solve with
+      L2 linesearch and GMRES-SSOR for the linear solve.
+
+      We can choose to use different methods on each subdomain.
+
+   - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+   MPI_Comm_size(PETSC_COMM_WORLD,&size); // get # of processors
+   MPI_Comm_rank(PETSC_COMM_WORLD,&rank); // get index of individual procs
+   if ((rank==size-1) && mixed) {
+      // SNESSetType(subsnes,SNESFAS); CHKERRQ(ierr);
+      SNESSetType(subsnes,SNESNEWTONLS);
+      SNESLineSearchSetType(subls,SNESLINESEARCHBT);
+      SNESSetTolerances(subsnes,PETSC_DEFAULT,PETSC_DEFAULT,PETSC_DEFAULT,5,PETSC_DEFAULT);
+      KSPSetType(subksp,KSPGMRES);
+      PCSetType(subpc,PCEISENSTAT);
+   } else  {
+      SNESSetType(subsnes,SNESNEWTONLS);
+      SNESSetTolerances(subsnes,PETSC_DEFAULT,PETSC_DEFAULT,PETSC_DEFAULT,1,PETSC_DEFAULT); // 1 iteration only
+      SNESLineSearchSetType(subls,SNESLINESEARCHL2);
+      KSPSetType(subksp,KSPGMRES);
+      PCSetType(subpc,PCEISENSTAT);
+   }
+   if (mixed) { // each subdomain gets their own indexed prefix
+      char prefix[10];
+      sprintf(prefix,"sub_%d_",rank);
+      SNESSetOptionsPrefix(subsnes,prefix);
+   }
+   ierr = SNESSetFromOptions(subsnes); CHKERRQ(ierr);
+   ierr = SNESSetFromOptions(snes); CHKERRQ(ierr);
    /* Wide-stencil params - - - - - - - - - - - - - - - - - - - - - - - - - - -
       Compute forward stencil directions for the determinant
    - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
    ComputeFwdStencilDirs(width,&user); // Stencil directions based on the L1 norm
    ComputeWeights(width,order,&user);  // Quadrature weights
    /* Solve - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-      Set up the inital guess on each sub-domain
+      Set up the inital guess on each sub-domain.
+      The runtime is calculated for the SNESSolve only.
+      The number of outer SNES iterations is also obtained.
    - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
    ierr = DMGetGlobalVector(da,&u_initial); CHKERRQ(ierr);
    ierr = InitialState(da,initial,u_initial,&user); CHKERRQ(ierr);
-   ierr = SNESSetFromOptions(snes); CHKERRQ(ierr);
    ierr = PetscTime(&t1); CHKERRQ(ierr);
    ierr = SNESSolve(snes,NULL,u_initial); CHKERRQ(ierr);
    ierr = PetscTime(&t2); CHKERRQ(ierr);
-   ierr = SNESGetIterationNumber(snes,&its); CHKERRQ(ierr); // get the number of outer snes iterations
+   ierr = SNESGetIterationNumber(snes,&its); CHKERRQ(ierr); // its = # of iterations
    /* Error info - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
       Get the solution from DA.
       Get the exact solution with g.
