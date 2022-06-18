@@ -160,8 +160,8 @@ PetscErrorCode InitialState(DM da, InitialType it, Vec u, MACtx *user) {
 PetscErrorCode MA1DFunctionLocal(DMDALocalInfo *info, PetscReal *u, PetscReal *F, MACtx *user) {
    PetscInt     i;
    PetscReal    Lx, h, x, ue, uw, f;
-
    PetscFunctionBeginUser;
+
    Lx = user->xmax - user->xmin;
    h = Lx/(PetscReal)(info->mx+1);
    for (i = info->xs; i<info->xs+info->xm; i++) {
@@ -190,8 +190,8 @@ PetscErrorCode MA2DFunctionLocal(DMDALocalInfo *info, PetscReal **au, PetscReal 
    PetscReal *SDD; // second directional deriv
    PetscReal *hFwd, *hBak; // magnitude of step in forward and backward dirs for each direction k
    PetscInt   width, M; // stencil width, and total number of directions
-
    PetscFunctionBeginUser;
+
    // get info from DA
    Lx = user->xmax - user->xmin;
    Ly = user->ymax - user->ymin;
@@ -224,8 +224,7 @@ PetscErrorCode MA3DFunctionLocal(DMDALocalInfo *info, PetscReal ***au, PetscReal
    // PetscInt   i, j, k;
    // PetscReal  xyzmin[3], xyzmax[3], hx, hy, hz, dvol, scx, scy, scz, scdiag,
    //          x, y, z, ue, uw, un, us, uu, ud;
-
-   PetscFunctionBeginUser;
+   // PetscFunctionBeginUser;
    // ierr = DMGetBoundingBox(info->da,xyzmin,xyzmax); CHKERRQ(ierr);
    // hx = (xyzmax[0] - xyzmin[0]) / (info->mx - 1);
    // hy = (xyzmax[1] - xyzmin[1]) / (info->my - 1);
@@ -276,8 +275,8 @@ PetscErrorCode MA1DJacobianLocal(DMDALocalInfo *info, PetscScalar *au, Mat J, Ma
    PetscInt        i,ncols;
    PetscReal       Lx, h, v[3];
    MatStencil      col[3],row;
-
    PetscFunctionBeginUser;
+
    Lx = user->xmax - user->xmin;
    h  = Lx/(PetscReal)(info->mx+1);
    for (i = info->xs; i < info->xs+info->xm; i++) { // loop over each row of J (mx by mx)
@@ -325,8 +324,8 @@ PetscErrorCode MA2DJacobianLocal(DMDALocalInfo *info, PetscScalar **au, Mat J, M
    // bool         *SGTE;  // for Stheno
    PetscBool    *SGTE;  // for latest PETSc
    PetscBool    regularize; // true if epsilon is the smallest among SDD
-
    PetscFunctionBeginUser;
+
    Lx = user->xmax - user->xmin;
    Ly = user->ymax - user->ymin;
    hx = Lx/(PetscReal)(info->mx + 1);
@@ -440,8 +439,7 @@ PetscErrorCode MA3DJacobianLocal(DMDALocalInfo *info, PetscScalar ***au, Mat J, 
    // PetscReal   xyzmin[3], xyzmax[3], hx, hy, hz, dvol, scx, scy, scz, scdiag, v[7];
    // PetscInt    i,j,k,ncols;
    // MatStencil  col[7],row;
-
-   PetscFunctionBeginUser;
+   // PetscFunctionBeginUser;
    // ierr = DMGetBoundingBox(info->da,xyzmin,xyzmax); CHKERRQ(ierr);
    // hx = (xyzmax[0] - xyzmin[0]) / (info->mx - 1);
    // hy = (xyzmax[1] - xyzmin[1]) / (info->my - 1);
@@ -521,8 +519,8 @@ PetscErrorCode MA3DJacobianLocal(DMDALocalInfo *info, PetscScalar ***au, Mat J, 
 PetscErrorCode ApproxDetD2u(PetscReal *DetD2u, PetscInt dim, PetscReal *SDD, MACtx *user) {
    PetscInt  k;
    PetscReal left,right;
-
    PetscFunctionBeginUser;
+
    // Compute left term
    left = 0;
    for (k=0; k<dim; k++) {
@@ -549,8 +547,8 @@ PetscErrorCode ComputeWeights(PetscInt width, PetscInt order, MACtx *user) {
    PetscInt   i,M;
    PetscReal  a,h1,h2;
    PetscReal *theta;
-
    PetscFunctionBeginUser;
+
    // Compute angles of L1 stencil points
    M = 2*width+1;
    PetscMalloc1(M,&theta);
@@ -600,14 +598,12 @@ PetscErrorCode PrintProjection(DM da, MACtx *user) {
    // PetscInt i,j,k,count,width,N,M,Nk;
    // PetscInt *di, *dj;
    // PetscReal *xFwd, *xBak, *yFwd, *yBak;
-
-   PetscFunctionBeginUser;
+   // PetscFunctionBeginUser;
    // // Get dimensions and other info from da
    // ierr = DMDAGetLocalInfo(da,&info); CHKERRQ(ierr);
    // N = info.my;     // total rows
    // M = info.mx;     // total cols
    // width = info.sw; // stencil width
-
    // // Compute stencil directions
    // Nk = 4*width+1;
    // PetscCalloc2(Nk,&di,Nk,&dj); // initilize 2 arrays of zeros
@@ -620,12 +616,10 @@ PetscErrorCode PrintProjection(DM da, MACtx *user) {
    //    dj[count] = PetscAbsReal(k)-width;
    //    count++;
    // }
-
    // PetscPrintf(PETSC_COMM_WORLD,"Stencil directions for width = %d:\n",width);
    // for (k=0; k<Nk; k++) {
    //    PetscPrintf(PETSC_COMM_WORLD,"(%d) di,dj = (%d,%d)\n",k,di[k],dj[k]);
    // }
-
    // for (i=0; i<M; i++) {
    //    for (j=0; j<N; j++) {
    //       for (k=0; k<Nk; k++) {
@@ -651,8 +645,8 @@ PetscErrorCode PrintProjection(DM da, MACtx *user) {
 */
 PetscErrorCode ComputeFwdStencilDirs(PetscInt width, MACtx *user) {
    PetscInt   k,count,N;
-
    PetscFunctionBeginUser;
+
    // Compute angles of L1 stencil points
    N = 2*width;
    PetscCalloc2(N,&user->Si,N,&user->Sj);
@@ -674,8 +668,8 @@ PetscErrorCode ComputeProjectionIndeces(PetscReal *di, PetscReal *dj, PetscInt i
    PetscReal m;
    // bool      check;  // for Stheno
    PetscBool check; // for newest PETSc release
-
    PetscFunctionBeginUser;
+
    if (Si==0) {
       *di = 0;
       *dj = (Sj>0)? Ny-j : -(1+j);
@@ -719,8 +713,8 @@ PetscErrorCode ComputeSDD(DMDALocalInfo *info, PetscReal **au, MACtx *user, Pets
    PetscInt   d,k,M,Ny,Nx,Si,Sj;
    PetscReal  hx,hy,Lx,Ly,di,dj,temp;
    PetscReal *uFwd, *uBak; // u in the the forward and backward position for each direction k
-
    PetscFunctionBeginUser;
+
    // get info from DA
    Nx = info->mx; Ny = info->my;
 
