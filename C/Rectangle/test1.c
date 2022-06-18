@@ -170,8 +170,8 @@ int main(int argc,char **args) {
    N = Nx = Ny = 4; // # of interior points
    dim         = 2; // PDE space dimension
    width       = 1; // stencil width
-   eps         = 0.25;  // epsilon = (hd)^2
-   order       = 2; // guadrature order
+   eps         = 0.25; // epsilon = (hd)^2
+   order       = 2;    // guadrature order
    initial     = ZEROS;
    problem     = ex10;
    user.xmin   = -1.0; user.xmax = 1.0; // x limits [-1, 1]
@@ -179,7 +179,7 @@ int main(int argc,char **args) {
    user.zmin   = -1.0; user.zmax = 1.0; // z limits [-1, 1]
    debug       = PETSC_FALSE;
    printSol    = PETSC_FALSE;
-   mixed      = PETSC_FALSE;
+   mixed       = PETSC_FALSE;
    // Get command args
    ierr = PetscOptionsBegin(PETSC_COMM_WORLD,"t1_", "options for test1.c", ""); CHKERRQ(ierr);
    ierr = PetscOptionsInt("-dim","dimension of problem (=1,2,3 only)","test1.c",dim,&dim,NULL);CHKERRQ(ierr);
@@ -191,15 +191,20 @@ int main(int argc,char **args) {
    ierr = PetscOptionsBool("-print","print out extra info","test1.c",printSol,&printSol,NULL);CHKERRQ(ierr);
    ierr = PetscOptionsBool("-mixed","sub-index the local domains and use FAS on the last subdomain","test1.c",mixed,&mixed,NULL);CHKERRQ(ierr);
    ierr = PetscOptionsEnum("-init_type","type of initial iterate","test1.c",InitialTypes,(PetscEnum)initial,(PetscEnum*)&initial,NULL); CHKERRQ(ierr);
+   ierr = PetscOptionsInt("-width","stencil width","test1.c",width,&width,&set_width);CHKERRQ(ierr);
+   ierr = PetscOptionsReal("-eps","regularization constant epsilon","test1.c",eps,&eps,&set_eps);CHKERRQ(ierr);
+   ierr = PetscOptionsEnum("-problem","problem type; determines exact solution and RHS","test1.c",ProblemTypes,(PetscEnum)problem,(PetscEnum*)&problem,NULL); CHKERRQ(ierr);
+   if (problem==ex11 || problem==ex12) {
+      user.xmin   = 0.0; user.xmax = 1.0; // x limits [0, 1]
+      user.ymin   = 0.0; user.ymax = 1.0; // y limits [0, 1]
+      user.zmin   = 0.0; user.zmax = 1.0; // z limits [0, 1]
+   }
    ierr = PetscOptionsReal("-xmin","set limit of domain ([xmin,1] x [-1,1] x [-1,1])","test1.c",user.xmin,&user.xmin,NULL);CHKERRQ(ierr);
    ierr = PetscOptionsReal("-xmax","set limit of domain ([-1,xmax] x [-1,1] x [-1,1])","test1.c",user.xmax,&user.xmax,NULL);CHKERRQ(ierr);
    ierr = PetscOptionsReal("-ymin","set limit of domain ([-1,1] x [ymin,1] x [-1,1])","test1.c",user.ymin,&user.ymin,NULL);CHKERRQ(ierr);
    ierr = PetscOptionsReal("-ymax","set limit of domain ([-1,1] x [-1,ymax] x [-1,1])","test1.c",user.ymax,&user.ymax,NULL);CHKERRQ(ierr);
    ierr = PetscOptionsReal("-zmin","set limit of domain ([-1,1] x [-1,1] x [zmin,1])","test1.c",user.zmin,&user.zmin,NULL);CHKERRQ(ierr);
    ierr = PetscOptionsReal("-zmax","set limit of domain ([-1,1] x [-1,1] x [-1,zmax])","test1.c",user.zmax,&user.zmax,NULL);CHKERRQ(ierr);
-   ierr = PetscOptionsEnum("-problem","problem type; determines exact solution and RHS","test1.c",ProblemTypes,(PetscEnum)problem,(PetscEnum*)&problem,NULL); CHKERRQ(ierr);
-   ierr = PetscOptionsInt("-width","stencil width","test1.c",width,&width,&set_width);CHKERRQ(ierr);
-   ierr = PetscOptionsReal("-eps","regularization constant epsilon","test1.c",eps,&eps,&set_eps);CHKERRQ(ierr);
    ierr = PetscOptionsEnd(); CHKERRQ(ierr);
    /* Update dependent params
       It's optimal to choose depth = ceil(h^(-1/3)) where h is the stepsize.

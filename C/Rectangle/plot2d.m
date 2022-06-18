@@ -17,8 +17,9 @@ clear, close all
 
 load_u % load petsc's numerical solution, u
 load_exact % load exact solution coded in petsc
-load_initial
-
+try
+    load_initial
+end
 s = length(u);
 n = sqrt(s);
 
@@ -58,9 +59,10 @@ surf(u_grid-u_exac)
 title('error')
 
 figure
-u_init = reshape(u_initial,n,n);
-surf(u_init)
-title('Initial Guess')
-
+try 
+    u_init = reshape(u_initial,n,n);
+    surf(u_init)
+    title('Initial Guess')
+end
 
 fprintf('|error|_inf = %f\n',norm(u_grid(:)-u_exac(:),inf))
