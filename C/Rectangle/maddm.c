@@ -1,6 +1,7 @@
 /*
-   This is a test code to solve the Monge-Ampere on a 2D rectangular domain
-   with the stencil of width 1.
+   This is a code to solve the Monge-Ampere on a 2D rectangular domain
+   discretized into a structured grid.
+
 
    This is the serial version, but most of it is ready to be
    done in parallel.
@@ -20,28 +21,28 @@ extern PetscErrorCode ComputeRHS(DMDALocalInfo*, Vec, MACtx*);
    Solution    u(x) = exp(|x|^2/2), for x in Rn
    RHS: Det(D^2u(x)) = (1+|x|^2)*exp(n/2*|x|^2)
 */
-PetscErrorCode u_exact_1Dex10(PetscReal x, PetscReal y, PetscReal z, void *ctx, PetscReal * u) {
+PetscErrorCode u_exact_1D_ex1(PetscReal x, PetscReal y, PetscReal z, void *ctx, PetscReal * u) {
    u[0] = PetscExpReal((x*x)/2.0);
    return 0;
 }
-PetscErrorCode u_exact_2Dex10(PetscReal x, PetscReal y, PetscReal z, void *ctx, PetscReal * u) {
+PetscErrorCode u_exact_2D_ex1(PetscReal x, PetscReal y, PetscReal z, void *ctx, PetscReal * u) {
    u[0] = PetscExpReal((x*x + y*y)/2.0);
    return 0;
 }
-PetscErrorCode u_exact_3Dex10(PetscReal x, PetscReal y, PetscReal z, void *ctx, PetscReal * u) {
+PetscErrorCode u_exact_3D_ex1(PetscReal x, PetscReal y, PetscReal z, void *ctx, PetscReal * u) {
    u[0] = PetscExpReal((x*x + y*y + z*z)/2.0);
    return 0;
 }
 // right-hand-side functions
-PetscErrorCode f_rhs_1Dex10(PetscReal x, PetscReal y, PetscReal z, void *ctx, PetscReal * f) {
+PetscErrorCode f_rhs_1D_ex1(PetscReal x, PetscReal y, PetscReal z, void *ctx, PetscReal * f) {
    f[0] = (1.0 + x*x)*PetscExpReal(x*x*0.5);
    return 0;
 }
-PetscErrorCode f_rhs_2Dex10(PetscReal x, PetscReal y, PetscReal z, void *ctx, PetscReal * f) {
+PetscErrorCode f_rhs_2D_ex1(PetscReal x, PetscReal y, PetscReal z, void *ctx, PetscReal * f) {
    f[0] = (1.0 + x*x + y*y)*PetscExpReal(x*x + y*y);
    return 0;
 }
-PetscErrorCode f_rhs_3Dex10(PetscReal x, PetscReal y, PetscReal z, void *ctx, PetscReal * f) {
+PetscErrorCode f_rhs_3D_ex1(PetscReal x, PetscReal y, PetscReal z, void *ctx, PetscReal * f) {
    f[0] = (1.0 + x*x + y*y + z*z)*PetscExpReal((x*x + y*y + z*z)*1.5);
    return 0;
 }
@@ -50,28 +51,28 @@ PetscErrorCode f_rhs_3Dex10(PetscReal x, PetscReal y, PetscReal z, void *ctx, Pe
    Solution    u(x) = 1/2 max(|x-0.5| - 0.2,0)        , for x in Rn
    RHS: Det(D^2u(x)) = max(1-0.2/|x-0.5|, 0)
 */
-PetscErrorCode u_exact_1Dex11(PetscReal x, PetscReal y, PetscReal z, void *ctx, PetscReal * u) {
+PetscErrorCode u_exact_1D_ex2(PetscReal x, PetscReal y, PetscReal z, void *ctx, PetscReal * u) {
    u[0] = 0.5*PetscPowReal(PetscMax(PetscAbsReal(x-0.5)-0.2,0),2);
    return 0;
 }
-PetscErrorCode u_exact_2Dex11(PetscReal x, PetscReal y, PetscReal z, void *ctx, PetscReal * u) {
+PetscErrorCode u_exact_2D_ex2(PetscReal x, PetscReal y, PetscReal z, void *ctx, PetscReal * u) {
    u[0] = 0.5*PetscPowReal(PetscMax(PetscSqrtReal(PetscSqr(x-0.5)+PetscSqr(y-0.5))-0.2,0),2);
    return 0;
 }
-PetscErrorCode u_exact_3Dex11(PetscReal x, PetscReal y, PetscReal z, void *ctx, PetscReal * u) {
+PetscErrorCode u_exact_3D_ex2(PetscReal x, PetscReal y, PetscReal z, void *ctx, PetscReal * u) {
    u[0] = 0.5*PetscPowReal(PetscMax(PetscSqrtReal(PetscSqr(x-0.5)+PetscSqr(y-0.5)+PetscSqr(z-0.5))-0.2,0),2);
    return 0;
 }
 // RHS
-PetscErrorCode f_rhs_1Dex11(PetscReal x, PetscReal y, PetscReal z, void *ctx, PetscReal * f) { // not sure if this is right
+PetscErrorCode f_rhs_1D_ex2(PetscReal x, PetscReal y, PetscReal z, void *ctx, PetscReal * f) { // not sure if this is right
    f[0] = PetscMax(1-0.2/PetscAbsReal(x-0.5),0);
    return 0;
 }
-PetscErrorCode f_rhs_2Dex11(PetscReal x, PetscReal y, PetscReal z, void *ctx, PetscReal * f) {
+PetscErrorCode f_rhs_2D_ex2(PetscReal x, PetscReal y, PetscReal z, void *ctx, PetscReal * f) {
    f[0] = PetscMax(1-0.2/PetscSqrtReal(PetscSqr(x-0.5)+PetscSqr(y-0.5)),0);
    return 0;
 }
-PetscErrorCode f_rhs_3Dex11(PetscReal x, PetscReal y, PetscReal z, void *ctx, PetscReal * f) {
+PetscErrorCode f_rhs_3D_ex2(PetscReal x, PetscReal y, PetscReal z, void *ctx, PetscReal * f) {
    f[0] = PetscMax(1-0.2/PetscSqrtReal(PetscSqr(x-0.5)+PetscSqr(y-0.5)),0);
    return 0;
 }
@@ -80,34 +81,33 @@ PetscErrorCode f_rhs_3Dex11(PetscReal x, PetscReal y, PetscReal z, void *ctx, Pe
    Solution    u(x) = -sqrt(2 - |x|^2),              for x in Rn
    RHS: Det(D^2u(x)) = 2/(2- |x|^2)^p(n)
 */
-PetscErrorCode u_exact_1Dex12(PetscReal x, PetscReal y, PetscReal z, void *ctx, PetscReal * u) {
+PetscErrorCode u_exact_1D_ex3(PetscReal x, PetscReal y, PetscReal z, void *ctx, PetscReal * u) {
    u[0] = -PetscSqrtReal(2.0 - x*x);
    return 0;
 }
-PetscErrorCode u_exact_2Dex12(PetscReal x, PetscReal y, PetscReal z, void *ctx, PetscReal * u) {
+PetscErrorCode u_exact_2D_ex3(PetscReal x, PetscReal y, PetscReal z, void *ctx, PetscReal * u) {
    PetscReal temp = -PetscSqrtReal(2.0 - x*x - y*y);
    u[0] = PetscIsInfOrNanScalar(temp) ? 0.0 : temp;
    return 0;
 }
-PetscErrorCode u_exact_3Dex12(PetscReal x, PetscReal y, PetscReal z, void *ctx, PetscReal * u) {
+PetscErrorCode u_exact_3D_ex3(PetscReal x, PetscReal y, PetscReal z, void *ctx, PetscReal * u) {
    u[0] = -PetscSqrtReal(2.0 - x*x - y*y - z*z);
    return 0;
 }
 // RHS
-PetscErrorCode f_rhs_1Dex12(PetscReal x, PetscReal y, PetscReal z, void *ctx, PetscReal * f) {
+PetscErrorCode f_rhs_1D_ex3(PetscReal x, PetscReal y, PetscReal z, void *ctx, PetscReal * f) {
    f[0] = 2.0/PetscPowReal(2.0-x*x,1.5);
    return 0;
 }
-PetscErrorCode f_rhs_2Dex12(PetscReal x, PetscReal y, PetscReal z, void *ctx, PetscReal * f) {
-   f[0] = 2.0*PetscPowReal(2.0 - x*x-y*y,-2.0);
+PetscErrorCode f_rhs_2D_ex3(PetscReal x, PetscReal y, PetscReal z, void *ctx, PetscReal * f) {
+   f[0] = 2.0/PetscPowReal(2.0 - x*x-y*y,2.0);
    return 0;
 }
-PetscErrorCode f_rhs_3Dex12(PetscReal x, PetscReal y, PetscReal z, void *ctx, PetscReal * f) {
+PetscErrorCode f_rhs_3D_ex3(PetscReal x, PetscReal y, PetscReal z, void *ctx, PetscReal * f) {
    f[0] = 2.0/PetscPowReal(2.0-x*x-y*y-z*z,2.5);
    return 0;
 }
 
-//STARTPTRARRAYS
 // arrays of pointers to functions
 static DMDASNESFunction residual_ptr[3]
     = {(DMDASNESFunction)&MA1DFunctionLocal,
@@ -123,21 +123,21 @@ typedef PetscErrorCode (*ExactFcnVec)(DMDALocalInfo*,Vec,MACtx*);
 
 static ExactFcnVec getuexact_ptr[3] = {&Form1DUExact, &Form2DUExact, &Form3DUExact};
 
-typedef enum {ex10, ex11, ex12} ProblemType;
-static const char* ProblemTypes[] = {"ex10","ex11","ex12","ProblemType","", NULL};
+typedef enum {ex1, ex2, ex3} ProblemType;
+static const char* ProblemTypes[] = {"ex1","ex2","ex3","ProblemType","", NULL};
 
 // more arrays of pointers to functions:   ..._ptr[DIMS][PROBLEMS]
 typedef PetscErrorCode (*PointwiseFcn)(PetscReal,PetscReal,PetscReal,void*,PetscReal*);
 
 static PointwiseFcn g_bdry_ptr[3][3]
-    = {{&u_exact_1Dex10, &u_exact_1Dex11, &u_exact_1Dex12},
-       {&u_exact_2Dex10, &u_exact_2Dex11, &u_exact_2Dex12},
-       {&u_exact_3Dex10, &u_exact_3Dex11, &u_exact_3Dex12}};
+    = {{&u_exact_1D_ex1, &u_exact_1D_ex2, &u_exact_1D_ex3},
+       {&u_exact_2D_ex1, &u_exact_2D_ex2, &u_exact_2D_ex3},
+       {&u_exact_3D_ex1, &u_exact_3D_ex2, &u_exact_3D_ex3}};
 
 static PointwiseFcn f_rhs_ptr[3][3]
-    = {{&f_rhs_1Dex10, &f_rhs_1Dex11, &f_rhs_1Dex12},
-       {&f_rhs_2Dex10, &f_rhs_2Dex11, &f_rhs_2Dex12},
-       {&f_rhs_3Dex10, &f_rhs_3Dex11, &f_rhs_3Dex12}};
+    = {{&f_rhs_1D_ex1, &f_rhs_1D_ex2, &f_rhs_1D_ex3},
+       {&f_rhs_2D_ex1, &f_rhs_2D_ex2, &f_rhs_2D_ex3},
+       {&f_rhs_3D_ex1, &f_rhs_3D_ex2, &f_rhs_3D_ex3}};
 
 static const char* InitialTypes[] = {"zeros","random","corner","pyramid","InitialType","", NULL};
 
@@ -154,9 +154,9 @@ int main(int argc,char **args) {
    MACtx          user; // see header file
    ExactFcnVec    getuexact;
    InitialType    initial;
-   ProblemType    problem;           // manufactured problem using exp()
-   PetscBool      debug,set_N,set_eps,set_width,printSol,mixed;
-   PetscReal      h_eff,hx,hy,eps,errinf,normconst2h,err2h;
+   ProblemType    problem;
+   PetscBool      debug,set_N,set_eps,set_width,printSol,fast,mixed;
+   PetscReal      h_eff,hx,hy,eps,errinf,normconst2h,err2h,op;
    char           gridstr[99];
    PetscInt       dim,width,N,Nx,Ny,order,its;
    PetscLogDouble t1,t2;
@@ -165,46 +165,50 @@ int main(int argc,char **args) {
    ierr = PetscInitialize(&argc,&args,NULL,help); if (ierr) return ierr;
    /*  Get parameters  - - - - - - - - - - - - - - - - - - - - - - - - - - -
       The defualt parameters are initialized below.
-      Most of them can be changed during runtime.
+      They can all be changed during runtime.
+      By default, we solve ex1 on [-1,1]^2.
    - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
    N = Nx = Ny = 4; // # of interior points
    dim         = 2; // PDE space dimension
    width       = 1; // stencil width
    eps         = 0.25; // epsilon = (hd)^2
    order       = 2;    // guadrature order
+   op          = 0.1;  // domain overlap percentage
    initial     = ZEROS;
-   problem     = ex10;
+   problem     = ex1;
    user.xmin   = -1.0; user.xmax = 1.0; // x limits [-1, 1]
    user.ymin   = -1.0; user.ymax = 1.0; // y limits [-1, 1]
    user.zmin   = -1.0; user.zmax = 1.0; // z limits [-1, 1]
+   fast        = PETSC_FALSE; // fast might be unstable so leave it off by default
    debug       = PETSC_FALSE;
    printSol    = PETSC_FALSE;
    mixed       = PETSC_FALSE;
-   // Get command args
-   ierr = PetscOptionsBegin(PETSC_COMM_WORLD,"t1_", "options for test1.c", ""); CHKERRQ(ierr);
-   ierr = PetscOptionsInt("-dim","dimension of problem (=1,2,3 only)","test1.c",dim,&dim,NULL);CHKERRQ(ierr);
-   ierr = PetscOptionsInt("-N","make the interior N by N","test1.c",N,&N,&set_N);CHKERRQ(ierr);
-   ierr = PetscOptionsInt("-Nx","number of interior nodes horizontally","test1.c",Nx,&Nx,NULL);CHKERRQ(ierr);
-   ierr = PetscOptionsInt("-Ny","number of interior nodes vertically","test1.c",Ny,&Ny,NULL);CHKERRQ(ierr);
-   ierr = PetscOptionsInt("-order","order of quadrature (default is 2)","test1.c",order,&order,NULL);CHKERRQ(ierr);
-   ierr = PetscOptionsBool("-debug","print out extra info","test1.c",debug,&debug,NULL);CHKERRQ(ierr);
-   ierr = PetscOptionsBool("-print","print out extra info","test1.c",printSol,&printSol,NULL);CHKERRQ(ierr);
-   ierr = PetscOptionsBool("-mixed","sub-index the local domains and use FAS on the last subdomain","test1.c",mixed,&mixed,NULL);CHKERRQ(ierr);
-   ierr = PetscOptionsEnum("-init_type","type of initial iterate","test1.c",InitialTypes,(PetscEnum)initial,(PetscEnum*)&initial,NULL); CHKERRQ(ierr);
-   ierr = PetscOptionsInt("-width","stencil width","test1.c",width,&width,&set_width);CHKERRQ(ierr);
-   ierr = PetscOptionsReal("-eps","regularization constant epsilon","test1.c",eps,&eps,&set_eps);CHKERRQ(ierr);
-   ierr = PetscOptionsEnum("-problem","problem type; determines exact solution and RHS","test1.c",ProblemTypes,(PetscEnum)problem,(PetscEnum*)&problem,NULL); CHKERRQ(ierr);
-   if (problem==ex11 || problem==ex12) {
+   ierr = PetscOptionsBegin(PETSC_COMM_WORLD,"","options for maddm.c",""); CHKERRQ(ierr);
+   ierr = PetscOptionsInt("-dim","dimension of problem (=1,2,3 only)","maddm.c",dim,&dim,NULL);CHKERRQ(ierr);
+   ierr = PetscOptionsInt("-N","make the interior N by N","maddm.c",N,&N,&set_N);CHKERRQ(ierr);
+   ierr = PetscOptionsInt("-Nx","number of interior nodes horizontally","maddm.c",Nx,&Nx,NULL);CHKERRQ(ierr);
+   ierr = PetscOptionsInt("-Ny","number of interior nodes vertically","maddm.c",Ny,&Ny,NULL);CHKERRQ(ierr);
+   ierr = PetscOptionsInt("-order","order of quadrature (default is 2)","maddm.c",order,&order,NULL);CHKERRQ(ierr);
+   ierr = PetscOptionsBool("-fast","use settings that are tuned to under-solve the local problems","maddm.c",fast,&fast,NULL);CHKERRQ(ierr);
+   ierr = PetscOptionsBool("-debug","print out extra info","maddm.c",debug,&debug,NULL);CHKERRQ(ierr);
+   ierr = PetscOptionsBool("-print","print out extra info","maddm.c",printSol,&printSol,NULL);CHKERRQ(ierr);
+   ierr = PetscOptionsBool("-mixed","sub-index the local domains and use FAS on the last subdomain","maddm.c",mixed,&mixed,NULL);CHKERRQ(ierr);
+   ierr = PetscOptionsEnum("-init_type","type of initial iterate","maddm.c",InitialTypes,(PetscEnum)initial,(PetscEnum*)&initial,NULL); CHKERRQ(ierr);
+   ierr = PetscOptionsInt("-width","stencil width","maddm.c",width,&width,&set_width);CHKERRQ(ierr);
+   ierr = PetscOptionsReal("-eps","regularization constant epsilon","maddm.c",eps,&eps,&set_eps);CHKERRQ(ierr);
+   ierr = PetscOptionsReal("-op","domain overlap percentage (0.0 to 1.0)","maddm.c",op,&op,NULL);CHKERRQ(ierr);
+   ierr = PetscOptionsEnum("-problem","problem type; (ex1, ex2, or ex3)","maddm.c",ProblemTypes,(PetscEnum)problem,(PetscEnum*)&problem,NULL); CHKERRQ(ierr);
+   if (problem==ex2 || problem==ex3) { // default limits for ex2 & ex3
       user.xmin   = 0.0; user.xmax = 1.0; // x limits [0, 1]
       user.ymin   = 0.0; user.ymax = 1.0; // y limits [0, 1]
       user.zmin   = 0.0; user.zmax = 1.0; // z limits [0, 1]
    }
-   ierr = PetscOptionsReal("-xmin","set limit of domain ([xmin,1] x [-1,1] x [-1,1])","test1.c",user.xmin,&user.xmin,NULL);CHKERRQ(ierr);
-   ierr = PetscOptionsReal("-xmax","set limit of domain ([-1,xmax] x [-1,1] x [-1,1])","test1.c",user.xmax,&user.xmax,NULL);CHKERRQ(ierr);
-   ierr = PetscOptionsReal("-ymin","set limit of domain ([-1,1] x [ymin,1] x [-1,1])","test1.c",user.ymin,&user.ymin,NULL);CHKERRQ(ierr);
-   ierr = PetscOptionsReal("-ymax","set limit of domain ([-1,1] x [-1,ymax] x [-1,1])","test1.c",user.ymax,&user.ymax,NULL);CHKERRQ(ierr);
-   ierr = PetscOptionsReal("-zmin","set limit of domain ([-1,1] x [-1,1] x [zmin,1])","test1.c",user.zmin,&user.zmin,NULL);CHKERRQ(ierr);
-   ierr = PetscOptionsReal("-zmax","set limit of domain ([-1,1] x [-1,1] x [-1,zmax])","test1.c",user.zmax,&user.zmax,NULL);CHKERRQ(ierr);
+   ierr = PetscOptionsReal("-xmin","set limit of domain ([xmin,1] x [-1,1] x [-1,1])","maddm.c",user.xmin,&user.xmin,NULL);CHKERRQ(ierr);
+   ierr = PetscOptionsReal("-xmax","set limit of domain ([-1,xmax] x [-1,1] x [-1,1])","maddm.c",user.xmax,&user.xmax,NULL);CHKERRQ(ierr);
+   ierr = PetscOptionsReal("-ymin","set limit of domain ([-1,1] x [ymin,1] x [-1,1])","maddm.c",user.ymin,&user.ymin,NULL);CHKERRQ(ierr);
+   ierr = PetscOptionsReal("-ymax","set limit of domain ([-1,1] x [-1,ymax] x [-1,1])","maddm.c",user.ymax,&user.ymax,NULL);CHKERRQ(ierr);
+   ierr = PetscOptionsReal("-zmin","set limit of domain ([-1,1] x [-1,1] x [zmin,1])","maddm.c",user.zmin,&user.zmin,NULL);CHKERRQ(ierr);
+   ierr = PetscOptionsReal("-zmax","set limit of domain ([-1,1] x [-1,1] x [-1,zmax])","maddm.c",user.zmax,&user.zmax,NULL);CHKERRQ(ierr);
    ierr = PetscOptionsEnd(); CHKERRQ(ierr);
    /* Update dependent params
       It's optimal to choose depth = ceil(h^(-1/3)) where h is the stepsize.
@@ -212,19 +216,16 @@ int main(int argc,char **args) {
       Epsilon is the regularization constant. We choose epsilon = (hd)^2 by default.
       We may change epsilon during runtime with "-t1_eps <f>", where <f> is a float
    */
-   if (set_N) {
+   if (set_N)
       Nx = Ny = N;
-   }
    hx    = (user.xmax - user.xmin)/(Nx+1);
    hy    = (user.ymax - user.ymin)/(Ny+1);
    h_eff = PetscMax(hx,hy);
-   if (!set_width) {
+   if (!set_width)
       width = PetscCeilReal(PetscPowReal(h_eff,-0.333));
-   }
    h_eff *= width;
-   if (!set_eps) {
+   if (!set_eps)
       eps = h_eff*h_eff; // epsilon = (h*d)^2
-   }
    user.debug   = debug;
    user.width   = width;
    user.epsilon = eps;
@@ -259,14 +260,19 @@ int main(int argc,char **args) {
          SETERRQ(PETSC_COMM_SELF,1,"invalid dim for DMDA creation\n");
    }
    /* DM setup - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-      The code is set up to mesh a domain [-Lx,Lx] x [-Ly,Ly]
+      The code is set up to mesh a domain [xmin,xmax] x [ymin,ymax]
       with uniformly distributed points. Nx and Ny are the number
-      of interior points. You can adjust the overlapping nodes
-      with -da_overlap <int>.
+      of interior points.
+      You can adjust the overlapping nodes directly with -da_overlap <int>
+      or adjust the percentage with -op <float> where float ranges from 0 to 1.
    - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
-   ierr = DMDASetOverlap(da,width,width,width);
-   ierr = DMSetFromOptions(da); CHKERRQ(ierr);
+   PetscInt mm, nn, olx, oly;
    ierr = DMSetUp(da); CHKERRQ(ierr);
+   ierr = DMDAGetInfo(da,NULL,NULL,NULL,NULL,&mm,&nn,NULL,NULL,NULL,NULL,NULL,NULL,NULL); CHKERRQ(ierr);
+   olx = PetscCeilReal(op*Nx/(PetscReal)mm); // x overlap
+   oly = PetscCeilReal(op*Ny/(PetscReal)nn); // y overlap
+   ierr = DMDASetOverlap(da,olx,oly,olx);
+   ierr = DMSetFromOptions(da); CHKERRQ(ierr);
    ierr = DMDASetUniformCoordinates(da,user.xmin+hx,user.xmax-hx,user.ymin+hy,user.ymax-hy,user.zmin,user.zmax); CHKERRQ(ierr);
    ierr = DMSetApplicationContext(da,&user); CHKERRQ(ierr);
    /* SNES setup - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -281,32 +287,33 @@ int main(int argc,char **args) {
    ierr = SNESSetDM(snes,da); CHKERRQ(ierr);
    ierr = DMDASNESSetFunctionLocal(da,INSERT_VALUES,(DMDASNESFunction)(residual_ptr[dim-1]),&user); CHKERRQ(ierr);
    ierr = DMDASNESSetJacobianLocal(da,(DMDASNESJacobian)(jacobian_ptr[dim-1]),&user); CHKERRQ(ierr);
-   ierr = SNESSetUp(snes); CHKERRQ(ierr);
-   SNESNASMGetSNES(snes,0,&subsnes); // get the local SNES
-   SNESGetLineSearch(subsnes,&subls); // get local linesearch
-   SNESGetKSP(subsnes,&subksp); // get the local KSP
-   KSPGetPC(subksp,&subpc); // get the local PC
    /* Subdomain Solve - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
       We can choose the local solver for each MPI rank.
       For most cases, doing Newton's method for the local solve with
       L2 linesearch and GMRES-SSOR for the linear solve.
-
       We can choose to use different methods on each subdomain.
-
    - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+   ierr = SNESSetUp(snes); CHKERRQ(ierr); // initialize subdomains
    MPI_Comm_size(PETSC_COMM_WORLD,&size); // get # of processors
-   MPI_Comm_rank(PETSC_COMM_WORLD,&rank); // get index of individual procs
+   MPI_Comm_rank(PETSC_COMM_WORLD,&rank); // get index of current procs
+   SNESNASMGetSNES(snes,0,&subsnes);      // get local SNES
+   SNESGetLineSearch(subsnes,&subls);     // get local linesearch
+   SNESGetKSP(subsnes,&subksp);           // get local KSP
+   KSPGetPC(subksp,&subpc);               // get local PC
    if ((rank==size-1) && mixed) {
       // SNESSetType(subsnes,SNESFAS); CHKERRQ(ierr);
       SNESSetType(subsnes,SNESNEWTONLS);
       SNESLineSearchSetType(subls,SNESLINESEARCHBT);
-      SNESSetTolerances(subsnes,PETSC_DEFAULT,PETSC_DEFAULT,PETSC_DEFAULT,5,PETSC_DEFAULT);
+      if (fast)
+         SNESSetTolerances(subsnes,PETSC_DEFAULT,PETSC_DEFAULT,PETSC_DEFAULT,5,PETSC_DEFAULT);
       KSPSetType(subksp,KSPGMRES);
       PCSetType(subpc,PCEISENSTAT);
    } else  {
       SNESSetType(subsnes,SNESNEWTONLS);
-      SNESSetTolerances(subsnes,PETSC_DEFAULT,PETSC_DEFAULT,PETSC_DEFAULT,1,PETSC_DEFAULT); // 1 iteration only
-      SNESLineSearchSetType(subls,SNESLINESEARCHL2);
+      if (fast) {
+         SNESSetTolerances(subsnes,PETSC_DEFAULT,PETSC_DEFAULT,PETSC_DEFAULT,1,PETSC_DEFAULT); // 1 iteration only
+         SNESLineSearchSetType(subls,SNESLINESEARCHL2); // secant L2 linesearch
+      }
       KSPSetType(subksp,KSPGMRES);
       PCSetType(subpc,PCEISENSTAT);
    }
@@ -355,15 +362,15 @@ int main(int argc,char **args) {
    switch (dim) {
       case 1:
          normconst2h = PetscSqrtReal((PetscReal)(info.mx-1));
-         snprintf(gridstr,99,"%d point 1D",info.mx);
+         snprintf(gridstr,99,"domain [%.2f,%.2f] with %d point 1D",user.xmin,user.xmax,info.mx);
          break;
       case 2:
          normconst2h = PetscSqrtReal((PetscReal)(info.mx-1)*(info.my-1));
-         snprintf(gridstr,99,"%d x %d point 2D",info.mx,info.my);
+         snprintf(gridstr,99,"domain [%.2f,%.2f]x[%.2f,%.2f] with %dx%d point 2D",user.xmin,user.xmax,user.ymin,user.ymax,info.mx,info.my);
          break;
       case 3:
          normconst2h = PetscSqrtReal((PetscReal)(info.mx-1)*(info.my-1)*(info.mz-1));
-         snprintf(gridstr,99,"%d x %d x %d point 3D",info.mx,info.my,info.mz);
+         snprintf(gridstr,99,"domain [%.2f,%.2f]x[%.2f,%.2f]x[%.2f,%.2f] %dx%dx%d point 3D",user.xmin,user.xmax,user.ymin,user.ymax,user.zmin,user.zmax,info.mx,info.my,info.mz);
          break;
       default:
          SETERRQ(PETSC_COMM_SELF,4,"invalid dim value in final report\n");
@@ -428,11 +435,14 @@ int main(int argc,char **args) {
          ierr = PetscViewerPushFormat(viewer,PETSC_VIEWER_ASCII_MATLAB);
          ierr = PetscObjectSetName((PetscObject)RHS,"rhs");
          ierr = VecView(RHS,viewer);
+         ierr = VecDestroy(&RHS);
       }
       // Free memory
       ierr = DMDestroy(&da); CHKERRQ(ierr);
       ierr = VecDestroy(&err); CHKERRQ(ierr);
+      ierr = VecDestroy(&u); CHKERRQ(ierr);
       ierr = VecDestroy(&u_exact); CHKERRQ(ierr);
+      ierr = VecDestroy(&u_initial); CHKERRQ(ierr);
       ierr = PetscViewerDestroy(&viewer); CHKERRQ(ierr);
       ierr = SNESDestroy(&snes); CHKERRQ(ierr);
    }
