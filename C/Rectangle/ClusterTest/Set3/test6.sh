@@ -30,3 +30,6 @@ mpiexec -np $np ../../test1 -t1_N $N -t1_problem ex10 -snes_type ngmres $fasnpc
 
 printf "\nFAS * NGMRES composite:\n"
 mpiexec -np $np ../../test1 -t1_N $N -t1_problem ex10 -snes_type composite -snes_composite_type multiplicative -snes_composite_sneses fas,ngmres
+
+printf "\nFAS + Newton composite:\n"
+mpiexec -np $np ../../test1 -t1_N $N -t1_problem ex10 -snes_type composite -snes_composite_type additiveoptimal -snes_composite_sneses newtontr,newtonls

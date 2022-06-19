@@ -18,7 +18,6 @@ PetscErrorCode InitialState(DM da, InitialType it, Vec u, MACtx *user) {
          ierr = VecSet(u,0.0); CHKERRQ(ierr);
          break;
       case RANDOM:
-
          ierr = PetscRandomCreate(PETSC_COMM_WORLD,&rctx); CHKERRQ(ierr);
          ierr = VecSetRandom(u,rctx); CHKERRQ(ierr);
          ierr = PetscRandomDestroy(&rctx); CHKERRQ(ierr);
@@ -29,7 +28,6 @@ PetscErrorCode InitialState(DM da, InitialType it, Vec u, MACtx *user) {
             Set the initial guess to that constant.
             We may want to experiment with the smallest values of the 4 corners.
          - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
-
          ierr = DMDAGetLocalInfo(da,&info); CHKERRQ(ierr);
          switch (info.dim) {
             case 1:
@@ -283,7 +281,6 @@ PetscErrorCode MA1DJacobianLocal(DMDALocalInfo *info, PetscScalar *au, Mat J, Ma
       row.i = i;
       col[0].i = i;
       ncols = 1;
-
       v[0] = 2.0/(h*h); // middle J_{i,j} = 2/h^2
       if (i-1 > 0) {
          col[ncols].i = i-1;

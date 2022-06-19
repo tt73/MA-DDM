@@ -1,0 +1,135 @@
+ test with np = 4
+ - - - - - - - N=100 - - - - - - - - - 
+0% overlap
+*Problem: ex10 on 100 x 100 point 2D grid with d = 4, and eps = 0.006:
+*Error:   |u-uexact|_inf = 1.969e-03, |u-uexact|_h = 1.308e-03
+*WTime:   7.706830
+*Iters:   242
+*Problem: ex11 on 100 x 100 point 2D grid with d = 5, and eps = 0.002:
+*Error:   |u-uexact|_inf = 4.080e-04, |u-uexact|_h = 2.238e-04
+*WTime:   14.896538
+*Iters:   358
+*Problem: ex12 on 100 x 100 point 2D grid with d = 5, and eps = 0.002:
+*Error:   |u-uexact|_inf = 3.868e-04, |u-uexact|_h = 2.133e-04
+*WTime:   9.406923
+*Iters:   233
+5% overlap
+*Problem: ex10 on 100 x 100 point 2D grid with d = 4, and eps = 0.006:
+*Error:   |u-uexact|_inf = 2.071e-03, |u-uexact|_h = 1.345e-03
+*WTime:   3.605581
+*Iters:   101
+*Problem: ex11 on 100 x 100 point 2D grid with d = 5, and eps = 0.002:
+*Error:   |u-uexact|_inf = 4.077e-04, |u-uexact|_h = 2.237e-04
+*WTime:   6.828770
+*Iters:   147
+*Problem: ex12 on 100 x 100 point 2D grid with d = 5, and eps = 0.002:
+*Error:   |u-uexact|_inf = 3.868e-04, |u-uexact|_h = 2.132e-04
+*WTime:   5.194854
+*Iters:   113
+10% overlap
+*Problem: ex10 on 100 x 100 point 2D grid with d = 4, and eps = 0.006:
+*Error:   |u-uexact|_inf = 2.029e-03, |u-uexact|_h = 1.330e-03
+*WTime:   2.212974
+*Iters:   53
+*Problem: ex11 on 100 x 100 point 2D grid with d = 5, and eps = 0.002:
+*Error:   |u-uexact|_inf = 4.072e-04, |u-uexact|_h = 2.236e-04
+*WTime:   4.308830
+*Iters:   79
+*Problem: ex12 on 100 x 100 point 2D grid with d = 5, and eps = 0.002:
+*Error:   |u-uexact|_inf = 3.868e-04, |u-uexact|_h = 2.132e-04
+*WTime:   3.308297
+*Iters:   63
+15% overlap
+*Problem: ex10 on 100 x 100 point 2D grid with d = 4, and eps = 0.006:
+*Error:   |u-uexact|_inf = 2.119e-03, |u-uexact|_h = 1.361e-03
+*WTime:   2.023404
+*Iters:   43
+*Problem: ex11 on 100 x 100 point 2D grid with d = 5, and eps = 0.002:
+*Error:   |u-uexact|_inf = 4.082e-04, |u-uexact|_h = 2.242e-04
+*WTime:   4.857793
+*Iters:   77
+*Problem: ex12 on 100 x 100 point 2D grid with d = 5, and eps = 0.002:
+*Error:   |u-uexact|_inf = 3.868e-04, |u-uexact|_h = 2.132e-04
+*WTime:   2.876841
+*Iters:   50
+20% overlap
+*Problem: ex10 on 100 x 100 point 2D grid with d = 4, and eps = 0.006:
+*Error:   |u-uexact|_inf = 2.106e-03, |u-uexact|_h = 1.354e-03
+*WTime:   1.902499
+*Iters:   35
+*Problem: ex11 on 100 x 100 point 2D grid with d = 5, and eps = 0.002:
+*Error:   |u-uexact|_inf = 4.078e-04, |u-uexact|_h = 2.240e-04
+*WTime:   3.798474
+*Iters:   54
+*Problem: ex12 on 100 x 100 point 2D grid with d = 5, and eps = 0.002:
+*Error:   |u-uexact|_inf = 3.868e-04, |u-uexact|_h = 2.132e-04
+*WTime:   2.646732
+*Iters:   40
+
+
+ - - - - - - - N=200 - - - - - - - - - 
+0% overlap
+*Problem: ex10 on 200 x 200 point 2D grid with d = 5, and eps = 0.002:
+*Error:   |u-uexact|_inf = 1.998e-03, |u-uexact|_h = 4.803e-04
+*WTime:   90.379959
+*Iters:   346
+*Problem: ex11 on 200 x 200 point 2D grid with d = 6, and eps = 0.001:
+*Error:   |u-uexact|_inf = 2.212e-04, |u-uexact|_h = 6.213e-05
+*WTime:   135.774149
+*Iters:   414
+*Problem: ex12 on 200 x 200 point 2D grid with d = 6, and eps = 0.001:
+*Error:   |u-uexact|_inf = 2.657e-04, |u-uexact|_h = 5.994e-05
+*WTime:   128.331948
+*Iters:   390
+5% overlap
+*Problem: ex10 on 200 x 200 point 2D grid with d = 5, and eps = 0.002:
+*Error:   |u-uexact|_inf = 1.235e-03, |u-uexact|_h = 2.605e-04
+*WTime:   26.891910
+*Iters:   92
+*Problem: ex11 on 200 x 200 point 2D grid with d = 6, and eps = 0.001:
+*Error:   |u-uexact|_inf = 1.398e-04, |u-uexact|_h = 7.194e-05
+*WTime:   50.455902
+*Iters:   129
+*Problem: ex12 on 200 x 200 point 2D grid with d = 6, and eps = 0.001:
+*Error:   |u-uexact|_inf = 2.657e-04, |u-uexact|_h = 5.986e-05
+*WTime:   45.559222
+*Iters:   127
+10% overlap
+*Problem: ex10 on 200 x 200 point 2D grid with d = 5, and eps = 0.002:
+*Error:   |u-uexact|_inf = 1.497e-03, |u-uexact|_h = 3.348e-04
+*WTime:   18.712614
+*Iters:   56
+*Problem: ex11 on 200 x 200 point 2D grid with d = 6, and eps = 0.001:
+*Error:   |u-uexact|_inf = 1.340e-04, |u-uexact|_h = 6.771e-05
+*WTime:   35.321142
+*Iters:   83
+*Problem: ex12 on 200 x 200 point 2D grid with d = 6, and eps = 0.001:
+*Error:   |u-uexact|_inf = 2.657e-04, |u-uexact|_h = 5.932e-05
+*WTime:   47.505665
+*Iters:   114
+15% overlap
+*Problem: ex10 on 200 x 200 point 2D grid with d = 5, and eps = 0.002:
+*Error:   |u-uexact|_inf = 1.110e-03, |u-uexact|_h = 2.370e-04
+*WTime:   15.793158
+*Iters:   44
+*Problem: ex11 on 200 x 200 point 2D grid with d = 6, and eps = 0.001:
+*Error:   |u-uexact|_inf = 1.316e-04, |u-uexact|_h = 6.528e-05
+*WTime:   31.122567
+*Iters:   67
+*Problem: ex12 on 200 x 200 point 2D grid with d = 6, and eps = 0.001:
+*Error:   |u-uexact|_inf = 2.657e-04, |u-uexact|_h = 5.937e-05
+*WTime:   148.160961
+*Iters:   353
+20% overlap
+*Problem: ex10 on 200 x 200 point 2D grid with d = 5, and eps = 0.002:
+*Error:   |u-uexact|_inf = 7.113e-04, |u-uexact|_h = 1.707e-04
+*WTime:   14.980889
+*Iters:   37
+*Problem: ex11 on 200 x 200 point 2D grid with d = 6, and eps = 0.001:
+*Error:   |u-uexact|_inf = 1.323e-04, |u-uexact|_h = 6.504e-05
+*WTime:   30.224622
+*Iters:   58
+*Problem: ex12 on 200 x 200 point 2D grid with d = 6, and eps = 0.001:
+*Error:   |u-uexact|_inf = 2.657e-04, |u-uexact|_h = 5.949e-05
+*WTime:   136.491808
+*Iters:   282
