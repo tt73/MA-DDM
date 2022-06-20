@@ -1,10 +1,10 @@
 /*
    This is a code to solve the Monge-Ampere on a 2D rectangular domain
-   discretized into a structured grid.
+   discretized into a structured grid. It is set to solve the problem
+   with nonlinear additive schwarz + Newton's method.
 
-
-   This is the serial version, but most of it is ready to be
-   done in parallel.
+   Compile this code with the makefile. Run with `./maddm`.
+   You can type  `./maddm -help | grep maddm` to see the options for this code.
 */
 static char help[] = "Solve the Monge-Ampere equation for one of three example problems in 1D or 2D using a wide-stencil discretization scheme on a rectangular grid.\n\n";
 
@@ -194,7 +194,7 @@ int main(int argc,char **args) {
    ierr = PetscOptionsBool("-sol","generate MATLAB solution files","maddm.c",printSol,&printSol,NULL);CHKERRQ(ierr);
    ierr = PetscOptionsBool("-mixed","sub-index the local domains and use a different solver on the last subdomain","maddm.c",mixed,&mixed,NULL);CHKERRQ(ierr);
    ierr = PetscOptionsEnum("-init_type","type of initial iterate","maddm.c",InitialTypes,(PetscEnum)initial,(PetscEnum*)&initial,NULL); CHKERRQ(ierr);
-   ierr = PetscOptionsInt("-width","stencil width","maddm.c",width,&width,&set_width);CHKERRQ(ierr);
+   ierr = PetscOptionsInt("-width","stencil width for MA discretization","maddm.c",width,&width,&set_width);CHKERRQ(ierr);
    ierr = PetscOptionsReal("-eps","regularization constant epsilon","maddm.c",eps,&eps,&set_eps);CHKERRQ(ierr);
    ierr = PetscOptionsReal("-op","domain overlap percentage (0.0 to 1.0)","maddm.c",op,&op,NULL);CHKERRQ(ierr);
    ierr = PetscOptionsEnum("-problem","problem type; (ex1, ex2, or ex3)","maddm.c",ProblemTypes,(PetscEnum)problem,(PetscEnum*)&problem,NULL); CHKERRQ(ierr);
@@ -290,9 +290,10 @@ int main(int argc,char **args) {
    /* Subdomain Solve - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
       We can choose the local solver for each MPI rank.
       Our default method should be a stable method which converges for most cases.
-      Then, if the runtime is too slow, we can choose to speed it up with -fast
-      or choose a
-      We can choose to use different methods on each subdomain.
+      We choose to use a BT linesearch and we run the local Newton iteration
+      until the residue decrease by a factor of 10.
+
+      We may want to
    - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
    ierr = SNESSetUp(snes); CHKERRQ(ierr); // initialize subdomains
    MPI_Comm_size(PETSC_COMM_WORLD,&size); // get # of processors
@@ -304,18 +305,22 @@ int main(int argc,char **args) {
    if ((rank==size-1) && mixed) { // final domain
       // SNESSetType(subsnes,SNESFAS); CHKERRQ(ierr);
       SNESSetType(subsnes,SNESNEWTONLS);
-      SNESLineSearchSetType(subls,SNESLINESEARCHBT); // cubic backtracking
       if (fast){
          // do 1 iteration
          SNESSetTolerances(subsnes,PETSC_DEFAULT,PETSC_DEFAULT,PETSC_DEFAULT,1,PETSC_DEFAULT);
+      } else {
+         SNESSetTolerances(subsnes,PETSC_DEFAULT,1.0e-1,PETSC_DEFAULT,PETSC_DEFAULT,PETSC_DEFAULT);
       }
       KSPSetType(subksp,KSPGMRES);
       PCSetType(subpc,PCEISENSTAT);
    } else  {
-      SNESSetType(subsnes,SNESNEWTONLS);
-      SNESLineSearchSetType(subls,SNESLINESEARCHL2); // secant L2 linesearch
       if (fast) {
-         SNESSetTolerances(subsnes,PETSC_DEFAULT,PETSC_DEFAULT,PETSC_DEFAULT,1,PETSC_DEFAULT); // 1 iteration only
+         // 1 iteration only + L2 linesearch
+         SNESLineSearchSetType(subls,SNESLINESEARCHL2); // secant L2 linesearch
+         SNESSetTolerances(subsnes,PETSC_DEFAULT,PETSC_DEFAULT,PETSC_DEFAULT,1,PETSC_DEFAULT);
+      } else {
+         // relative res < 0.1
+         SNESSetTolerances(subsnes,PETSC_DEFAULT,1.0e-1,PETSC_DEFAULT,PETSC_DEFAULT,PETSC_DEFAULT);
       }
       KSPSetType(subksp,KSPGMRES);
       PCSetType(subpc,PCEISENSTAT);
