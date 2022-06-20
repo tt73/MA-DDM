@@ -156,13 +156,12 @@ PetscErrorCode InitialState(DM da, InitialType it, Vec u, MACtx *user) {
    Since this is 1D, the ouptut F is represented as an array and so is the input u.
 */
 PetscErrorCode MA1DFunctionLocal(DMDALocalInfo *info, PetscReal *u, PetscReal *F, MACtx *user) {
-   PetscInt     i;
-   PetscReal    Lx, h, x, ue, uw, f;
+   PetscInt  i;
+   PetscReal h, x, ue, uw, f;
    PetscFunctionBeginUser;
 
-   Lx = user->xmax - user->xmin;
-   h = Lx/(PetscReal)(info->mx+1);
-   for (i = info->xs; i<info->xs+info->xm; i++) {
+   h = (user->xmax-user->xmin)/(PetscReal)(info->mx+1);
+   for (i=info->xs; i<info->xs+info->xm; i++) {
       x = user->xmin + (i+1)*h;
       ue = u[i+1];
       uw = u[i-1];
@@ -183,7 +182,7 @@ PetscErrorCode MA1DFunctionLocal(DMDALocalInfo *info, PetscReal *u, PetscReal *F
 */
 PetscErrorCode MA2DFunctionLocal(DMDALocalInfo *info, PetscReal **au, PetscReal **aF, MACtx *user) {
    PetscInt   i,j;
-   PetscReal  Lx,Ly,hx,hy,x,y,f;
+   PetscReal  hx,hy,x,y,f;
    PetscReal  DetD2u; // MA operator approximation
    PetscReal *SDD; // second directional deriv
    PetscReal *hFwd, *hBak; // magnitude of step in forward and backward dirs for each direction k
@@ -191,17 +190,15 @@ PetscErrorCode MA2DFunctionLocal(DMDALocalInfo *info, PetscReal **au, PetscReal 
    PetscFunctionBeginUser;
 
    // get info from DA
-   Lx = user->xmax - user->xmin;
-   Ly = user->ymax - user->ymin;
-   hx = Lx/(PetscReal)(info->mx + 1);
-   hy = Ly/(PetscReal)(info->my + 1);
+   hx = (user->xmax-user->xmin)/(PetscReal)(info->mx+1);
+   hy = (user->ymax-user->ymin)/(PetscReal)(info->my+1);
    // allocate mem for derivative stuff
    width = info->sw;
    M     = 2*width;
    PetscMalloc1(M,&SDD);
    PetscMalloc2(M,&hFwd,M,&hBak);
    // begin loop over all local interior nodes
-   for (j = info->ys; j < info->ys + info->ym; j++) {
+   for (j=info->ys; j<info->ys+info->ym; j++) {
       y = user->ymin + (j+1)*hy;
       for (i=info->xs; i<info->xs+info->xm; i++) {
          x = user->xmin + (i+1)*hx;
@@ -271,13 +268,12 @@ PetscErrorCode MA3DFunctionLocal(DMDALocalInfo *info, PetscReal ***au, PetscReal
 PetscErrorCode MA1DJacobianLocal(DMDALocalInfo *info, PetscScalar *au, Mat J, Mat Jpre, MACtx *user) {
    PetscErrorCode  ierr;
    PetscInt        i,ncols;
-   PetscReal       Lx, h, v[3];
+   PetscReal       h, v[3];
    MatStencil      col[3],row;
    PetscFunctionBeginUser;
 
-   Lx = user->xmax - user->xmin;
-   h  = Lx/(PetscReal)(info->mx+1);
-   for (i = info->xs; i < info->xs+info->xm; i++) { // loop over each row of J (mx by mx)
+   h  = (user->xmax-user->xmin)/(PetscReal)(info->mx+1);
+   for (i=info->xs; i<info->xs+info->xm; i++) { // loop over each row of J (mx by mx)
       row.i = i;
       col[0].i = i;
       ncols = 1;
@@ -310,23 +306,21 @@ PetscErrorCode MA1DJacobianLocal(DMDALocalInfo *info, PetscScalar *au, Mat J, Ma
 */
 PetscErrorCode MA2DJacobianLocal(DMDALocalInfo *info, PetscScalar **au, Mat J, Mat Jpre, MACtx *user) {
    PetscErrorCode  ierr;
-   PetscInt     i,j,k,Si,Sj,ncols,width,min_k,Nk,Ns,factor; // Nk = # of directions, Ns = # of stencil pts
-   PetscReal    Lx,Ly,x,y,hx,hy,temp,dSDD;
-   PetscReal    *v;
-   MatStencil   *col;
-   MatStencil   row;
-   PetscReal    common;
-   PetscReal    *hFwd, *hBak; // magnitude of step in forward and backward dirs for each direction k
-   PetscReal    *SDD;   // second directional deriv
-   // bool         *SGTE;  // for Stheno
-   PetscBool    *SGTE;  // for latest PETSc
-   PetscBool    regularize; // true if epsilon is the smallest among SDD
+   PetscInt        i,j,k,Si,Sj,ncols,width,min_k,Nk,Ns,factor; // Nk = # of directions, Ns = # of stencil pts
+   PetscReal       x,y,hx,hy,temp,dSDD;
+   PetscReal       *v;
+   MatStencil      *col;
+   MatStencil      row;
+   PetscReal       common;
+   PetscReal       *hFwd, *hBak; // magnitude of step in forward and backward dirs for each direction k
+   PetscReal       *SDD;   // second directional deriv
+   // bool            *SGTE;  // for Stheno
+   PetscBool       *SGTE;  // for latest PETSc
+   PetscBool       regularize; // true if epsilon is the smallest among SDD
    PetscFunctionBeginUser;
 
-   Lx = user->xmax - user->xmin;
-   Ly = user->ymax - user->ymin;
-   hx = Lx/(PetscReal)(info->mx + 1);
-   hy = Ly/(PetscReal)(info->my + 1);
+   hx = (user->xmax-user->xmin)/(PetscReal)(info->mx+1);
+   hy = (user->ymax-user->ymin)/(PetscReal)(info->my+1);
    width = info->sw;
    Nk    = 2*width; // number of angular forward directions
    Ns    = 4*width+1; // total number of stencil points

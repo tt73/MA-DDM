@@ -22,7 +22,7 @@ extern PetscErrorCode ComputeRHS(DMDALocalInfo*, Vec, MACtx*);
    RHS: Det(D^2u(x)) = (1+|x|^2)*exp(n/2*|x|^2)
 */
 PetscErrorCode u_exact_1D_ex1(PetscReal x, PetscReal y, PetscReal z, void *ctx, PetscReal * u) {
-   u[0] = PetscExpReal((x*x)/2.0);
+   u[0] = PetscExpReal(x*x/2.0);
    return 0;
 }
 PetscErrorCode u_exact_2D_ex1(PetscReal x, PetscReal y, PetscReal z, void *ctx, PetscReal * u) {
@@ -35,7 +35,7 @@ PetscErrorCode u_exact_3D_ex1(PetscReal x, PetscReal y, PetscReal z, void *ctx, 
 }
 // right-hand-side functions
 PetscErrorCode f_rhs_1D_ex1(PetscReal x, PetscReal y, PetscReal z, void *ctx, PetscReal * f) {
-   f[0] = (1.0 + x*x)*PetscExpReal(x*x*0.5);
+   f[0] = (1.0 + x*x)*PetscExpReal(x*x/2.0);
    return 0;
 }
 PetscErrorCode f_rhs_2D_ex1(PetscReal x, PetscReal y, PetscReal z, void *ctx, PetscReal * f) {
@@ -48,7 +48,7 @@ PetscErrorCode f_rhs_3D_ex1(PetscReal x, PetscReal y, PetscReal z, void *ctx, Pe
 }
 
 /*
-   Solution    u(x) = 1/2 max(|x-0.5| - 0.2,0)        , for x in Rn
+   Solution    u(x) = 1/2 max(|x-0.5| - 0.2,0)^2        , for x in Rn
    RHS: Det(D^2u(x)) = max(1-0.2/|x-0.5|, 0)
 */
 PetscErrorCode u_exact_1D_ex2(PetscReal x, PetscReal y, PetscReal z, void *ctx, PetscReal * u) {
@@ -64,8 +64,8 @@ PetscErrorCode u_exact_3D_ex2(PetscReal x, PetscReal y, PetscReal z, void *ctx, 
    return 0;
 }
 // RHS
-PetscErrorCode f_rhs_1D_ex2(PetscReal x, PetscReal y, PetscReal z, void *ctx, PetscReal * f) { // not sure if this is right
-   f[0] = PetscMax(1-0.2/PetscAbsReal(x-0.5),0);
+PetscErrorCode f_rhs_1D_ex2(PetscReal x, PetscReal y, PetscReal z, void *ctx, PetscReal * f) {
+   f[0] = (x<=0.3 || x>=0.7) ? 1.0 : 0.0;
    return 0;
 }
 PetscErrorCode f_rhs_2D_ex2(PetscReal x, PetscReal y, PetscReal z, void *ctx, PetscReal * f) {
@@ -100,7 +100,7 @@ PetscErrorCode f_rhs_1D_ex3(PetscReal x, PetscReal y, PetscReal z, void *ctx, Pe
    return 0;
 }
 PetscErrorCode f_rhs_2D_ex3(PetscReal x, PetscReal y, PetscReal z, void *ctx, PetscReal * f) {
-   f[0] = 2.0/PetscPowReal(2.0 - x*x-y*y,2.0);
+   f[0] = 2.0/PetscPowReal(2.0-x*x-y*y,2.0);
    return 0;
 }
 PetscErrorCode f_rhs_3D_ex3(PetscReal x, PetscReal y, PetscReal z, void *ctx, PetscReal * f) {
@@ -171,18 +171,18 @@ int main(int argc,char **args) {
    N = Nx = Ny = 4; // # of interior points
    dim         = 2; // PDE space dimension
    width       = 1; // stencil width
-   eps         = 0.25; // epsilon = (hd)^2
-   order       = 2;    // guadrature order
-   op          = 0.1;  // domain overlap percentage
-   initial     = ZEROS;
-   problem     = ex1;
+   eps         = 0.25;  // epsilon = (hd)^2
+   order       = 2;     // guadrature order
+   op          = 0.1;   // domain overlap percentage
+   initial     = ZEROS; // initial guess for outer iterative method
+   problem     = ex1;   // choose ex1, ex2, or ex3
    user.xmin   = -1.0; user.xmax = 1.0; // x limits [-1, 1]
    user.ymin   = -1.0; user.ymax = 1.0; // y limits [-1, 1]
    user.zmin   = -1.0; user.zmax = 1.0; // z limits [-1, 1]
    fast        = PETSC_FALSE; // fast might be unstable so leave it off by default
-   debug       = PETSC_FALSE;
-   printSol    = PETSC_FALSE;
-   mixed       = PETSC_FALSE;
+   debug       = PETSC_FALSE; // option to print out extra info
+   printSol    = PETSC_FALSE; // option to generate MATLAB solution scripts
+   mixed       = PETSC_FALSE; // option to use different solver on each subdomain
    ierr = PetscOptionsBegin(PETSC_COMM_WORLD,"","options for maddm.c",""); CHKERRQ(ierr);
    ierr = PetscOptionsInt("-dim","dimension of problem (=1,2,3 only)","maddm.c",dim,&dim,NULL);CHKERRQ(ierr);
    ierr = PetscOptionsInt("-N","make the interior N by N","maddm.c",N,&N,&set_N);CHKERRQ(ierr);
@@ -191,8 +191,8 @@ int main(int argc,char **args) {
    ierr = PetscOptionsInt("-order","order of quadrature (default is 2)","maddm.c",order,&order,NULL);CHKERRQ(ierr);
    ierr = PetscOptionsBool("-fast","use settings that are tuned to under-solve the local problems","maddm.c",fast,&fast,NULL);CHKERRQ(ierr);
    ierr = PetscOptionsBool("-debug","print out extra info","maddm.c",debug,&debug,NULL);CHKERRQ(ierr);
-   ierr = PetscOptionsBool("-print","print out extra info","maddm.c",printSol,&printSol,NULL);CHKERRQ(ierr);
-   ierr = PetscOptionsBool("-mixed","sub-index the local domains and use FAS on the last subdomain","maddm.c",mixed,&mixed,NULL);CHKERRQ(ierr);
+   ierr = PetscOptionsBool("-sol","generate MATLAB solution files","maddm.c",printSol,&printSol,NULL);CHKERRQ(ierr);
+   ierr = PetscOptionsBool("-mixed","sub-index the local domains and use a different solver on the last subdomain","maddm.c",mixed,&mixed,NULL);CHKERRQ(ierr);
    ierr = PetscOptionsEnum("-init_type","type of initial iterate","maddm.c",InitialTypes,(PetscEnum)initial,(PetscEnum*)&initial,NULL); CHKERRQ(ierr);
    ierr = PetscOptionsInt("-width","stencil width","maddm.c",width,&width,&set_width);CHKERRQ(ierr);
    ierr = PetscOptionsReal("-eps","regularization constant epsilon","maddm.c",eps,&eps,&set_eps);CHKERRQ(ierr);
@@ -233,18 +233,18 @@ int main(int argc,char **args) {
    user.f_rhs   = f_rhs_ptr[dim-1][problem];
    /* DMDACreate - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
       Set up a system of indexed nodes configured in a 1d, 2d, or 3d lattice.
-      The dimensions are free to choose and the distribution of nodes is
-      handled automatically.
+      The dimensions are free to choose and the distribution of nodes of the
+      grid into subdomains is handled automatically, hence the `PETSC_DECIDE`.
    - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
    switch (dim) {
       case 1:
          ierr = DMDACreate1d(PETSC_COMM_WORLD,DM_BOUNDARY_NONE,Nx,1,1,NULL,&da); CHKERRQ(ierr);
          break;
       case 2:
-         ierr = DMDACreate2d(PETSC_COMM_WORLD,   // MPI not important
-                        DM_BOUNDARY_NONE,        // no periodicity in x
-                        DM_BOUNDARY_NONE,        // no periodicity in y
-                        width==1?DMDA_STENCIL_STAR:DMDA_STENCIL_BOX, // star means + sign stencil, box means stencil has diagonals
+         ierr = DMDACreate2d(PETSC_COMM_WORLD,     //
+                        DM_BOUNDARY_NONE,          // no periodicity in x
+                        DM_BOUNDARY_NONE,          // no periodicity in y
+                        width==1?DMDA_STENCIL_STAR:DMDA_STENCIL_BOX, // star = cardinal directions, box = more general
                         Nx,Ny,                     // mesh size in x & y directions
                         PETSC_DECIDE,PETSC_DECIDE, // local mesh size
                         1,                         // degree of freedom
@@ -267,12 +267,12 @@ int main(int argc,char **args) {
       or adjust the percentage with -op <float> where float ranges from 0 to 1.
    - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
    PetscInt mm, nn, olx, oly;
-   ierr = DMSetUp(da); CHKERRQ(ierr);
+   ierr = DMSetUp(da); CHKERRQ(ierr); // initialize the grid distribution, then get mm and nn
    ierr = DMDAGetInfo(da,NULL,NULL,NULL,NULL,&mm,&nn,NULL,NULL,NULL,NULL,NULL,NULL,NULL); CHKERRQ(ierr);
    olx = PetscCeilReal(op*Nx/(PetscReal)mm); // x overlap
    oly = PetscCeilReal(op*Ny/(PetscReal)nn); // y overlap
    ierr = DMDASetOverlap(da,olx,oly,olx);
-   ierr = DMSetFromOptions(da); CHKERRQ(ierr);
+   ierr = DMSetFromOptions(da); CHKERRQ(ierr); // the nodes
    ierr = DMDASetUniformCoordinates(da,user.xmin+hx,user.xmax-hx,user.ymin+hy,user.ymax-hy,user.zmin,user.zmax); CHKERRQ(ierr);
    ierr = DMSetApplicationContext(da,&user); CHKERRQ(ierr);
    /* SNES setup - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -376,11 +376,13 @@ int main(int argc,char **args) {
          SETERRQ(PETSC_COMM_SELF,4,"invalid dim value in final report\n");
    }
    err2h /= normconst2h; // like continuous L2
-   ierr = PetscPrintf(PETSC_COMM_WORLD, "*Problem: %s on %s grid with d = %d, and eps = %.3f:\n"
+   ierr = PetscPrintf(PETSC_COMM_WORLD,
+               "*Problem: %s on %s grid\n"
+               "*Params:  Nd = %d, width = %d, eps = %.3f, op = %.2f\n"
                "*Error:   |u-uexact|_inf = %.3e, |u-uexact|_h = %.3e\n"
                "*WTime:   %.6f\n"
                "*Iters:   %d\n",
-               ProblemTypes[problem],gridstr,info.sw,user.epsilon,errinf,err2h,t2-t1,its); CHKERRQ(ierr);
+               ProblemTypes[problem],gridstr,size,info.sw,user.epsilon,op,errinf,err2h,t2-t1,its); CHKERRQ(ierr);
 
    /* Debugging Info - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
       To print out debugging info, add the option -t1_debug.
@@ -394,10 +396,7 @@ int main(int argc,char **args) {
       PetscInt ox, oy;
       DMDAGetOverlap(da_after,&ox,&oy,NULL);
       PetscPrintf(PETSC_COMM_WORLD,"-- Overlap in x: %d, Overlap in y: %d\n",ox,oy);
-      PetscMPIInt    rank, size;
       DMDALocalInfo  info;
-      MPI_Comm_size(PETSC_COMM_WORLD,&size);
-      MPI_Comm_rank(PETSC_COMM_WORLD,&rank);
       MPI_Barrier(PETSC_COMM_WORLD);
       for (int i=0; i<size; i++) {
          if (i==rank) {
@@ -411,68 +410,64 @@ int main(int argc,char **args) {
       the numerical and exact solutions into a workspace.
    - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
    if (printSol) {
-      PetscViewer viewer;  // Viewer object fascilitates printing out solution
-      ierr = PetscViewerCreate(PETSC_COMM_WORLD, &viewer); // initialize the viewer object
-      ierr = PetscViewerASCIIOpen(PETSC_COMM_WORLD,"load_u.m",&viewer);  // set the file name
-      ierr = PetscViewerPushFormat(viewer,PETSC_VIEWER_ASCII_MATLAB); // except its for u
+      PetscViewer viewer; // Viewer object fascilitates printing out solution
+      ierr = PetscViewerCreate(PETSC_COMM_WORLD,&viewer);
+      ierr = PetscViewerASCIIOpen(PETSC_COMM_WORLD,"load_u.m",&viewer);
+      ierr = PetscViewerPushFormat(viewer,PETSC_VIEWER_ASCII_MATLAB);
       ierr = PetscObjectSetName((PetscObject)u,"u");
       ierr = VecView(u,viewer);
-      ierr = PetscViewerASCIIOpen(PETSC_COMM_WORLD,"load_exact.m",&viewer);  // set the file name
-      ierr = PetscViewerPushFormat(viewer,PETSC_VIEWER_ASCII_MATLAB); // except its for u
+      ierr = PetscViewerASCIIOpen(PETSC_COMM_WORLD,"load_exact.m",&viewer);
+      ierr = PetscViewerPushFormat(viewer,PETSC_VIEWER_ASCII_MATLAB);
       ierr = PetscObjectSetName((PetscObject)u_exact,"u_exact");
       ierr = VecView(u_exact,viewer);
       if (debug) { // extras for sanity check
          // print out intial guess in matlab format
          InitialState(da,initial,u_initial,&user);
-         ierr = PetscViewerASCIIOpen(PETSC_COMM_WORLD,"load_initial.m",&viewer);  // set the file name
+         ierr = PetscViewerASCIIOpen(PETSC_COMM_WORLD,"load_initial.m",&viewer);
          ierr = PetscViewerPushFormat(viewer,PETSC_VIEWER_ASCII_MATLAB);
          ierr = PetscObjectSetName((PetscObject)u_initial,"u_initial");
          ierr = VecView(u_initial,viewer);
          Vec  RHS; // print out the source term or the RHS
          ierr = VecDuplicate(u_exact,&RHS);
          ierr = ComputeRHS(&info,RHS,&user);
-         ierr = PetscViewerASCIIOpen(PETSC_COMM_WORLD,"load_rhs.m",&viewer);  // set the file name
+         ierr = PetscViewerASCIIOpen(PETSC_COMM_WORLD,"load_rhs.m",&viewer);
          ierr = PetscViewerPushFormat(viewer,PETSC_VIEWER_ASCII_MATLAB);
          ierr = PetscObjectSetName((PetscObject)RHS,"rhs");
          ierr = VecView(RHS,viewer);
          ierr = VecDestroy(&RHS);
       }
-      // Free memory
-      ierr = DMDestroy(&da); CHKERRQ(ierr);
-      ierr = VecDestroy(&err); CHKERRQ(ierr);
-      ierr = VecDestroy(&u); CHKERRQ(ierr);
-      ierr = VecDestroy(&u_exact); CHKERRQ(ierr);
-      ierr = VecDestroy(&u_initial); CHKERRQ(ierr);
       ierr = PetscViewerDestroy(&viewer); CHKERRQ(ierr);
-      ierr = SNESDestroy(&snes); CHKERRQ(ierr);
    }
+   // Free memory
+   ierr = DMDestroy(&da); CHKERRQ(ierr); // destroying da also destroys snes
+   ierr = VecDestroy(&err); CHKERRQ(ierr);
+   ierr = VecDestroy(&u); CHKERRQ(ierr);
+   ierr = VecDestroy(&u_exact); CHKERRQ(ierr);
+   ierr = VecDestroy(&u_initial); CHKERRQ(ierr);
    return PetscFinalize();
 }
 
 PetscErrorCode Form1DUExact(DMDALocalInfo *info, Vec u, MACtx* user) {
    PetscErrorCode ierr;
    PetscInt   i;
-   PetscReal  Lx, hx, x, *au,temp;
-   Lx = user->xmax - user->xmin;
-   hx = Lx/(PetscReal)(info->mx-1);
-   ierr = DMDAVecGetArray(info->da, u, &au);CHKERRQ(ierr);
+   PetscReal  hx,x,*au,temp;
+   hx = (user->xmax-user->xmin)/(PetscReal)(info->mx+1);
+   ierr = DMDAVecGetArray(info->da,u,&au);CHKERRQ(ierr);
    for (i=info->xs; i<info->xs+info->xm; i++) {
       x = user->xmin + (i+1)*hx;
       user->g_bdry(x,0.0,0.0,user,&temp);
       au[i] = temp;
    }
-   ierr = DMDAVecRestoreArray(info->da, u, &au);CHKERRQ(ierr);
+   ierr = DMDAVecRestoreArray(info->da,u,&au);CHKERRQ(ierr);
    return 0;
 }
 
 PetscErrorCode Form2DUExact(DMDALocalInfo *info, Vec u, MACtx* user) {
    PetscErrorCode ierr;
-   PetscInt   i, j;
-   PetscReal  Lx, Ly, hx, hy, x, y, **au,temp;
-   Lx = user->xmax - user->xmin;
-   Ly = user->ymax - user->ymin;
-   hx = Lx/(PetscReal)(info->mx + 1);
-   hy = Ly/(PetscReal)(info->my + 1);
+   PetscInt   i,j;
+   PetscReal  hx,hy,x,y,**au,temp;
+   hx = (user->xmax-user->xmin)/(PetscReal)(info->mx+1);
+   hy = (user->ymax-user->ymin)/(PetscReal)(info->my+1);
    ierr = DMDAVecGetArray(info->da, u, &au);CHKERRQ(ierr);
    for (j=info->ys; j<info->ys+info->ym; j++) {
       y = user->ymin + (j+1)*hy;
@@ -482,7 +477,7 @@ PetscErrorCode Form2DUExact(DMDALocalInfo *info, Vec u, MACtx* user) {
          au[j][i] = temp;
       }
    }
-   ierr = DMDAVecRestoreArray(info->da, u, &au);CHKERRQ(ierr);
+   ierr = DMDAVecRestoreArray(info->da,u,&au);CHKERRQ(ierr);
    return 0;
 }
 
