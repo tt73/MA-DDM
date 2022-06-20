@@ -25,4 +25,4 @@ module load gnu8
 module load mpich
 module load petsc
 
-bash test2_N.sh > out_test2_N
+bash test2_N.sh > out_test2

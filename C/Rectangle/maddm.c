@@ -289,8 +289,9 @@ int main(int argc,char **args) {
    ierr = DMDASNESSetJacobianLocal(da,(DMDASNESJacobian)(jacobian_ptr[dim-1]),&user); CHKERRQ(ierr);
    /* Subdomain Solve - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
       We can choose the local solver for each MPI rank.
-      For most cases, doing Newton's method for the local solve with
-      L2 linesearch and GMRES-SSOR for the linear solve.
+      Our default method should be a stable method which converges for most cases.
+      Then, if the runtime is too slow, we can choose to speed it up with -fast
+      or choose a
       We can choose to use different methods on each subdomain.
    - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
    ierr = SNESSetUp(snes); CHKERRQ(ierr); // initialize subdomains
@@ -300,19 +301,21 @@ int main(int argc,char **args) {
    SNESGetLineSearch(subsnes,&subls);     // get local linesearch
    SNESGetKSP(subsnes,&subksp);           // get local KSP
    KSPGetPC(subksp,&subpc);               // get local PC
-   if ((rank==size-1) && mixed) {
+   if ((rank==size-1) && mixed) { // final domain
       // SNESSetType(subsnes,SNESFAS); CHKERRQ(ierr);
       SNESSetType(subsnes,SNESNEWTONLS);
-      SNESLineSearchSetType(subls,SNESLINESEARCHBT);
-      if (fast)
-         SNESSetTolerances(subsnes,PETSC_DEFAULT,PETSC_DEFAULT,PETSC_DEFAULT,5,PETSC_DEFAULT);
+      SNESLineSearchSetType(subls,SNESLINESEARCHBT); // cubic backtracking
+      if (fast){
+         // do 1 iteration
+         SNESSetTolerances(subsnes,PETSC_DEFAULT,PETSC_DEFAULT,PETSC_DEFAULT,1,PETSC_DEFAULT);
+      }
       KSPSetType(subksp,KSPGMRES);
       PCSetType(subpc,PCEISENSTAT);
    } else  {
       SNESSetType(subsnes,SNESNEWTONLS);
+      SNESLineSearchSetType(subls,SNESLINESEARCHL2); // secant L2 linesearch
       if (fast) {
          SNESSetTolerances(subsnes,PETSC_DEFAULT,PETSC_DEFAULT,PETSC_DEFAULT,1,PETSC_DEFAULT); // 1 iteration only
-         SNESLineSearchSetType(subls,SNESLINESEARCHL2); // secant L2 linesearch
       }
       KSPSetType(subksp,KSPGMRES);
       PCSetType(subpc,PCEISENSTAT);
@@ -452,13 +455,13 @@ PetscErrorCode Form1DUExact(DMDALocalInfo *info, Vec u, MACtx* user) {
    PetscInt   i;
    PetscReal  hx,x,*au,temp;
    hx = (user->xmax-user->xmin)/(PetscReal)(info->mx+1);
-   ierr = DMDAVecGetArray(info->da,u,&au);CHKERRQ(ierr);
+   ierr = DMDAVecGetArray(info->da,u,&au); CHKERRQ(ierr);
    for (i=info->xs; i<info->xs+info->xm; i++) {
       x = user->xmin + (i+1)*hx;
       user->g_bdry(x,0.0,0.0,user,&temp);
       au[i] = temp;
    }
-   ierr = DMDAVecRestoreArray(info->da,u,&au);CHKERRQ(ierr);
+   ierr = DMDAVecRestoreArray(info->da,u,&au); CHKERRQ(ierr);
    return 0;
 }
 
@@ -468,7 +471,7 @@ PetscErrorCode Form2DUExact(DMDALocalInfo *info, Vec u, MACtx* user) {
    PetscReal  hx,hy,x,y,**au,temp;
    hx = (user->xmax-user->xmin)/(PetscReal)(info->mx+1);
    hy = (user->ymax-user->ymin)/(PetscReal)(info->my+1);
-   ierr = DMDAVecGetArray(info->da, u, &au);CHKERRQ(ierr);
+   ierr = DMDAVecGetArray(info->da,u,&au); CHKERRQ(ierr);
    for (j=info->ys; j<info->ys+info->ym; j++) {
       y = user->ymin + (j+1)*hy;
       for (i=info->xs; i<info->xs+info->xm; i++) {
@@ -477,7 +480,7 @@ PetscErrorCode Form2DUExact(DMDALocalInfo *info, Vec u, MACtx* user) {
          au[j][i] = temp;
       }
    }
-   ierr = DMDAVecRestoreArray(info->da,u,&au);CHKERRQ(ierr);
+   ierr = DMDAVecRestoreArray(info->da,u,&au); CHKERRQ(ierr);
    return 0;
 }
 
@@ -489,7 +492,7 @@ PetscErrorCode Form3DUExact(DMDALocalInfo *info, Vec u, MACtx* user) {
    hx = (xyzmax[0] - xyzmin[0]) / (info->mx - 1);
    hy = (xyzmax[1] - xyzmin[1]) / (info->my - 1);
    hz = (xyzmax[2] - xyzmin[2]) / (info->mz - 1);
-   ierr = DMDAVecGetArray(info->da, u, &au);CHKERRQ(ierr);
+   ierr = DMDAVecGetArray(info->da, u, &au); CHKERRQ(ierr);
    for (k=info->zs; k<info->zs+info->zm; k++) {
       z = xyzmin[2] + k*hz;
       for (j=info->ys; j<info->ys+info->ym; j++) {
@@ -501,7 +504,7 @@ PetscErrorCode Form3DUExact(DMDALocalInfo *info, Vec u, MACtx* user) {
          }
       }
    }
-   ierr = DMDAVecRestoreArray(info->da, u, &au);CHKERRQ(ierr);
+   ierr = DMDAVecRestoreArray(info->da, u, &au); CHKERRQ(ierr);
    return 0;
 }
 

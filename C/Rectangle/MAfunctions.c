@@ -314,8 +314,8 @@ PetscErrorCode MA2DJacobianLocal(DMDALocalInfo *info, PetscScalar **au, Mat J, M
    PetscReal       common;
    PetscReal       *hFwd, *hBak; // magnitude of step in forward and backward dirs for each direction k
    PetscReal       *SDD;   // second directional deriv
-   // bool            *SGTE;  // for Stheno
-   PetscBool       *SGTE;  // for latest PETSc
+   bool            *SGTE;  // for Stheno
+   // PetscBool       *SGTE;  // for latest PETSc
    PetscBool       regularize; // true if epsilon is the smallest among SDD
    PetscFunctionBeginUser;
 
@@ -537,7 +537,7 @@ PetscErrorCode ApproxDetD2u(PetscReal *DetD2u, PetscInt dim, PetscReal *SDD, MAC
 PetscErrorCode ComputeWeights(PetscInt width, PetscInt order, MACtx *user) {
    PetscInt   i,M;
    PetscReal  a,h1,h2;
-   PetscReal *theta;
+   PetscReal  *theta;
    PetscFunctionBeginUser;
 
    // Compute angles of L1 stencil points
@@ -657,8 +657,8 @@ PetscErrorCode ComputeFwdStencilDirs(PetscInt width, MACtx *user) {
 */
 PetscErrorCode ComputeProjectionIndeces(PetscReal *di, PetscReal *dj, PetscInt i, PetscInt j, PetscInt Si, PetscInt Sj, PetscInt Nx, PetscInt Ny) {
    PetscReal m;
-   // bool      check;  // for Stheno
-   PetscBool check; // for newest PETSc release
+   bool      check;  // for Stheno
+   // PetscBool check; // for newest PETSc release
    PetscFunctionBeginUser;
 
    if (Si==0) {
@@ -702,17 +702,14 @@ PetscErrorCode ComputeProjectionIndeces(PetscReal *di, PetscReal *dj, PetscInt i
 */
 PetscErrorCode ComputeSDD(DMDALocalInfo *info, PetscReal **au, MACtx *user, PetscInt i, PetscInt j, PetscReal x, PetscReal y, PetscReal *SDD, PetscReal *hFwd, PetscReal *hBak) {
    PetscInt   d,k,M,Ny,Nx,Si,Sj;
-   PetscReal  hx,hy,Lx,Ly,di,dj,temp;
-   PetscReal *uFwd, *uBak; // u in the the forward and backward position for each direction k
+   PetscReal  hx,hy,di,dj,temp;
+   PetscReal  *uFwd, *uBak; // u in the the forward and backward position for each direction k
    PetscFunctionBeginUser;
 
    // get info from DA
    Nx = info->mx; Ny = info->my;
-
-   Lx = user->xmax - user->xmin;
-   Ly = user->ymax - user->ymin;
-   hx = Lx/(PetscReal)(Nx + 1);
-   hy = Ly/(PetscReal)(Ny + 1);
+   hx = (user->xmax - user->xmin)/(PetscReal)(Nx + 1);
+   hy = (user->ymax - user->ymin)/(PetscReal)(Ny + 1);
    d  = info->sw;
    M  = d*2;
    PetscMalloc2(M,&uFwd,M,&uBak);
