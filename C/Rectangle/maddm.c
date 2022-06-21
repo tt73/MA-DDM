@@ -309,7 +309,7 @@ int main(int argc,char **args) {
          // do 1 iteration
          SNESSetTolerances(subsnes,PETSC_DEFAULT,PETSC_DEFAULT,PETSC_DEFAULT,1,PETSC_DEFAULT);
       } else {
-         SNESSetTolerances(subsnes,PETSC_DEFAULT,1.0e-1,PETSC_DEFAULT,PETSC_DEFAULT,PETSC_DEFAULT);
+         SNESSetTolerances(subsnes,PETSC_DEFAULT,1.e-1,PETSC_DEFAULT,PETSC_DEFAULT,PETSC_DEFAULT);
       }
       KSPSetType(subksp,KSPGMRES);
       PCSetType(subpc,PCEISENSTAT);
@@ -318,9 +318,14 @@ int main(int argc,char **args) {
          // 1 iteration only + L2 linesearch
          SNESLineSearchSetType(subls,SNESLINESEARCHL2); // secant L2 linesearch
          SNESSetTolerances(subsnes,PETSC_DEFAULT,PETSC_DEFAULT,PETSC_DEFAULT,1,PETSC_DEFAULT);
-      } else {
-         // relative res < 0.1
-         SNESSetTolerances(subsnes,PETSC_DEFAULT,1.0e-1,PETSC_DEFAULT,PETSC_DEFAULT,PETSC_DEFAULT);
+         KSPSetTolerances(subksp,1.e-3,PETSC_DEFAULT,PETSC_DEFAULT,PETSC_DEFAULT);
+         SNESLineSearchSetTolerances(subls,PETSC_DEFAULT,PETSC_DEFAULT,1.e-1,PETSC_DEFAULT,PETSC_DEFAULT,PETSC_DEFAULT);
+      } else if (size > 1) {
+         // newton rres < 0.1
+         // gmres res < 0.1
+         SNESSetTolerances(subsnes,PETSC_DEFAULT,1.e-1,PETSC_DEFAULT,PETSC_DEFAULT,PETSC_DEFAULT);
+         KSPSetTolerances(subksp,1.e-1,PETSC_DEFAULT,PETSC_DEFAULT,PETSC_DEFAULT);
+         SNESLineSearchSetTolerances(subls,PETSC_DEFAULT,PETSC_DEFAULT,1.e-1,PETSC_DEFAULT,PETSC_DEFAULT,PETSC_DEFAULT);
       }
       KSPSetType(subksp,KSPGMRES);
       PCSetType(subpc,PCEISENSTAT);
