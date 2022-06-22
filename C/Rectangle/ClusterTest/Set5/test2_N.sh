@@ -4,5 +4,5 @@ do
    printf "N = $N\n"
    mpiexec -np $np ../../maddm -N $N -problem ex1 -fast
    mpiexec -np $np ../../maddm -N $N -problem ex2 -fast
-   mpiexec -np $np ../../maddm -N $N -problem ex3 -fast -mixed
+   mpiexec -np $np ../../maddm -N $N -problem ex3
 done

@@ -10,7 +10,7 @@ do
    printf "$overlap $op\n"
    mpiexec -np $np ../../maddm -N $N0 -op $op -problem ex1 -fast
    mpiexec -np $np ../../maddm -N $N0 -op $op -problem ex2 -fast
-   mpiexec -np $np ../../maddm -N $N0 -op $op -problem ex3 -fast -mixed
+   mpiexec -np $np ../../maddm -N $N0 -op $op -problem ex3
 done
 
 
@@ -20,7 +20,7 @@ do
    printf "$overlap $op\n"
    mpiexec -np $np ../../maddm -N $N1 -op $op -problem ex1 -fast
    mpiexec -np $np ../../maddm -N $N1 -op $op -problem ex2 -fast
-   mpiexec -np $np ../../maddm -N $N1 -op $op -problem ex3 -fast -mixed
+   mpiexec -np $np ../../maddm -N $N1 -op $op -problem ex3
 done
 
 ## Four Subdomains
@@ -32,7 +32,7 @@ do
    printf "$overlap $op\n"
    mpiexec -np $np ../../maddm -N $N0 -op $op -problem ex1 -fast
    mpiexec -np $np ../../maddm -N $N0 -op $op -problem ex2 -fast
-   mpiexec -np $np ../../maddm -N $N0 -op $op -problem ex3 -fast -mixed
+   mpiexec -np $np ../../maddm -N $N0 -op $op -problem ex3
 done
 
 
