@@ -302,6 +302,7 @@ int main(int argc,char **args) {
    SNESGetLineSearch(subsnes,&subls);     // get local linesearch
    SNESGetKSP(subsnes,&subksp);           // get local KSP
    KSPGetPC(subksp,&subpc);               // get local PC
+
    if ((rank==size-1) && mixed) { // final domain
       // SNESSetType(subsnes,SNESFAS); CHKERRQ(ierr);
       SNESSetType(subsnes,SNESNEWTONLS);

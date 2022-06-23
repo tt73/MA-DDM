@@ -305,18 +305,17 @@ PetscErrorCode MA1DJacobianLocal(DMDALocalInfo *info, PetscScalar *au, Mat J, Ma
    The J is constructed implicitly using stencil values.
 */
 PetscErrorCode MA2DJacobianLocal(DMDALocalInfo *info, PetscScalar **au, Mat J, Mat Jpre, MACtx *user) {
-   PetscErrorCode  ierr;
-   PetscInt        i,j,k,Si,Sj,ncols,width,min_k,Nk,Ns,factor; // Nk = # of directions, Ns = # of stencil pts
-   PetscReal       x,y,hx,hy,temp,dSDD;
-   PetscReal       *v;
-   MatStencil      *col;
-   MatStencil      row;
-   PetscReal       common;
-   PetscReal       *hFwd, *hBak; // magnitude of step in forward and backward dirs for each direction k
-   PetscReal       *SDD;   // second directional deriv
-   bool            *SGTE;  // for Stheno
-   // PetscBool       *SGTE;  // for latest PETSc
-   PetscBool       regularize; // true if epsilon is the smallest among SDD
+   PetscErrorCode ierr;
+   PetscInt       i,j,k,Si,Sj,ncols,width,min_k,Nk,Ns,factor; // Nk = # of directions, Ns = # of stencil pts
+   PetscReal      x,y,hx,hy,temp,dSDD;
+   PetscReal      *v;
+   MatStencil     *col;
+   MatStencil     row;
+   PetscReal      common;
+   PetscReal      *hFwd,*hBak; // magnitude of step in forward and backward dirs for each direction k
+   PetscReal      *SDD;        // second directional deriv
+   PetscInt       *SGTE;       // SDD is greater than epsilon
+   PetscBool      regularize;  // true if epsilon is the smallest among SDD
    PetscFunctionBeginUser;
 
    hx = (user->xmax-user->xmin)/(PetscReal)(info->mx+1);
@@ -657,8 +656,7 @@ PetscErrorCode ComputeFwdStencilDirs(PetscInt width, MACtx *user) {
 */
 PetscErrorCode ComputeProjectionIndeces(PetscReal *di, PetscReal *dj, PetscInt i, PetscInt j, PetscInt Si, PetscInt Sj, PetscInt Nx, PetscInt Ny) {
    PetscReal m;
-   bool      check;  // for Stheno
-   // PetscBool check; // for newest PETSc release
+   PetscInt check; // should be a boolean, but it doesn't work on Stheno compiler
    PetscFunctionBeginUser;
 
    if (Si==0) {
