@@ -288,10 +288,12 @@ int main(int argc,char **args) {
    ierr = DMDASNESSetFunctionLocal(da,INSERT_VALUES,(DMDASNESFunction)(residual_ptr[dim-1]),&user); CHKERRQ(ierr);
    ierr = DMDASNESSetJacobianLocal(da,(DMDASNESJacobian)(jacobian_ptr[dim-1]),&user); CHKERRQ(ierr);
    /* Subdomain Solve - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-      We can choose the local solver for each MPI rank.
-      Our default method should be a stable method which converges for most cases.
-      We choose to use a BT linesearch and we run the local Newton iteration
-      until the residue decrease by a factor of 10.
+      The following lines of code extracts the SNES, LS, KSP, and PC
+      objects from the local subsolver given to the current rank.
+
+      By default, we set the local solver to use GMRES and use an
+      efficient SSOR preconditioner. This was found to be a fast,
+      reliable linear solver combo.
    - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
    ierr = SNESSetUp(snes); CHKERRQ(ierr); // initialize subdomains
    MPI_Comm_size(PETSC_COMM_WORLD,&size); // get # of processors
@@ -300,51 +302,57 @@ int main(int argc,char **args) {
    SNESGetLineSearch(subsnes,&subls);     // get local linesearch
    SNESGetKSP(subsnes,&subksp);           // get local KSP
    KSPGetPC(subksp,&subpc);               // get local PC
+   KSPSetType(subksp,KSPGMRES);  // rtol = 1e-5 by default
+   PCSetType(subpc,PCEISENSTAT); // fast accurate linear solver combo
+
+   /* Tuning Local the Solve - - - - - - - - - - - - - - - - - - - - - - - - -
+
+   - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+
+   // if (size==1) { // only 1 subdomain
+   //    // gmres rres < 0.01
+   //    // ls rres < 0.01
+   //    KSPSetTolerances(subksp,1.e-2,PETSC_DEFAULT,PETSC_DEFAULT,PETSC_DEFAULT);
+   //    SNESLineSearchSetTolerances(subls,PETSC_DEFAULT,PETSC_DEFAULT,1.e-2,PETSC_DEFAULT,PETSC_DEFAULT,PETSC_DEFAULT);
+   // } else if (rank<size-1) { // default settings
+   //    // newton rres < 0.01
+   //    // gmres rres < 0.01
+   //    // ls rres < 0.01
+   //    SNESSetTolerances(subsnes,PETSC_DEFAULT,1.e-2,PETSC_DEFAULT,PETSC_DEFAULT,PETSC_DEFAULT);
+   //    KSPSetTolerances(subksp,1.e-2,PETSC_DEFAULT,PETSC_DEFAULT,PETSC_DEFAULT);
+   //    SNESLineSearchSetTolerances(subls,PETSC_DEFAULT,PETSC_DEFAULT,1.e-2,PETSC_DEFAULT,PETSC_DEFAULT,PETSC_DEFAULT);
+   // }
 
 
-   if (size==1) { // only 1 subdomain
-      // gmres rres < 0.01
-      // ls rres < 0.01
-      KSPSetTolerances(subksp,1.e-2,PETSC_DEFAULT,PETSC_DEFAULT,PETSC_DEFAULT);
-      SNESLineSearchSetTolerances(subls,PETSC_DEFAULT,PETSC_DEFAULT,1.e-2,PETSC_DEFAULT,PETSC_DEFAULT,PETSC_DEFAULT);
-   } else if (rank<size-1) { // default settings
-      // newton rres < 0.01
-      // gmres rres < 0.01
-      // ls rres < 0.01
-      SNESSetTolerances(subsnes,PETSC_DEFAULT,1.e-2,PETSC_DEFAULT,PETSC_DEFAULT,PETSC_DEFAULT);
-      KSPSetTolerances(subksp,1.e-2,PETSC_DEFAULT,PETSC_DEFAULT,PETSC_DEFAULT);
-      SNESLineSearchSetTolerances(subls,PETSC_DEFAULT,PETSC_DEFAULT,1.e-2,PETSC_DEFAULT,PETSC_DEFAULT,PETSC_DEFAULT);
-   }
+   // if ((rank==size-1) && mixed) { // final domain
+   //    // SNESSetType(subsnes,SNESFAS); CHKERRQ(ierr);
+   //    SNESSetType(subsnes,SNESNEWTONLS);
+   //    if (fast){
+   //       // do 1 iteration
+   //       SNESSetTolerances(subsnes,PETSC_DEFAULT,PETSC_DEFAULT,PETSC_DEFAULT,1,PETSC_DEFAULT);
+   //    } else {
+   //       SNESSetTolerances(subsnes,PETSC_DEFAULT,1.e-1,PETSC_DEFAULT,PETSC_DEFAULT,PETSC_DEFAULT);
+   //    }
+   //    KSPSetType(subksp,KSPGMRES);
+   //    PCSetType(subpc,PCEISENSTAT);
+   // } else  {
+   //    if (fast) {
+   //       // 1 iteration only + L2 linesearch
+   //       SNESLineSearchSetType(subls,SNESLINESEARCHL2); // secant L2 linesearch
+   //       SNESSetTolerances(subsnes,PETSC_DEFAULT,PETSC_DEFAULT,PETSC_DEFAULT,1,PETSC_DEFAULT);
+   //       KSPSetTolerances(subksp,1.e-1,PETSC_DEFAULT,PETSC_DEFAULT,PETSC_DEFAULT);
+   //       SNESLineSearchSetTolerances(subls,PETSC_DEFAULT,PETSC_DEFAULT,1.e-1,PETSC_DEFAULT,PETSC_DEFAULT,PETSC_DEFAULT);
+   //    } else if (size > 1) {
+   //       // newton rres < 0.1
+   //       // gmres res < 0.1
+   //       SNESSetTolerances(subsnes,PETSC_DEFAULT,1.e-1,PETSC_DEFAULT,PETSC_DEFAULT,PETSC_DEFAULT);
+   //       KSPSetTolerances(subksp,1.e-1,PETSC_DEFAULT,PETSC_DEFAULT,PETSC_DEFAULT);
+   //       SNESLineSearchSetTolerances(subls,PETSC_DEFAULT,PETSC_DEFAULT,1.e-1,PETSC_DEFAULT,PETSC_DEFAULT,PETSC_DEFAULT);
+   //    }
+   //    KSPSetType(subksp,KSPGMRES);
+   //    PCSetType(subpc,PCEISENSTAT);
+   // }
 
-
-   if ((rank==size-1) && mixed) { // final domain
-      // SNESSetType(subsnes,SNESFAS); CHKERRQ(ierr);
-      SNESSetType(subsnes,SNESNEWTONLS);
-      if (fast){
-         // do 1 iteration
-         SNESSetTolerances(subsnes,PETSC_DEFAULT,PETSC_DEFAULT,PETSC_DEFAULT,1,PETSC_DEFAULT);
-      } else {
-         SNESSetTolerances(subsnes,PETSC_DEFAULT,1.e-1,PETSC_DEFAULT,PETSC_DEFAULT,PETSC_DEFAULT);
-      }
-      KSPSetType(subksp,KSPGMRES);
-      PCSetType(subpc,PCEISENSTAT);
-   } else  {
-      if (fast) {
-         // 1 iteration only + L2 linesearch
-         SNESLineSearchSetType(subls,SNESLINESEARCHL2); // secant L2 linesearch
-         SNESSetTolerances(subsnes,PETSC_DEFAULT,PETSC_DEFAULT,PETSC_DEFAULT,1,PETSC_DEFAULT);
-         KSPSetTolerances(subksp,1.e-1,PETSC_DEFAULT,PETSC_DEFAULT,PETSC_DEFAULT);
-         SNESLineSearchSetTolerances(subls,PETSC_DEFAULT,PETSC_DEFAULT,1.e-1,PETSC_DEFAULT,PETSC_DEFAULT,PETSC_DEFAULT);
-      } else if (size > 1) {
-         // newton rres < 0.1
-         // gmres res < 0.1
-         SNESSetTolerances(subsnes,PETSC_DEFAULT,1.e-1,PETSC_DEFAULT,PETSC_DEFAULT,PETSC_DEFAULT);
-         KSPSetTolerances(subksp,1.e-1,PETSC_DEFAULT,PETSC_DEFAULT,PETSC_DEFAULT);
-         SNESLineSearchSetTolerances(subls,PETSC_DEFAULT,PETSC_DEFAULT,1.e-1,PETSC_DEFAULT,PETSC_DEFAULT,PETSC_DEFAULT);
-      }
-      KSPSetType(subksp,KSPGMRES);
-      PCSetType(subpc,PCEISENSTAT);
-   }
    if (mixed) { // each subdomain gets their own indexed prefix
       char prefix[10];
       sprintf(prefix,"sub_%d_",rank);
