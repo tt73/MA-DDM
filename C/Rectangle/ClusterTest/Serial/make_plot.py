@@ -1,12 +1,8 @@
 import matplotlib.pyplot as plt
 import numpy as np
-import subprocess
 import argparse
-import math
 import sys
 
-
-pi = math.pi
 
 text = 'This is a script that runs a ddm over multiple values of k'
 parser = argparse.ArgumentParser(description=text)
@@ -31,6 +27,17 @@ for i in range(N):
 print(times)
 
 
+ax1.plot(angles,reu,'-',label=str(waves[i]))
+ax1.title.set_text('')
+# ax2.plot(angles,imu,'-',label=str(waves[i]))
+# ax2.title.set_text('Imaginary')
+ax1.plot(angles,np.real(u),'k:',label='_nolegend_')
+# ax2.plot(angles,np.imag(u),'k:',label='_nolegend_')
+ax1.legend()
+# ax2.legend()
+plt.suptitle("Solution on exterior R = {}".format(r2))
+plt.savefig('wavenumber.png')
+plt.show()
 
 
 # # Choose your method here...
