@@ -292,8 +292,6 @@ int main(int argc,char **args) {
       Our default method should be a stable method which converges for most cases.
       We choose to use a BT linesearch and we run the local Newton iteration
       until the residue decrease by a factor of 10.
-
-      We may want to
    - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
    ierr = SNESSetUp(snes); CHKERRQ(ierr); // initialize subdomains
    MPI_Comm_size(PETSC_COMM_WORLD,&size); // get # of processors
@@ -302,6 +300,22 @@ int main(int argc,char **args) {
    SNESGetLineSearch(subsnes,&subls);     // get local linesearch
    SNESGetKSP(subsnes,&subksp);           // get local KSP
    KSPGetPC(subksp,&subpc);               // get local PC
+
+
+   if (size==1) { // only 1 subdomain
+      // gmres rres < 0.01
+      // ls rres < 0.01
+      KSPSetTolerances(subksp,1.e-2,PETSC_DEFAULT,PETSC_DEFAULT,PETSC_DEFAULT);
+      SNESLineSearchSetTolerances(subls,PETSC_DEFAULT,PETSC_DEFAULT,1.e-2,PETSC_DEFAULT,PETSC_DEFAULT,PETSC_DEFAULT);
+   } else if (rank<size-1) { // default settings
+      // newton rres < 0.01
+      // gmres rres < 0.01
+      // ls rres < 0.01
+      SNESSetTolerances(subsnes,PETSC_DEFAULT,1.e-2,PETSC_DEFAULT,PETSC_DEFAULT,PETSC_DEFAULT);
+      KSPSetTolerances(subksp,1.e-2,PETSC_DEFAULT,PETSC_DEFAULT,PETSC_DEFAULT);
+      SNESLineSearchSetTolerances(subls,PETSC_DEFAULT,PETSC_DEFAULT,1.e-2,PETSC_DEFAULT,PETSC_DEFAULT,PETSC_DEFAULT);
+   }
+
 
    if ((rank==size-1) && mixed) { // final domain
       // SNESSetType(subsnes,SNESFAS); CHKERRQ(ierr);
@@ -319,7 +333,7 @@ int main(int argc,char **args) {
          // 1 iteration only + L2 linesearch
          SNESLineSearchSetType(subls,SNESLINESEARCHL2); // secant L2 linesearch
          SNESSetTolerances(subsnes,PETSC_DEFAULT,PETSC_DEFAULT,PETSC_DEFAULT,1,PETSC_DEFAULT);
-         KSPSetTolerances(subksp,1.e-3,PETSC_DEFAULT,PETSC_DEFAULT,PETSC_DEFAULT);
+         KSPSetTolerances(subksp,1.e-1,PETSC_DEFAULT,PETSC_DEFAULT,PETSC_DEFAULT);
          SNESLineSearchSetTolerances(subls,PETSC_DEFAULT,PETSC_DEFAULT,1.e-1,PETSC_DEFAULT,PETSC_DEFAULT,PETSC_DEFAULT);
       } else if (size > 1) {
          // newton rres < 0.1
