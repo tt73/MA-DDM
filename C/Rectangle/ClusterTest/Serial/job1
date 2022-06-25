@@ -20,8 +20,6 @@
 #SBATCH -N 1
 
 ## Modules needed for PETSc
-module load gnu8
-module load mpich
-module load petsc
+module load gnu8 mpich petsc
 
-bash test1.sh > out_test1
+bash test1.sh > out_test1b

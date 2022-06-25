@@ -302,7 +302,7 @@ int main(int argc,char **args) {
    SNESGetLineSearch(subsnes,&subls);     // get local linesearch
    SNESGetKSP(subsnes,&subksp);           // get local KSP
    KSPGetPC(subksp,&subpc);               // get local PC
-   KSPSetType(subksp,KSPGMRES);  // rtol = 1e-5 by default
+   KSPSetType(subksp,KSPDGMRES);  // rtol = 1e-5 by default
    PCSetType(subpc,PCEISENSTAT); // fast accurate linear solver combo
 
    /* Tuning Local the Solve - - - - - - - - - - - - - - - - - - - - - - - - -
