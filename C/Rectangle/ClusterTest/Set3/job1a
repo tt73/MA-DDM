@@ -3,7 +3,7 @@
 # Submit this by typing `sbatch shjob`
 
 ## NAMING
-#SBATCH -J j1
+#SBATCH -J set3
 #SBATCH -p public
 #SBATCH -o test.output
 #SBATCH -e test.output
@@ -21,12 +21,6 @@
 #SBATCH --mem=16G
 #SBATCH -N 4
 
-module load gnu8
-module load mpich
-module load petsc
+module load gnu8 mpich petsc
 
-bash test4.sh > out4
-
-bash test5.sh > out5
-
-bash test6.sh > out6
+bash test4e.sh > out4e
