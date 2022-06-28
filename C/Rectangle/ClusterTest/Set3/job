@@ -1,6 +1,6 @@
 #!/bin/bash -l
 # This is a job submission file on the njit cluster Stheno.
-# Submit this by typing `sbatch shjob`
+# Submit this by typing `sbatch job`
 
 ## NAMING
 #SBATCH -J set3
@@ -23,4 +23,4 @@
 
 module load gnu8 mpich petsc
 
-bash test4e.sh > out4e
+bash test4b.sh > out4b

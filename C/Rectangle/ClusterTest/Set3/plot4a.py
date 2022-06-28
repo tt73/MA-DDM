@@ -37,33 +37,29 @@ print("problem 3")
 print(times[:,:,2])
 print(iters[:,:,2])
 
-fig = plt.figure(figsize=(3, 3))
+fig = plt.figure(figsize=(6, 6))
 ax1=fig.add_subplot(111, projection='3d')
-ax1.set_xlabel('Snes rtol', labelpad=10)
+ax1.set_xlabel('SNES rtol', labelpad=10)
 ax1.set_ylabel('KSP rtol', labelpad=10)
 ax1.set_zlabel('Runtime')
-xpos = np.arange(xlabels.shape[0])
-ypos = np.arange(ylabels.shape[0])
 
-xposM, yposM = np.meshgrid(xpos, ypos, copy=False)
+_x = np.arange(N)
+_y = np.arange(M)
+_xx, _yy = np.meshgrid(_x, _y)
+x, y = _xx.ravel(), _yy.ravel()
+z0 = np.zeros_like(x)
+dx = 1
+dy = 1
 
-zpos=result
-zpos = zpos.ravel()
-
-dx=0.5
-dy=0.5
-dz=zpos
-
-ax1.w_xaxis.set_ticks(xpos + dx/2.)
-ax1.w_xaxis.set_ticklabels(xlabels)
-
-ax1.w_yaxis.set_ticks(ypos + dy/2.)
-ax1.w_yaxis.set_ticklabels(ylabels)
-
-values = np.linspace(0.2, 1., xposM.ravel().shape[0])
-colors = cm.rainbow(values)
-ax1.bar3d(xposM.ravel(), yposM.ravel(), dz*0, dx, dy, dz, color=colors)
+# ax1.bar3d(x,y,z0,dx,dy,times[:,:,0].ravel(),color=colors[0])
+# ax1.bar3d(x+0.2,y,z0,dx,dy,times[:,:,1].ravel(),color=colors[1])
+ax1.bar3d(x+0.4,y,z0,dx,dy,times[:,:,2].ravel(),color=colors[2],alpha=0.8)
+names = ['1e-4','1e-3','1e-2','1e-1']
+plt.xticks(_x,names)
+plt.yticks(_y,names)
+plt.savefig('rtols.png',dpi=300,bbox_inches='tight')
 plt.show()
+
 
 # fig = plt.figure(1, figsize=(6,6))
 # plt.plot(Ns,times[0],'-', label='P1',marker='o',mfc='w',color=colors[0],ms=8)
@@ -78,6 +74,6 @@ plt.show()
 # plt.ylabel('Time (sec)')
 # plt.yticks(np.arange(0,1200,120))
 # plt.legend(fontsize=14)
-# plt.savefig('serial.png',dpi=300,bbox_inches='tight')
 # plt.show()
+
 
