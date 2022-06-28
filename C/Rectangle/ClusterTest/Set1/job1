@@ -3,7 +3,7 @@
 # Submit this by typing `sbatch shjob`
 
 ## NAMING
-#SBATCH -J j2
+#SBATCH -J j3
 #SBATCH -p public
 #SBATCH -o test.output
 #SBATCH -e test.output
@@ -19,10 +19,10 @@
 ## RUNTIME  HOURS:MIN:SEC and MEMORY
 #SBATCH -t 8:0:0
 #SBATCH --mem=16G
-#SBATCH -N 2
+#SBATCH -N 9
 
 module load gnu8
 module load mpich
 module load petsc
 
-bash test2_N.sh > out_test2_N
+bash test1.sh > out1

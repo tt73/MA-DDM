@@ -37,6 +37,34 @@ print("problem 3")
 print(times[:,:,2])
 print(iters[:,:,2])
 
+fig = plt.figure(figsize=(3, 3))
+ax1=fig.add_subplot(111, projection='3d')
+ax1.set_xlabel('Snes rtol', labelpad=10)
+ax1.set_ylabel('KSP rtol', labelpad=10)
+ax1.set_zlabel('Runtime')
+xpos = np.arange(xlabels.shape[0])
+ypos = np.arange(ylabels.shape[0])
+
+xposM, yposM = np.meshgrid(xpos, ypos, copy=False)
+
+zpos=result
+zpos = zpos.ravel()
+
+dx=0.5
+dy=0.5
+dz=zpos
+
+ax1.w_xaxis.set_ticks(xpos + dx/2.)
+ax1.w_xaxis.set_ticklabels(xlabels)
+
+ax1.w_yaxis.set_ticks(ypos + dy/2.)
+ax1.w_yaxis.set_ticklabels(ylabels)
+
+values = np.linspace(0.2, 1., xposM.ravel().shape[0])
+colors = cm.rainbow(values)
+ax1.bar3d(xposM.ravel(), yposM.ravel(), dz*0, dx, dy, dz, color=colors)
+plt.show()
+
 # fig = plt.figure(1, figsize=(6,6))
 # plt.plot(Ns,times[0],'-', label='P1',marker='o',mfc='w',color=colors[0],ms=8)
 # plt.plot(Ns,times[1],':', label='P2',marker='s',mfc='w',color=colors[1],ms=8)
