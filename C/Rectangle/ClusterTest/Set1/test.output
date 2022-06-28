@@ -22,3 +22,6 @@ Currently Loaded Modules:
 
  
 
+srun: Job step aborted: Waiting up to 62 seconds for job step to finish.
+slurmstepd: error: *** STEP 105813.29 ON node001 CANCELLED AT 2022-06-28T16:54:50 ***
+slurmstepd: error: *** JOB 105813 ON node001 CANCELLED AT 2022-06-28T16:54:50 ***
