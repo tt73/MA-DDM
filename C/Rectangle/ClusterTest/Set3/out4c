@@ -14,7 +14,6 @@ base of comparison - DGMRES + eisenstat:
 *Error:   |u-uexact|_inf = 2.657e-04, |u-uexact|_h = 5.966e-05
 *WTime:   17.181494
 *Iters:   70
-
 GMRES + multigrid:
 *Problem: ex1 on domain [-1.00,1.00]x[-1.00,1.00] with 200x200 point 2D grid
 *Params:  Nd = 4, width = 5, eps = 0.002, op = 0.10
@@ -31,7 +30,6 @@ GMRES + multigrid:
 *Error:   |u-uexact|_inf = 2.657e-04, |u-uexact|_h = 5.931e-05
 *WTime:   34.111926
 *Iters:   52
-
 GMRES + jacobi:
 *Problem: ex1 on domain [-1.00,1.00]x[-1.00,1.00] with 200x200 point 2D grid
 *Params:  Nd = 4, width = 5, eps = 0.002, op = 0.10
@@ -48,7 +46,6 @@ GMRES + jacobi:
 *Error:   |u-uexact|_inf = 2.657e-04, |u-uexact|_h = 5.969e-05
 *WTime:   32.890069
 *Iters:   73
-
 GMRES + SOR:
 *Problem: ex1 on domain [-1.00,1.00]x[-1.00,1.00] with 200x200 point 2D grid
 *Params:  Nd = 4, width = 5, eps = 0.002, op = 0.10
@@ -65,7 +62,6 @@ GMRES + SOR:
 *Error:   |u-uexact|_inf = 2.657e-04, |u-uexact|_h = 5.982e-05
 *WTime:   23.340958
 *Iters:   55
-
 PFGMRES:
 *Problem: ex1 on domain [-1.00,1.00]x[-1.00,1.00] with 200x200 point 2D grid
 *Params:  Nd = 4, width = 5, eps = 0.002, op = 0.10
@@ -82,7 +78,6 @@ PFGMRES:
 *Error:   |u-uexact|_inf = 2.657e-04, |u-uexact|_h = 5.965e-05
 *WTime:   19.657130
 *Iters:   77
-
 Chebyshev:
 *Problem: ex1 on domain [-1.00,1.00]x[-1.00,1.00] with 200x200 point 2D grid
 *Params:  Nd = 4, width = 5, eps = 0.002, op = 0.10
@@ -99,7 +94,6 @@ Chebyshev:
 *Error:   |u-uexact|_inf = 2.657e-04, |u-uexact|_h = 5.997e-05
 *WTime:   33.274038
 *Iters:   58
-
 GCR:
 *Problem: ex1 on domain [-1.00,1.00]x[-1.00,1.00] with 200x200 point 2D grid
 *Params:  Nd = 4, width = 5, eps = 0.002, op = 0.10
@@ -116,7 +110,6 @@ GCR:
 *Error:   |u-uexact|_inf = 2.657e-04, |u-uexact|_h = 5.967e-05
 *WTime:   20.212742
 *Iters:   76
-
 LGMRES:
 *Problem: ex1 on domain [-1.00,1.00]x[-1.00,1.00] with 200x200 point 2D grid
 *Params:  Nd = 4, width = 5, eps = 0.002, op = 0.10
@@ -133,7 +126,6 @@ LGMRES:
 *Error:   |u-uexact|_inf = 2.657e-04, |u-uexact|_h = 5.966e-05
 *WTime:   17.080672
 *Iters:   70
-
 BCGSL:
 *Problem: ex1 on domain [-1.00,1.00]x[-1.00,1.00] with 200x200 point 2D grid
 *Params:  Nd = 4, width = 5, eps = 0.002, op = 0.10
