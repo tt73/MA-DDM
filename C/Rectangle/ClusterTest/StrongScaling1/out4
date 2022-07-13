@@ -1,0 +1,37 @@
+Starting /home/t/tt73/.bash_profile ... standard AFS bash profile
+
+========================
+Home directory : /home/t/tt73 is not in AFS -- skipping quota check
+========================
+
+On host node003 :
+	 15:25:02 up 89 days, 23:10,  0 users,  load average: 0.00, 0.05, 0.23
+
+=== === === Your Kerberos ticket and AFS token status === === ===
+klist: No credentials cache found (filename: /tmp/krb5cc_90502_LjayDN9NGg)
+Kerberos : 
+AFS      : 
+
+Loading default modules ...
+Create file : "/home/t/tt73/.modules" to customize.
+
+
+Currently Loaded Modules:
+  1) python/3.8   3) mpich/3.3.1    5) openblas/0.3.7    7) petsc/3.12.0
+  2) gnu8/8.3.0   4) phdf5/1.10.5   6) scalapack/2.0.2
+
+ 
+
+*Problem: ex1 on domain [-1.00,1.00]x[-1.00,1.00] with 300x300 point 2D grid
+*Params:  Nd = 4, width = 6, eps = 0.002, op = 0.10
+*Error:   |u-uexact|_inf = 5.070e-03, |u-uexact|_h = 1.534e-03
+*WTime:   336.700003
+*Iters:   30
+*Problem: ex2 on domain [0.00,1.00]x[0.00,1.00] with 300x300 point 2D grid
+*Params:  Nd = 4, width = 7, eps = 0.001, op = 0.10
+*Error:   |u-uexact|_inf = 1.401e-04, |u-uexact|_h = 2.545e-05
+*WTime:   461.929878
+*Iters:   23
+srun: Job step aborted: Waiting up to 62 seconds for job step to finish.
+slurmstepd: error: *** STEP 106193.2 ON node003 CANCELLED AT 2022-07-12T15:40:26 ***
+slurmstepd: error: *** JOB 106193 ON node003 CANCELLED AT 2022-07-12T15:40:26 ***

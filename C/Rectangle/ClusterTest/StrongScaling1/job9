@@ -1,0 +1,19 @@
+#!/bin/bash -l
+#SBATCH -J j9
+#SBATCH -p public
+#SBATCH -o out9
+#SBATCH -p dms-cpu
+#SBATCH --mail-user tt73@njit.edu
+#SBATCH -A tt73
+#SBATCH -t 8:0:0
+#SBATCH --mem=16G
+#SBATCH --nodes 9
+#SBATCH --ntasks 9
+#SBATCH --exclusive
+module load gnu8
+module load mpich
+module load petsc
+N=300
+mpirun ../../maddm -N $N -problem ex1 -snes_max_it 500
+mpirun ../../maddm -N $N -problem ex2 -snes_max_it 500
+mpirun ../../maddm -N $N -problem ex3 -snes_max_it 500
