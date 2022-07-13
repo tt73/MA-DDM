@@ -1,7 +1,7 @@
 import numpy as np
 import subprocess
 
-nps = np.array([2,4,6,8,9])
+nps = np.array([1,2,4,6,8,9])
 
 # loop to create job files
 for i in range(len(nps)):
