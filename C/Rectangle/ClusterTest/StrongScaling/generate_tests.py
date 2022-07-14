@@ -20,7 +20,7 @@ for i in range(len(nps)):
    f.write("#SBATCH --ntasks {:d}\n".format(nps[i]))
    # f.write("#SBATCH --exclusive\n")
    f.write("module load gnu8 mpich petsc\n")
-   f.write("N=200\n")
+   f.write("N=300\n")
    f.write("mpirun ../../maddm -N $N -problem ex1 -sin >> out{:d}\n".format(nps[i]))
    f.write("mpirun ../../maddm -N $N -problem ex2 -sin >> out{:d}\n".format(nps[i]))
    f.write("mpirun ../../maddm -N $N -problem ex3 -sin >> out{:d}\n".format(nps[i]))
