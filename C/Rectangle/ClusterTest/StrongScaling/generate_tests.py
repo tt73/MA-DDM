@@ -1,7 +1,7 @@
 import numpy as np
 import subprocess
 
-nps = np.array([1,2,4,6,8,9])
+nps = np.array([2,4,6,8,9])
 
 # loop to create job files
 for i in range(len(nps)):
@@ -10,7 +10,7 @@ for i in range(len(nps)):
    f.write("#!/bin/bash -l\n")
    f.write("#SBATCH -J j{:d}\n".format(nps[i]))
    f.write("#SBATCH -p public\n")
-   f.write("#SBATCH -o out{:d}\n".format(nps[i]))
+   f.write("#SBATCH -o slurmout{:d}\n".format(nps[i]))
    f.write("#SBATCH -p dms-cpu\n")
    f.write("#SBATCH --mail-user tt73@njit.edu\n")
    f.write("#SBATCH -A tt73\n")
@@ -21,7 +21,7 @@ for i in range(len(nps)):
    # f.write("#SBATCH --exclusive\n")
    f.write("module load gnu8 mpich petsc\n")
    f.write("N=300\n")
-   f.write("mpirun ../../maddm -N $N -problem ex1 -aspin\n")
-   f.write("mpirun ../../maddm -N $N -problem ex2 -aspin\n")
-   f.write("mpirun ../../maddm -N $N -problem ex3 -aspin\n")
+   f.write("mpirun ../../maddm -N $N -problem ex1 -aspin > out{:d}\n".format(nps[i]))
+   f.write("mpirun ../../maddm -N $N -problem ex2 -aspin > out{:d}\n".format(nps[i]))
+   f.write("mpirun ../../maddm -N $N -problem ex3 -aspin > out{:d}\n".format(nps[i]))
    f.close()
