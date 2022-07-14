@@ -11,16 +11,17 @@ static char help[] = "Solve the Monge-Ampere equation for one of three example p
 #include <petsc.h>
 #include "MAfunctions.h"
 
-//
 extern PetscErrorCode Form1DUExact(DMDALocalInfo*, Vec, MACtx*);
 extern PetscErrorCode Form2DUExact(DMDALocalInfo*, Vec, MACtx*);
 extern PetscErrorCode Form3DUExact(DMDALocalInfo*, Vec, MACtx*);
 extern PetscErrorCode ComputeRHS(DMDALocalInfo*, Vec, MACtx*);
 
-/*
+/* Problem 1 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+   Smooth example.
    Solution    u(x) = exp(|x|^2/2), for x in Rn
    RHS: Det(D^2u(x)) = (1+|x|^2)*exp(n/2*|x|^2)
-*/
+   Defualt domain: [-1,-1]^2
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 PetscErrorCode u_exact_1D_ex1(PetscReal x, PetscReal y, PetscReal z, void *ctx, PetscReal * u) {
    u[0] = PetscExpReal(x*x/2.0);
    return 0;
@@ -33,7 +34,6 @@ PetscErrorCode u_exact_3D_ex1(PetscReal x, PetscReal y, PetscReal z, void *ctx, 
    u[0] = PetscExpReal((x*x + y*y + z*z)/2.0);
    return 0;
 }
-// right-hand-side functions
 PetscErrorCode f_rhs_1D_ex1(PetscReal x, PetscReal y, PetscReal z, void *ctx, PetscReal * f) {
    f[0] = (1.0 + x*x)*PetscExpReal(x*x/2.0);
    return 0;
@@ -47,10 +47,12 @@ PetscErrorCode f_rhs_3D_ex1(PetscReal x, PetscReal y, PetscReal z, void *ctx, Pe
    return 0;
 }
 
-/*
+/* Problem 2 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+   Fully degenerate example.
    Solution    u(x) = 1/2 max(|x-0.5| - 0.2,0)^2        , for x in Rn
    RHS: Det(D^2u(x)) = max(1-0.2/|x-0.5|, 0)
-*/
+   Defualt domain: [0,-1]^2
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 PetscErrorCode u_exact_1D_ex2(PetscReal x, PetscReal y, PetscReal z, void *ctx, PetscReal * u) {
    u[0] = 0.5*PetscPowReal(PetscMax(PetscAbsReal(x-0.5)-0.2,0),2);
    return 0;
@@ -63,7 +65,6 @@ PetscErrorCode u_exact_3D_ex2(PetscReal x, PetscReal y, PetscReal z, void *ctx, 
    u[0] = 0.5*PetscPowReal(PetscMax(PetscSqrtReal(PetscSqr(x-0.5)+PetscSqr(y-0.5)+PetscSqr(z-0.5))-0.2,0),2);
    return 0;
 }
-// RHS
 PetscErrorCode f_rhs_1D_ex2(PetscReal x, PetscReal y, PetscReal z, void *ctx, PetscReal * f) {
    f[0] = (x<=0.3 || x>=0.7) ? 1.0 : 0.0;
    return 0;
@@ -77,10 +78,12 @@ PetscErrorCode f_rhs_3D_ex2(PetscReal x, PetscReal y, PetscReal z, void *ctx, Pe
    return 0;
 }
 
-/*
+/* Problem 3 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+   Semi-degenerate with gradient blow-up on the boundary.
    Solution    u(x) = -sqrt(2 - |x|^2),              for x in Rn
    RHS: Det(D^2u(x)) = 2/(2- |x|^2)^p(n)
-*/
+   Defualt domain: [0,-1]^2
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 PetscErrorCode u_exact_1D_ex3(PetscReal x, PetscReal y, PetscReal z, void *ctx, PetscReal * u) {
    u[0] = -PetscSqrtReal(2.0 - x*x);
    return 0;
@@ -94,7 +97,6 @@ PetscErrorCode u_exact_3D_ex3(PetscReal x, PetscReal y, PetscReal z, void *ctx, 
    u[0] = -PetscSqrtReal(2.0 - x*x - y*y - z*z);
    return 0;
 }
-// RHS
 PetscErrorCode f_rhs_1D_ex3(PetscReal x, PetscReal y, PetscReal z, void *ctx, PetscReal * f) {
    f[0] = 2.0/PetscPowReal(2.0-x*x,1.5);
    return 0;
@@ -151,11 +153,11 @@ int main(int argc,char **args) {
    PC             subpc;
    DMDALocalInfo  info;
    Vec            u_initial,u,u_exact,err;
-   MACtx          user; // see header file
+   MACtx          user; // monge-ampere user context. see header file
    ExactFcnVec    getuexact;
    InitialType    initial;
    ProblemType    problem;
-   PetscBool      debug,set_N,set_eps,set_width,printSol,fast,mixed;
+   PetscBool      debug,set_N,set_eps,set_width,printSol,fast,mixed,htn,sin,aspin;
    PetscReal      h_eff,hx,hy,eps,errinf,normconst2h,err2h,op;
    char           gridstr[99];
    PetscInt       dim,width,N,Nx,Ny,order,its;
@@ -183,6 +185,10 @@ int main(int argc,char **args) {
    debug       = PETSC_FALSE; // option to print out extra info
    printSol    = PETSC_FALSE; // option to generate MATLAB solution scripts
    mixed       = PETSC_FALSE; // option to use different solver on each subdomain
+   htn         = PETSC_FALSE; // option to use high-tolerance Newton
+   sin         = PETSC_FALSE; // option to use single-iteration Newton
+   aspin       = PETSC_FALSE; // option to use additive schwarz preconditioned inexact newton
+
    ierr = PetscOptionsBegin(PETSC_COMM_WORLD,"","options for maddm.c",""); CHKERRQ(ierr);
    ierr = PetscOptionsInt("-dim","dimension of problem (=1,2,3 only)","maddm.c",dim,&dim,NULL);CHKERRQ(ierr);
    ierr = PetscOptionsInt("-N","make the interior N by N","maddm.c",N,&N,&set_N);CHKERRQ(ierr);
@@ -193,6 +199,9 @@ int main(int argc,char **args) {
    ierr = PetscOptionsBool("-debug","print out extra info","maddm.c",debug,&debug,NULL);CHKERRQ(ierr);
    ierr = PetscOptionsBool("-sol","generate MATLAB solution files","maddm.c",printSol,&printSol,NULL);CHKERRQ(ierr);
    ierr = PetscOptionsBool("-mixed","sub-index the local domains and use a different solver on the last subdomain","maddm.c",mixed,&mixed,NULL);CHKERRQ(ierr);
+   ierr = PetscOptionsBool("-htn","option to use high-tolerance Newton (HTN)","maddm.c",htn,&htn,NULL);CHKERRQ(ierr);
+   ierr = PetscOptionsBool("-sin","option to use single-iteration Newton (HTN)","maddm.c",sin,&sin,NULL);CHKERRQ(ierr);
+   ierr = PetscOptionsBool("-aspin","option to use additive schwarz preconditioned inexact newton (ASPIN)","maddm.c",aspin,&aspin,NULL);CHKERRQ(ierr);
    ierr = PetscOptionsEnum("-init_type","type of initial iterate","maddm.c",InitialTypes,(PetscEnum)initial,(PetscEnum*)&initial,NULL); CHKERRQ(ierr);
    ierr = PetscOptionsInt("-width","stencil width for MA discretization","maddm.c",width,&width,&set_width);CHKERRQ(ierr);
    ierr = PetscOptionsReal("-eps","regularization constant epsilon","maddm.c",eps,&eps,&set_eps);CHKERRQ(ierr);
@@ -291,9 +300,9 @@ int main(int argc,char **args) {
       The following lines of code extracts the SNES, LS, KSP, and PC
       objects from the local subsolver given to the current rank.
 
-      By default, we set the local solver to use GMRES and use an
-      efficient SSOR preconditioner. This was found to be a fast,
-      reliable linear solver combo.
+      By default, we set the local solver to use the deflated GMRES and use an
+      efficient SSOR preconditioner. This was experimentally found to be a
+      fast and reliable linear solver combo.
    - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
    ierr = SNESSetUp(snes); CHKERRQ(ierr); // initialize subdomains
    MPI_Comm_size(PETSC_COMM_WORLD,&size); // get # of processors
@@ -303,17 +312,43 @@ int main(int argc,char **args) {
    SNESGetKSP(subsnes,&subksp);           // get local KSP
    KSPGetPC(subksp,&subpc);               // get local PC
    KSPSetType(subksp,KSPDGMRES);  // rtol = 1e-5 by default
-   PCSetType(subpc,PCEISENSTAT); // fast accurate linear solver combo
+   PCSetType(subpc,PCEISENSTAT);  // fast accurate linear solver combo
+
+   /* Serial Code - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+      If the code is run serially, there is only 1 subdomain.
+      In this case, NASM is equivalent to Newton's method.
+      The default SNES iterations is 50. We increase it to avoid needless restarting.
+      You need to add -sub_snes_monitor to view the residues of the method.
+   - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+   if (size==1) { // only 1 subdomain - increase defualt iterations which is only 50
+      SNESSetTolerances(subsnes,PETSC_DEFAULT,PETSC_DEFAULT,PETSC_DEFAULT,10000,PETSC_DEFAULT);
+   }
 
    /* Tuning Local the Solve - - - - - - - - - - - - - - - - - - - - - - - - -
+      In order to get speedup with NASM, we need to under-solve the local
+      Newton, linesearch, and GMRES options.
 
+      There's two recommended options: the high-tolerance Newton (HTN) and
+      the single-iteration Newton (SIN). The HTN changes the Newton tolerance
+      and the GMRES tolerance both to 1e-1. The SIN caps the max number of
+      Newton iterations to one and sets the GMRES tolerance to 1e-2.
+
+      For both methods, we set the linesearch to 2nd order BT. The 3rd order
+      BT does a while loop to meet a convergence criterion which can be costly.
    - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+   if (sin) {
+      SNESSetTolerances(subsnes,PETSC_DEFAULT,PETSC_DEFAULT,PETSC_DEFAULT,1,PETSC_DEFAULT);
+      KSPSetTolerances(subksp,1.e-2,PETSC_DEFAULT,PETSC_DEFAULT,PETSC_DEFAULT);
+      SNESLineSearchSetType(subls,SNESLINESEARCHBT);
+      SNESLineSearchSetOrder(subls,2);
+   } else if(htn) {
+      SNESSetTolerances(subsnes,PETSC_DEFAULT,1.e-1,PETSC_DEFAULT,PETSC_DEFAULT,PETSC_DEFAULT);
+      KSPSetTolerances(subksp,1.e-2,PETSC_DEFAULT,PETSC_DEFAULT,PETSC_DEFAULT);
+      SNESLineSearchSetType(subls,SNESLINESEARCHBT);
+      SNESLineSearchSetOrder(subls,2);
+   }
 
-   // if (size==1) { // only 1 subdomain
-   //    // gmres rres < 0.01
-   //    // ls rres < 0.01
-   //    KSPSetTolerances(subksp,1.e-2,PETSC_DEFAULT,PETSC_DEFAULT,PETSC_DEFAULT);
-   //    SNESLineSearchSetTolerances(subls,PETSC_DEFAULT,PETSC_DEFAULT,1.e-2,PETSC_DEFAULT,PETSC_DEFAULT,PETSC_DEFAULT);
+
    // } else if (rank<size-1) { // default settings
    //    // newton rres < 0.01
    //    // gmres rres < 0.01
@@ -353,13 +388,38 @@ int main(int argc,char **args) {
    //    PCSetType(subpc,PCEISENSTAT);
    // }
 
+   /* ASPIN - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+      Additive Schwarz Preconditioned Inexact Newton is a completely different
+      from NASM. It's using Newton as the global method and using NASM as
+      a preconditioner. The default settings are terrible so I made these
+      options available.
+   - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+   if(aspin) {
+      ierr = SNESSetType(snes,SNESASPIN); CHKERRQ(ierr);
+      ierr = SNESGetNPC(snes,&subsnes);
+      // ierr = SNESGetLineSearch(subsnes,&subls); // get local linesearch, default is cubic BT
+      // ierr = SNESGetKSP(subsnes,&subksp);       // get local KSP, default is preonly
+      // ierr = KSPGetPC(subksp,&subpc);           // get local PC, default is lu
+      // ierr = KSPSetType(subksp,KSPDGMRES);      // change KSP to DGMRES
+      // ierr = PCSetType(subpc,PCEISENSTAT);      // change PC to eisenstat
+      // ierr = SNESLineSearchSetOrder(subls,2);   // change BT order to quadratic
+      // ierr = SNESSetNPC(snes,subsnes);          // apply the changes
+
+      PetscOptionsSetValue(NULL,"-npc_sub_ksp_type","fgmres");
+      PetscOptionsSetValue(NULL,"-npc_sub_pc_type","ilu");
+      PetscOptionsSetValue(NULL,"-npc_sub_snes_linesearch_order","2");
+      // PetscOptionsSetValue(NULL,"-npc_sub_snes_rtol","1e-1");
+      // PetscOptionsSetValue(NULL,"-npc_sub_ksp_rtol","1e-1");
+      // PetscOptionsSetValue(NULL,"-npc_sub_snes_max_it","1");
+   }
+
    if (mixed) { // each subdomain gets their own indexed prefix
       char prefix[10];
       sprintf(prefix,"sub_%d_",rank);
       SNESSetOptionsPrefix(subsnes,prefix);
    }
-   ierr = SNESSetFromOptions(subsnes); CHKERRQ(ierr);
    ierr = SNESSetFromOptions(snes); CHKERRQ(ierr);
+   ierr = SNESSetFromOptions(subsnes); CHKERRQ(ierr);
    /* Wide-stencil params - - - - - - - - - - - - - - - - - - - - - - - - - - -
       Compute forward stencil directions for the determinant
    - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */

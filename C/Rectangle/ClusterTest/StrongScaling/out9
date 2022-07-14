@@ -1,0 +1,39 @@
+Starting /home/t/tt73/.bash_profile ... standard AFS bash profile
+
+========================
+Home directory : /home/t/tt73 is not in AFS -- skipping quota check
+========================
+
+On host node001 :
+	 14:38:12 up 344 days,  5:51,  0 users,  load average: 0.00, 0.01, 0.05
+
+=== === === Your Kerberos ticket and AFS token status === === ===
+klist: No credentials cache found (filename: /tmp/krb5cc_90502_ZoH7to1Xif)
+Kerberos : 
+AFS      : 
+
+Loading default modules ...
+Create file : "/home/t/tt73/.modules" to customize.
+
+
+Currently Loaded Modules:
+  1) gnu8/8.3.0    3) phdf5/1.10.5     5) scalapack/2.0.2   7) python/3.8
+  2) mpich/3.3.1   4) openblas/0.3.7   6) petsc/3.12.0
+
+ 
+
+*Problem: ex1 on domain [-1.00,1.00]x[-1.00,1.00] with 300x300 point 2D grid
+*Params:  Nd = 9, width = 6, eps = 0.002, op = 0.10
+*Error:   |u-uexact|_inf = 5.713e-04, |u-uexact|_h = 3.150e-04
+*WTime:   60.461438
+*Iters:   7
+*Problem: ex2 on domain [0.00,1.00]x[0.00,1.00] with 300x300 point 2D grid
+*Params:  Nd = 9, width = 7, eps = 0.001, op = 0.10
+*Error:   |u-uexact|_inf = 9.269e-05, |u-uexact|_h = 5.086e-05
+*WTime:   164.746437
+*Iters:   13
+*Problem: ex3 on domain [0.00,1.00]x[0.00,1.00] with 300x300 point 2D grid
+*Params:  Nd = 9, width = 7, eps = 0.001, op = 0.10
+*Error:   |u-uexact|_inf = 1.208e-04, |u-uexact|_h = 4.885e-05
+*WTime:   141.034056
+*Iters:   10
