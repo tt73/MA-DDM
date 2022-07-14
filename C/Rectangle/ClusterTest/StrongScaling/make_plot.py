@@ -25,8 +25,8 @@ for i in range(n):
    f.close()
 
 
-base_times = np.array([22.089607, 7.997088, 36.583053]) # N = 200
-# base_times = np.array([97.899028, 29.104737, 176.157447]) # N = 300
+# base_times = np.array([22.089607, 7.997088, 36.583053]) # N = 200
+base_times = np.array([97.899028, 29.104737, 176.157447]) # N = 300
 
 
 
@@ -42,9 +42,9 @@ plt.rcParams.update({'font.size' : 14})
 colors=sns.color_palette("rocket",3)
 fig = plt.figure(1, figsize=(6,6))
 
-speedup1 = times[0]/base_times[0]
-speedup2 = times[1]/base_times[1]
-speedup3 = times[2]/base_times[2]
+speedup1 = base_times[0]/times[0]
+speedup2 = base_times[1]/times[1]
+speedup3 = base_times[2]/times[2]
 
 plt.plot(nps,speedup1,'-', label='P1',marker='o',mfc='w',color=colors[0],ms=8)
 plt.plot(nps,speedup2,':', label='P2',marker='s',mfc='w',color=colors[1],ms=8)
