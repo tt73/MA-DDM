@@ -8,9 +8,11 @@ for i in range(n):
    # loop over each of the 3 problems
    # read in the error, runtime, and iterations
    for i in range(3):
-      err = f.readline()
-      time = f.readline()
-      iter = f.readline()
+      f.readline() # skip
+      f.readline() # skip
+      err = f.readline().split()[-1]
+      time = f.readline().split()[-1]
+      iter = f.readline().split()[-1]
       print(err)
       print(time)
       print(iter)
@@ -18,7 +20,7 @@ for i in range(n):
    print("done with file ")
 
 
-base_times = np.array([12.2 10.1 123.12])
+base_times = np.array([60.2, 30.1, 123.12])
 
 
 # plot runtime vs Nd
