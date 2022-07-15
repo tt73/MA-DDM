@@ -14,3 +14,4 @@ N=300
 mpirun ../../maddm -N $N -problem ex1 -sin >> out2
 mpirun ../../maddm -N $N -problem ex2 -sin >> out2
 mpirun ../../maddm -N $N -problem ex3 -sin >> out2
+mpirun ../../maddm -N $N -problem ex4 -sin >> out2

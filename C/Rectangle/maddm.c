@@ -218,6 +218,7 @@ int main(int argc,char **args) {
    ierr = PetscOptionsInt("-Nx","number of interior nodes horizontally","maddm.c",Nx,&Nx,NULL);CHKERRQ(ierr);
    ierr = PetscOptionsInt("-Ny","number of interior nodes vertically","maddm.c",Ny,&Ny,NULL);CHKERRQ(ierr);
    ierr = PetscOptionsInt("-order","order of quadrature (default is 2)","maddm.c",order,&order,NULL);CHKERRQ(ierr);
+   ierr = PetscOptionsInt("-width","stencil width for MA discretization","maddm.c",width,&width,&set_width);CHKERRQ(ierr);
    ierr = PetscOptionsBool("-fast","use settings that are tuned to under-solve the local problems","maddm.c",fast,&fast,NULL);CHKERRQ(ierr);
    ierr = PetscOptionsBool("-debug","print out extra info","maddm.c",debug,&debug,NULL);CHKERRQ(ierr);
    ierr = PetscOptionsBool("-sol","generate MATLAB solution files","maddm.c",printSol,&printSol,NULL);CHKERRQ(ierr);
@@ -226,7 +227,6 @@ int main(int argc,char **args) {
    ierr = PetscOptionsBool("-sin","option to use single-iteration Newton (HTN)","maddm.c",sin,&sin,NULL);CHKERRQ(ierr);
    ierr = PetscOptionsBool("-aspin","option to use additive schwarz preconditioned inexact newton (ASPIN)","maddm.c",aspin,&aspin,NULL);CHKERRQ(ierr);
    ierr = PetscOptionsEnum("-init_type","type of initial iterate","maddm.c",InitialTypes,(PetscEnum)initial,(PetscEnum*)&initial,NULL); CHKERRQ(ierr);
-   ierr = PetscOptionsInt("-width","stencil width for MA discretization","maddm.c",width,&width,&set_width);CHKERRQ(ierr);
    ierr = PetscOptionsReal("-eps","regularization constant epsilon","maddm.c",eps,&eps,&set_eps);CHKERRQ(ierr);
    ierr = PetscOptionsReal("-op","domain overlap percentage (0.0 to 1.0)","maddm.c",op,&op,NULL);CHKERRQ(ierr);
    ierr = PetscOptionsEnum("-problem","problem type; (ex1, ex2, ex3, ex4)","maddm.c",ProblemTypes,(PetscEnum)problem,(PetscEnum*)&problem,NULL); CHKERRQ(ierr);
@@ -361,12 +361,12 @@ int main(int argc,char **args) {
    - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
    if (sin) {
       SNESSetTolerances(subsnes,PETSC_DEFAULT,PETSC_DEFAULT,PETSC_DEFAULT,1,PETSC_DEFAULT);
-      KSPSetTolerances(subksp,1.e-2,PETSC_DEFAULT,PETSC_DEFAULT,PETSC_DEFAULT);
+      KSPSetTolerances(subksp,1.e-1,PETSC_DEFAULT,PETSC_DEFAULT,PETSC_DEFAULT);
       SNESLineSearchSetType(subls,SNESLINESEARCHBT);
       SNESLineSearchSetOrder(subls,2);
    } else if(htn) {
       SNESSetTolerances(subsnes,PETSC_DEFAULT,1.e-1,PETSC_DEFAULT,PETSC_DEFAULT,PETSC_DEFAULT);
-      KSPSetTolerances(subksp,1.e-2,PETSC_DEFAULT,PETSC_DEFAULT,PETSC_DEFAULT);
+      KSPSetTolerances(subksp,1.e-1,PETSC_DEFAULT,PETSC_DEFAULT,PETSC_DEFAULT);
       SNESLineSearchSetType(subls,SNESLINESEARCHBT);
       SNESLineSearchSetOrder(subls,2);
    }

@@ -29,4 +29,5 @@ do
    ../../maddm -N $N -problem ex1 >> out1
    ../../maddm -N $N -problem ex2 >> out1
    ../../maddm -N $N -problem ex3 >> out1
+   ../../maddm -N $N -problem ex4 >> out1
 done
