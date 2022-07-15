@@ -1,12 +1,11 @@
 #!/bin/bash -l
-# This is a job submission file on the njit cluster Stheno.
-# Submit this by typing `sbatch shjob`
+# This is a redo of the size test in Set1 with single-iteration newton.
 
 ## NAMING
 #SBATCH -J j2
 #SBATCH -p public
-#SBATCH -o test.output
-#SBATCH -e test.output
+#SBATCH -o slurmout2
+
 
 ## partition/queue
 #SBATCH -p dms-cpu
@@ -27,7 +26,7 @@ np=4
 for N in {100,200,300,400}
 do
    printf "N = $N\n" >> out2
-   mpiexec -np $np ../../maddm -N $N -problem ex1 >> out2
-   mpiexec -np $np ../../maddm -N $N -problem ex2 >> out2
-   mpiexec -np $np ../../maddm -N $N -problem ex3 >> out2
+   mpiexec -np $np ../../maddm -N $N -problem ex1 -sin >> out2
+   mpiexec -np $np ../../maddm -N $N -problem ex2 -sin >> out2
+   mpiexec -np $np ../../maddm -N $N -problem ex3 -sin >> out2
 done

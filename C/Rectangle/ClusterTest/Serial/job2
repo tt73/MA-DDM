@@ -1,5 +1,6 @@
 #!/bin/bash -l
-## This
+## This is a serial test for the default Newton method in PETSc.
+## It uses the regular GMRES with ILU PC.
 
 ## Set the name of job
 #SBATCH -J serial2

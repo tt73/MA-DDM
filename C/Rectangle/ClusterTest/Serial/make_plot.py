@@ -5,7 +5,7 @@ import seaborn as sns
 plt.rcParams.update({'font.size' : 14})
 colors=sns.color_palette("rocket",3)
 
-f = open("out_test1b")
+f = open("out1")
 N = 9
 Ns = np.zeros(N,dtype=int)
 times = np.zeros((3,N),dtype=float)
@@ -30,7 +30,7 @@ plt.tick_params(direction='in',which='major', length=10, bottom=True, top=True, 
 plt.tick_params(labelbottom=True,labeltop=False,labelright=False,labelleft=True)
 plt.xlabel('$N$')
 plt.ylabel('Runtime (sec)')
-plt.yticks(np.arange(0,1200,120))
+plt.yticks(np.arange(0,1201,120))
 plt.legend(fontsize=14)
 plt.savefig('serial.png',dpi=300,bbox_inches='tight')
 plt.show()
