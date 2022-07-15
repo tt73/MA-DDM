@@ -418,8 +418,8 @@ int main(int argc,char **args) {
       sprintf(prefix,"sub_%d_",rank);
       SNESSetOptionsPrefix(subsnes,prefix);
    }
-   ierr = SNESSetFromOptions(snes); CHKERRQ(ierr);
    ierr = SNESSetFromOptions(subsnes); CHKERRQ(ierr);
+   ierr = SNESSetFromOptions(snes); CHKERRQ(ierr);
    /* Wide-stencil params - - - - - - - - - - - - - - - - - - - - - - - - - - -
       Compute forward stencil directions for the determinant
    - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */

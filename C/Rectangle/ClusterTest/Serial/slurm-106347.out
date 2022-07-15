@@ -1,0 +1,483 @@
+Starting /home/t/tt73/.bash_profile ... standard AFS bash profile
+
+========================
+Home directory : /home/t/tt73 is not in AFS -- skipping quota check
+========================
+
+On host node017 :
+	 10:23:30 up 490 days, 15:36,  0 users,  load average: 1.64, 1.83, 1.31
+
+=== === === Your Kerberos ticket and AFS token status === === ===
+klist: No credentials cache found (filename: /tmp/krb5cc_90502_erH55cf60v)
+Kerberos : 
+AFS      : 
+
+Loading default modules ...
+Create file : "/home/t/tt73/.modules" to customize.
+
+
+Currently Loaded Modules:
+  1) gnu8/8.3.0    3) phdf5/1.10.5     5) scalapack/2.0.2
+  2) mpich/3.3.1   4) openblas/0.3.7   6) petsc/3.12.0
+
+ 
+
+[0]PETSC ERROR: #1 PetscCommDuplicate() line 118 in /home/abuild/rpmbuild/BUILD/petsc-3.12.0/src/sys/objects/tagm.c
+[0]PETSC ERROR: #2 PetscHeaderCreate_Private() line 64 in /home/abuild/rpmbuild/BUILD/petsc-3.12.0/src/sys/objects/inherit.c
+[0]PETSC ERROR: #3 SNESLineSearchCreate() line 184 in /home/abuild/rpmbuild/BUILD/petsc-3.12.0/src/snes/linesearch/interface/linesearch.c
+[0]PETSC ERROR: #4 SNESGetLineSearch() line 5551 in /home/abuild/rpmbuild/BUILD/petsc-3.12.0/src/snes/interface/snes.c
+[0]PETSC ERROR: #5 SNESCreate_NEWTONLS() line 407 in /home/abuild/rpmbuild/BUILD/petsc-3.12.0/src/snes/impls/ls/ls.c
+[0]PETSC ERROR: #6 SNESSetType() line 4579 in /home/abuild/rpmbuild/BUILD/petsc-3.12.0/src/snes/interface/snes.c
+[0]PETSC ERROR: #7 SNESSetFromOptions() line 895 in /home/abuild/rpmbuild/BUILD/petsc-3.12.0/src/snes/interface/snes.c
+[0]PETSC ERROR: #8 main() line 422 in /home/t/tt73/MA-DDM/C/Rectangle/maddm.c
+[0]PETSC ERROR: PETSc Option Table entries:
+[0]PETSC ERROR: -N 100
+[0]PETSC ERROR: -problem ex1
+[0]PETSC ERROR: -snes_type newtonls
+[0]PETSC ERROR: ----------------End of Error Message -------send entire error message to petsc-maint@mcs.anl.gov----------
+application called MPI_Abort(MPI_COMM_WORLD, 1) - process 0
+[unset]: write_line error; fd=-1 buf=:cmd=abort exitcode=1
+:
+system msg for write_line failure : Bad file descriptor
+[0]PETSC ERROR: #1 PetscCommDuplicate() line 118 in /home/abuild/rpmbuild/BUILD/petsc-3.12.0/src/sys/objects/tagm.c
+[0]PETSC ERROR: #2 PetscHeaderCreate_Private() line 64 in /home/abuild/rpmbuild/BUILD/petsc-3.12.0/src/sys/objects/inherit.c
+[0]PETSC ERROR: #3 SNESLineSearchCreate() line 184 in /home/abuild/rpmbuild/BUILD/petsc-3.12.0/src/snes/linesearch/interface/linesearch.c
+[0]PETSC ERROR: #4 SNESGetLineSearch() line 5551 in /home/abuild/rpmbuild/BUILD/petsc-3.12.0/src/snes/interface/snes.c
+[0]PETSC ERROR: #5 SNESCreate_NEWTONLS() line 407 in /home/abuild/rpmbuild/BUILD/petsc-3.12.0/src/snes/impls/ls/ls.c
+[0]PETSC ERROR: #6 SNESSetType() line 4579 in /home/abuild/rpmbuild/BUILD/petsc-3.12.0/src/snes/interface/snes.c
+[0]PETSC ERROR: #7 SNESSetFromOptions() line 895 in /home/abuild/rpmbuild/BUILD/petsc-3.12.0/src/snes/interface/snes.c
+[0]PETSC ERROR: #8 main() line 422 in /home/t/tt73/MA-DDM/C/Rectangle/maddm.c
+[0]PETSC ERROR: PETSc Option Table entries:
+[0]PETSC ERROR: -N 100
+[0]PETSC ERROR: -problem ex2
+[0]PETSC ERROR: -snes_type newtonls
+[0]PETSC ERROR: ----------------End of Error Message -------send entire error message to petsc-maint@mcs.anl.gov----------
+application called MPI_Abort(MPI_COMM_WORLD, 1) - process 0
+[unset]: write_line error; fd=-1 buf=:cmd=abort exitcode=1
+:
+system msg for write_line failure : Bad file descriptor
+[0]PETSC ERROR: #1 PetscCommDuplicate() line 118 in /home/abuild/rpmbuild/BUILD/petsc-3.12.0/src/sys/objects/tagm.c
+[0]PETSC ERROR: #2 PetscHeaderCreate_Private() line 64 in /home/abuild/rpmbuild/BUILD/petsc-3.12.0/src/sys/objects/inherit.c
+[0]PETSC ERROR: #3 SNESLineSearchCreate() line 184 in /home/abuild/rpmbuild/BUILD/petsc-3.12.0/src/snes/linesearch/interface/linesearch.c
+[0]PETSC ERROR: #4 SNESGetLineSearch() line 5551 in /home/abuild/rpmbuild/BUILD/petsc-3.12.0/src/snes/interface/snes.c
+[0]PETSC ERROR: #5 SNESCreate_NEWTONLS() line 407 in /home/abuild/rpmbuild/BUILD/petsc-3.12.0/src/snes/impls/ls/ls.c
+[0]PETSC ERROR: #6 SNESSetType() line 4579 in /home/abuild/rpmbuild/BUILD/petsc-3.12.0/src/snes/interface/snes.c
+[0]PETSC ERROR: #7 SNESSetFromOptions() line 895 in /home/abuild/rpmbuild/BUILD/petsc-3.12.0/src/snes/interface/snes.c
+[0]PETSC ERROR: #8 main() line 422 in /home/t/tt73/MA-DDM/C/Rectangle/maddm.c
+[0]PETSC ERROR: PETSc Option Table entries:
+[0]PETSC ERROR: -N 100
+[0]PETSC ERROR: -problem ex3
+[0]PETSC ERROR: -snes_type newtonls
+[0]PETSC ERROR: ----------------End of Error Message -------send entire error message to petsc-maint@mcs.anl.gov----------
+application called MPI_Abort(MPI_COMM_WORLD, 1) - process 0
+[unset]: write_line error; fd=-1 buf=:cmd=abort exitcode=1
+:
+system msg for write_line failure : Bad file descriptor
+[0]PETSC ERROR: #1 PetscCommDuplicate() line 118 in /home/abuild/rpmbuild/BUILD/petsc-3.12.0/src/sys/objects/tagm.c
+[0]PETSC ERROR: #2 PetscHeaderCreate_Private() line 64 in /home/abuild/rpmbuild/BUILD/petsc-3.12.0/src/sys/objects/inherit.c
+[0]PETSC ERROR: #3 SNESLineSearchCreate() line 184 in /home/abuild/rpmbuild/BUILD/petsc-3.12.0/src/snes/linesearch/interface/linesearch.c
+[0]PETSC ERROR: #4 SNESGetLineSearch() line 5551 in /home/abuild/rpmbuild/BUILD/petsc-3.12.0/src/snes/interface/snes.c
+[0]PETSC ERROR: #5 SNESCreate_NEWTONLS() line 407 in /home/abuild/rpmbuild/BUILD/petsc-3.12.0/src/snes/impls/ls/ls.c
+[0]PETSC ERROR: #6 SNESSetType() line 4579 in /home/abuild/rpmbuild/BUILD/petsc-3.12.0/src/snes/interface/snes.c
+[0]PETSC ERROR: #7 SNESSetFromOptions() line 895 in /home/abuild/rpmbuild/BUILD/petsc-3.12.0/src/snes/interface/snes.c
+[0]PETSC ERROR: #8 main() line 422 in /home/t/tt73/MA-DDM/C/Rectangle/maddm.c
+[0]PETSC ERROR: PETSc Option Table entries:
+[0]PETSC ERROR: -N 150
+[0]PETSC ERROR: -problem ex1
+[0]PETSC ERROR: -snes_type newtonls
+[0]PETSC ERROR: ----------------End of Error Message -------send entire error message to petsc-maint@mcs.anl.gov----------
+application called MPI_Abort(MPI_COMM_WORLD, 1) - process 0
+[unset]: write_line error; fd=-1 buf=:cmd=abort exitcode=1
+:
+system msg for write_line failure : Bad file descriptor
+[0]PETSC ERROR: #1 PetscCommDuplicate() line 118 in /home/abuild/rpmbuild/BUILD/petsc-3.12.0/src/sys/objects/tagm.c
+[0]PETSC ERROR: #2 PetscHeaderCreate_Private() line 64 in /home/abuild/rpmbuild/BUILD/petsc-3.12.0/src/sys/objects/inherit.c
+[0]PETSC ERROR: #3 SNESLineSearchCreate() line 184 in /home/abuild/rpmbuild/BUILD/petsc-3.12.0/src/snes/linesearch/interface/linesearch.c
+[0]PETSC ERROR: #4 SNESGetLineSearch() line 5551 in /home/abuild/rpmbuild/BUILD/petsc-3.12.0/src/snes/interface/snes.c
+[0]PETSC ERROR: #5 SNESCreate_NEWTONLS() line 407 in /home/abuild/rpmbuild/BUILD/petsc-3.12.0/src/snes/impls/ls/ls.c
+[0]PETSC ERROR: #6 SNESSetType() line 4579 in /home/abuild/rpmbuild/BUILD/petsc-3.12.0/src/snes/interface/snes.c
+[0]PETSC ERROR: #7 SNESSetFromOptions() line 895 in /home/abuild/rpmbuild/BUILD/petsc-3.12.0/src/snes/interface/snes.c
+[0]PETSC ERROR: #8 main() line 422 in /home/t/tt73/MA-DDM/C/Rectangle/maddm.c
+[0]PETSC ERROR: PETSc Option Table entries:
+[0]PETSC ERROR: -N 150
+[0]PETSC ERROR: -problem ex2
+[0]PETSC ERROR: -snes_type newtonls
+[0]PETSC ERROR: ----------------End of Error Message -------send entire error message to petsc-maint@mcs.anl.gov----------
+application called MPI_Abort(MPI_COMM_WORLD, 1) - process 0
+[unset]: write_line error; fd=-1 buf=:cmd=abort exitcode=1
+:
+system msg for write_line failure : Bad file descriptor
+[0]PETSC ERROR: #1 PetscCommDuplicate() line 118 in /home/abuild/rpmbuild/BUILD/petsc-3.12.0/src/sys/objects/tagm.c
+[0]PETSC ERROR: #2 PetscHeaderCreate_Private() line 64 in /home/abuild/rpmbuild/BUILD/petsc-3.12.0/src/sys/objects/inherit.c
+[0]PETSC ERROR: #3 SNESLineSearchCreate() line 184 in /home/abuild/rpmbuild/BUILD/petsc-3.12.0/src/snes/linesearch/interface/linesearch.c
+[0]PETSC ERROR: #4 SNESGetLineSearch() line 5551 in /home/abuild/rpmbuild/BUILD/petsc-3.12.0/src/snes/interface/snes.c
+[0]PETSC ERROR: #5 SNESCreate_NEWTONLS() line 407 in /home/abuild/rpmbuild/BUILD/petsc-3.12.0/src/snes/impls/ls/ls.c
+[0]PETSC ERROR: #6 SNESSetType() line 4579 in /home/abuild/rpmbuild/BUILD/petsc-3.12.0/src/snes/interface/snes.c
+[0]PETSC ERROR: #7 SNESSetFromOptions() line 895 in /home/abuild/rpmbuild/BUILD/petsc-3.12.0/src/snes/interface/snes.c
+[0]PETSC ERROR: #8 main() line 422 in /home/t/tt73/MA-DDM/C/Rectangle/maddm.c
+[0]PETSC ERROR: PETSc Option Table entries:
+[0]PETSC ERROR: -N 150
+[0]PETSC ERROR: -problem ex3
+[0]PETSC ERROR: -snes_type newtonls
+[0]PETSC ERROR: ----------------End of Error Message -------send entire error message to petsc-maint@mcs.anl.gov----------
+application called MPI_Abort(MPI_COMM_WORLD, 1) - process 0
+[unset]: write_line error; fd=-1 buf=:cmd=abort exitcode=1
+:
+system msg for write_line failure : Bad file descriptor
+[0]PETSC ERROR: #1 PetscCommDuplicate() line 118 in /home/abuild/rpmbuild/BUILD/petsc-3.12.0/src/sys/objects/tagm.c
+[0]PETSC ERROR: #2 PetscHeaderCreate_Private() line 64 in /home/abuild/rpmbuild/BUILD/petsc-3.12.0/src/sys/objects/inherit.c
+[0]PETSC ERROR: #3 SNESLineSearchCreate() line 184 in /home/abuild/rpmbuild/BUILD/petsc-3.12.0/src/snes/linesearch/interface/linesearch.c
+[0]PETSC ERROR: #4 SNESGetLineSearch() line 5551 in /home/abuild/rpmbuild/BUILD/petsc-3.12.0/src/snes/interface/snes.c
+[0]PETSC ERROR: #5 SNESCreate_NEWTONLS() line 407 in /home/abuild/rpmbuild/BUILD/petsc-3.12.0/src/snes/impls/ls/ls.c
+[0]PETSC ERROR: #6 SNESSetType() line 4579 in /home/abuild/rpmbuild/BUILD/petsc-3.12.0/src/snes/interface/snes.c
+[0]PETSC ERROR: #7 SNESSetFromOptions() line 895 in /home/abuild/rpmbuild/BUILD/petsc-3.12.0/src/snes/interface/snes.c
+[0]PETSC ERROR: #8 main() line 422 in /home/t/tt73/MA-DDM/C/Rectangle/maddm.c
+[0]PETSC ERROR: PETSc Option Table entries:
+[0]PETSC ERROR: -N 200
+[0]PETSC ERROR: -problem ex1
+[0]PETSC ERROR: -snes_type newtonls
+[0]PETSC ERROR: ----------------End of Error Message -------send entire error message to petsc-maint@mcs.anl.gov----------
+application called MPI_Abort(MPI_COMM_WORLD, 1) - process 0
+[unset]: write_line error; fd=-1 buf=:cmd=abort exitcode=1
+:
+system msg for write_line failure : Bad file descriptor
+[0]PETSC ERROR: #1 PetscCommDuplicate() line 118 in /home/abuild/rpmbuild/BUILD/petsc-3.12.0/src/sys/objects/tagm.c
+[0]PETSC ERROR: #2 PetscHeaderCreate_Private() line 64 in /home/abuild/rpmbuild/BUILD/petsc-3.12.0/src/sys/objects/inherit.c
+[0]PETSC ERROR: #3 SNESLineSearchCreate() line 184 in /home/abuild/rpmbuild/BUILD/petsc-3.12.0/src/snes/linesearch/interface/linesearch.c
+[0]PETSC ERROR: #4 SNESGetLineSearch() line 5551 in /home/abuild/rpmbuild/BUILD/petsc-3.12.0/src/snes/interface/snes.c
+[0]PETSC ERROR: #5 SNESCreate_NEWTONLS() line 407 in /home/abuild/rpmbuild/BUILD/petsc-3.12.0/src/snes/impls/ls/ls.c
+[0]PETSC ERROR: #6 SNESSetType() line 4579 in /home/abuild/rpmbuild/BUILD/petsc-3.12.0/src/snes/interface/snes.c
+[0]PETSC ERROR: #7 SNESSetFromOptions() line 895 in /home/abuild/rpmbuild/BUILD/petsc-3.12.0/src/snes/interface/snes.c
+[0]PETSC ERROR: #8 main() line 422 in /home/t/tt73/MA-DDM/C/Rectangle/maddm.c
+[0]PETSC ERROR: PETSc Option Table entries:
+[0]PETSC ERROR: -N 200
+[0]PETSC ERROR: -problem ex2
+[0]PETSC ERROR: -snes_type newtonls
+[0]PETSC ERROR: ----------------End of Error Message -------send entire error message to petsc-maint@mcs.anl.gov----------
+application called MPI_Abort(MPI_COMM_WORLD, 1) - process 0
+[unset]: write_line error; fd=-1 buf=:cmd=abort exitcode=1
+:
+system msg for write_line failure : Bad file descriptor
+[0]PETSC ERROR: #1 PetscCommDuplicate() line 118 in /home/abuild/rpmbuild/BUILD/petsc-3.12.0/src/sys/objects/tagm.c
+[0]PETSC ERROR: #2 PetscHeaderCreate_Private() line 64 in /home/abuild/rpmbuild/BUILD/petsc-3.12.0/src/sys/objects/inherit.c
+[0]PETSC ERROR: #3 SNESLineSearchCreate() line 184 in /home/abuild/rpmbuild/BUILD/petsc-3.12.0/src/snes/linesearch/interface/linesearch.c
+[0]PETSC ERROR: #4 SNESGetLineSearch() line 5551 in /home/abuild/rpmbuild/BUILD/petsc-3.12.0/src/snes/interface/snes.c
+[0]PETSC ERROR: #5 SNESCreate_NEWTONLS() line 407 in /home/abuild/rpmbuild/BUILD/petsc-3.12.0/src/snes/impls/ls/ls.c
+[0]PETSC ERROR: #6 SNESSetType() line 4579 in /home/abuild/rpmbuild/BUILD/petsc-3.12.0/src/snes/interface/snes.c
+[0]PETSC ERROR: #7 SNESSetFromOptions() line 895 in /home/abuild/rpmbuild/BUILD/petsc-3.12.0/src/snes/interface/snes.c
+[0]PETSC ERROR: #8 main() line 422 in /home/t/tt73/MA-DDM/C/Rectangle/maddm.c
+[0]PETSC ERROR: PETSc Option Table entries:
+[0]PETSC ERROR: -N 200
+[0]PETSC ERROR: -problem ex3
+[0]PETSC ERROR: -snes_type newtonls
+[0]PETSC ERROR: ----------------End of Error Message -------send entire error message to petsc-maint@mcs.anl.gov----------
+application called MPI_Abort(MPI_COMM_WORLD, 1) - process 0
+[unset]: write_line error; fd=-1 buf=:cmd=abort exitcode=1
+:
+system msg for write_line failure : Bad file descriptor
+[0]PETSC ERROR: #1 PetscCommDuplicate() line 118 in /home/abuild/rpmbuild/BUILD/petsc-3.12.0/src/sys/objects/tagm.c
+[0]PETSC ERROR: #2 PetscHeaderCreate_Private() line 64 in /home/abuild/rpmbuild/BUILD/petsc-3.12.0/src/sys/objects/inherit.c
+[0]PETSC ERROR: #3 SNESLineSearchCreate() line 184 in /home/abuild/rpmbuild/BUILD/petsc-3.12.0/src/snes/linesearch/interface/linesearch.c
+[0]PETSC ERROR: #4 SNESGetLineSearch() line 5551 in /home/abuild/rpmbuild/BUILD/petsc-3.12.0/src/snes/interface/snes.c
+[0]PETSC ERROR: #5 SNESCreate_NEWTONLS() line 407 in /home/abuild/rpmbuild/BUILD/petsc-3.12.0/src/snes/impls/ls/ls.c
+[0]PETSC ERROR: #6 SNESSetType() line 4579 in /home/abuild/rpmbuild/BUILD/petsc-3.12.0/src/snes/interface/snes.c
+[0]PETSC ERROR: #7 SNESSetFromOptions() line 895 in /home/abuild/rpmbuild/BUILD/petsc-3.12.0/src/snes/interface/snes.c
+[0]PETSC ERROR: #8 main() line 422 in /home/t/tt73/MA-DDM/C/Rectangle/maddm.c
+[0]PETSC ERROR: PETSc Option Table entries:
+[0]PETSC ERROR: -N 250
+[0]PETSC ERROR: -problem ex1
+[0]PETSC ERROR: -snes_type newtonls
+[0]PETSC ERROR: ----------------End of Error Message -------send entire error message to petsc-maint@mcs.anl.gov----------
+application called MPI_Abort(MPI_COMM_WORLD, 1) - process 0
+[unset]: write_line error; fd=-1 buf=:cmd=abort exitcode=1
+:
+system msg for write_line failure : Bad file descriptor
+[0]PETSC ERROR: #1 PetscCommDuplicate() line 118 in /home/abuild/rpmbuild/BUILD/petsc-3.12.0/src/sys/objects/tagm.c
+[0]PETSC ERROR: #2 PetscHeaderCreate_Private() line 64 in /home/abuild/rpmbuild/BUILD/petsc-3.12.0/src/sys/objects/inherit.c
+[0]PETSC ERROR: #3 SNESLineSearchCreate() line 184 in /home/abuild/rpmbuild/BUILD/petsc-3.12.0/src/snes/linesearch/interface/linesearch.c
+[0]PETSC ERROR: #4 SNESGetLineSearch() line 5551 in /home/abuild/rpmbuild/BUILD/petsc-3.12.0/src/snes/interface/snes.c
+[0]PETSC ERROR: #5 SNESCreate_NEWTONLS() line 407 in /home/abuild/rpmbuild/BUILD/petsc-3.12.0/src/snes/impls/ls/ls.c
+[0]PETSC ERROR: #6 SNESSetType() line 4579 in /home/abuild/rpmbuild/BUILD/petsc-3.12.0/src/snes/interface/snes.c
+[0]PETSC ERROR: #7 SNESSetFromOptions() line 895 in /home/abuild/rpmbuild/BUILD/petsc-3.12.0/src/snes/interface/snes.c
+[0]PETSC ERROR: #8 main() line 422 in /home/t/tt73/MA-DDM/C/Rectangle/maddm.c
+[0]PETSC ERROR: PETSc Option Table entries:
+[0]PETSC ERROR: -N 250
+[0]PETSC ERROR: -problem ex2
+[0]PETSC ERROR: -snes_type newtonls
+[0]PETSC ERROR: ----------------End of Error Message -------send entire error message to petsc-maint@mcs.anl.gov----------
+application called MPI_Abort(MPI_COMM_WORLD, 1) - process 0
+[unset]: write_line error; fd=-1 buf=:cmd=abort exitcode=1
+:
+system msg for write_line failure : Bad file descriptor
+[0]PETSC ERROR: #1 PetscCommDuplicate() line 118 in /home/abuild/rpmbuild/BUILD/petsc-3.12.0/src/sys/objects/tagm.c
+[0]PETSC ERROR: #2 PetscHeaderCreate_Private() line 64 in /home/abuild/rpmbuild/BUILD/petsc-3.12.0/src/sys/objects/inherit.c
+[0]PETSC ERROR: #3 SNESLineSearchCreate() line 184 in /home/abuild/rpmbuild/BUILD/petsc-3.12.0/src/snes/linesearch/interface/linesearch.c
+[0]PETSC ERROR: #4 SNESGetLineSearch() line 5551 in /home/abuild/rpmbuild/BUILD/petsc-3.12.0/src/snes/interface/snes.c
+[0]PETSC ERROR: #5 SNESCreate_NEWTONLS() line 407 in /home/abuild/rpmbuild/BUILD/petsc-3.12.0/src/snes/impls/ls/ls.c
+[0]PETSC ERROR: #6 SNESSetType() line 4579 in /home/abuild/rpmbuild/BUILD/petsc-3.12.0/src/snes/interface/snes.c
+[0]PETSC ERROR: #7 SNESSetFromOptions() line 895 in /home/abuild/rpmbuild/BUILD/petsc-3.12.0/src/snes/interface/snes.c
+[0]PETSC ERROR: #8 main() line 422 in /home/t/tt73/MA-DDM/C/Rectangle/maddm.c
+[0]PETSC ERROR: PETSc Option Table entries:
+[0]PETSC ERROR: -N 250
+[0]PETSC ERROR: -problem ex3
+[0]PETSC ERROR: -snes_type newtonls
+[0]PETSC ERROR: ----------------End of Error Message -------send entire error message to petsc-maint@mcs.anl.gov----------
+application called MPI_Abort(MPI_COMM_WORLD, 1) - process 0
+[unset]: write_line error; fd=-1 buf=:cmd=abort exitcode=1
+:
+system msg for write_line failure : Bad file descriptor
+[0]PETSC ERROR: #1 PetscCommDuplicate() line 118 in /home/abuild/rpmbuild/BUILD/petsc-3.12.0/src/sys/objects/tagm.c
+[0]PETSC ERROR: #2 PetscHeaderCreate_Private() line 64 in /home/abuild/rpmbuild/BUILD/petsc-3.12.0/src/sys/objects/inherit.c
+[0]PETSC ERROR: #3 SNESLineSearchCreate() line 184 in /home/abuild/rpmbuild/BUILD/petsc-3.12.0/src/snes/linesearch/interface/linesearch.c
+[0]PETSC ERROR: #4 SNESGetLineSearch() line 5551 in /home/abuild/rpmbuild/BUILD/petsc-3.12.0/src/snes/interface/snes.c
+[0]PETSC ERROR: #5 SNESCreate_NEWTONLS() line 407 in /home/abuild/rpmbuild/BUILD/petsc-3.12.0/src/snes/impls/ls/ls.c
+[0]PETSC ERROR: #6 SNESSetType() line 4579 in /home/abuild/rpmbuild/BUILD/petsc-3.12.0/src/snes/interface/snes.c
+[0]PETSC ERROR: #7 SNESSetFromOptions() line 895 in /home/abuild/rpmbuild/BUILD/petsc-3.12.0/src/snes/interface/snes.c
+[0]PETSC ERROR: #8 main() line 422 in /home/t/tt73/MA-DDM/C/Rectangle/maddm.c
+[0]PETSC ERROR: PETSc Option Table entries:
+[0]PETSC ERROR: -N 300
+[0]PETSC ERROR: -problem ex1
+[0]PETSC ERROR: -snes_type newtonls
+[0]PETSC ERROR: ----------------End of Error Message -------send entire error message to petsc-maint@mcs.anl.gov----------
+application called MPI_Abort(MPI_COMM_WORLD, 1) - process 0
+[unset]: write_line error; fd=-1 buf=:cmd=abort exitcode=1
+:
+system msg for write_line failure : Bad file descriptor
+[0]PETSC ERROR: #1 PetscCommDuplicate() line 118 in /home/abuild/rpmbuild/BUILD/petsc-3.12.0/src/sys/objects/tagm.c
+[0]PETSC ERROR: #2 PetscHeaderCreate_Private() line 64 in /home/abuild/rpmbuild/BUILD/petsc-3.12.0/src/sys/objects/inherit.c
+[0]PETSC ERROR: #3 SNESLineSearchCreate() line 184 in /home/abuild/rpmbuild/BUILD/petsc-3.12.0/src/snes/linesearch/interface/linesearch.c
+[0]PETSC ERROR: #4 SNESGetLineSearch() line 5551 in /home/abuild/rpmbuild/BUILD/petsc-3.12.0/src/snes/interface/snes.c
+[0]PETSC ERROR: #5 SNESCreate_NEWTONLS() line 407 in /home/abuild/rpmbuild/BUILD/petsc-3.12.0/src/snes/impls/ls/ls.c
+[0]PETSC ERROR: #6 SNESSetType() line 4579 in /home/abuild/rpmbuild/BUILD/petsc-3.12.0/src/snes/interface/snes.c
+[0]PETSC ERROR: #7 SNESSetFromOptions() line 895 in /home/abuild/rpmbuild/BUILD/petsc-3.12.0/src/snes/interface/snes.c
+[0]PETSC ERROR: #8 main() line 422 in /home/t/tt73/MA-DDM/C/Rectangle/maddm.c
+[0]PETSC ERROR: PETSc Option Table entries:
+[0]PETSC ERROR: -N 300
+[0]PETSC ERROR: -problem ex2
+[0]PETSC ERROR: -snes_type newtonls
+[0]PETSC ERROR: ----------------End of Error Message -------send entire error message to petsc-maint@mcs.anl.gov----------
+application called MPI_Abort(MPI_COMM_WORLD, 1) - process 0
+[unset]: write_line error; fd=-1 buf=:cmd=abort exitcode=1
+:
+system msg for write_line failure : Bad file descriptor
+[0]PETSC ERROR: #1 PetscCommDuplicate() line 118 in /home/abuild/rpmbuild/BUILD/petsc-3.12.0/src/sys/objects/tagm.c
+[0]PETSC ERROR: #2 PetscHeaderCreate_Private() line 64 in /home/abuild/rpmbuild/BUILD/petsc-3.12.0/src/sys/objects/inherit.c
+[0]PETSC ERROR: #3 SNESLineSearchCreate() line 184 in /home/abuild/rpmbuild/BUILD/petsc-3.12.0/src/snes/linesearch/interface/linesearch.c
+[0]PETSC ERROR: #4 SNESGetLineSearch() line 5551 in /home/abuild/rpmbuild/BUILD/petsc-3.12.0/src/snes/interface/snes.c
+[0]PETSC ERROR: #5 SNESCreate_NEWTONLS() line 407 in /home/abuild/rpmbuild/BUILD/petsc-3.12.0/src/snes/impls/ls/ls.c
+[0]PETSC ERROR: #6 SNESSetType() line 4579 in /home/abuild/rpmbuild/BUILD/petsc-3.12.0/src/snes/interface/snes.c
+[0]PETSC ERROR: #7 SNESSetFromOptions() line 895 in /home/abuild/rpmbuild/BUILD/petsc-3.12.0/src/snes/interface/snes.c
+[0]PETSC ERROR: #8 main() line 422 in /home/t/tt73/MA-DDM/C/Rectangle/maddm.c
+[0]PETSC ERROR: PETSc Option Table entries:
+[0]PETSC ERROR: -N 300
+[0]PETSC ERROR: -problem ex3
+[0]PETSC ERROR: -snes_type newtonls
+[0]PETSC ERROR: ----------------End of Error Message -------send entire error message to petsc-maint@mcs.anl.gov----------
+application called MPI_Abort(MPI_COMM_WORLD, 1) - process 0
+[unset]: write_line error; fd=-1 buf=:cmd=abort exitcode=1
+:
+system msg for write_line failure : Bad file descriptor
+[0]PETSC ERROR: #1 PetscCommDuplicate() line 118 in /home/abuild/rpmbuild/BUILD/petsc-3.12.0/src/sys/objects/tagm.c
+[0]PETSC ERROR: #2 PetscHeaderCreate_Private() line 64 in /home/abuild/rpmbuild/BUILD/petsc-3.12.0/src/sys/objects/inherit.c
+[0]PETSC ERROR: #3 SNESLineSearchCreate() line 184 in /home/abuild/rpmbuild/BUILD/petsc-3.12.0/src/snes/linesearch/interface/linesearch.c
+[0]PETSC ERROR: #4 SNESGetLineSearch() line 5551 in /home/abuild/rpmbuild/BUILD/petsc-3.12.0/src/snes/interface/snes.c
+[0]PETSC ERROR: #5 SNESCreate_NEWTONLS() line 407 in /home/abuild/rpmbuild/BUILD/petsc-3.12.0/src/snes/impls/ls/ls.c
+[0]PETSC ERROR: #6 SNESSetType() line 4579 in /home/abuild/rpmbuild/BUILD/petsc-3.12.0/src/snes/interface/snes.c
+[0]PETSC ERROR: #7 SNESSetFromOptions() line 895 in /home/abuild/rpmbuild/BUILD/petsc-3.12.0/src/snes/interface/snes.c
+[0]PETSC ERROR: #8 main() line 422 in /home/t/tt73/MA-DDM/C/Rectangle/maddm.c
+[0]PETSC ERROR: PETSc Option Table entries:
+[0]PETSC ERROR: -N 350
+[0]PETSC ERROR: -problem ex1
+[0]PETSC ERROR: -snes_type newtonls
+[0]PETSC ERROR: ----------------End of Error Message -------send entire error message to petsc-maint@mcs.anl.gov----------
+application called MPI_Abort(MPI_COMM_WORLD, 1) - process 0
+[unset]: write_line error; fd=-1 buf=:cmd=abort exitcode=1
+:
+system msg for write_line failure : Bad file descriptor
+[0]PETSC ERROR: #1 PetscCommDuplicate() line 118 in /home/abuild/rpmbuild/BUILD/petsc-3.12.0/src/sys/objects/tagm.c
+[0]PETSC ERROR: #2 PetscHeaderCreate_Private() line 64 in /home/abuild/rpmbuild/BUILD/petsc-3.12.0/src/sys/objects/inherit.c
+[0]PETSC ERROR: #3 SNESLineSearchCreate() line 184 in /home/abuild/rpmbuild/BUILD/petsc-3.12.0/src/snes/linesearch/interface/linesearch.c
+[0]PETSC ERROR: #4 SNESGetLineSearch() line 5551 in /home/abuild/rpmbuild/BUILD/petsc-3.12.0/src/snes/interface/snes.c
+[0]PETSC ERROR: #5 SNESCreate_NEWTONLS() line 407 in /home/abuild/rpmbuild/BUILD/petsc-3.12.0/src/snes/impls/ls/ls.c
+[0]PETSC ERROR: #6 SNESSetType() line 4579 in /home/abuild/rpmbuild/BUILD/petsc-3.12.0/src/snes/interface/snes.c
+[0]PETSC ERROR: #7 SNESSetFromOptions() line 895 in /home/abuild/rpmbuild/BUILD/petsc-3.12.0/src/snes/interface/snes.c
+[0]PETSC ERROR: #8 main() line 422 in /home/t/tt73/MA-DDM/C/Rectangle/maddm.c
+[0]PETSC ERROR: PETSc Option Table entries:
+[0]PETSC ERROR: -N 350
+[0]PETSC ERROR: -problem ex2
+[0]PETSC ERROR: -snes_type newtonls
+[0]PETSC ERROR: ----------------End of Error Message -------send entire error message to petsc-maint@mcs.anl.gov----------
+application called MPI_Abort(MPI_COMM_WORLD, 1) - process 0
+[unset]: write_line error; fd=-1 buf=:cmd=abort exitcode=1
+:
+system msg for write_line failure : Bad file descriptor
+[0]PETSC ERROR: #1 PetscCommDuplicate() line 118 in /home/abuild/rpmbuild/BUILD/petsc-3.12.0/src/sys/objects/tagm.c
+[0]PETSC ERROR: #2 PetscHeaderCreate_Private() line 64 in /home/abuild/rpmbuild/BUILD/petsc-3.12.0/src/sys/objects/inherit.c
+[0]PETSC ERROR: #3 SNESLineSearchCreate() line 184 in /home/abuild/rpmbuild/BUILD/petsc-3.12.0/src/snes/linesearch/interface/linesearch.c
+[0]PETSC ERROR: #4 SNESGetLineSearch() line 5551 in /home/abuild/rpmbuild/BUILD/petsc-3.12.0/src/snes/interface/snes.c
+[0]PETSC ERROR: #5 SNESCreate_NEWTONLS() line 407 in /home/abuild/rpmbuild/BUILD/petsc-3.12.0/src/snes/impls/ls/ls.c
+[0]PETSC ERROR: #6 SNESSetType() line 4579 in /home/abuild/rpmbuild/BUILD/petsc-3.12.0/src/snes/interface/snes.c
+[0]PETSC ERROR: #7 SNESSetFromOptions() line 895 in /home/abuild/rpmbuild/BUILD/petsc-3.12.0/src/snes/interface/snes.c
+[0]PETSC ERROR: #8 main() line 422 in /home/t/tt73/MA-DDM/C/Rectangle/maddm.c
+[0]PETSC ERROR: PETSc Option Table entries:
+[0]PETSC ERROR: -N 350
+[0]PETSC ERROR: -problem ex3
+[0]PETSC ERROR: -snes_type newtonls
+[0]PETSC ERROR: ----------------End of Error Message -------send entire error message to petsc-maint@mcs.anl.gov----------
+application called MPI_Abort(MPI_COMM_WORLD, 1) - process 0
+[unset]: write_line error; fd=-1 buf=:cmd=abort exitcode=1
+:
+system msg for write_line failure : Bad file descriptor
+[0]PETSC ERROR: #1 PetscCommDuplicate() line 118 in /home/abuild/rpmbuild/BUILD/petsc-3.12.0/src/sys/objects/tagm.c
+[0]PETSC ERROR: #2 PetscHeaderCreate_Private() line 64 in /home/abuild/rpmbuild/BUILD/petsc-3.12.0/src/sys/objects/inherit.c
+[0]PETSC ERROR: #3 SNESLineSearchCreate() line 184 in /home/abuild/rpmbuild/BUILD/petsc-3.12.0/src/snes/linesearch/interface/linesearch.c
+[0]PETSC ERROR: #4 SNESGetLineSearch() line 5551 in /home/abuild/rpmbuild/BUILD/petsc-3.12.0/src/snes/interface/snes.c
+[0]PETSC ERROR: #5 SNESCreate_NEWTONLS() line 407 in /home/abuild/rpmbuild/BUILD/petsc-3.12.0/src/snes/impls/ls/ls.c
+[0]PETSC ERROR: #6 SNESSetType() line 4579 in /home/abuild/rpmbuild/BUILD/petsc-3.12.0/src/snes/interface/snes.c
+[0]PETSC ERROR: #7 SNESSetFromOptions() line 895 in /home/abuild/rpmbuild/BUILD/petsc-3.12.0/src/snes/interface/snes.c
+[0]PETSC ERROR: #8 main() line 422 in /home/t/tt73/MA-DDM/C/Rectangle/maddm.c
+[0]PETSC ERROR: PETSc Option Table entries:
+[0]PETSC ERROR: -N 400
+[0]PETSC ERROR: -problem ex1
+[0]PETSC ERROR: -snes_type newtonls
+[0]PETSC ERROR: ----------------End of Error Message -------send entire error message to petsc-maint@mcs.anl.gov----------
+application called MPI_Abort(MPI_COMM_WORLD, 1) - process 0
+[unset]: write_line error; fd=-1 buf=:cmd=abort exitcode=1
+:
+system msg for write_line failure : Bad file descriptor
+[0]PETSC ERROR: #1 PetscCommDuplicate() line 118 in /home/abuild/rpmbuild/BUILD/petsc-3.12.0/src/sys/objects/tagm.c
+[0]PETSC ERROR: #2 PetscHeaderCreate_Private() line 64 in /home/abuild/rpmbuild/BUILD/petsc-3.12.0/src/sys/objects/inherit.c
+[0]PETSC ERROR: #3 SNESLineSearchCreate() line 184 in /home/abuild/rpmbuild/BUILD/petsc-3.12.0/src/snes/linesearch/interface/linesearch.c
+[0]PETSC ERROR: #4 SNESGetLineSearch() line 5551 in /home/abuild/rpmbuild/BUILD/petsc-3.12.0/src/snes/interface/snes.c
+[0]PETSC ERROR: #5 SNESCreate_NEWTONLS() line 407 in /home/abuild/rpmbuild/BUILD/petsc-3.12.0/src/snes/impls/ls/ls.c
+[0]PETSC ERROR: #6 SNESSetType() line 4579 in /home/abuild/rpmbuild/BUILD/petsc-3.12.0/src/snes/interface/snes.c
+[0]PETSC ERROR: #7 SNESSetFromOptions() line 895 in /home/abuild/rpmbuild/BUILD/petsc-3.12.0/src/snes/interface/snes.c
+[0]PETSC ERROR: #8 main() line 422 in /home/t/tt73/MA-DDM/C/Rectangle/maddm.c
+[0]PETSC ERROR: PETSc Option Table entries:
+[0]PETSC ERROR: -N 400
+[0]PETSC ERROR: -problem ex2
+[0]PETSC ERROR: -snes_type newtonls
+[0]PETSC ERROR: ----------------End of Error Message -------send entire error message to petsc-maint@mcs.anl.gov----------
+application called MPI_Abort(MPI_COMM_WORLD, 1) - process 0
+[unset]: write_line error; fd=-1 buf=:cmd=abort exitcode=1
+:
+system msg for write_line failure : Bad file descriptor
+[0]PETSC ERROR: #1 PetscCommDuplicate() line 118 in /home/abuild/rpmbuild/BUILD/petsc-3.12.0/src/sys/objects/tagm.c
+[0]PETSC ERROR: #2 PetscHeaderCreate_Private() line 64 in /home/abuild/rpmbuild/BUILD/petsc-3.12.0/src/sys/objects/inherit.c
+[0]PETSC ERROR: #3 SNESLineSearchCreate() line 184 in /home/abuild/rpmbuild/BUILD/petsc-3.12.0/src/snes/linesearch/interface/linesearch.c
+[0]PETSC ERROR: #4 SNESGetLineSearch() line 5551 in /home/abuild/rpmbuild/BUILD/petsc-3.12.0/src/snes/interface/snes.c
+[0]PETSC ERROR: #5 SNESCreate_NEWTONLS() line 407 in /home/abuild/rpmbuild/BUILD/petsc-3.12.0/src/snes/impls/ls/ls.c
+[0]PETSC ERROR: #6 SNESSetType() line 4579 in /home/abuild/rpmbuild/BUILD/petsc-3.12.0/src/snes/interface/snes.c
+[0]PETSC ERROR: #7 SNESSetFromOptions() line 895 in /home/abuild/rpmbuild/BUILD/petsc-3.12.0/src/snes/interface/snes.c
+[0]PETSC ERROR: #8 main() line 422 in /home/t/tt73/MA-DDM/C/Rectangle/maddm.c
+[0]PETSC ERROR: PETSc Option Table entries:
+[0]PETSC ERROR: -N 400
+[0]PETSC ERROR: -problem ex3
+[0]PETSC ERROR: -snes_type newtonls
+[0]PETSC ERROR: ----------------End of Error Message -------send entire error message to petsc-maint@mcs.anl.gov----------
+application called MPI_Abort(MPI_COMM_WORLD, 1) - process 0
+[unset]: write_line error; fd=-1 buf=:cmd=abort exitcode=1
+:
+system msg for write_line failure : Bad file descriptor
+[0]PETSC ERROR: #1 PetscCommDuplicate() line 118 in /home/abuild/rpmbuild/BUILD/petsc-3.12.0/src/sys/objects/tagm.c
+[0]PETSC ERROR: #2 PetscHeaderCreate_Private() line 64 in /home/abuild/rpmbuild/BUILD/petsc-3.12.0/src/sys/objects/inherit.c
+[0]PETSC ERROR: #3 SNESLineSearchCreate() line 184 in /home/abuild/rpmbuild/BUILD/petsc-3.12.0/src/snes/linesearch/interface/linesearch.c
+[0]PETSC ERROR: #4 SNESGetLineSearch() line 5551 in /home/abuild/rpmbuild/BUILD/petsc-3.12.0/src/snes/interface/snes.c
+[0]PETSC ERROR: #5 SNESCreate_NEWTONLS() line 407 in /home/abuild/rpmbuild/BUILD/petsc-3.12.0/src/snes/impls/ls/ls.c
+[0]PETSC ERROR: #6 SNESSetType() line 4579 in /home/abuild/rpmbuild/BUILD/petsc-3.12.0/src/snes/interface/snes.c
+[0]PETSC ERROR: #7 SNESSetFromOptions() line 895 in /home/abuild/rpmbuild/BUILD/petsc-3.12.0/src/snes/interface/snes.c
+[0]PETSC ERROR: #8 main() line 422 in /home/t/tt73/MA-DDM/C/Rectangle/maddm.c
+[0]PETSC ERROR: PETSc Option Table entries:
+[0]PETSC ERROR: -N 450
+[0]PETSC ERROR: -problem ex1
+[0]PETSC ERROR: -snes_type newtonls
+[0]PETSC ERROR: ----------------End of Error Message -------send entire error message to petsc-maint@mcs.anl.gov----------
+application called MPI_Abort(MPI_COMM_WORLD, 1) - process 0
+[unset]: write_line error; fd=-1 buf=:cmd=abort exitcode=1
+:
+system msg for write_line failure : Bad file descriptor
+[0]PETSC ERROR: #1 PetscCommDuplicate() line 118 in /home/abuild/rpmbuild/BUILD/petsc-3.12.0/src/sys/objects/tagm.c
+[0]PETSC ERROR: #2 PetscHeaderCreate_Private() line 64 in /home/abuild/rpmbuild/BUILD/petsc-3.12.0/src/sys/objects/inherit.c
+[0]PETSC ERROR: #3 SNESLineSearchCreate() line 184 in /home/abuild/rpmbuild/BUILD/petsc-3.12.0/src/snes/linesearch/interface/linesearch.c
+[0]PETSC ERROR: #4 SNESGetLineSearch() line 5551 in /home/abuild/rpmbuild/BUILD/petsc-3.12.0/src/snes/interface/snes.c
+[0]PETSC ERROR: #5 SNESCreate_NEWTONLS() line 407 in /home/abuild/rpmbuild/BUILD/petsc-3.12.0/src/snes/impls/ls/ls.c
+[0]PETSC ERROR: #6 SNESSetType() line 4579 in /home/abuild/rpmbuild/BUILD/petsc-3.12.0/src/snes/interface/snes.c
+[0]PETSC ERROR: #7 SNESSetFromOptions() line 895 in /home/abuild/rpmbuild/BUILD/petsc-3.12.0/src/snes/interface/snes.c
+[0]PETSC ERROR: #8 main() line 422 in /home/t/tt73/MA-DDM/C/Rectangle/maddm.c
+[0]PETSC ERROR: PETSc Option Table entries:
+[0]PETSC ERROR: -N 450
+[0]PETSC ERROR: -problem ex2
+[0]PETSC ERROR: -snes_type newtonls
+[0]PETSC ERROR: ----------------End of Error Message -------send entire error message to petsc-maint@mcs.anl.gov----------
+application called MPI_Abort(MPI_COMM_WORLD, 1) - process 0
+[unset]: write_line error; fd=-1 buf=:cmd=abort exitcode=1
+:
+system msg for write_line failure : Bad file descriptor
+[0]PETSC ERROR: #1 PetscCommDuplicate() line 118 in /home/abuild/rpmbuild/BUILD/petsc-3.12.0/src/sys/objects/tagm.c
+[0]PETSC ERROR: #2 PetscHeaderCreate_Private() line 64 in /home/abuild/rpmbuild/BUILD/petsc-3.12.0/src/sys/objects/inherit.c
+[0]PETSC ERROR: #3 SNESLineSearchCreate() line 184 in /home/abuild/rpmbuild/BUILD/petsc-3.12.0/src/snes/linesearch/interface/linesearch.c
+[0]PETSC ERROR: #4 SNESGetLineSearch() line 5551 in /home/abuild/rpmbuild/BUILD/petsc-3.12.0/src/snes/interface/snes.c
+[0]PETSC ERROR: #5 SNESCreate_NEWTONLS() line 407 in /home/abuild/rpmbuild/BUILD/petsc-3.12.0/src/snes/impls/ls/ls.c
+[0]PETSC ERROR: #6 SNESSetType() line 4579 in /home/abuild/rpmbuild/BUILD/petsc-3.12.0/src/snes/interface/snes.c
+[0]PETSC ERROR: #7 SNESSetFromOptions() line 895 in /home/abuild/rpmbuild/BUILD/petsc-3.12.0/src/snes/interface/snes.c
+[0]PETSC ERROR: #8 main() line 422 in /home/t/tt73/MA-DDM/C/Rectangle/maddm.c
+[0]PETSC ERROR: PETSc Option Table entries:
+[0]PETSC ERROR: -N 450
+[0]PETSC ERROR: -problem ex3
+[0]PETSC ERROR: -snes_type newtonls
+[0]PETSC ERROR: ----------------End of Error Message -------send entire error message to petsc-maint@mcs.anl.gov----------
+application called MPI_Abort(MPI_COMM_WORLD, 1) - process 0
+[unset]: write_line error; fd=-1 buf=:cmd=abort exitcode=1
+:
+system msg for write_line failure : Bad file descriptor
+[0]PETSC ERROR: #1 PetscCommDuplicate() line 118 in /home/abuild/rpmbuild/BUILD/petsc-3.12.0/src/sys/objects/tagm.c
+[0]PETSC ERROR: #2 PetscHeaderCreate_Private() line 64 in /home/abuild/rpmbuild/BUILD/petsc-3.12.0/src/sys/objects/inherit.c
+[0]PETSC ERROR: #3 SNESLineSearchCreate() line 184 in /home/abuild/rpmbuild/BUILD/petsc-3.12.0/src/snes/linesearch/interface/linesearch.c
+[0]PETSC ERROR: #4 SNESGetLineSearch() line 5551 in /home/abuild/rpmbuild/BUILD/petsc-3.12.0/src/snes/interface/snes.c
+[0]PETSC ERROR: #5 SNESCreate_NEWTONLS() line 407 in /home/abuild/rpmbuild/BUILD/petsc-3.12.0/src/snes/impls/ls/ls.c
+[0]PETSC ERROR: #6 SNESSetType() line 4579 in /home/abuild/rpmbuild/BUILD/petsc-3.12.0/src/snes/interface/snes.c
+[0]PETSC ERROR: #7 SNESSetFromOptions() line 895 in /home/abuild/rpmbuild/BUILD/petsc-3.12.0/src/snes/interface/snes.c
+[0]PETSC ERROR: #8 main() line 422 in /home/t/tt73/MA-DDM/C/Rectangle/maddm.c
+[0]PETSC ERROR: PETSc Option Table entries:
+[0]PETSC ERROR: -N 500
+[0]PETSC ERROR: -problem ex1
+[0]PETSC ERROR: -snes_type newtonls
+[0]PETSC ERROR: ----------------End of Error Message -------send entire error message to petsc-maint@mcs.anl.gov----------
+application called MPI_Abort(MPI_COMM_WORLD, 1) - process 0
+[unset]: write_line error; fd=-1 buf=:cmd=abort exitcode=1
+:
+system msg for write_line failure : Bad file descriptor
+[0]PETSC ERROR: #1 PetscCommDuplicate() line 118 in /home/abuild/rpmbuild/BUILD/petsc-3.12.0/src/sys/objects/tagm.c
+[0]PETSC ERROR: #2 PetscHeaderCreate_Private() line 64 in /home/abuild/rpmbuild/BUILD/petsc-3.12.0/src/sys/objects/inherit.c
+[0]PETSC ERROR: #3 SNESLineSearchCreate() line 184 in /home/abuild/rpmbuild/BUILD/petsc-3.12.0/src/snes/linesearch/interface/linesearch.c
+[0]PETSC ERROR: #4 SNESGetLineSearch() line 5551 in /home/abuild/rpmbuild/BUILD/petsc-3.12.0/src/snes/interface/snes.c
+[0]PETSC ERROR: #5 SNESCreate_NEWTONLS() line 407 in /home/abuild/rpmbuild/BUILD/petsc-3.12.0/src/snes/impls/ls/ls.c
+[0]PETSC ERROR: #6 SNESSetType() line 4579 in /home/abuild/rpmbuild/BUILD/petsc-3.12.0/src/snes/interface/snes.c
+[0]PETSC ERROR: #7 SNESSetFromOptions() line 895 in /home/abuild/rpmbuild/BUILD/petsc-3.12.0/src/snes/interface/snes.c
+[0]PETSC ERROR: #8 main() line 422 in /home/t/tt73/MA-DDM/C/Rectangle/maddm.c
+[0]PETSC ERROR: PETSc Option Table entries:
+[0]PETSC ERROR: -N 500
+[0]PETSC ERROR: -problem ex2
+[0]PETSC ERROR: -snes_type newtonls
+[0]PETSC ERROR: ----------------End of Error Message -------send entire error message to petsc-maint@mcs.anl.gov----------
+application called MPI_Abort(MPI_COMM_WORLD, 1) - process 0
+[unset]: write_line error; fd=-1 buf=:cmd=abort exitcode=1
+:
+system msg for write_line failure : Bad file descriptor
+[0]PETSC ERROR: #1 PetscCommDuplicate() line 118 in /home/abuild/rpmbuild/BUILD/petsc-3.12.0/src/sys/objects/tagm.c
+[0]PETSC ERROR: #2 PetscHeaderCreate_Private() line 64 in /home/abuild/rpmbuild/BUILD/petsc-3.12.0/src/sys/objects/inherit.c
+[0]PETSC ERROR: #3 SNESLineSearchCreate() line 184 in /home/abuild/rpmbuild/BUILD/petsc-3.12.0/src/snes/linesearch/interface/linesearch.c
+[0]PETSC ERROR: #4 SNESGetLineSearch() line 5551 in /home/abuild/rpmbuild/BUILD/petsc-3.12.0/src/snes/interface/snes.c
+[0]PETSC ERROR: #5 SNESCreate_NEWTONLS() line 407 in /home/abuild/rpmbuild/BUILD/petsc-3.12.0/src/snes/impls/ls/ls.c
+[0]PETSC ERROR: #6 SNESSetType() line 4579 in /home/abuild/rpmbuild/BUILD/petsc-3.12.0/src/snes/interface/snes.c
+[0]PETSC ERROR: #7 SNESSetFromOptions() line 895 in /home/abuild/rpmbuild/BUILD/petsc-3.12.0/src/snes/interface/snes.c
+[0]PETSC ERROR: #8 main() line 422 in /home/t/tt73/MA-DDM/C/Rectangle/maddm.c
+[0]PETSC ERROR: PETSc Option Table entries:
+[0]PETSC ERROR: -N 500
+[0]PETSC ERROR: -problem ex3
+[0]PETSC ERROR: -snes_type newtonls
+[0]PETSC ERROR: ----------------End of Error Message -------send entire error message to petsc-maint@mcs.anl.gov----------
+application called MPI_Abort(MPI_COMM_WORLD, 1) - process 0
+[unset]: write_line error; fd=-1 buf=:cmd=abort exitcode=1
+:
+system msg for write_line failure : Bad file descriptor

@@ -1,6 +1,7 @@
 #!/bin/bash -l
-# This is a job submission file on the njit cluster Stheno.
-# Submit this by typing `sbatch shjob`
+## This is a test to run the NASM on one subdomain. It's equivalent to Newton's method.
+## DGMRES with SSOR PC is used for the linear system.
+## The number of subdomain iterations has been increased from 50 to 10000 for the serial case.
 
 ## Set the name of job
 #SBATCH -J serial1
@@ -11,7 +12,7 @@
 
 ## Set email notification
 #SBATCH --mail-user tt73@njit.edu
-#SBATCH --mail-type=ALL
+#SBATCH --mail-type=END
 #SBATCH -A tt73
 
 ## RUNTIME  HOURS:MIN:SEC and MEMORY
@@ -22,4 +23,10 @@
 ## Modules needed for PETSc
 module load gnu8 mpich petsc
 
-bash test1.sh > out_test1b
+for N in 100 150 200 250 300 350 400 450 500
+do
+   printf "N = $N:\n" >> out1
+   ../../maddm -N $N -problem ex1 >> out1
+   ../../maddm -N $N -problem ex2 >> out1
+   ../../maddm -N $N -problem ex3 >> out1
+done

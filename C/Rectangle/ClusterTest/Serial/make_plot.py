@@ -29,7 +29,7 @@ plt.tick_params(direction='in',which='minor', length=5, bottom=True, top=True, l
 plt.tick_params(direction='in',which='major', length=10, bottom=True, top=True, left=True, right=True)
 plt.tick_params(labelbottom=True,labeltop=False,labelright=False,labelleft=True)
 plt.xlabel('$N$')
-plt.ylabel('Time (sec)')
+plt.ylabel('Runtime (sec)')
 plt.yticks(np.arange(0,1200,120))
 plt.legend(fontsize=14)
 plt.savefig('serial.png',dpi=300,bbox_inches='tight')
