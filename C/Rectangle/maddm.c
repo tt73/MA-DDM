@@ -79,7 +79,7 @@ PetscErrorCode f_rhs_3D_ex2(PetscReal x, PetscReal y, PetscReal z, void *ctx, Pe
 }
 
 /* Problem 3 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-   Semi-degenerate with gradient blow-up on the boundary.
+   Gradient blow-up on the boundary.
    Solution    u(x) = -sqrt(2 - |x|^2),              for x in Rn
    RHS: Det(D^2u(x)) = 2/(2- |x|^2)^p(n)
    Defualt domain: [0,-1]^2
@@ -110,6 +110,29 @@ PetscErrorCode f_rhs_3D_ex3(PetscReal x, PetscReal y, PetscReal z, void *ctx, Pe
    return 0;
 }
 
+/* Problem 4 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+   Semi-degenerate polynomial. γ = (0.6,0.4)
+   Solution    u(x) = (γ·x)^2,              for x in R2
+   RHS: 0
+   Defualt domain: [-1,-1]^2
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+PetscErrorCode u_exact_1D_ex4(PetscReal x, PetscReal y, PetscReal z, void *ctx, PetscReal * u) {
+   u[0] = 0.6*0.6*x*x;
+   return 0;
+}
+PetscErrorCode u_exact_2D_ex4(PetscReal x, PetscReal y, PetscReal z, void *ctx, PetscReal * u) {
+   u[0] = PetscPowReal(0.6*x + 0.4*y,2.0);
+   return 0;
+}
+PetscErrorCode u_exact_3D_ex4(PetscReal x, PetscReal y, PetscReal z, void *ctx, PetscReal * u) {
+   u[0] = PetscPowReal(0.6*x + 0.4*y + z, 2.0);
+   return 0;
+}
+PetscErrorCode f_rhs_ex4(PetscReal x, PetscReal y, PetscReal z, void *ctx, PetscReal * f) {
+   f[0] = 0;
+   return 0;
+}
+
 // arrays of pointers to functions
 static DMDASNESFunction residual_ptr[3]
     = {(DMDASNESFunction)&MA1DFunctionLocal,
@@ -125,21 +148,21 @@ typedef PetscErrorCode (*ExactFcnVec)(DMDALocalInfo*,Vec,MACtx*);
 
 static ExactFcnVec getuexact_ptr[3] = {&Form1DUExact, &Form2DUExact, &Form3DUExact};
 
-typedef enum {ex1, ex2, ex3} ProblemType;
-static const char* ProblemTypes[] = {"ex1","ex2","ex3","ProblemType","", NULL};
+typedef enum {ex1, ex2, ex3, ex4} ProblemType;
+static const char* ProblemTypes[] = {"ex1","ex2","ex3","ex4","ProblemType","", NULL};
 
 // more arrays of pointers to functions:   ..._ptr[DIMS][PROBLEMS]
 typedef PetscErrorCode (*PointwiseFcn)(PetscReal,PetscReal,PetscReal,void*,PetscReal*);
 
-static PointwiseFcn g_bdry_ptr[3][3]
-    = {{&u_exact_1D_ex1, &u_exact_1D_ex2, &u_exact_1D_ex3},
-       {&u_exact_2D_ex1, &u_exact_2D_ex2, &u_exact_2D_ex3},
-       {&u_exact_3D_ex1, &u_exact_3D_ex2, &u_exact_3D_ex3}};
+static PointwiseFcn g_bdry_ptr[3][4]
+    = {{&u_exact_1D_ex1, &u_exact_1D_ex2, &u_exact_1D_ex3, &u_exact_1D_ex4},
+       {&u_exact_2D_ex1, &u_exact_2D_ex2, &u_exact_2D_ex3, &u_exact_2D_ex4},
+       {&u_exact_3D_ex1, &u_exact_3D_ex2, &u_exact_3D_ex3, &u_exact_3D_ex3}};
 
-static PointwiseFcn f_rhs_ptr[3][3]
-    = {{&f_rhs_1D_ex1, &f_rhs_1D_ex2, &f_rhs_1D_ex3},
-       {&f_rhs_2D_ex1, &f_rhs_2D_ex2, &f_rhs_2D_ex3},
-       {&f_rhs_3D_ex1, &f_rhs_3D_ex2, &f_rhs_3D_ex3}};
+static PointwiseFcn f_rhs_ptr[3][4]
+    = {{&f_rhs_1D_ex1, &f_rhs_1D_ex2, &f_rhs_1D_ex3, &f_rhs_ex4},
+       {&f_rhs_2D_ex1, &f_rhs_2D_ex2, &f_rhs_2D_ex3, &f_rhs_ex4},
+       {&f_rhs_3D_ex1, &f_rhs_3D_ex2, &f_rhs_3D_ex3, &f_rhs_ex4}};
 
 static const char* InitialTypes[] = {"zeros","random","corner","pyramid","InitialType","", NULL};
 
@@ -206,7 +229,7 @@ int main(int argc,char **args) {
    ierr = PetscOptionsInt("-width","stencil width for MA discretization","maddm.c",width,&width,&set_width);CHKERRQ(ierr);
    ierr = PetscOptionsReal("-eps","regularization constant epsilon","maddm.c",eps,&eps,&set_eps);CHKERRQ(ierr);
    ierr = PetscOptionsReal("-op","domain overlap percentage (0.0 to 1.0)","maddm.c",op,&op,NULL);CHKERRQ(ierr);
-   ierr = PetscOptionsEnum("-problem","problem type; (ex1, ex2, or ex3)","maddm.c",ProblemTypes,(PetscEnum)problem,(PetscEnum*)&problem,NULL); CHKERRQ(ierr);
+   ierr = PetscOptionsEnum("-problem","problem type; (ex1, ex2, ex3, ex4)","maddm.c",ProblemTypes,(PetscEnum)problem,(PetscEnum*)&problem,NULL); CHKERRQ(ierr);
    if (problem==ex2 || problem==ex3) { // default limits for ex2 & ex3
       user.xmin   = 0.0; user.xmax = 1.0; // x limits [0, 1]
       user.ymin   = 0.0; user.ymax = 1.0; // y limits [0, 1]
