@@ -41,7 +41,7 @@ fig = plt.figure(figsize=(6, 6))
 # ax1=fig.add_subplot(111, projection='3d')
 ax1=fig.add_subplot(111)
 ax1.set_xlabel('rtol', labelpad=10)
-ax1.set_ylabel('Time (sec)', labelpad=10)
+ax1.set_ylabel('Runtime (sec)', labelpad=10)
 
 x = np.arange(4)
 

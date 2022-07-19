@@ -1,19 +1,21 @@
 #!/bin/bash -l
-# This is a job submission file on the njit cluster Stheno.
-# Submit this by typing `sbatch shjob`
+## This is the problem size scaling test.
+## Default settings to over-solve on the subdomains are used.
+## We use a fixed overlap percentage for increasing N.
+## We expect to see roughly constant iteration numbers.
 
 ## NAMING
 #SBATCH -J j2
 #SBATCH -p public
-#SBATCH -o test.output
-#SBATCH -e test.output
+#SBATCH -o slurmout2
+#SBATCH -e slurmout2
 
 ## partition/queue
 #SBATCH -p dms-cpu
 
 ## EMAIL NOTIFICATION
 #SBATCH --mail-user tt73@njit.edu
-#SBATCH --mail-type=ALL
+#SBATCH --mail-type=END
 #SBATCH -A tt73
 
 ## RUNTIME  HOURS:MIN:SEC and MEMORY
@@ -30,4 +32,5 @@ do
    mpiexec -np $np ../../maddm -N $N -problem ex1 >> out2
    mpiexec -np $np ../../maddm -N $N -problem ex2 >> out2
    mpiexec -np $np ../../maddm -N $N -problem ex3 >> out2
+   mpiexec -np $np ../../maddm -N $N -problem ex4 >> out2
 done

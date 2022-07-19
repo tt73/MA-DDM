@@ -1,12 +1,14 @@
 #!/bin/bash -l
-## This is a job submission file on the njit cluster Stheno.
-##
+## This is the overlap percentage test.
+## We are over-solving on the subdomains.
+## For a fixed problem size, we increase the overlap amount between the subdomains.
+## We expect to see decrease in iteration number.
 
 ## NAMING
 #SBATCH -J j1
 #SBATCH -p public
-#SBATCH -o slurmout
-#SBATCH -e slurmout
+#SBATCH -o slurmout1
+#SBATCH -e slurmout1
 
 ## partition/queue
 #SBATCH -p dms-cpu
@@ -31,4 +33,5 @@ do
    mpiexec -np $np ../../maddm -N $N -op $op -problem ex1 >> out1
    mpiexec -np $np ../../maddm -N $N -op $op -problem ex2 >> out1
    mpiexec -np $np ../../maddm -N $N -op $op -problem ex3 >> out1
+   mpiexec -np $np ../../maddm -N $N -op $op -problem ex4 >> out1
 done

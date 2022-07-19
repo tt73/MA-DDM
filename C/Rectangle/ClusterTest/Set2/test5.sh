@@ -1,52 +1,74 @@
+#!/bin/bash -l
 ## These tests are for the NASM with a different nonlinear solver.
+
+## NAMING
+#SBATCH -J j5
+#SBATCH -p public
+#SBATCH -o slurmout5
+#SBATCH -e slurmout5
+
+## partition/queue
+#SBATCH -p dms-cpu
+
+## EMAIL NOTIFICATION
+#SBATCH --mail-user tt73@njit.edu
+#SBATCH --mail-type=END
+#SBATCH -A tt73
+
+## RUNTIME HOURS:MIN:SEC and MEMORY
+#SBATCH -t 8:0:0
+#SBATCH --mem=16G
+#SBATCH -N 4
+
+rm -f out5
+
 N=200
 np=4
 
-printf "Newtonls with optimal settings: \n"
-mpiexec -np $np ../../maddm -N $N -problem ex1 -sub_snes_linesearch_type l2 -sub_snes_max_it 1 -sub_ksp_rtol 1e-2
-mpiexec -np $np ../../maddm -N $N -problem ex2 -sub_snes_linesearch_type l2 -sub_snes_max_it 1 -sub_ksp_rtol 1e-2
-mpiexec -np $np ../../maddm -N $N -problem ex3 -sub_snes_linesearch_type l2 -sub_snes_max_it 1 -sub_ksp_rtol 1e-2
-## Single L2 Newton Iteration w/ ksp at 0.001 tol.
+printf "SIN:\n" >> out5
+mpiexec -np $np ../../maddm -N $N -problem ex1 -sub_snes_linesearch_order 2 -sub_snes_max_it 1 -sub_ksp_rtol 1e-1 >> out5
+mpiexec -np $np ../../maddm -N $N -problem ex2 -sub_snes_linesearch_order 2 -sub_snes_max_it 1 -sub_ksp_rtol 1e-1 >> out5
+mpiexec -np $np ../../maddm -N $N -problem ex3 -sub_snes_linesearch_order 2 -sub_snes_max_it 1 -sub_ksp_rtol 1e-1 >> out5
+mpiexec -np $np ../../maddm -N $N -problem ex4 -sub_snes_linesearch_order 2 -sub_snes_max_it 1 -sub_ksp_rtol 1e-1 >> out5
 
-printf "\nTR:\n"
-mpiexec -np $np ../../maddm -N $N -problem ex1 -sub_snes_type newtontr -sub_snes_trtol 1e-6 -sub_snes_rtol 1e-1 -sub_ksp_rtol 1e-1
-mpiexec -np $np ../../maddm -N $N -problem ex2 -sub_snes_type newtontr -sub_snes_trtol 1e-6 -sub_snes_rtol 1e-1 -sub_ksp_rtol 1e-1
-mpiexec -np $np ../../maddm -N $N -problem ex3 -sub_snes_type newtontr -sub_snes_trtol 1e-6 -sub_snes_rtol 1e-1 -sub_ksp_rtol 1e-1
+printf "\nTR:\n" >> out5
+mpiexec -np $np ../../maddm -N $N -problem ex1 -sub_snes_type newtontr -sub_snes_trtol 1e-6 -sub_snes_rtol 1e-1 -sub_ksp_rtol 1e-1 >> out5
+mpiexec -np $np ../../maddm -N $N -problem ex2 -sub_snes_type newtontr -sub_snes_trtol 1e-6 -sub_snes_rtol 1e-1 -sub_ksp_rtol 1e-1 >> out5
+mpiexec -np $np ../../maddm -N $N -problem ex3 -sub_snes_type newtontr -sub_snes_trtol 1e-6 -sub_snes_rtol 1e-1 -sub_ksp_rtol 1e-1 >> out5
+mpiexec -np $np ../../maddm -N $N -problem ex4 -sub_snes_type newtontr -sub_snes_trtol 1e-6 -sub_snes_rtol 1e-1 -sub_ksp_rtol 1e-1 >> out5
 ## Its slow but it converges without NPC
 ## This has 8 parameters so its annoying to tune.
 
-printf "\nFAS:\n"
-mpiexec -np $np ../../maddm -N $N -problem ex1 -sub_snes_type fas -sub_fas_coarse_snes_linesearch_type l2 -sub_snes_max_it 1 -sub_fas_coarse_pc_type eisenstat format
-## Converges without NPC
+printf "\nFAS:\n" >> out5
+mpiexec -np $np ../../maddm -N $N -problem ex1 -sub_snes_type fas -sub_fas_coarse_snes_linesearch_order 2 -sub_fas_coarse_snes_max_it 1 -sub_fas_coarse_ksp_rtol 1e-1 -sub_fas_coarse_pc_type eisenstat >> out5
+mpiexec -np $np ../../maddm -N $N -problem ex2 -sub_snes_type fas -sub_fas_coarse_snes_linesearch_order 2 -sub_fas_coarse_snes_max_it 1 -sub_fas_coarse_ksp_rtol 1e-1 -sub_fas_coarse_pc_type eisenstat >> out5
+mpiexec -np $np ../../maddm -N $N -problem ex3 -sub_snes_type fas -sub_fas_coarse_snes_linesearch_order 2 -sub_fas_coarse_snes_max_it 1 -sub_fas_coarse_ksp_rtol 1e-1 -sub_fas_coarse_pc_type eisenstat >> out5
+mpiexec -np $np ../../maddm -N $N -problem ex4 -sub_snes_type fas -sub_fas_coarse_snes_linesearch_order 2 -sub_fas_coarse_snes_max_it 1 -sub_fas_coarse_ksp_rtol 1e-1 -sub_fas_coarse_pc_type eisenstat >> out5
+##
 
-printf "\nAnderson with LS NPC:\n"
-lsnpc=' -sub_npc_snes_type newtonls -sub_npc_pc_type eisenstat -sub_npc_snes_linesearch_type l2 -sub_npc_snes_max_it 1'
-mpiexec -np $np ../../maddm -N $N -problem ex1 -sub_snes_type anderson -sub_snes_max_it 1 $lsnpc format
+printf "\nAnderson with LS NPC:\n" >> out5
+lsnpc=' -sub_npc_snes_type newtonls -sub_npc_pc_type eisenstat -sub_npc_snes_linesearch_order 2 -sub_npc_snes_max_it 1'
+mpiexec -np $np ../../maddm -N $N -problem ex1 -sub_snes_type anderson -sub_snes_max_it 1 $lsnpc >> out5
+mpiexec -np $np ../../maddm -N $N -problem ex2 -sub_snes_type anderson -sub_snes_max_it 1 $lsnpc >> out5
+mpiexec -np $np ../../maddm -N $N -problem ex3 -sub_snes_type anderson -sub_snes_max_it 1 $lsnpc >> out5
+mpiexec -np $np ../../maddm -N $N -problem ex4 -sub_snes_type anderson -sub_snes_max_it 1 $lsnpc >> out5
 
-printf "\nAnderson with FAS NPC:\n"
-fasnpc=' -sub_npc_snes_type fas -sub_npc_fas_coarse_snes_linesearch_type l2 -sub_npc_fas_coarse_pc_type eisenstat -sub_npc_fas_coarse_snes_max_it 1'
-mpiexec -np $np ../../maddm -N $N -problem ex1 -sub_snes_type anderson -sub_snes_max_it 1 $fasnpc format
-
-printf "\nNGMRES with LS NPC:\n"
-mpiexec -np $np ../../maddm -N $N -problem ex1 -sub_snes_type ngmres -sub_snes_max_it 1 $lsnpc format
+printf "\nNGMRES with LS NPC:\n" >> out5
+mpiexec -np $np ../../maddm -N $N -problem ex1 -sub_snes_type ngmres -sub_snes_max_it 1 $lsnpc >> out5
+mpiexec -np $np ../../maddm -N $N -problem ex2 -sub_snes_type ngmres -sub_snes_max_it 1 $lsnpc >> out5
+mpiexec -np $np ../../maddm -N $N -problem ex3 -sub_snes_type ngmres -sub_snes_max_it 1 $lsnpc >> out5
+mpiexec -np $np ../../maddm -N $N -problem ex4 -sub_snes_type ngmres -sub_snes_max_it 1 $lsnpc >> out5
 # mpiexec -np $np ../../maddm -N $N -problem ex1 -sub_snes_type ngmres -sub_npc_snes_type newtonls -sub_npc_pc_type eisenstat -sub_npc_snes_linesearch_type l2 -sub_npc_snes_max_it 1 -sub_snes_max_it 1 -snes_converged_reason -snes_monitor -snes_view
 ## NGMRES doensn't converge without a preconditioner
 ## This is good
 
-printf "\nNGMRES with FAS NPC:\n"
-mpiexec -np $np ../../maddm -N $N -problem ex1 -sub_snes_type ngmres -sub_snes_max_it 1 $fasnpc format
-## This is good
-
-# printf "\nNGMRES with TR NPC:\n"
+# printf "\nNGMRES with TR NPC:\n" >> out5
 # mpiexec -np $np ../../maddm -N $N -problem ex1 -sub_snes_type ngmres -sub_snes_max_it 1 -sub_npc_snes_type newtontr -sub_npc_pc_type eisenstat -sub_npc_snes_max_it 1 format
 ## This is bad. Trustregion is not a good preconditioner.
 
-
-printf "\nQN with LS NPC:\n"
-mpiexec -np $np ../../maddm -N $N -problem ex1 -sub_snes_type qn -sub_snes_linesearch_type l2 -sub_snes_linesearch_max_it 1 $lsnpc format
+printf "\nQN with LS NPC:\n" >> out5
+mpiexec -np $np ../../maddm -N $N -problem ex1 -sub_snes_type qn -sub_snes_linesearch_order 2 -sub_snes_linesearch_max_it 1 $lsnpc >> out5
+mpiexec -np $np ../../maddm -N $N -problem ex2 -sub_snes_type qn -sub_snes_linesearch_order 2 -sub_snes_linesearch_max_it 1 $lsnpc >> out5
+mpiexec -np $np ../../maddm -N $N -problem ex3 -sub_snes_type qn -sub_snes_linesearch_order 2 -sub_snes_linesearch_max_it 1 $lsnpc >> out5
+mpiexec -np $np ../../maddm -N $N -problem ex4 -sub_snes_type qn -sub_snes_linesearch_order 2 -sub_snes_linesearch_max_it 1 $lsnpc >> out5
 ## It's not fast, but it has fewer DDM iterations.
-
-printf "\nQN with FAS NPC:\n"
-mpiexec -np $np ../../maddm -N $N -problem ex1 -sub_snes_type qn -sub_snes_linesearch_type l2 -sub_snes_linesearch_max_it 1 $fasnpc format
-## It's not fast, but it has fewer DDM iterations.
-

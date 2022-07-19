@@ -3,19 +3,19 @@ import numpy as np
 import seaborn as sns
 
 plt.rcParams.update({'font.size' : 14})
-colors=sns.color_palette("rocket",3)
+colors=sns.color_palette("rocket",4)
 
-f = open("out4a")
+f = open("out1")
 N = 4
 M = 4
-times = np.zeros((N,M,3),dtype=float)
-errs = np.zeros((N,M,3),dtype=float)
-iters = np.zeros((N,M,3),dtype=int)
+times = np.zeros((N,M,4),dtype=float)
+errs = np.zeros((N,M,4),dtype=float)
+iters = np.zeros((N,M,4),dtype=int)
 
 for i in range(N):
    for j in range(M):
       print(f.readline()) # tolerance
-      for k in range(3):
+      for k in range(4):
          f.readline() # Problem
          f.readline() # Params
          # print(f.readline().split())
@@ -37,11 +37,15 @@ print("problem 3")
 print(times[:,:,2])
 print(iters[:,:,2])
 
+print("problem 4")
+print(times[:,:,3])
+print(iters[:,:,3])
+
 fig = plt.figure(figsize=(6, 6))
 ax1=fig.add_subplot(111, projection='3d')
 ax1.set_xlabel('SNES rtol', labelpad=10)
 ax1.set_ylabel('KSP rtol', labelpad=10)
-ax1.set_zlabel('Runtime')
+ax1.set_zlabel('Runtime (sec)')
 
 _x = np.arange(N)
 _y = np.arange(M)
@@ -57,7 +61,7 @@ ax1.bar3d(x+0.4,y,z0,dx,dy,times[:,:,2].ravel(),color=colors[2],alpha=0.8)
 names = ['1e-4','1e-3','1e-2','1e-1']
 plt.xticks(_x,names)
 plt.yticks(_y,names)
-plt.savefig('rtols.png',dpi=300,bbox_inches='tight')
+plt.savefig('HTN.png',dpi=600,bbox_inches='tight')
 plt.show()
 
 

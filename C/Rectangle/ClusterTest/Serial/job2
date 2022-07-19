@@ -28,4 +28,5 @@ do
    ../../maddm -N $N -problem ex1 -snes_type newtonls >> out2
    ../../maddm -N $N -problem ex2 -snes_type newtonls >> out2
    ../../maddm -N $N -problem ex3 -snes_type newtonls >> out2
+   ../../maddm -N $N -problem ex4 -snes_type newtonls >> out2
 done
