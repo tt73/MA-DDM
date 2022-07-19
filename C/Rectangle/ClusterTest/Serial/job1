@@ -23,6 +23,8 @@
 ## Modules needed for PETSc
 module load gnu8 mpich petsc
 
+rm -f out1
+
 for N in 100 150 200 250 300 350 400 450 500
 do
    printf "N = $N:\n" >> out1

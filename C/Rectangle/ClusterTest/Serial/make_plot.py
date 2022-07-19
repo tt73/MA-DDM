@@ -12,7 +12,7 @@ for i in range(N):
       f.readline() # Problem
       f.readline() # Params
       f.readline() # Error
-      times[j][i] = f.readline().split()[1] # WTime
+      times[j][i] = f.readline().split()[-1] # WTime
       f.readline() # Iters
    Ns[i] = 100 + i*50
 

@@ -23,12 +23,21 @@
 
 module load gnu8 mpich petsc
 
-N=300
+rm -f out1a out1b
+
+N=200
 np=4
 for op in {0.0,0.05,0.10,0.15,0.20}
 do
-   printf "overlap = $op\n" >> out1
-   mpiexec -np $np ../../maddm -N $N -op $op -problem ex1 -sin >> out1
-   mpiexec -np $np ../../maddm -N $N -op $op -problem ex2 -sin >> out1
-   mpiexec -np $np ../../maddm -N $N -op $op -problem ex3 -sin >> out1
+   printf "overlap = $op\n" >> out1a
+   mpiexec -np $np ../../maddm -N $N -op $op -problem ex1 -sin >> out1a
+   mpiexec -np $np ../../maddm -N $N -op $op -problem ex2 -sin >> out1a
+   mpiexec -np $np ../../maddm -N $N -op $op -problem ex3 -sin >> out1a
+   mpiexec -np $np ../../maddm -N $N -op $op -problem ex4 -sin >> out1a
+
+   printf "overlap = $op\n" >> out1b
+   mpiexec -np $np ../../maddm -N $N -op $op -problem ex1 -htn >> out1b
+   mpiexec -np $np ../../maddm -N $N -op $op -problem ex2 -htn >> out1b
+   mpiexec -np $np ../../maddm -N $N -op $op -problem ex3 -htn >> out1b
+   mpiexec -np $np ../../maddm -N $N -op $op -problem ex4 -htn >> out1b
 done

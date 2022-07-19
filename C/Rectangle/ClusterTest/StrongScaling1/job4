@@ -1,7 +1,7 @@
 #!/bin/bash -l
 #SBATCH -J j4
 #SBATCH -p public
-#SBATCH -o out4
+#SBATCH -o slurmout4
 #SBATCH -p dms-cpu
 #SBATCH --mail-user tt73@njit.edu
 #SBATCH -A tt73
@@ -9,11 +9,9 @@
 #SBATCH --mem=16G
 #SBATCH --nodes 4
 #SBATCH --ntasks 4
-#SBATCH --exclusive
-module load gnu8
-module load mpich
-module load petsc
+module load gnu8 mpich petsc
 N=300
-mpirun ../../maddm -N $N -problem ex1 -snes_max_it 500
-mpirun ../../maddm -N $N -problem ex2 -snes_max_it 500
-mpirun ../../maddm -N $N -problem ex3 -snes_max_it 500
+mpirun ../../maddm -N $N -problem ex1 >> out4
+mpirun ../../maddm -N $N -problem ex2 >> out4
+mpirun ../../maddm -N $N -problem ex3 >> out4
+mpirun ../../maddm -N $N -problem ex4 >> out4

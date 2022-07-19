@@ -1,0 +1,17 @@
+#!/bin/bash -l
+#SBATCH -J j8
+#SBATCH -p public
+#SBATCH -o slurmout8
+#SBATCH -p dms-cpu
+#SBATCH --mail-user tt73@njit.edu
+#SBATCH -A tt73
+#SBATCH -t 8:0:0
+#SBATCH --mem=16G
+#SBATCH --nodes 8
+#SBATCH --ntasks 8
+module load gnu8 mpich petsc
+N=300
+mpirun ../../maddm -N $N -problem ex1 -sin >> out8
+mpirun ../../maddm -N $N -problem ex2 -sin >> out8
+mpirun ../../maddm -N $N -problem ex3 -sin >> out8
+mpirun ../../maddm -N $N -problem ex4 -sin >> out8

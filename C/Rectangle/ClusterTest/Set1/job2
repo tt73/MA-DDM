@@ -25,6 +25,8 @@
 
 module load gnu8 mpich petsc
 
+rm -f out2
+
 np=4
 for N in {100,200,300,400}
 do

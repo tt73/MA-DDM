@@ -22,11 +22,20 @@
 
 module load gnu8 mpich petsc
 
+rm -f out2a out2
+
 np=4
 for N in {100,200,300,400}
 do
-   printf "N = $N\n" >> out2
-   mpiexec -np $np ../../maddm -N $N -problem ex1 -sin >> out2
-   mpiexec -np $np ../../maddm -N $N -problem ex2 -sin >> out2
-   mpiexec -np $np ../../maddm -N $N -problem ex3 -sin >> out2
+   printf "N = $N\n" >> out2a
+   mpiexec -np $np ../../maddm -N $N -problem ex1 -sin >> out2a
+   mpiexec -np $np ../../maddm -N $N -problem ex2 -sin >> out2a
+   mpiexec -np $np ../../maddm -N $N -problem ex3 -sin >> out2a
+   mpiexec -np $np ../../maddm -N $N -problem ex4 -sin >> out2a
+
+   printf "N = $N\n" >> out2b
+   mpiexec -np $np ../../maddm -N $N -problem ex1 -htn >> out2b
+   mpiexec -np $np ../../maddm -N $N -problem ex2 -htn >> out2b
+   mpiexec -np $np ../../maddm -N $N -problem ex3 -htn >> out2b
+   mpiexec -np $np ../../maddm -N $N -problem ex4 -htn >> out2b
 done
