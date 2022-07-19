@@ -2,9 +2,6 @@ import matplotlib.pyplot as plt
 import numpy as np
 import seaborn as sns
 
-plt.rcParams.update({'font.size' : 14})
-colors=sns.color_palette("rocket",4)
-
 f = open("out1")
 N = 9
 Ns = np.zeros(N,dtype=int)
@@ -19,11 +16,15 @@ for i in range(N):
       f.readline() # Iters
    Ns[i] = 100 + i*50
 
+plt.rcParams.update({'font.size' : 14})
+colors = sns.color_palette("rocket",4)
+lines = ['-',':','--','.-']
+marks = ['o','s','^','x']
 fig = plt.figure(1, figsize=(6,6))
-plt.plot(Ns,times[0],'-', label='P1',marker='o',mfc='w',color=colors[0],ms=8)
-plt.plot(Ns,times[1],':', label='P2',marker='s',mfc='w',color=colors[1],ms=8)
-plt.plot(Ns,times[2],'--',label='P3',marker='^',mfc='w',color=colors[2],ms=8)
-plt.plot(Ns,times[3],'.-',label='P4',marker='x',mfc='w',color=colors[3],ms=8)
+plt.plot(Ns,times[0],lines[0],label='P1',marker=marks[0],mfc='w',color=colors[0],ms=8)
+plt.plot(Ns,times[1],lines[1],label='P2',marker=marks[1],mfc='w',color=colors[1],ms=8)
+plt.plot(Ns,times[2],lines[2],label='P3',marker=marks[2],mfc='w',color=colors[2],ms=8)
+plt.plot(Ns,times[3],lines[3],label='P4',marker=marks[3],mfc='w',color=colors[3],ms=8)
 plt.tick_params(direction='in',right=True,top=True)
 plt.tick_params(labelsize=14)
 plt.tick_params(direction='in',which='minor', length=5, bottom=True, top=True, left=True, right=True)
