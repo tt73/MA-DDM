@@ -1,23 +1,46 @@
+#!/bin/bash -l
+## Just trying out different global solvers.
+
+## NAMING
+#SBATCH -J j6
+#SBATCH -p public
+#SBATCH -o slurmout6
+#SBATCH -e slurmout6
+
+## partition/queue
+#SBATCH -p dms-cpu
+
+## EMAIL NOTIFICATION
+#SBATCH --mail-user tt73@njit.edu
+#SBATCH --mail-type=END
+#SBATCH -A tt73
+
+## RUNTIME HOURS:MIN:SEC and MEMORY
+#SBATCH -t 8:0:0
+#SBATCH --mem=16G
+#SBATCH -N 4
+
 N=200
 np=4
 
-printf "\nNASM:\n"
-mpiexec -np $np ../../maddm -N $N -problem ex1 -sub_snes_rtol 1e-1 -sub_ksp_rtol 1e-1
-mpiexec -np $np ../../maddm -N $N -problem ex2 -sub_snes_rtol 1e-1 -sub_ksp_rtol 1e-1
-mpiexec -np $np ../../maddm -N $N -problem ex3 -sub_snes_rtol 1e-1 -sub_ksp_rtol 1e-1
+printf "NASM:\n"
+mpiexec -np $np ../../maddm -N $N -problem ex1 -sin
+mpiexec -np $np ../../maddm -N $N -problem ex2 -sin
+mpiexec -np $np ../../maddm -N $N -problem ex3 -sin
+mpiexec -np $np ../../maddm -N $N -problem ex4 -sin
 
-printf "\nLS:\n"
+printf "Newton:\n"
 mpiexec -np $np ../../maddm -N $N -problem ex1 -snes_type newtonls -snes_linesearch_type l2 -ksp_type pipefgmres -ksp_rtol 1e-2
 mpiexec -np $np ../../maddm -N $N -problem ex2 -snes_type newtonls -snes_linesearch_type l2 -ksp_type pipefgmres -ksp_rtol 1e-2
 mpiexec -np $np ../../maddm -N $N -problem ex3 -snes_type newtonls -snes_linesearch_type l2 -ksp_type pipefgmres -ksp_rtol 1e-2
 
-printf "\nASPIN:\n"
+printf "ASPIN:\n"
 mpiexec -np $np ../../maddm -N $N -problem ex1 -snes_type aspin -npc_sub_pc_type ilu
 mpiexec -np $np ../../maddm -N $N -problem ex2 -snes_type aspin -npc_sub_pc_type ilu
 mpiexec -np $np ../../maddm -N $N -problem ex3 -snes_type aspin -npc_sub_pc_type ilu
 
 
-printf "\nFAS:\n"
+printf "FAS:\n"
 mpiexec -np $np ../../maddm -N $N -problem ex1 -snes_type fas -fas_coarse_snes_linesearch_type l2
 
 # printf "\nNGMRES:\n"

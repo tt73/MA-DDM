@@ -1,5 +1,6 @@
 #!/bin/bash -l
-## These tests are for the NASM with a different nonlinear solver.
+## We still use NASM as the gloabal method.
+## We use a local solver other than Newton's method.
 
 ## NAMING
 #SBATCH -J j5
@@ -31,7 +32,7 @@ mpiexec -np $np ../../maddm -N $N -problem ex2 -sub_snes_linesearch_order 2 -sub
 mpiexec -np $np ../../maddm -N $N -problem ex3 -sub_snes_linesearch_order 2 -sub_snes_max_it 1 -sub_ksp_rtol 1e-1 >> out5
 mpiexec -np $np ../../maddm -N $N -problem ex4 -sub_snes_linesearch_order 2 -sub_snes_max_it 1 -sub_ksp_rtol 1e-1 >> out5
 
-printf "\nTR:\n" >> out5
+printf "TR:\n" >> out5
 mpiexec -np $np ../../maddm -N $N -problem ex1 -sub_snes_type newtontr -sub_snes_trtol 1e-6 -sub_snes_rtol 1e-1 -sub_ksp_rtol 1e-1 >> out5
 mpiexec -np $np ../../maddm -N $N -problem ex2 -sub_snes_type newtontr -sub_snes_trtol 1e-6 -sub_snes_rtol 1e-1 -sub_ksp_rtol 1e-1 >> out5
 mpiexec -np $np ../../maddm -N $N -problem ex3 -sub_snes_type newtontr -sub_snes_trtol 1e-6 -sub_snes_rtol 1e-1 -sub_ksp_rtol 1e-1 >> out5
@@ -39,21 +40,21 @@ mpiexec -np $np ../../maddm -N $N -problem ex4 -sub_snes_type newtontr -sub_snes
 ## Its slow but it converges without NPC
 ## This has 8 parameters so its annoying to tune.
 
-printf "\nFAS:\n" >> out5
+printf "FAS:\n" >> out5
 mpiexec -np $np ../../maddm -N $N -problem ex1 -sub_snes_type fas -sub_fas_coarse_snes_linesearch_order 2 -sub_fas_coarse_snes_max_it 1 -sub_fas_coarse_ksp_rtol 1e-1 -sub_fas_coarse_pc_type eisenstat >> out5
 mpiexec -np $np ../../maddm -N $N -problem ex2 -sub_snes_type fas -sub_fas_coarse_snes_linesearch_order 2 -sub_fas_coarse_snes_max_it 1 -sub_fas_coarse_ksp_rtol 1e-1 -sub_fas_coarse_pc_type eisenstat >> out5
 mpiexec -np $np ../../maddm -N $N -problem ex3 -sub_snes_type fas -sub_fas_coarse_snes_linesearch_order 2 -sub_fas_coarse_snes_max_it 1 -sub_fas_coarse_ksp_rtol 1e-1 -sub_fas_coarse_pc_type eisenstat >> out5
 mpiexec -np $np ../../maddm -N $N -problem ex4 -sub_snes_type fas -sub_fas_coarse_snes_linesearch_order 2 -sub_fas_coarse_snes_max_it 1 -sub_fas_coarse_ksp_rtol 1e-1 -sub_fas_coarse_pc_type eisenstat >> out5
 ##
 
-printf "\nAnderson with LS NPC:\n" >> out5
+printf "Anderson with LS NPC:\n" >> out5
 lsnpc=' -sub_npc_snes_type newtonls -sub_npc_pc_type eisenstat -sub_npc_snes_linesearch_order 2 -sub_npc_snes_max_it 1'
 mpiexec -np $np ../../maddm -N $N -problem ex1 -sub_snes_type anderson -sub_snes_max_it 1 $lsnpc >> out5
 mpiexec -np $np ../../maddm -N $N -problem ex2 -sub_snes_type anderson -sub_snes_max_it 1 $lsnpc >> out5
 mpiexec -np $np ../../maddm -N $N -problem ex3 -sub_snes_type anderson -sub_snes_max_it 1 $lsnpc >> out5
 mpiexec -np $np ../../maddm -N $N -problem ex4 -sub_snes_type anderson -sub_snes_max_it 1 $lsnpc >> out5
 
-printf "\nNGMRES with LS NPC:\n" >> out5
+printf "NGMRES with LS NPC:\n" >> out5
 mpiexec -np $np ../../maddm -N $N -problem ex1 -sub_snes_type ngmres -sub_snes_max_it 1 $lsnpc >> out5
 mpiexec -np $np ../../maddm -N $N -problem ex2 -sub_snes_type ngmres -sub_snes_max_it 1 $lsnpc >> out5
 mpiexec -np $np ../../maddm -N $N -problem ex3 -sub_snes_type ngmres -sub_snes_max_it 1 $lsnpc >> out5
@@ -66,7 +67,7 @@ mpiexec -np $np ../../maddm -N $N -problem ex4 -sub_snes_type ngmres -sub_snes_m
 # mpiexec -np $np ../../maddm -N $N -problem ex1 -sub_snes_type ngmres -sub_snes_max_it 1 -sub_npc_snes_type newtontr -sub_npc_pc_type eisenstat -sub_npc_snes_max_it 1 format
 ## This is bad. Trustregion is not a good preconditioner.
 
-printf "\nQN with LS NPC:\n" >> out5
+printf "QN with LS NPC:\n" >> out5
 mpiexec -np $np ../../maddm -N $N -problem ex1 -sub_snes_type qn -sub_snes_linesearch_order 2 -sub_snes_linesearch_max_it 1 $lsnpc >> out5
 mpiexec -np $np ../../maddm -N $N -problem ex2 -sub_snes_type qn -sub_snes_linesearch_order 2 -sub_snes_linesearch_max_it 1 $lsnpc >> out5
 mpiexec -np $np ../../maddm -N $N -problem ex3 -sub_snes_type qn -sub_snes_linesearch_order 2 -sub_snes_linesearch_max_it 1 $lsnpc >> out5
