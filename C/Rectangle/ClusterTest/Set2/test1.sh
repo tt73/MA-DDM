@@ -21,6 +21,9 @@
 #SBATCH --mem=16G
 #SBATCH -N 4
 
+
+module load gnu8 mpich petsc
+
 rm -f out1
 
 N=200

@@ -1,0 +1,62 @@
+Starting /home/t/tt73/.bash_profile ... standard AFS bash profile
+
+========================
+Home directory : /home/t/tt73 is not in AFS -- skipping quota check
+========================
+
+On host node011 :
+	 10:36:12 up 495 days, 15:50,  0 users,  load average: 0.08, 0.03, 0.05
+
+=== === === Your Kerberos ticket and AFS token status === === ===
+klist: No credentials cache found (filename: /tmp/krb5cc_90502_58s2mxxnU7)
+Kerberos : 
+AFS      : 
+
+Loading default modules ...
+Create file : "/home/t/tt73/.modules" to customize.
+
+
+Currently Loaded Modules:
+  1) gnu8/8.3.0    3) phdf5/1.10.5     5) scalapack/2.0.2
+  2) mpich/3.3.1   4) openblas/0.3.7   6) petsc/3.12.0
+
+ 
+
+*Problem: ex1 on domain [-1.00,1.00]x[-1.00,1.00] with 200x200 point 2D grid
+*Params:  Nd = 4, width = 5, eps = 0.002, op = 0.10
+*Error:   |u-uexact|_inf = 9.263e-04, |u-uexact|_h = 5.256e-04
+*WTime:   5.503894
+*Iters:   19
+*Problem: ex2 on domain [0.00,1.00]x[0.00,1.00] with 200x200 point 2D grid
+*Params:  Nd = 4, width = 6, eps = 0.001, op = 0.10
+*Error:   |u-uexact|_inf = 1.523e-04, |u-uexact|_h = 8.353e-05
+*WTime:   4.828545
+*Iters:   14
+*Problem: ex3 on domain [0.00,1.00]x[0.00,1.00] with 200x200 point 2D grid
+*Params:  Nd = 4, width = 6, eps = 0.001, op = 0.10
+*Error:   |u-uexact|_inf = 2.657e-04, |u-uexact|_h = 5.955e-05
+*WTime:   21.788257
+*Iters:   71
+*Problem: ex4 on domain [-1.00,1.00]x[-1.00,1.00] with 200x200 point 2D grid
+*Params:  Nd = 4, width = 5, eps = 0.002, op = 0.10
+*Error:   |u-uexact|_inf = 7.534e-04, |u-uexact|_h = 1.583e-04
+*WTime:   10.916027
+*Iters:   33
+NGMRES with FAS NPC:
+*Problem: ex1 on domain [-1.00,1.00]x[-1.00,1.00] with 200x200 point 2D grid
+*Params:  Nd = 4, width = 5, eps = 0.002, op = 0.10
+*Error:   |u-uexact|_inf = 9.264e-04, |u-uexact|_h = 5.257e-04
+*WTime:   5.576086
+*Iters:   1
+FAS * NGMRES composite:
+*Problem: ex1 on domain [-1.00,1.00]x[-1.00,1.00] with 200x200 point 2D grid
+*Params:  Nd = 4, width = 5, eps = 0.002, op = 0.10
+*Error:   |u-uexact|_inf = 2.077e-01, |u-uexact|_h = 2.057e-03
+*WTime:   7.901943
+*Iters:   0
+FAS + Newton composite:
+*Problem: ex1 on domain [-1.00,1.00]x[-1.00,1.00] with 200x200 point 2D grid
+*Params:  Nd = 4, width = 5, eps = 0.002, op = 0.10
+*Error:   |u-uexact|_inf = 9.269e-04, |u-uexact|_h = 5.261e-04
+*WTime:   10.612899
+*Iters:   19
