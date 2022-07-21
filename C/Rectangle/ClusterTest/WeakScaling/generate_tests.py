@@ -2,10 +2,12 @@ import numpy as np
 import subprocess
 
 base_N = 100
+op = 0.10 # overlap percentage
 
 nps = np.array([1,4,9])
-Nxs = np.array([base_N, base_N*2, base_N*3])
-Nys = np.array([base_N, base_N*2, base_N*3])
+Nxs = np.array([base_N, base_N*2/(1+op), base_N*3/(1+op)],dtype=int)
+Nys = np.array([base_N, base_N*2/(1+op), base_N*3/(1+op)],dtype=int)
+
 
 # loop to create job files
 for i in range(len(nps)):
@@ -24,8 +26,15 @@ for i in range(len(nps)):
    f.write("#SBATCH --ntasks {:d}\n".format(nps[i]))
    # f.write("#SBATCH --exclusive\n")
    f.write("module load gnu8 mpich petsc\n")
-   f.write("mpirun ../../maddm -Nx {:d} -Ny {:d} -problem ex1 -sin >> out{:d}\n".format(Nxs[i],Nys[i],nps[i]))
-   f.write("mpirun ../../maddm -Nx {:d} -Ny {:d} -problem ex2 -sin >> out{:d}\n".format(Nxs[i],Nys[i],nps[i]))
-   f.write("mpirun ../../maddm -Nx {:d} -Ny {:d} -problem ex3 -sin >> out{:d}\n".format(Nxs[i],Nys[i],nps[i]))
-   f.write("mpirun ../../maddm -Nx {:d} -Ny {:d} -problem ex4 -sin >> out{:d}\n".format(Nxs[i],Nys[i],nps[i]))
+   if (i==0):
+      f.write("mpirun ../../maddm -Nx {:d} -Ny {:d} -op {:f} -problem ex1 >> out{:d}\n".format(Nxs[i],Nys[i],op,nps[i]))
+      f.write("mpirun ../../maddm -Nx {:d} -Ny {:d} -op {:f} -problem ex2 >> out{:d}\n".format(Nxs[i],Nys[i],op,nps[i]))
+      f.write("mpirun ../../maddm -Nx {:d} -Ny {:d} -op {:f} -problem ex3 >> out{:d}\n".format(Nxs[i],Nys[i],op,nps[i]))
+      f.write("mpirun ../../maddm -Nx {:d} -Ny {:d} -op {:f} -problem ex4 >> out{:d}\n".format(Nxs[i],Nys[i],op,nps[i]))
+
+   else:
+      f.write("mpirun ../../maddm -Nx {:d} -Ny {:d} -op {:f} -problem ex1 -sin >> out{:d}\n".format(Nxs[i],Nys[i],op,nps[i]))
+      f.write("mpirun ../../maddm -Nx {:d} -Ny {:d} -op {:f} -problem ex2 -sin >> out{:d}\n".format(Nxs[i],Nys[i],op,nps[i]))
+      f.write("mpirun ../../maddm -Nx {:d} -Ny {:d} -op {:f} -problem ex3 -sin >> out{:d}\n".format(Nxs[i],Nys[i],op,nps[i]))
+      f.write("mpirun ../../maddm -Nx {:d} -Ny {:d} -op {:f} -problem ex4 -sin >> out{:d}\n".format(Nxs[i],Nys[i],op,nps[i]))
    f.close()

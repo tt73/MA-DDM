@@ -1,0 +1,24 @@
+Starting /home/t/tt73/.bash_profile ... standard AFS bash profile
+
+========================
+Home directory : /home/t/tt73 is not in AFS -- skipping quota check
+========================
+
+On host node011 :
+	 13:14:13 up 496 days, 18:28,  0 users,  load average: 0.00, 0.01, 0.05
+
+=== === === Your Kerberos ticket and AFS token status === === ===
+klist: No credentials cache found (filename: /tmp/krb5cc_90502_P0WrjwIEYH)
+Kerberos : 
+AFS      : 
+
+Loading default modules ...
+Create file : "/home/t/tt73/.modules" to customize.
+
+
+Currently Loaded Modules:
+  1) gnu8/8.3.0       3) mpich/3.3.1    5) scalapack/2.0.2   7) python/3.8
+  2) openblas/0.3.7   4) phdf5/1.10.5   6) petsc/3.12.0
+
+ 
+

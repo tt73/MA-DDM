@@ -1,15 +1,11 @@
 ## uncomment below if compiling on cluster
-# PETSC_DIR=/opt/ohpc/pub/libs/gnu8/mpich/petsc/3.12.0
 include ${PETSC_DIR}/lib/petsc/conf/variables
 include ${PETSC_DIR}/lib/petsc/conf/rules
-CFLAGS += -pedantic -std=c99
-
-all: maddm bratu pbratu
+# CFLAGS += -pedantic -std=c99
 
 maddm: maddm.o MAfunctions.o
 	-${CLINKER} -o maddm maddm.o MAfunctions.o ${PETSC_LIB}
 	${RM} maddm.o MAfunctions.o
-
 
 bratu: bratu.c
 	${CC} $^ ${PETSC_LIB} ${PETSC_CCPPFLAGS} ${CC_FLAGS} -o $@
