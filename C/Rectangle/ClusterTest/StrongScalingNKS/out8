@@ -1,20 +1,20 @@
 *Problem: ex1 on domain [-1.00,1.00]x[-1.00,1.00] with 300x300 point 2D grid
 *Params:  Nd = 8, width = 6, eps = 0.002, op = 0.10
-*Error:   |u-uexact|_inf = 4.147e-04, |u-uexact|_h = 2.404e-04
-*WTime:   5.551317
-*Iters:   29
+*Error:   |u-uexact|_inf = 5.715e-04, |u-uexact|_h = 3.151e-04
+*WTime:   15.117664
+*Iters:   35
 *Problem: ex2 on domain [0.00,1.00]x[0.00,1.00] with 300x300 point 2D grid
 *Params:  Nd = 8, width = 7, eps = 0.001, op = 0.10
-*Error:   |u-uexact|_inf = 9.298e-05, |u-uexact|_h = 5.104e-05
-*WTime:   5.844386
-*Iters:   17
+*Error:   |u-uexact|_inf = 9.271e-05, |u-uexact|_h = 5.088e-05
+*WTime:   6.014078
+*Iters:   13
 *Problem: ex3 on domain [0.00,1.00]x[0.00,1.00] with 300x300 point 2D grid
 *Params:  Nd = 8, width = 7, eps = 0.001, op = 0.10
-*Error:   |u-uexact|_inf = 1.208e-04, |u-uexact|_h = 4.886e-05
-*WTime:   21.601871
-*Iters:   60
+*Error:   |u-uexact|_inf = 1.208e-04, |u-uexact|_h = 4.885e-05
+*WTime:   34.431985
+*Iters:   56
 *Problem: ex4 on domain [-1.00,1.00]x[-1.00,1.00] with 300x300 point 2D grid
 *Params:  Nd = 8, width = 6, eps = 0.002, op = 0.10
-*Error:   |u-uexact|_inf = 1.050e-02, |u-uexact|_h = 6.140e-03
-*WTime:   3.025372
-*Iters:   16
+*Error:   |u-uexact|_inf = 1.046e-02, |u-uexact|_h = 6.133e-03
+*WTime:   4.984916
+*Iters:   14

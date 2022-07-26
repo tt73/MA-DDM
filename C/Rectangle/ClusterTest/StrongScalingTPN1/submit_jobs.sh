@@ -1,6 +1,8 @@
 ## First load the python module with `module load python`.
 ## Then gnenerate the job scripts with `python generate_tests.py`
 ## Then subit the jobs on the cluster with this scrpit with `bash submit_tests`
+##
+## I am setting the number of tasks per node to 1, and using the exclusive directive.
 
 # delete all out files
 rm out*

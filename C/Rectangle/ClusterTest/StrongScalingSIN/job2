@@ -9,9 +9,11 @@
 #SBATCH --mem=16G
 #SBATCH --nodes 2
 #SBATCH --ntasks 2
-module load gnu8 mpich petsc
+#SBATCH --ntasks-per-node 1
+#SBATCH --exclusive
+module load gnu8 mpich petsc/3.12.0
 N=300
-mpirun ../../maddm -N $N -problem ex1 -sin -op 0.15 >> out2
-mpirun ../../maddm -N $N -problem ex2 -sin -op 0.15 >> out2
-mpirun ../../maddm -N $N -problem ex3 -sin -op 0.15 >> out2
-mpirun ../../maddm -N $N -problem ex4 -sin -op 0.15 >> out2
+mpirun ../../maddm -N $N -problem ex1 -sin -op 0.10 >> out2
+mpirun ../../maddm -N $N -problem ex2 -sin -op 0.10 >> out2
+mpirun ../../maddm -N $N -problem ex3 -sin -op 0.10 >> out2
+mpirun ../../maddm -N $N -problem ex4 -sin -op 0.10 >> out2

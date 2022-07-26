@@ -21,7 +21,8 @@
 #SBATCH -N 1
 
 ## Modules needed for PETSc
-module load gnu8 mpich petsc
+# module load gnu8 mpich petsc/3.12.0 # outdated
+module load petsc # 3.17.3
 
 rm -f out1
 

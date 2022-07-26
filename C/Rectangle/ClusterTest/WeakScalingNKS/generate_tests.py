@@ -1,7 +1,7 @@
 import numpy as np
 import subprocess
 
-base_N = 150
+base_N = 100
 op = 0.1 # overlap percentage
 
 nps = np.array([1,4,9])
@@ -25,7 +25,7 @@ for i in range(len(nps)):
    f.write("#SBATCH --nodes {:d}\n".format(nps[i]))
    f.write("#SBATCH --ntasks {:d}\n".format(nps[i]))
    # f.write("#SBATCH --exclusive\n")
-   f.write("module load gnu8 mpich petsc\n")
+   f.write("module load gnu8 mpich petsc/3.12.0\n")
    if (i==0):
       f.write("mpirun ../../maddm -Nx {:d} -Ny {:d} -op {:f} -problem ex1 >> out{:d}\n".format(Nxs[i],Nys[i],op,nps[i]))
       f.write("mpirun ../../maddm -Nx {:d} -Ny {:d} -op {:f} -problem ex2 >> out{:d}\n".format(Nxs[i],Nys[i],op,nps[i]))
@@ -33,8 +33,8 @@ for i in range(len(nps)):
       f.write("mpirun ../../maddm -Nx {:d} -Ny {:d} -op {:f} -problem ex4 >> out{:d}\n".format(Nxs[i],Nys[i],op,nps[i]))
 
    else:
-      f.write("mpirun ../../maddm -Nx {:d} -Ny {:d} -op {:f} -problem ex1 -snes_type newtonls -ksp_rtol 1e-2 -snes_linesearch_order 2 -ksp_type pipefgmres >> out{:d}\n".format(Nxs[i],Nys[i],op,nps[i]))
-      f.write("mpirun ../../maddm -Nx {:d} -Ny {:d} -op {:f} -problem ex2 -snes_type newtonls -ksp_rtol 1e-2 -snes_linesearch_order 2 -ksp_type pipefgmres >> out{:d}\n".format(Nxs[i],Nys[i],op,nps[i]))
-      f.write("mpirun ../../maddm -Nx {:d} -Ny {:d} -op {:f} -problem ex3 -snes_type newtonls -ksp_rtol 1e-2 -snes_linesearch_order 2 -ksp_type pipefgmres >> out{:d}\n".format(Nxs[i],Nys[i],op,nps[i]))
-      f.write("mpirun ../../maddm -Nx {:d} -Ny {:d} -op {:f} -problem ex4 -snes_type newtonls -ksp_rtol 1e-2 -snes_linesearch_order 2 -ksp_type pipefgmres >> out{:d}\n".format(Nxs[i],Nys[i],op,nps[i]))
+      f.write("mpirun ../../maddm -Nx {:d} -Ny {:d} -op {:f} -problem ex1 -snes_type newtonls -snes_linesearch_order 2 -ksp_type pipefgmres >> out{:d}\n".format(Nxs[i],Nys[i],op,nps[i]))
+      f.write("mpirun ../../maddm -Nx {:d} -Ny {:d} -op {:f} -problem ex2 -snes_type newtonls -snes_linesearch_order 2 -ksp_type pipefgmres >> out{:d}\n".format(Nxs[i],Nys[i],op,nps[i]))
+      f.write("mpirun ../../maddm -Nx {:d} -Ny {:d} -op {:f} -problem ex3 -snes_type newtonls -snes_linesearch_order 2 -ksp_type pipefgmres >> out{:d}\n".format(Nxs[i],Nys[i],op,nps[i]))
+      f.write("mpirun ../../maddm -Nx {:d} -Ny {:d} -op {:f} -problem ex4 -snes_type newtonls -snes_linesearch_order 2 -ksp_type pipefgmres >> out{:d}\n".format(Nxs[i],Nys[i],op,nps[i]))
    f.close()

@@ -1,0 +1,43 @@
+
+Due to MODULEPATH changes, the following have been reloaded:
+  1) binutils/.2.34     2) zlib/.1.2.11
+
+Starting /home/t/tt73/.bash_profile ... standard AFS bash profile
+
+========================
+Home directory : /home/t/tt73 is not in AFS -- skipping quota check
+========================
+
+On host node017 :
+	 15:04:33 up 497 days, 20:17,  0 users,  load average: 0.08, 0.03, 0.05
+
+=== === === Your Kerberos ticket and AFS token status === === ===
+klist: No credentials cache found (filename: /tmp/krb5cc_90502_I7OShimTBE)
+Kerberos : 
+AFS      : 
+
+Loading default modules ...
+Create file : "/home/t/tt73/.modules" to customize.
+
+
+Currently Loaded Modules:
+  1) GCCcore/.9.3.0     (H)  15) ncurses/.6.2                      (H)
+  2) GCC/9.3.0               16) libreadline/.8.0                  (H)
+  3) numactl/.2.0.13    (H)  17) Tcl/8.6.10
+  4) XZ/.5.2.5          (H)  18) SQLite/3.31.1
+  5) libxml2/.2.9.10    (H)  19) GMP/.6.2.0                        (H)
+  6) libpciaccess/.0.16 (H)  20) libffi/.3.3                       (H)
+  7) hwloc/.2.2.0       (H)  21) Python/3.8.2
+  8) libevent/2.1.11         22) FFTW/3.3.8
+  9) UCX/1.8.0               23) ScaLAPACK/2.1.0
+ 10) libfabric/.1.11.0  (H)  24) pybind11/2.4.3-Python-3.8.2
+ 11) PMIx/3.1.5              25) SciPy-bundle/2020.03-Python-3.8.2
+ 12) OpenMPI/4.0.3           26) petsc/3.17.3
+ 13) OpenBLAS/0.3.9          27) zlib/.1.2.11                      (H)
+ 14) bzip2/.1.0.8       (H)  28) binutils/.2.34                    (H)
+
+  Where:
+   H:  Hidden Module
+
+ 
+

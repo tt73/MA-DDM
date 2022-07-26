@@ -1,7 +1,7 @@
-## uncomment below if compiling on cluster
+## To compile this on Stheno, type `module load petsc` first. Then type `make maddm`.
+
 include ${PETSC_DIR}/lib/petsc/conf/variables
 include ${PETSC_DIR}/lib/petsc/conf/rules
-# CFLAGS += -pedantic -std=c99
 
 maddm: maddm.o MAfunctions.o
 	-${CLINKER} -o maddm maddm.o MAfunctions.o ${PETSC_LIB}
