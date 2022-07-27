@@ -5,7 +5,6 @@
 
 ## NAMING
 #SBATCH -J j3
-#SBATCH -p public
 #SBATCH -o slurmout3
 #SBATCH -e slurmout3
 
@@ -19,10 +18,14 @@
 
 ## RUNTIME HOURS:MIN:SEC and MEMORY
 #SBATCH -t 8:0:0
-#SBATCH --mem=16G
-#SBATCH -N 4
+#SBATCH --mem=0G
 
-module load gnu8 mpich petsc
+## Task allocation
+#SBATCH --ntasks 4
+#SBATCH --nodes 4
+#SBATCH --ntasks-per-node 1
+
+module load gnu8 mpich petsc/3.12.0
 
 N=200
 np=4

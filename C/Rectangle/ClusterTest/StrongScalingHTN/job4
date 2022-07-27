@@ -1,15 +1,15 @@
 #!/bin/bash -l
 #SBATCH -J j4
-#SBATCH -p public
 #SBATCH -o slurmout4
 #SBATCH -p dms-cpu
 #SBATCH --mail-user tt73@njit.edu
 #SBATCH -A tt73
 #SBATCH -t 8:0:0
-#SBATCH --mem=16G
+#SBATCH --mem=0G
 #SBATCH --nodes 4
 #SBATCH --ntasks 4
-module load gnu8 mpich petsc
+#SBATCH --ntasks-per-node 1
+module load gnu8 mpich petsc/3.12.0
 N=300
 mpirun ../../maddm -N $N -problem ex1 -htn >> out4
 mpirun ../../maddm -N $N -problem ex2 -htn >> out4

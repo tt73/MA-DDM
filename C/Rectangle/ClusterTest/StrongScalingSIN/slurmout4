@@ -4,8 +4,8 @@ Starting /home/t/tt73/.bash_profile ... standard AFS bash profile
 Home directory : /home/t/tt73 is not in AFS -- skipping quota check
 ========================
 
-On host node020 :
-	 15:19:03 up 501 days, 20:32,  0 users,  load average: 0.00, 0.01, 0.10
+On host node003 :
+	 17:09:55 up 104 days, 55 min,  0 users,  load average: 0.88, 1.01, 0.78
 
 === === === Your Kerberos ticket and AFS token status === === ===
 klist: No credentials cache found (filename: /tmp/krb5cc_90502_dMY7CcGc5M)

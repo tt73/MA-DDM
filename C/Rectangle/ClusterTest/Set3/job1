@@ -1,12 +1,9 @@
 #!/bin/bash -l
 # This is a redo of the overlap test in Set1 with single-iteration newton.
 
-
 ## NAMING
 #SBATCH -J j1
-#SBATCH -p public
 #SBATCH -o slurmout1
-
 
 ## partition/queue
 #SBATCH -p dms-cpu
@@ -18,7 +15,7 @@
 
 ## RUNTIME  HOURS:MIN:SEC and MEMORY
 #SBATCH -t 8:0:0
-#SBATCH --mem=16G
+#SBATCH --mem=0
 
 ## Task allocation
 #SBATCH --ntasks 4
@@ -31,17 +28,17 @@ rm -f out1a out1b
 
 N=200
 np=4
-for op in {0.0,0.05,0.10,0.15,0.20}
+for op in {0.0,0.05,0.10,0.15,0.20,0.25}
 do
    printf "overlap = $op\n" >> out1a
-   mpiexec -np $np ../../maddm -N $N -op $op -problem ex1 -sin >> out1a
-   mpiexec -np $np ../../maddm -N $N -op $op -problem ex2 -sin >> out1a
-   mpiexec -np $np ../../maddm -N $N -op $op -problem ex3 -sin >> out1a
-   mpiexec -np $np ../../maddm -N $N -op $op -problem ex4 -sin >> out1a
+   mpirun ../../maddm -N $N -op $op -problem ex1 -sin >> out1a
+   mpirun ../../maddm -N $N -op $op -problem ex2 -sin >> out1a
+   mpirun ../../maddm -N $N -op $op -problem ex3 -sin >> out1a
+   mpirun ../../maddm -N $N -op $op -problem ex4 -sin >> out1a
 
    printf "overlap = $op\n" >> out1b
-   mpiexec -np $np ../../maddm -N $N -op $op -problem ex1 -htn >> out1b
-   mpiexec -np $np ../../maddm -N $N -op $op -problem ex2 -htn >> out1b
-   mpiexec -np $np ../../maddm -N $N -op $op -problem ex3 -htn >> out1b
-   mpiexec -np $np ../../maddm -N $N -op $op -problem ex4 -htn >> out1b
+   mpirun -np $np ../../maddm -N $N -op $op -problem ex1 -htn >> out1b
+   mpirun -np $np ../../maddm -N $N -op $op -problem ex2 -htn >> out1b
+   mpirun -np $np ../../maddm -N $N -op $op -problem ex3 -htn >> out1b
+   mpirun -np $np ../../maddm -N $N -op $op -problem ex4 -htn >> out1b
 done
