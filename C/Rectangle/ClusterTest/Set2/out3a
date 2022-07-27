@@ -51,3 +51,13 @@ linesearch basic:
 *Error:   |u-uexact|_inf = 1.320e-04, |u-uexact|_h = 6.891e-05
 *WTime:   18.517034
 *Iters:   34
+*Problem: ex3 on domain [0.00,1.00]x[0.00,1.00] with 200x200 point 2D grid
+*Params:  Nd = 4, width = 6, eps = 0.001, op = 0.10
+*Error:   |u-uexact|_inf = 2.657e-04, |u-uexact|_h = 5.932e-05
+*WTime:   1583.617264
+*Iters:   661
+*Problem: ex4 on domain [-1.00,1.00]x[-1.00,1.00] with 200x200 point 2D grid
+*Params:  Nd = 4, width = 5, eps = 0.002, op = 0.10
+*Error:   |u-uexact|_inf = 6.393e-04, |u-uexact|_h = 8.666e-05
+*WTime:   14.877995
+*Iters:   43
