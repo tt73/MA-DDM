@@ -1,20 +1,20 @@
 *Problem: ex1 on domain [-1.00,1.00]x[-1.00,1.00] with 272x272 point 2D grid
 *Params:  Nd = 9, width = 6, eps = 0.002, op = 0.10
-*Error:   |u-uexact|_inf = 3.901e-04, |u-uexact|_h = 1.516e-04
-*WTime:   24.730392
-*Iters:   230
+*Error:   |u-uexact|_inf = 5.222e-04, |u-uexact|_h = 2.385e-04
+*WTime:   20.718605
+*Iters:   229
 *Problem: ex2 on domain [0.00,1.00]x[0.00,1.00] with 272x272 point 2D grid
 *Params:  Nd = 9, width = 7, eps = 0.001, op = 0.10
-*Error:   |u-uexact|_inf = 1.018e-04, |u-uexact|_h = 5.407e-05
-*WTime:   16.680909
-*Iters:   117
+*Error:   |u-uexact|_inf = 1.076e-04, |u-uexact|_h = 5.488e-05
+*WTime:   13.787100
+*Iters:   120
 *Problem: ex3 on domain [0.00,1.00]x[0.00,1.00] with 272x272 point 2D grid
 *Params:  Nd = 9, width = 7, eps = 0.001, op = 0.10
-*Error:   |u-uexact|_inf = 1.204e-04, |u-uexact|_h = 5.708e-05
-*WTime:   26.780655
-*Iters:   217
+*Error:   |u-uexact|_inf = 1.204e-04, |u-uexact|_h = 5.673e-05
+*WTime:   19.401065
+*Iters:   181
 *Problem: ex4 on domain [-1.00,1.00]x[-1.00,1.00] with 272x272 point 2D grid
 *Params:  Nd = 9, width = 6, eps = 0.002, op = 0.10
-*Error:   |u-uexact|_inf = 1.025e-02, |u-uexact|_h = 6.040e-03
-*WTime:   12.453267
-*Iters:   116
+*Error:   |u-uexact|_inf = 1.027e-02, |u-uexact|_h = 6.035e-03
+*WTime:   10.120515
+*Iters:   117

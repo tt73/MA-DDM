@@ -47,11 +47,10 @@ plt.tick_params(direction='in',which='major', length=10, bottom=True, top=True, 
 plt.tick_params(labelbottom=True,labeltop=False,labelright=False,labelleft=True)
 plt.legend(fontsize=14)
 plt.xticks(nps)
-plt.minorticks_on()
-plt.tick_params(which='minor', bottom=False, top=False)
+plt.minorticks_on(); plt.tick_params(which='minor', bottom=False, top=False)
 
 # plt.yticks(np.arange(1,10))
 plt.xlabel('$N_d$')
 plt.ylabel('Efficiency')
-plt.savefig('Efficiency.png',dpi=600,bbox_inches='tight')
+plt.savefig('efficiency.png',dpi=600,bbox_inches='tight')
 plt.show()
