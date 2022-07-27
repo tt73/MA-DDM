@@ -5,9 +5,10 @@
 #SBATCH --mail-user tt73@njit.edu
 #SBATCH -A tt73
 #SBATCH -t 8:0:0
-#SBATCH --mem=16G
 #SBATCH --nodes 4
 #SBATCH --ntasks 4
+#SBATCH --ntasks-per-node 1
+#SBATCH --exclusive
 module load gnu8 mpich petsc/3.12.0
 N=300
 mpirun ../../maddm -N $N -problem ex1 -snes_type newtonls -snes_linesearch_order 2 -ksp_type pipefgmres -pc_type bjacobi >> out4

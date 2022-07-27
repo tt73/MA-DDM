@@ -17,10 +17,14 @@
 
 ## RUNTIME HOURS:MIN:SEC and MEMORY
 #SBATCH -t 8:0:0
-#SBATCH --mem=16G
-#SBATCH -N 4
+#SBATCH --mem=0G
 
-module load gnu8 mpich petsc
+## Task allocation
+#SBATCH --ntasks 4
+#SBATCH --nodes 4
+#SBATCH --ntasks-per-node 1
+
+module load gnu8 mpich petsc/3.12.0
 
 rm -f out6
 
@@ -33,17 +37,23 @@ mpiexec -np $np ../../maddm -N $N -problem ex2 -sin >> out6
 mpiexec -np $np ../../maddm -N $N -problem ex3 -sin >> out6
 mpiexec -np $np ../../maddm -N $N -problem ex4 -sin >> out6
 
-printf "Newton-Krylov Schwarz:\n" >> out6
-mpiexec -np $np ../../maddm -N $N -problem ex1 -snes_type newtonls -snes_linesearch_type l2 -ksp_type pipefgmres -ksp_rtol 1e-2 >> out6
-mpiexec -np $np ../../maddm -N $N -problem ex2 -snes_type newtonls -snes_linesearch_type l2 -ksp_type pipefgmres -ksp_rtol 1e-2 >> out6
-mpiexec -np $np ../../maddm -N $N -problem ex3 -snes_type newtonls -snes_linesearch_type l2 -ksp_type pipefgmres -ksp_rtol 1e-2 >> out6
-mpiexec -np $np ../../maddm -N $N -problem ex4 -snes_type newtonls -snes_linesearch_type l2 -ksp_type pipefgmres -ksp_rtol 1e-2 >> out6
+printf "Newton-Krylov Schwarz with Bjacobi:\n" >> out6
+mpiexec -np $np ../../maddm -N $N -problem ex1 -snes_type newtonls -snes_linesearch_type l2 -ksp_type pipefgmres >> out6
+mpiexec -np $np ../../maddm -N $N -problem ex2 -snes_type newtonls -snes_linesearch_type l2 -ksp_type pipefgmres >> out6
+mpiexec -np $np ../../maddm -N $N -problem ex3 -snes_type newtonls -snes_linesearch_type l2 -ksp_type pipefgmres >> out6
+mpiexec -np $np ../../maddm -N $N -problem ex4 -snes_type newtonls -snes_linesearch_type l2 -ksp_type pipefgmres >> out6
+
+printf "Newton-Krylov Schwarz with ASM(1):\n" >> out6
+mpiexec -np $np ../../maddm -N $N -problem ex1 -snes_type newtonls -snes_linesearch_type l2 -ksp_type pipefgmres -pc_type asm >> out6
+mpiexec -np $np ../../maddm -N $N -problem ex2 -snes_type newtonls -snes_linesearch_type l2 -ksp_type pipefgmres -pc_type asm >> out6
+mpiexec -np $np ../../maddm -N $N -problem ex3 -snes_type newtonls -snes_linesearch_type l2 -ksp_type pipefgmres -pc_type asm >> out6
+mpiexec -np $np ../../maddm -N $N -problem ex4 -snes_type newtonls -snes_linesearch_type l2 -ksp_type pipefgmres -pc_type asm >> out6
 
 printf "ASPIN:\n" >> out6
-mpiexec -np $np ../../maddm -N $N -problem ex1 -snes_type aspin -npc_sub_pc_type ilu >> out6
-mpiexec -np $np ../../maddm -N $N -problem ex2 -snes_type aspin -npc_sub_pc_type ilu >> out6
-mpiexec -np $np ../../maddm -N $N -problem ex3 -snes_type aspin -npc_sub_pc_type ilu >> out6
-mpiexec -np $np ../../maddm -N $N -problem ex4 -snes_type aspin -npc_sub_pc_type ilu >> out6
+mpiexec -np $np ../../maddm -N $N -problem ex1 -aspin >> out6
+mpiexec -np $np ../../maddm -N $N -problem ex2 -aspin >> out6
+mpiexec -np $np ../../maddm -N $N -problem ex3 -aspin >> out6
+mpiexec -np $np ../../maddm -N $N -problem ex4 -aspin >> out6
 
 printf "FAS:\n" >> out6
 mpiexec -np $np ../../maddm -N $N -problem ex1 -snes_type fas -fas_coarse_snes_linesearch_order 2 >> out6

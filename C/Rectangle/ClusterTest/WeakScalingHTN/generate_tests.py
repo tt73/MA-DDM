@@ -2,12 +2,11 @@ import numpy as np
 import subprocess
 
 base_N = 100
-op = 0.2 # overlap percentage
+op = 0.3 # overlap percentage
 
 nps = np.array([1,4,9])
 Nxs = np.array([base_N, base_N*2/(1+op), base_N*3/(1+op)],dtype=int)
 Nys = np.array([base_N, base_N*2/(1+op), base_N*3/(1+op)],dtype=int)
-
 
 # loop to create job files
 for i in range(len(nps)):
@@ -21,10 +20,9 @@ for i in range(len(nps)):
    f.write("#SBATCH --mail-user tt73@njit.edu\n")
    f.write("#SBATCH -A tt73\n")
    f.write("#SBATCH -t 8:0:0\n")
-   f.write("#SBATCH --mem=16G\n")
+   f.write("#SBATCH --mem=0G\n")
    f.write("#SBATCH --nodes {:d}\n".format(nps[i]))
    f.write("#SBATCH --ntasks {:d}\n".format(nps[i]))
-   # f.write("#SBATCH --exclusive\n")
    f.write("module load gnu8 mpich petsc\n")
    if (i==0):
       f.write("mpirun ../../maddm -Nx {:d} -Ny {:d} -op {:f} -problem ex1 >> out{:d}\n".format(Nxs[i],Nys[i],op,nps[i]))

@@ -5,13 +5,13 @@
 #SBATCH --mail-user tt73@njit.edu
 #SBATCH -A tt73
 #SBATCH -t 8:0:0
-#SBATCH --mem=0G
 #SBATCH --nodes 2
 #SBATCH --ntasks 2
 #SBATCH --ntasks-per-node 1
+#SBATCH --exclusive
 module load gnu8 mpich petsc/3.12.0
 N=300
-mpirun ../../maddm -N $N -problem ex1 -htn >> out2
-mpirun ../../maddm -N $N -problem ex2 -htn >> out2
-mpirun ../../maddm -N $N -problem ex3 -htn >> out2
-mpirun ../../maddm -N $N -problem ex4 -htn >> out2
+mpirun ../../maddm -N $N -problem ex1 -htn -op 0.3 >> out2
+mpirun ../../maddm -N $N -problem ex2 -htn -op 0.3 >> out2
+mpirun ../../maddm -N $N -problem ex3 -htn -op 0.3 >> out2
+mpirun ../../maddm -N $N -problem ex4 -htn -op 0.3 >> out2
