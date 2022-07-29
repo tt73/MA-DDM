@@ -2,7 +2,7 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 import numpy as np
 
-nps = np.array([1,4,9])
+nps = np.array([1,2,4,6,8,9])
 n = len(nps)
 
 # creates arrays for data

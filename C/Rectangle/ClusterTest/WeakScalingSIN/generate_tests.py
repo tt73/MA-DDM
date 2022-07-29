@@ -4,9 +4,9 @@ import subprocess
 base_N = 100
 op = 0.10 # overlap percentage
 
-nps = np.array([1,4,9])
-Nxs = np.array([base_N, base_N*2/(1+op), base_N*3/(1+op), base_N*4/(1+op)],dtype=int)
-Nys = np.array([base_N, base_N*2/(1+op), base_N*3/(1+op), base_N*4/(1+op)],dtype=int)
+nps = np.array([1,2,4,6,8,9])
+Nxs = np.array([base_N, base_N         , base_N*2/(1+op), base_N*2/(1+op), base_N*2/(1+op), base_N*3/(1+op)],dtype=int)
+Nys = np.array([base_N, base_N*2/(1+op), base_N*2/(1+op), base_N*3/(1+op), base_N*4/(1+op), base_N*3/(1+op)],dtype=int)
 
 
 # loop to create job files
