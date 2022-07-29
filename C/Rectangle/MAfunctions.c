@@ -653,20 +653,22 @@ PetscErrorCode ComputeFwdStencilDirs(PetscInt width, MACtx *user) {
 /* Compute di and dj
    This is Algorithm 5 in the Appendix.
    This function computes the projected version of Si and Sj when near the boundary.
+
+   Si and Sj are the x and y relative stencil directions (positive or negative).
 */
 PetscErrorCode ComputeProjectionIndeces(PetscReal *di, PetscReal *dj, PetscInt i, PetscInt j, PetscInt Si, PetscInt Sj, PetscInt Nx, PetscInt Ny) {
    PetscReal m;
-   PetscInt check; // should be a boolean, but it doesn't work on Stheno compiler
+   PetscInt check;
    PetscFunctionBeginUser;
 
-   if (Si==0) {
+   if (Si==0) {        // purely vertical
       *di = 0;
       *dj = (Sj>0)? Ny-j : -(1+j);
-   } else if (Sj==0) {
+   } else if (Sj==0) { // purely horizontal
       *di = (Si>0)? Nx-i : -(1+i);
       *dj = 0;
-   } else {
-      m = Sj/(PetscReal)Si;
+   } else {            // mixed
+      m = Sj/(PetscReal)Si; // slope
       if (Si>0 && Sj>0) {
          check = PetscAbsReal((Ny-j)/m) < PetscAbsReal(Nx-i);
          // check = Sj > Si;
@@ -724,11 +726,11 @@ PetscErrorCode ComputeSDD(DMDALocalInfo *info, PetscReal **au, MACtx *user, Pets
       hFwd[0] = hx; hFwd[1] = hx;
       hBak[0] = hy; hBak[1] = hy;
    } else { // compute SDD for general width
-      for (k=0; k<M; k++) {
-         Si = user->Si[k];
-         Sj = user->Sj[k];
+      for (k=0; k<M; k++) { // loop over each stencil directions pairs
+         Si = user->Si[k]; // stencil x displacement (positive)
+         Sj = user->Sj[k]; // stencil y displacement (positive)
          // Forward point for direction k
-         if (i+Si>=0 && i+Si<=Ny-1 && j+Sj<=Ny-1 && j+Sj>=0) {
+         if (i+Si>=0 && i+Si<=Ny-1 && j+Sj<=Ny-1 && j+Sj>=0) {  // in-bound check
             // forward stencil point in the kth direction is in range
             uFwd[k] = au[j+Sj][i+Si];
             hFwd[k] = PetscSqrtReal(hx*hx*Si*Si + hy*hy*Sj*Sj);
