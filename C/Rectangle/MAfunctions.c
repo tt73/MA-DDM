@@ -726,9 +726,13 @@ PetscErrorCode ComputeSDD(DMDALocalInfo *info, PetscReal **au, MACtx *user, Pets
       hFwd[0] = hx; hFwd[1] = hx;
       hBak[0] = hy; hBak[1] = hy;
    } else { // compute SDD for general width
+      if(user->debug) {
+         PetscPrintf(PETSC_COMM_WORLD," -- Debugging ComputeSDD\n");
+         PetscPrintf(PETSC_COMM_WORLD," -- i = %d, j = %d\n",i,j);
+      }
       for (k=0; k<M; k++) { // loop over each stencil directions pairs
-         Si = user->Si[k]; // stencil x displacement (positive)
-         Sj = user->Sj[k]; // stencil y displacement (positive)
+         Si = user->Si[k]; // stencil x forward displacement
+         Sj = user->Sj[k]; // stencil y forward displacement
          // Forward point for direction k
          if (i+Si>=0 && i+Si<=Ny-1 && j+Sj<=Ny-1 && j+Sj>=0) {  // in-bound check
             // forward stencil point in the kth direction is in range
@@ -740,6 +744,9 @@ PetscErrorCode ComputeSDD(DMDALocalInfo *info, PetscReal **au, MACtx *user, Pets
             user->g_bdry(x+hx*di,y+hy*dj,0.0,user,&temp);
             uFwd[k] = temp;
             hFwd[k] = PetscSqrtReal(hx*hx*di*di + hy*hy*dj*dj);
+            if(user->debug) {
+               PetscPrintf(PETSC_COMM_WORLD," -- Fwd Projected (%d,%d) onto (%d,%d)\n",Si,Sj,di,dj);
+            }
          }
          // Backward point for direction k
          if (i-Si>=0 && i-Si<=Ny-1 && j-Sj>=0 && j-Sj <= Ny-1) {
@@ -748,10 +755,13 @@ PetscErrorCode ComputeSDD(DMDALocalInfo *info, PetscReal **au, MACtx *user, Pets
             hBak[k] = PetscSqrtReal(hx*hx*Si*Si + hy*hy*Sj*Sj);
          } else {
             // otherwise get the coordinates of the projection
-            ComputeProjectionIndeces(&di,&dj,i,j,-Si,-Sj,Ny,Ny);
+            ComputeProjectionIndeces(&di,&dj,i,j,-Si,-Sj,Nx,Ny);
             user->g_bdry(x+hx*di,y+hy*dj,0.0,user,&temp);
             uBak[k] = temp;
             hBak[k] = PetscSqrtReal(hx*hx*di*di + hy*hy*dj*dj);
+            if(user->debug) {
+               PetscPrintf(PETSC_COMM_WORLD," -- Bak Projected (%d,%d) onto (%d,%d)\n",-Si,-Sj,di,dj);
+            }
          }
       }
       // Use formula for generalized centered difference
