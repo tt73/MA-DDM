@@ -21,7 +21,10 @@ try
     load_initial
 end
 s = length(u);
-n = sqrt(s);
+% n = sqrt(s);
+% m = sqrt(s);
+n = 3; 
+m = 7; 
 
 %% 
 
@@ -45,12 +48,12 @@ end
 
 
 figure
-u_grid = reshape(u,n,n);
+u_grid = reshape(u,n,m);
 surf(u_grid)
 title('Numerical solution')
 
 figure
-u_exac = reshape(u_exact,n,n);
+u_exac = reshape(u_exact,n,m);
 surf(u_exac)
 title('Exact solution')
 
@@ -60,7 +63,7 @@ title('error')
 
 figure
 try 
-    u_init = reshape(u_initial,n,n);
+    u_init = reshape(u_initial,n,m);
     surf(u_init)
     title('Initial Guess')
 end
