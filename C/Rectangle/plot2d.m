@@ -23,8 +23,8 @@ end
 s = length(u);
 % n = sqrt(s);
 % m = sqrt(s);
-n = 3; 
-m = 7; 
+n = 20; 
+m = 2*n+1; 
 
 %% 
 

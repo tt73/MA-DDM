@@ -708,6 +708,7 @@ PetscErrorCode ComputeSDD(DMDALocalInfo *info, PetscReal **au, MACtx *user, Pets
 
    // get info from DA
    Nx = info->mx; Ny = info->my;
+
    hx = (user->xmax - user->xmin)/(PetscReal)(Nx + 1);
    hy = (user->ymax - user->ymin)/(PetscReal)(Ny + 1);
    d  = info->sw;
@@ -733,35 +734,40 @@ PetscErrorCode ComputeSDD(DMDALocalInfo *info, PetscReal **au, MACtx *user, Pets
       for (k=0; k<M; k++) { // loop over each stencil directions pairs
          Si = user->Si[k]; // stencil x forward displacement
          Sj = user->Sj[k]; // stencil y forward displacement
+         if(user->debug) {
+            PetscPrintf(PETSC_COMM_WORLD," -- Si = %d, Sj = %d\n",Si,Sj);
+         }
          // Forward point for direction k
-         if (i+Si>=0 && i+Si<=Ny-1 && j+Sj<=Ny-1 && j+Sj>=0) {  // in-bound check
+         if (i+Si>=0 && i+Si<=Nx-1 && j+Sj<=Ny-1 && j+Sj>=0) {  // in-bound check
             // forward stencil point in the kth direction is in range
             uFwd[k] = au[j+Sj][i+Si];
             hFwd[k] = PetscSqrtReal(hx*hx*Si*Si + hy*hy*Sj*Sj);
          } else {
             // otherwise get the coordinates of the projection
             ComputeProjectionIndeces(&di,&dj,i,j,Si,Sj,Nx,Ny);
+            if(user->debug) {
+               PetscPrintf(PETSC_COMM_WORLD," -- Fwd Projected (%d,%d) onto (%.1f,%.1f)\n",Si,Sj,di,dj);
+               PetscPrintf(PETSC_COMM_WORLD," -- New coord (%.3f,%.3f)\n",x+hx*di,y+hy*dj);
+            }
             user->g_bdry(x+hx*di,y+hy*dj,0.0,user,&temp);
             uFwd[k] = temp;
             hFwd[k] = PetscSqrtReal(hx*hx*di*di + hy*hy*dj*dj);
-            if(user->debug) {
-               PetscPrintf(PETSC_COMM_WORLD," -- Fwd Projected (%d,%d) onto (%d,%d)\n",Si,Sj,di,dj);
-            }
          }
          // Backward point for direction k
-         if (i-Si>=0 && i-Si<=Ny-1 && j-Sj>=0 && j-Sj <= Ny-1) {
+         if (i-Si>=0 && i-Si<=Nx-1 && j-Sj>=0 && j-Sj <= Ny-1) {
             // backward stencil point in the kth direction is in range
             uBak[k] = au[j-Sj][i-Si];
             hBak[k] = PetscSqrtReal(hx*hx*Si*Si + hy*hy*Sj*Sj);
          } else {
             // otherwise get the coordinates of the projection
             ComputeProjectionIndeces(&di,&dj,i,j,-Si,-Sj,Nx,Ny);
+            if(user->debug) {
+               PetscPrintf(PETSC_COMM_WORLD," -- Bak Projected (%d,%d) onto (%.1f,%.1f)\n",-Si,-Sj,di,dj);
+               PetscPrintf(PETSC_COMM_WORLD," -- New coord (%.3f,%.3f)\n",x+hx*di,y+hy*dj);
+            }
             user->g_bdry(x+hx*di,y+hy*dj,0.0,user,&temp);
             uBak[k] = temp;
             hBak[k] = PetscSqrtReal(hx*hx*di*di + hy*hy*dj*dj);
-            if(user->debug) {
-               PetscPrintf(PETSC_COMM_WORLD," -- Bak Projected (%d,%d) onto (%d,%d)\n",-Si,-Sj,di,dj);
-            }
          }
       }
       // Use formula for generalized centered difference
