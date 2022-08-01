@@ -1,7 +1,7 @@
 import numpy as np
 import subprocess
 
-base_N = 200
+base_N = 150
 op = 0.3 # overlap percentage
 
 nps = np.array([1,2,4,6,8,9])

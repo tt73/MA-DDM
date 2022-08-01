@@ -5,10 +5,10 @@ Home directory : /home/t/tt73 is not in AFS -- skipping quota check
 ========================
 
 On host node017 :
-	 15:10:46 up 504 days, 20:24,  0 users,  load average: 0.00, 0.04, 0.07
+	 12:17:01 up 507 days, 17:30,  0 users,  load average: 0.00, 0.07, 0.19
 
 === === === Your Kerberos ticket and AFS token status === === ===
-klist: No credentials cache found (filename: /tmp/krb5cc_90502_AaW03EdwUb)
+klist: No credentials cache found (filename: /tmp/krb5cc_90502_PhE9ydX8E1)
 Kerberos : 
 AFS      : 
 
@@ -17,8 +17,8 @@ Create file : "/home/t/tt73/.modules" to customize.
 
 
 Currently Loaded Modules:
-  1) gnu8/8.3.0    3) phdf5/1.10.5     5) scalapack/2.0.2   7) python/3.8
-  2) mpich/3.3.1   4) openblas/0.3.7   6) petsc/3.12.0
+  1) python/3.8   3) mpich/3.3.1    5) openblas/0.3.7    7) petsc/3.12.0
+  2) gnu8/8.3.0   4) phdf5/1.10.5   6) scalapack/2.0.2
 
  
 

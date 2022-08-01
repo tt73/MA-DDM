@@ -51,7 +51,8 @@ plt.xticks(nps)
 
 
 # plt.yticks(np.arange(1,10))
+plt.ylim([0,1.1])
 plt.xlabel('$N_d$')
 plt.ylabel('Efficiency')
-plt.savefig('Efficiency.png',dpi=600,bbox_inches='tight')
+plt.savefig('efficiency_htn.png',dpi=600,bbox_inches='tight')
 plt.show()

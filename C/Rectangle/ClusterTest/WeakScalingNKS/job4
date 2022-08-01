@@ -9,7 +9,7 @@
 #SBATCH --ntasks 4
 #SBATCH --ntasks-per-node 1
 module load gnu8 mpich petsc/3.12.0
-mpirun ../../maddm -Nx 200 -Ny 200 -op 0.000000 -problem ex1 -snes_type newtonls -snes_linesearch_order 2 -ksp_type pipefgmres >> out4
-mpirun ../../maddm -Nx 200 -Ny 200 -op 0.000000 -problem ex2 -snes_type newtonls -snes_linesearch_order 2 -ksp_type pipefgmres >> out4
-mpirun ../../maddm -Nx 200 -Ny 200 -op 0.000000 -problem ex3 -snes_type newtonls -snes_linesearch_order 2 -ksp_type pipefgmres >> out4
-mpirun ../../maddm -Nx 200 -Ny 200 -op 0.000000 -problem ex4 -snes_type newtonls -snes_linesearch_order 2 -ksp_type pipefgmres >> out4
+mpirun ../../maddm -Nx 300 -Ny 300 -op 0.000000 -problem ex1 -snes_type newtonls -snes_linesearch_order 2 -ksp_type pipefgmres >> out4
+mpirun ../../maddm -Nx 300 -Ny 300 -op 0.000000 -problem ex2 -snes_type newtonls -snes_linesearch_order 2 -ksp_type pipefgmres >> out4
+mpirun ../../maddm -Nx 300 -Ny 300 -op 0.000000 -problem ex3 -snes_type newtonls -snes_linesearch_order 2 -ksp_type pipefgmres >> out4
+mpirun ../../maddm -Nx 300 -Ny 300 -op 0.000000 -problem ex4 -snes_type newtonls -snes_linesearch_order 2 -ksp_type pipefgmres >> out4

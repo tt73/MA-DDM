@@ -9,7 +9,7 @@
 #SBATCH --ntasks 1
 #SBATCH --ntasks-per-node 1
 module load gnu8 mpich petsc/3.12.0
-mpirun ../../maddm -Nx 100 -Ny 100 -op 0.100000 -problem ex1 >> out1
-mpirun ../../maddm -Nx 100 -Ny 100 -op 0.100000 -problem ex2 >> out1
-mpirun ../../maddm -Nx 100 -Ny 100 -op 0.100000 -problem ex3 >> out1
-mpirun ../../maddm -Nx 100 -Ny 100 -op 0.100000 -problem ex4 >> out1
+mpirun ../../maddm -Nx 150 -Ny 150 -op 0.100000 -problem ex1 >> out1
+mpirun ../../maddm -Nx 150 -Ny 150 -op 0.100000 -problem ex2 >> out1
+mpirun ../../maddm -Nx 150 -Ny 150 -op 0.100000 -problem ex3 >> out1
+mpirun ../../maddm -Nx 150 -Ny 150 -op 0.100000 -problem ex4 >> out1
