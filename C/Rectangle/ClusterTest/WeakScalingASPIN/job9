@@ -1,0 +1,15 @@
+#!/bin/bash -l
+#SBATCH -J j9
+#SBATCH -o slurmout9
+#SBATCH -p dms-cpu
+#SBATCH -A tt73
+#SBATCH -t 8:0:0
+#SBATCH --mem=0G
+#SBATCH --nodes 9
+#SBATCH --ntasks 9
+#SBATCH --ntasks-per-node 1
+module load gnu8 mpich petsc/3.12.0
+mpirun ../../maddm -Nx 346 -Ny 346 -op 0.300000 -problem ex1 -aspin >> out9
+mpirun ../../maddm -Nx 346 -Ny 346 -op 0.300000 -problem ex2 -aspin >> out9
+mpirun ../../maddm -Nx 346 -Ny 346 -op 0.300000 -problem ex3 -aspin >> out9
+mpirun ../../maddm -Nx 346 -Ny 346 -op 0.300000 -problem ex4 -aspin >> out9

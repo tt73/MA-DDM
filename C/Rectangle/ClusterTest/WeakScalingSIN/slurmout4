@@ -5,7 +5,7 @@ Home directory : /home/t/tt73 is not in AFS -- skipping quota check
 ========================
 
 On host node011 :
-	 12:46:34 up 507 days, 18:00,  0 users,  load average: 0.01, 0.25, 0.32
+	 17:13:53 up 507 days, 22:27,  0 users,  load average: 0.18, 0.64, 0.71
 
 === === === Your Kerberos ticket and AFS token status === === ===
 klist: No credentials cache found (filename: /tmp/krb5cc_90502_PhE9ydX8E1)

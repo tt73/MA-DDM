@@ -1,13 +1,12 @@
 import numpy as np
 import subprocess
 
-base_N = 400
-op = 0.10 # overlap percentage
+base_N = 150
+op = 0.3 # overlap percentage
 
 nps = np.array([1,2,4,6,8,9])
 Nxs = np.array([base_N, base_N         , base_N*2/(1+op), base_N*2/(1+op), base_N*2/(1+op), base_N*3/(1+op)],dtype=int)
 Nys = np.array([base_N, base_N*2/(1+op), base_N*2/(1+op), base_N*3/(1+op), base_N*4/(1+op), base_N*3/(1+op)],dtype=int)
-
 
 # loop to create job files
 for i in range(len(nps)):
@@ -31,8 +30,8 @@ for i in range(len(nps)):
       f.write("mpirun ../../maddm -Nx {:d} -Ny {:d} -op {:f} -problem ex4 >> out{:d}\n".format(Nxs[i],Nys[i],op,nps[i]))
 
    else:
-      f.write("mpirun ../../maddm -Nx {:d} -Ny {:d} -op {:f} -problem ex1 -sin >> out{:d}\n".format(Nxs[i],Nys[i],op,nps[i]))
-      f.write("mpirun ../../maddm -Nx {:d} -Ny {:d} -op {:f} -problem ex2 -sin >> out{:d}\n".format(Nxs[i],Nys[i],op,nps[i]))
-      f.write("mpirun ../../maddm -Nx {:d} -Ny {:d} -op {:f} -problem ex3 -sin >> out{:d}\n".format(Nxs[i],Nys[i],op,nps[i]))
-      f.write("mpirun ../../maddm -Nx {:d} -Ny {:d} -op {:f} -problem ex4 -sin >> out{:d}\n".format(Nxs[i],Nys[i],op,nps[i]))
+      f.write("mpirun ../../maddm -Nx {:d} -Ny {:d} -op {:f} -problem ex1 -aspin >> out{:d}\n".format(Nxs[i],Nys[i],op,nps[i]))
+      f.write("mpirun ../../maddm -Nx {:d} -Ny {:d} -op {:f} -problem ex2 -aspin >> out{:d}\n".format(Nxs[i],Nys[i],op,nps[i]))
+      f.write("mpirun ../../maddm -Nx {:d} -Ny {:d} -op {:f} -problem ex3 -aspin >> out{:d}\n".format(Nxs[i],Nys[i],op,nps[i]))
+      f.write("mpirun ../../maddm -Nx {:d} -Ny {:d} -op {:f} -problem ex4 -aspin >> out{:d}\n".format(Nxs[i],Nys[i],op,nps[i]))
    f.close()
