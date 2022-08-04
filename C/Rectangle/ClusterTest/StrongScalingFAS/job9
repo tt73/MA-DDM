@@ -1,0 +1,16 @@
+#!/bin/bash -l
+#SBATCH -J j9
+#SBATCH -o slurmout9
+#SBATCH -p dms-cpu
+#SBATCH -A tt73
+#SBATCH -t 8:0:0
+#SBATCH --nodes 9
+#SBATCH --ntasks 9
+#SBATCH --ntasks-per-node 1
+#SBATCH --exclusive
+module load gnu8 mpich petsc/3.12.0
+N=300
+mpirun ../../maddm -N $N -problem ex1 -snes_type fas -op 0.1 >> out9
+mpirun ../../maddm -N $N -problem ex2 -snes_type fas -op 0.1 >> out9
+mpirun ../../maddm -N $N -problem ex3 -snes_type fas -op 0.1 >> out9
+mpirun ../../maddm -N $N -problem ex4 -snes_type fas -op 0.1 >> out9
