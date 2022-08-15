@@ -4,6 +4,7 @@ import numpy as np
 
 nps = np.array([2,4,6,8,9])
 n = len(nps)
+ideal = np.arange(0,10)
 
 # creates arrays for data
 times = np.zeros((4,n),dtype=float)
@@ -51,6 +52,7 @@ plt.plot(nps,speedup1,'-', label='P1',marker='o',mfc='w',color=colors[0],ms=8)
 plt.plot(nps,speedup2,':', label='P2',marker='s',mfc='w',color=colors[1],ms=8)
 plt.plot(nps,speedup3,'--',label='P3',marker='^',mfc='w',color=colors[2],ms=8)
 plt.plot(nps,speedup4,'.-',label='P4',marker='x',mfc='w',color=colors[3],ms=8)
+plt.plot(ideal,ideal,':',label='none',mfc='w',color='k',ms=8)
 
 plt.tick_params(direction='in',right=True,top=True)
 plt.tick_params(labelsize=14)
@@ -59,7 +61,7 @@ plt.tick_params(direction='in',which='major', length=10, bottom=True, top=True, 
 plt.tick_params(labelbottom=True,labeltop=False,labelright=False,labelleft=True)
 plt.legend(fontsize=14)
 plt.xticks(nps)
-plt.yticks(np.arange(1,10))
+plt.yticks(np.arange(0,10))
 plt.xlabel('$N_d$')
 plt.ylabel('Speedup')
 plt.savefig('speedup.png',dpi=600,bbox_inches='tight')
