@@ -180,10 +180,10 @@ int main(int argc,char **args) {
    ExactFcnVec    getuexact;
    InitialType    initial;
    ProblemType    problem;
-   PetscBool      debug,set_N,set_eps,set_width,printSol,fast,mixed,htn,sin,aspin;
+   PetscBool      debug,set_N,set_eps,set_width,printSol,mixed,htn,sin,aspin,ilusin,coarse;
    PetscReal      h_eff,hx,hy,eps,errinf,normconst2h,err2h,op;
    char           gridstr[99];
-   PetscInt       dim,width,N,Nx,Ny,order,its;
+   PetscInt       dim,width,N,Nx,Ny,order,NASM_its,KSP_its,Newt_its;
    PetscLogDouble t1,t2;
    PetscMPIInt    rank,size;
 
@@ -204,13 +204,14 @@ int main(int argc,char **args) {
    user.xmin   = -1.0; user.xmax = 1.0; // x limits [-1, 1]
    user.ymin   = -1.0; user.ymax = 1.0; // y limits [-1, 1]
    user.zmin   = -1.0; user.zmax = 1.0; // z limits [-1, 1]
-   fast        = PETSC_FALSE; // fast might be unstable so leave it off by default
    debug       = PETSC_FALSE; // option to print out extra info
    printSol    = PETSC_FALSE; // option to generate MATLAB solution scripts
    mixed       = PETSC_FALSE; // option to use different solver on each subdomain
    htn         = PETSC_FALSE; // option to use high-tolerance Newton
    sin         = PETSC_FALSE; // option to use single-iteration Newton
    aspin       = PETSC_FALSE; // option to use additive schwarz preconditioned inexact newton
+   ilusin      = PETSC_FALSE; // experimental
+   coarse      = PETSC_FALSE; // fast might be unstable so leave it off by default
 
    ierr = PetscOptionsBegin(PETSC_COMM_WORLD,"","options for maddm.c",""); CHKERRQ(ierr);
    ierr = PetscOptionsInt("-dim","dimension of problem (=1,2,3 only)","maddm.c",dim,&dim,NULL);CHKERRQ(ierr);
@@ -219,13 +220,14 @@ int main(int argc,char **args) {
    ierr = PetscOptionsInt("-Ny","number of interior nodes vertically","maddm.c",Ny,&Ny,NULL);CHKERRQ(ierr);
    ierr = PetscOptionsInt("-order","order of quadrature (default is 2)","maddm.c",order,&order,NULL);CHKERRQ(ierr);
    ierr = PetscOptionsInt("-width","stencil width for MA discretization","maddm.c",width,&width,&set_width);CHKERRQ(ierr);
-   ierr = PetscOptionsBool("-fast","use settings that are tuned to under-solve the local problems","maddm.c",fast,&fast,NULL);CHKERRQ(ierr);
    ierr = PetscOptionsBool("-debug","print out extra info","maddm.c",debug,&debug,NULL);CHKERRQ(ierr);
    ierr = PetscOptionsBool("-sol","generate MATLAB solution files","maddm.c",printSol,&printSol,NULL);CHKERRQ(ierr);
    ierr = PetscOptionsBool("-mixed","sub-index the local domains and use a different solver on the last subdomain","maddm.c",mixed,&mixed,NULL);CHKERRQ(ierr);
    ierr = PetscOptionsBool("-htn","option to use high-tolerance Newton (HTN)","maddm.c",htn,&htn,NULL);CHKERRQ(ierr);
    ierr = PetscOptionsBool("-sin","option to use single-iteration Newton (HTN)","maddm.c",sin,&sin,NULL);CHKERRQ(ierr);
    ierr = PetscOptionsBool("-aspin","option to use additive schwarz preconditioned inexact newton (ASPIN)","maddm.c",aspin,&aspin,NULL);CHKERRQ(ierr);
+   ierr = PetscOptionsBool("-ilusin","trying something","maddm.c",ilusin,&ilusin,NULL);CHKERRQ(ierr);
+   ierr = PetscOptionsBool("-coarse","use NASM+FAS additive composite method","maddm.c",coarse,&coarse,NULL);CHKERRQ(ierr);
    ierr = PetscOptionsEnum("-init_type","type of initial iterate","maddm.c",InitialTypes,(PetscEnum)initial,(PetscEnum*)&initial,NULL); CHKERRQ(ierr);
    ierr = PetscOptionsReal("-eps","regularization constant epsilon","maddm.c",eps,&eps,&set_eps);CHKERRQ(ierr);
    ierr = PetscOptionsReal("-op","domain overlap percentage (0.0 to 1.0)","maddm.c",op,&op,NULL);CHKERRQ(ierr);
@@ -369,8 +371,20 @@ int main(int argc,char **args) {
       KSPSetTolerances(subksp,1.e-1,PETSC_DEFAULT,PETSC_DEFAULT,PETSC_DEFAULT);
       SNESLineSearchSetType(subls,SNESLINESEARCHBT);
       SNESLineSearchSetOrder(subls,2);
+   } else if (ilusin) {
+      SNESSetTolerances(subsnes,PETSC_DEFAULT,PETSC_DEFAULT,PETSC_DEFAULT,1,PETSC_DEFAULT); // one iteration
+      // KSPSetTolerances(subksp,1.e-1,PETSC_DEFAULT,PETSC_DEFAULT,PETSC_DEFAULT); //
+      SNESLineSearchSetType(subls,SNESLINESEARCHBT);
+      SNESLineSearchSetOrder(subls,2);
+      KSPSetType(subksp,KSPPREONLY);  //  don't use any krylov
+      PCSetType(subpc,PCILU);         // use inexact ILU
+   } else if (coarse) {
+      PetscOptionsSetValue(NULL,"-snes_type","composite");
+      PetscOptionsSetValue(NULL,"-snes_composite_type","additive");
+      PetscOptionsSetValue(NULL,"-snes_composite_sneses","nasm,fas");
+      PetscOptionsSetValue(NULL,"-sub_0_sub_ksp_type","dgmres");
+      PetscOptionsSetValue(NULL,"-sub_0_sub_pc_type","eisenstat");
    }
-
 
    // } else if (rank<size-1) { // default settings
    //    // newton rres < 0.01
@@ -455,10 +469,20 @@ int main(int argc,char **args) {
    - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
    ierr = DMGetGlobalVector(da,&u_initial); CHKERRQ(ierr);
    ierr = InitialState(da,initial,u_initial,&user); CHKERRQ(ierr);
+   // SNESSetCountersReset(subsnes,0); // prevent newton iteration count from resetting
    ierr = PetscTime(&t1); CHKERRQ(ierr);
    ierr = SNESSolve(snes,NULL,u_initial); CHKERRQ(ierr);
    ierr = PetscTime(&t2); CHKERRQ(ierr);
-   ierr = SNESGetIterationNumber(snes,&its); CHKERRQ(ierr); // its = # of iterations
+   /* Iterations - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+      Get the number of NASM iterations.
+      Get the total Newton iterations at the local level.
+      Get the total Krylov iterations at the local level.
+   - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+   ierr = SNESGetIterationNumber(snes,&NASM_its); CHKERRQ(ierr); // its = # of iterations
+   ierr = KSPGetTotalIterations(subksp,&KSP_its); CHKERRQ(ierr);
+   // ierr = SNESGetIterationNumber(subsnes,&Newt_its); CHKERRQ(ierr);
+   // SNESGetLinearSolveIterations(subsnes,&Newt_its);
+   SNESGetNumberFunctionEvals(subsnes,&Newt_its);
    /* Error info - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
       Get the solution from DA.
       Get the exact solution with g.
@@ -500,8 +524,8 @@ int main(int argc,char **args) {
                "*Params:  Nd = %d, width = %d, eps = %.3f, op = %.2f\n"
                "*Error:   |u-uexact|_inf = %.3e, |u-uexact|_h = %.3e\n"
                "*WTime:   %.6f\n"
-               "*Iters:   %d\n",
-               ProblemTypes[problem],gridstr,size,info.sw,user.epsilon,op,errinf,err2h,t2-t1,its); CHKERRQ(ierr);
+               "*Iters:   Krylov %d, Newton %d, NASM %d\n",
+               ProblemTypes[problem],gridstr,size,info.sw,user.epsilon,op,errinf,err2h,t2-t1,KSP_its,Newt_its,NASM_its); CHKERRQ(ierr);
 
    /* Debugging Info - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
       To print out debugging info, add the option -t1_debug.
