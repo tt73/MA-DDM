@@ -5,10 +5,10 @@ Home directory : /home/t/tt73 is not in AFS -- skipping quota check
 ========================
 
 On host node000 :
-	 16:04:00 up 510 days, 21:17,  0 users,  load average: 0.08, 0.03, 0.05
+	 14:41:10 up 521 days, 19:54,  0 users,  load average: 0.10, 4.63, 8.86
 
 === === === Your Kerberos ticket and AFS token status === === ===
-klist: No credentials cache found (filename: /tmp/krb5cc_90502_ZpURBjzurH)
+klist: No credentials cache found (filename: /tmp/krb5cc_90502_hvRSeR6EGp)
 Kerberos : 
 AFS      : 
 
@@ -17,8 +17,237 @@ Create file : "/home/t/tt73/.modules" to customize.
 
 
 Currently Loaded Modules:
-  1) gnu8/8.3.0    3) phdf5/1.10.5     5) scalapack/2.0.2
-  2) mpich/3.3.1   4) openblas/0.3.7   6) petsc/3.12.0
+  1) python/3.8
 
  
 
+../../maddm: error while loading shared libraries: libmpi_usempif08.so.40: cannot open shared object file: No such file or directory
+slurmstepd: error: node023 [5] pmixp_coll_ring.c:738 [pmixp_coll_ring_reset_if_to] mpi/pmix: ERROR: 0x2b69e80059a0: collective timeout seq=0
+slurmstepd: error: node023 [5] pmixp_coll.c:281 [pmixp_coll_log] mpi/pmix: ERROR: Dumping collective state
+slurmstepd: error: node023 [5] pmixp_coll_ring.c:756 [pmixp_coll_ring_log] mpi/pmix: ERROR: 0x2b69e80059a0: COLL_FENCE_RING state seq=0
+slurmstepd: error: node023 [5] pmixp_coll_ring.c:758 [pmixp_coll_ring_log] mpi/pmix: ERROR: my peerid: 5:node023
+slurmstepd: error: node017 [1] pmixp_coll_ring.c:738 [pmixp_coll_ring_reset_if_to] mpi/pmix: ERROR: 0x2abb300059a0: collective timeout seq=0
+slurmstepd: error: node017 [1] pmixp_coll.c:281 [pmixp_coll_log] mpi/pmix: ERROR: Dumping collective state
+slurmstepd: error: node017 [1] pmixp_coll_ring.c:756 [pmixp_coll_ring_log] mpi/pmix: ERROR: 0x2abb300059a0: COLL_FENCE_RING state seq=0
+slurmstepd: error: node017 [1] pmixp_coll_ring.c:758 [pmixp_coll_ring_log] mpi/pmix: ERROR: my peerid: 1:node017
+slurmstepd: error: node026 [7] pmixp_coll_ring.c:738 [pmixp_coll_ring_reset_if_to] mpi/pmix: ERROR: 0x2b52680059a0: collective timeout seq=0
+slurmstepd: error: node026 [7] pmixp_coll.c:281 [pmixp_coll_log] mpi/pmix: ERROR: Dumping collective state
+slurmstepd: error: node026 [7] pmixp_coll_ring.c:756 [pmixp_coll_ring_log] mpi/pmix: ERROR: 0x2b52680059a0: COLL_FENCE_RING state seq=0
+slurmstepd: error: node026 [7] pmixp_coll_ring.c:758 [pmixp_coll_ring_log] mpi/pmix: ERROR: my peerid: 7:node026
+slurmstepd: error: node022 [4] pmixp_coll_ring.c:738 [pmixp_coll_ring_reset_if_to] mpi/pmix: ERROR: 0x2b14640059a0: collective timeout seq=0
+slurmstepd: error: node022 [4] pmixp_coll.c:281 [pmixp_coll_log] mpi/pmix: ERROR: Dumping collective state
+slurmstepd: error: node022 [4] pmixp_coll_ring.c:756 [pmixp_coll_ring_log] mpi/pmix: ERROR: 0x2b14640059a0: COLL_FENCE_RING state seq=0
+slurmstepd: error: node022 [4] pmixp_coll_ring.c:758 [pmixp_coll_ring_log] mpi/pmix: ERROR: my peerid: 4:node022
+slurmstepd: error: node022 [4] pmixp_coll_ring.c:765 [pmixp_coll_ring_log] mpi/pmix: ERROR: neighbor id: next 5:node023, prev 3:node020
+slurmstepd: error: node027 [8] pmixp_coll_ring.c:738 [pmixp_coll_ring_reset_if_to] mpi/pmix: ERROR: 0x2b42140059a0: collective timeout seq=0
+slurmstepd: error: node027 [8] pmixp_coll.c:281 [pmixp_coll_log] mpi/pmix: ERROR: Dumping collective state
+slurmstepd: error: node027 [8] pmixp_coll_ring.c:756 [pmixp_coll_ring_log] mpi/pmix: ERROR: 0x2b42140059a0: COLL_FENCE_RING state seq=0
+slurmstepd: error: node027 [8] pmixp_coll_ring.c:758 [pmixp_coll_ring_log] mpi/pmix: ERROR: my peerid: 8:node027
+slurmstepd: error: node024 [6] pmixp_coll_ring.c:738 [pmixp_coll_ring_reset_if_to] mpi/pmix: ERROR: 0x2b02d40059a0: collective timeout seq=0
+slurmstepd: error: node024 [6] pmixp_coll.c:281 [pmixp_coll_log] mpi/pmix: ERROR: Dumping collective state
+slurmstepd: error: node024 [6] pmixp_coll_ring.c:756 [pmixp_coll_ring_log] mpi/pmix: ERROR: 0x2b02d40059a0: COLL_FENCE_RING state seq=0
+slurmstepd: error: node024 [6] pmixp_coll_ring.c:758 [pmixp_coll_ring_log] mpi/pmix: ERROR: my peerid: 6:node024
+slurmstepd: error: node024 [6] pmixp_coll_ring.c:765 [pmixp_coll_ring_log] mpi/pmix: ERROR: neighbor id: next 7:node026, prev 5:node023
+slurmstepd: error: node018 [2] pmixp_coll_ring.c:738 [pmixp_coll_ring_reset_if_to] mpi/pmix: ERROR: 0x2ac250017e70: collective timeout seq=0
+slurmstepd: error: node018 [2] pmixp_coll.c:281 [pmixp_coll_log] mpi/pmix: ERROR: Dumping collective state
+slurmstepd: error: node018 [2] pmixp_coll_ring.c:756 [pmixp_coll_ring_log] mpi/pmix: ERROR: 0x2ac250017e70: COLL_FENCE_RING state seq=0
+slurmstepd: error: node018 [2] pmixp_coll_ring.c:758 [pmixp_coll_ring_log] mpi/pmix: ERROR: my peerid: 2:node018
+slurmstepd: error: node018 [2] pmixp_coll_ring.c:765 [pmixp_coll_ring_log] mpi/pmix: ERROR: neighbor id: next 3:node020, prev 1:node017
+slurmstepd: error: node020 [3] pmixp_coll_ring.c:738 [pmixp_coll_ring_reset_if_to] mpi/pmix: ERROR: 0x2b0b0c0059a0: collective timeout seq=0
+slurmstepd: error: node020 [3] pmixp_coll.c:281 [pmixp_coll_log] mpi/pmix: ERROR: Dumping collective state
+slurmstepd: error: node020 [3] pmixp_coll_ring.c:756 [pmixp_coll_ring_log] mpi/pmix: ERROR: 0x2b0b0c0059a0: COLL_FENCE_RING state seq=0
+slurmstepd: error: node020 [3] pmixp_coll_ring.c:758 [pmixp_coll_ring_log] mpi/pmix: ERROR: my peerid: 3:node020
+slurmstepd: error: node020 [3] pmixp_coll_ring.c:765 [pmixp_coll_ring_log] mpi/pmix: ERROR: neighbor id: next 4:node022, prev 2:node018
+slurmstepd: error: node020 [3] pmixp_coll_ring.c:775 [pmixp_coll_ring_log] mpi/pmix: ERROR: Context ptr=0x2b0b0c005a18, #0, in-use=0
+slurmstepd: error: node020 [3] pmixp_coll_ring.c:775 [pmixp_coll_ring_log] mpi/pmix: ERROR: Context ptr=0x2b0b0c005a50, #1, in-use=0
+slurmstepd: error: node023 [5] pmixp_coll_ring.c:765 [pmixp_coll_ring_log] mpi/pmix: ERROR: neighbor id: next 6:node024, prev 4:node022
+slurmstepd: error: node023 [5] pmixp_coll_ring.c:775 [pmixp_coll_ring_log] mpi/pmix: ERROR: Context ptr=0x2b69e8005a18, #0, in-use=0
+slurmstepd: error: node023 [5] pmixp_coll_ring.c:775 [pmixp_coll_ring_log] mpi/pmix: ERROR: Context ptr=0x2b69e8005a50, #1, in-use=0
+slurmstepd: error: node023 [5] pmixp_coll_ring.c:775 [pmixp_coll_ring_log] mpi/pmix: ERROR: Context ptr=0x2b69e8005a88, #2, in-use=1
+slurmstepd: error: node023 [5] pmixp_coll_ring.c:786 [pmixp_coll_ring_log] mpi/pmix: ERROR: 	 seq=0 contribs: loc=1/prev=7/fwd=7
+slurmstepd: error: node023 [5] pmixp_coll_ring.c:788 [pmixp_coll_ring_log] mpi/pmix: ERROR: 	 neighbor contribs [9]:
+slurmstepd: error: node023 [5] pmixp_coll_ring.c:821 [pmixp_coll_ring_log] mpi/pmix: ERROR: 		 done contrib: node[017-018,020,022,024,026-027]
+slurmstepd: error: node023 [5] pmixp_coll_ring.c:823 [pmixp_coll_ring_log] mpi/pmix: ERROR: 		 wait contrib: node000
+slurmstepd: error: node023 [5] pmixp_coll_ring.c:825 [pmixp_coll_ring_log] mpi/pmix: ERROR: 	 status=PMIXP_COLL_RING_PROGRESS
+slurmstepd: error: node023 [5] pmixp_coll_ring.c:829 [pmixp_coll_ring_log] mpi/pmix: ERROR: 	 buf (offset/size): 2664/5661
+slurmstepd: error: node017 [1] pmixp_coll_ring.c:765 [pmixp_coll_ring_log] mpi/pmix: ERROR: neighbor id: next 2:node018, prev 0:node000
+slurmstepd: error: node017 [1] pmixp_coll_ring.c:775 [pmixp_coll_ring_log] mpi/pmix: ERROR: Context ptr=0x2abb30005a18, #0, in-use=0
+slurmstepd: error: node017 [1] pmixp_coll_ring.c:775 [pmixp_coll_ring_log] mpi/pmix: ERROR: Context ptr=0x2abb30005a50, #1, in-use=0
+slurmstepd: error: node017 [1] pmixp_coll_ring.c:775 [pmixp_coll_ring_log] mpi/pmix: ERROR: Context ptr=0x2abb30005a88, #2, in-use=1
+slurmstepd: error: node017 [1] pmixp_coll_ring.c:786 [pmixp_coll_ring_log] mpi/pmix: ERROR: 	 seq=0 contribs: loc=1/prev=7/fwd=7
+slurmstepd: error: node017 [1] pmixp_coll_ring.c:788 [pmixp_coll_ring_log] mpi/pmix: ERROR: 	 neighbor contribs [9]:
+slurmstepd: error: node017 [1] pmixp_coll_ring.c:821 [pmixp_coll_ring_log] mpi/pmix: ERROR: 		 done contrib: node[018,020,022-024,026-027]
+slurmstepd: error: node017 [1] pmixp_coll_ring.c:823 [pmixp_coll_ring_log] mpi/pmix: ERROR: 		 wait contrib: node000
+slurmstepd: error: node017 [1] pmixp_coll_ring.c:825 [pmixp_coll_ring_log] mpi/pmix: ERROR: 	 status=PMIXP_COLL_RING_PROGRESS
+slurmstepd: error: node017 [1] pmixp_coll_ring.c:829 [pmixp_coll_ring_log] mpi/pmix: ERROR: 	 buf (offset/size): 2664/5661
+slurmstepd: error: node026 [7] pmixp_coll_ring.c:765 [pmixp_coll_ring_log] mpi/pmix: ERROR: neighbor id: next 8:node027, prev 6:node024
+slurmstepd: error: node026 [7] pmixp_coll_ring.c:775 [pmixp_coll_ring_log] mpi/pmix: ERROR: Context ptr=0x2b5268005a18, #0, in-use=0
+slurmstepd: error: node026 [7] pmixp_coll_ring.c:775 [pmixp_coll_ring_log] mpi/pmix: ERROR: Context ptr=0x2b5268005a50, #1, in-use=0
+slurmstepd: error: node026 [7] pmixp_coll_ring.c:775 [pmixp_coll_ring_log] mpi/pmix: ERROR: Context ptr=0x2b5268005a88, #2, in-use=1
+slurmstepd: error: node026 [7] pmixp_coll_ring.c:786 [pmixp_coll_ring_log] mpi/pmix: ERROR: 	 seq=0 contribs: loc=1/prev=7/fwd=7
+slurmstepd: error: node026 [7] pmixp_coll_ring.c:788 [pmixp_coll_ring_log] mpi/pmix: ERROR: 	 neighbor contribs [9]:
+slurmstepd: error: node026 [7] pmixp_coll_ring.c:821 [pmixp_coll_ring_log] mpi/pmix: ERROR: 		 done contrib: node[017-018,020,022-024,027]
+slurmstepd: error: node026 [7] pmixp_coll_ring.c:823 [pmixp_coll_ring_log] mpi/pmix: ERROR: 		 wait contrib: node000
+slurmstepd: error: node026 [7] pmixp_coll_ring.c:825 [pmixp_coll_ring_log] mpi/pmix: ERROR: 	 status=PMIXP_COLL_RING_PROGRESS
+slurmstepd: error: node026 [7] pmixp_coll_ring.c:829 [pmixp_coll_ring_log] mpi/pmix: ERROR: 	 buf (offset/size): 2664/5661
+slurmstepd: error: node027 [8] pmixp_coll_ring.c:765 [pmixp_coll_ring_log] mpi/pmix: ERROR: neighbor id: next 0:node000, prev 7:node026
+slurmstepd: error: node027 [8] pmixp_coll_ring.c:775 [pmixp_coll_ring_log] mpi/pmix: ERROR: Context ptr=0x2b4214005a18, #0, in-use=0
+slurmstepd: error: node027 [8] pmixp_coll_ring.c:775 [pmixp_coll_ring_log] mpi/pmix: ERROR: Context ptr=0x2b4214005a50, #1, in-use=0
+slurmstepd: error: node027 [8] pmixp_coll_ring.c:775 [pmixp_coll_ring_log] mpi/pmix: ERROR: Context ptr=0x2b4214005a88, #2, in-use=1
+slurmstepd: error: node027 [8] pmixp_coll_ring.c:786 [pmixp_coll_ring_log] mpi/pmix: ERROR: 	 seq=0 contribs: loc=1/prev=7/fwd=8
+slurmstepd: error: node027 [8] pmixp_coll_ring.c:788 [pmixp_coll_ring_log] mpi/pmix: ERROR: 	 neighbor contribs [9]:
+slurmstepd: error: node022 [4] pmixp_coll_ring.c:775 [pmixp_coll_ring_log] mpi/pmix: ERROR: Context ptr=0x2b1464005a18, #0, in-use=0
+slurmstepd: error: node022 [4] pmixp_coll_ring.c:775 [pmixp_coll_ring_log] mpi/pmix: ERROR: Context ptr=0x2b1464005a50, #1, in-use=0
+slurmstepd: error: node022 [4] pmixp_coll_ring.c:775 [pmixp_coll_ring_log] mpi/pmix: ERROR: Context ptr=0x2b1464005a88, #2, in-use=1
+slurmstepd: error: node022 [4] pmixp_coll_ring.c:786 [pmixp_coll_ring_log] mpi/pmix: ERROR: 	 seq=0 contribs: loc=1/prev=7/fwd=7
+slurmstepd: error: node022 [4] pmixp_coll_ring.c:788 [pmixp_coll_ring_log] mpi/pmix: ERROR: 	 neighbor contribs [9]:
+slurmstepd: error: node022 [4] pmixp_coll_ring.c:821 [pmixp_coll_ring_log] mpi/pmix: ERROR: 		 done contrib: node[017-018,020,023-024,026-027]
+slurmstepd: error: node022 [4] pmixp_coll_ring.c:823 [pmixp_coll_ring_log] mpi/pmix: ERROR: 		 wait contrib: node000
+slurmstepd: error: node024 [6] pmixp_coll_ring.c:775 [pmixp_coll_ring_log] mpi/pmix: ERROR: Context ptr=0x2b02d4005a18, #0, in-use=0
+slurmstepd: error: node024 [6] pmixp_coll_ring.c:775 [pmixp_coll_ring_log] mpi/pmix: ERROR: Context ptr=0x2b02d4005a50, #1, in-use=0
+slurmstepd: error: node024 [6] pmixp_coll_ring.c:775 [pmixp_coll_ring_log] mpi/pmix: ERROR: Context ptr=0x2b02d4005a88, #2, in-use=1
+slurmstepd: error: node024 [6] pmixp_coll_ring.c:786 [pmixp_coll_ring_log] mpi/pmix: ERROR: 	 seq=0 contribs: loc=1/prev=7/fwd=7
+slurmstepd: error: node024 [6] pmixp_coll_ring.c:788 [pmixp_coll_ring_log] mpi/pmix: ERROR: 	 neighbor contribs [9]:
+slurmstepd: error: node024 [6] pmixp_coll_ring.c:821 [pmixp_coll_ring_log] mpi/pmix: ERROR: 		 done contrib: node[017-018,020,022-023,026-027]
+slurmstepd: error: node024 [6] pmixp_coll_ring.c:823 [pmixp_coll_ring_log] mpi/pmix: ERROR: 		 wait contrib: node000
+slurmstepd: error: node027 [8] pmixp_coll_ring.c:821 [pmixp_coll_ring_log] mpi/pmix: ERROR: 		 done contrib: node[017-018,020,022-024,026]
+slurmstepd: error: node027 [8] pmixp_coll_ring.c:823 [pmixp_coll_ring_log] mpi/pmix: ERROR: 		 wait contrib: node000
+slurmstepd: error: node027 [8] pmixp_coll_ring.c:825 [pmixp_coll_ring_log] mpi/pmix: ERROR: 	 status=PMIXP_COLL_RING_PROGRESS
+slurmstepd: error: node027 [8] pmixp_coll_ring.c:829 [pmixp_coll_ring_log] mpi/pmix: ERROR: 	 buf (offset/size): 2664/5661
+slurmstepd: error: node022 [4] pmixp_coll_ring.c:825 [pmixp_coll_ring_log] mpi/pmix: ERROR: 	 status=PMIXP_COLL_RING_PROGRESS
+slurmstepd: error: node022 [4] pmixp_coll_ring.c:829 [pmixp_coll_ring_log] mpi/pmix: ERROR: 	 buf (offset/size): 2664/5661
+slurmstepd: error: node024 [6] pmixp_coll_ring.c:825 [pmixp_coll_ring_log] mpi/pmix: ERROR: 	 status=PMIXP_COLL_RING_PROGRESS
+slurmstepd: error: node024 [6] pmixp_coll_ring.c:829 [pmixp_coll_ring_log] mpi/pmix: ERROR: 	 buf (offset/size): 2664/5661
+slurmstepd: error: node018 [2] pmixp_coll_ring.c:775 [pmixp_coll_ring_log] mpi/pmix: ERROR: Context ptr=0x2ac250017ee8, #0, in-use=0
+slurmstepd: error: node018 [2] pmixp_coll_ring.c:775 [pmixp_coll_ring_log] mpi/pmix: ERROR: Context ptr=0x2ac250017f20, #1, in-use=0
+slurmstepd: error: node018 [2] pmixp_coll_ring.c:775 [pmixp_coll_ring_log] mpi/pmix: ERROR: Context ptr=0x2ac250017f58, #2, in-use=1
+slurmstepd: error: node018 [2] pmixp_coll_ring.c:786 [pmixp_coll_ring_log] mpi/pmix: ERROR: 	 seq=0 contribs: loc=1/prev=7/fwd=7
+slurmstepd: error: node018 [2] pmixp_coll_ring.c:788 [pmixp_coll_ring_log] mpi/pmix: ERROR: 	 neighbor contribs [9]:
+slurmstepd: error: node018 [2] pmixp_coll_ring.c:821 [pmixp_coll_ring_log] mpi/pmix: ERROR: 		 done contrib: node[017,020,022-024,026-027]
+slurmstepd: error: node018 [2] pmixp_coll_ring.c:823 [pmixp_coll_ring_log] mpi/pmix: ERROR: 		 wait contrib: node000
+slurmstepd: error: node018 [2] pmixp_coll_ring.c:825 [pmixp_coll_ring_log] mpi/pmix: ERROR: 	 status=PMIXP_COLL_RING_PROGRESS
+slurmstepd: error: node018 [2] pmixp_coll_ring.c:829 [pmixp_coll_ring_log] mpi/pmix: ERROR: 	 buf (offset/size): 2664/5661
+slurmstepd: error: node020 [3] pmixp_coll_ring.c:775 [pmixp_coll_ring_log] mpi/pmix: ERROR: Context ptr=0x2b0b0c005a88, #2, in-use=1
+slurmstepd: error: node020 [3] pmixp_coll_ring.c:786 [pmixp_coll_ring_log] mpi/pmix: ERROR: 	 seq=0 contribs: loc=1/prev=7/fwd=7
+slurmstepd: error: node020 [3] pmixp_coll_ring.c:788 [pmixp_coll_ring_log] mpi/pmix: ERROR: 	 neighbor contribs [9]:
+slurmstepd: error: node020 [3] pmixp_coll_ring.c:821 [pmixp_coll_ring_log] mpi/pmix: ERROR: 		 done contrib: node[017-018,022-024,026-027]
+slurmstepd: error: node020 [3] pmixp_coll_ring.c:823 [pmixp_coll_ring_log] mpi/pmix: ERROR: 		 wait contrib: node000
+slurmstepd: error: node020 [3] pmixp_coll_ring.c:825 [pmixp_coll_ring_log] mpi/pmix: ERROR: 	 status=PMIXP_COLL_RING_PROGRESS
+slurmstepd: error: node020 [3] pmixp_coll_ring.c:829 [pmixp_coll_ring_log] mpi/pmix: ERROR: 	 buf (offset/size): 2664/5661
+slurmstepd: error: node027 [8] pmixp_utils.c:457 [pmixp_p2p_send] mpi/pmix: ERROR: send failed, rc=2, exceeded the retry limit
+slurmstepd: error: node027 [8] pmixp_server.c:1490 [_slurm_send] mpi/pmix: ERROR: Cannot send message to /var/spool/slurmd/stepd.slurm.pmix.109438.0, size = 118, hostlist:
+(null)
+slurmstepd: error: node026 [7] pmixp_coll_ring.c:738 [pmixp_coll_ring_reset_if_to] mpi/pmix: ERROR: 0x2b52680059a0: collective timeout seq=0
+slurmstepd: error: node026 [7] pmixp_coll.c:281 [pmixp_coll_log] mpi/pmix: ERROR: Dumping collective state
+slurmstepd: error: node026 [7] pmixp_coll_ring.c:756 [pmixp_coll_ring_log] mpi/pmix: ERROR: 0x2b52680059a0: COLL_FENCE_RING state seq=0
+slurmstepd: error: node026 [7] pmixp_coll_ring.c:758 [pmixp_coll_ring_log] mpi/pmix: ERROR: my peerid: 7:node026
+slurmstepd: error: node026 [7] pmixp_coll_ring.c:765 [pmixp_coll_ring_log] mpi/pmix: ERROR: neighbor id: next 8:node027, prev 6:node024
+slurmstepd: error: node026 [7] pmixp_coll_ring.c:775 [pmixp_coll_ring_log] mpi/pmix: ERROR: Context ptr=0x2b5268005a18, #0, in-use=0
+slurmstepd: error: node026 [7] pmixp_coll_ring.c:775 [pmixp_coll_ring_log] mpi/pmix: ERROR: Context ptr=0x2b5268005a50, #1, in-use=0
+slurmstepd: error: node026 [7] pmixp_coll_ring.c:775 [pmixp_coll_ring_log] mpi/pmix: ERROR: Context ptr=0x2b5268005a88, #2, in-use=1
+slurmstepd: error: node026 [7] pmixp_coll_ring.c:786 [pmixp_coll_ring_log] mpi/pmix: ERROR: 	 seq=0 contribs: loc=1/prev=3/fwd=4
+slurmstepd: error: node026 [7] pmixp_coll_ring.c:788 [pmixp_coll_ring_log] mpi/pmix: ERROR: 	 neighbor contribs [9]:
+slurmstepd: error: node026 [7] pmixp_coll_ring.c:821 [pmixp_coll_ring_log] mpi/pmix: ERROR: 		 done contrib: node[020,022,024]
+slurmstepd: error: node026 [7] pmixp_coll_ring.c:823 [pmixp_coll_ring_log] mpi/pmix: ERROR: 		 wait contrib: node[000,017-018,023,027]
+slurmstepd: error: node026 [7] pmixp_coll_ring.c:825 [pmixp_coll_ring_log] mpi/pmix: ERROR: 	 status=PMIXP_COLL_RING_PROGRESS
+slurmstepd: error: node026 [7] pmixp_coll_ring.c:829 [pmixp_coll_ring_log] mpi/pmix: ERROR: 	 buf (offset/size): 76/247
+slurmstepd: error: node020 [3] pmixp_coll_ring.c:738 [pmixp_coll_ring_reset_if_to] mpi/pmix: ERROR: 0x2b0b0c0059a0: collective timeout seq=0
+slurmstepd: error: node020 [3] pmixp_coll.c:281 [pmixp_coll_log] mpi/pmix: ERROR: Dumping collective state
+slurmstepd: error: node020 [3] pmixp_coll_ring.c:756 [pmixp_coll_ring_log] mpi/pmix: ERROR: 0x2b0b0c0059a0: COLL_FENCE_RING state seq=0
+slurmstepd: error: node020 [3] pmixp_coll_ring.c:758 [pmixp_coll_ring_log] mpi/pmix: ERROR: my peerid: 3:node020
+slurmstepd: error: node020 [3] pmixp_coll_ring.c:765 [pmixp_coll_ring_log] mpi/pmix: ERROR: neighbor id: next 4:node022, prev 2:node018
+slurmstepd: error: node020 [3] pmixp_coll_ring.c:775 [pmixp_coll_ring_log] mpi/pmix: ERROR: Context ptr=0x2b0b0c005a18, #0, in-use=0
+slurmstepd: error: node020 [3] pmixp_coll_ring.c:775 [pmixp_coll_ring_log] mpi/pmix: ERROR: Context ptr=0x2b0b0c005a50, #1, in-use=0
+slurmstepd: error: node020 [3] pmixp_coll_ring.c:775 [pmixp_coll_ring_log] mpi/pmix: ERROR: Context ptr=0x2b0b0c005a88, #2, in-use=1
+slurmstepd: error: node020 [3] pmixp_coll_ring.c:786 [pmixp_coll_ring_log] mpi/pmix: ERROR: 	 seq=0 contribs: loc=1/prev=0/fwd=1
+slurmstepd: error: node020 [3] pmixp_coll_ring.c:788 [pmixp_coll_ring_log] mpi/pmix: ERROR: 	 neighbor contribs [9]:
+slurmstepd: error: node020 [3] pmixp_coll_ring.c:821 [pmixp_coll_ring_log] mpi/pmix: ERROR: 		 done contrib: -
+slurmstepd: error: node020 [3] pmixp_coll_ring.c:823 [pmixp_coll_ring_log] mpi/pmix: ERROR: 		 wait contrib: node[000,017-018,022-024,026-027]
+slurmstepd: error: node020 [3] pmixp_coll_ring.c:825 [pmixp_coll_ring_log] mpi/pmix: ERROR: 	 status=PMIXP_COLL_RING_PROGRESS
+slurmstepd: error: node020 [3] pmixp_coll_ring.c:829 [pmixp_coll_ring_log] mpi/pmix: ERROR: 	 buf (offset/size): 19/190
+slurmstepd: error: node018 [2] pmixp_coll_ring.c:738 [pmixp_coll_ring_reset_if_to] mpi/pmix: ERROR: 0x2ac250017e70: collective timeout seq=0
+slurmstepd: error: node018 [2] pmixp_coll.c:281 [pmixp_coll_log] mpi/pmix: ERROR: Dumping collective state
+slurmstepd: error: node018 [2] pmixp_coll_ring.c:756 [pmixp_coll_ring_log] mpi/pmix: ERROR: 0x2ac250017e70: COLL_FENCE_RING state seq=0
+slurmstepd: error: node018 [2] pmixp_coll_ring.c:758 [pmixp_coll_ring_log] mpi/pmix: ERROR: my peerid: 2:node018
+slurmstepd: error: node018 [2] pmixp_coll_ring.c:765 [pmixp_coll_ring_log] mpi/pmix: ERROR: neighbor id: next 3:node020, prev 1:node017
+slurmstepd: error: node018 [2] pmixp_coll_ring.c:775 [pmixp_coll_ring_log] mpi/pmix: ERROR: Context ptr=0x2ac250017ee8, #0, in-use=0
+slurmstepd: error: node018 [2] pmixp_coll_ring.c:775 [pmixp_coll_ring_log] mpi/pmix: ERROR: Context ptr=0x2ac250017f20, #1, in-use=0
+slurmstepd: error: node018 [2] pmixp_coll_ring.c:775 [pmixp_coll_ring_log] mpi/pmix: ERROR: Context ptr=0x2ac250017f58, #2, in-use=1
+slurmstepd: error: node018 [2] pmixp_coll_ring.c:786 [pmixp_coll_ring_log] mpi/pmix: ERROR: 	 seq=0 contribs: loc=1/prev=0/fwd=1
+slurmstepd: error: node018 [2] pmixp_coll_ring.c:788 [pmixp_coll_ring_log] mpi/pmix: ERROR: 	 neighbor contribs [9]:
+slurmstepd: error: node018 [2] pmixp_coll_ring.c:821 [pmixp_coll_ring_log] mpi/pmix: ERROR: 		 done contrib: -
+slurmstepd: error: node018 [2] pmixp_coll_ring.c:823 [pmixp_coll_ring_log] mpi/pmix: ERROR: 		 wait contrib: node[000,017,020,022-024,026-027]
+slurmstepd: error: node018 [2] pmixp_coll_ring.c:825 [pmixp_coll_ring_log] mpi/pmix: ERROR: 	 status=PMIXP_COLL_RING_PROGRESS
+slurmstepd: error: node018 [2] pmixp_coll_ring.c:829 [pmixp_coll_ring_log] mpi/pmix: ERROR: 	 buf (offset/size): 19/190
+slurmstepd: error: node023 [5] pmixp_coll_ring.c:738 [pmixp_coll_ring_reset_if_to] mpi/pmix: ERROR: 0x2b69e80059a0: collective timeout seq=0
+slurmstepd: error: node023 [5] pmixp_coll.c:281 [pmixp_coll_log] mpi/pmix: ERROR: Dumping collective state
+slurmstepd: error: node023 [5] pmixp_coll_ring.c:756 [pmixp_coll_ring_log] mpi/pmix: ERROR: 0x2b69e80059a0: COLL_FENCE_RING state seq=0
+slurmstepd: error: node023 [5] pmixp_coll_ring.c:758 [pmixp_coll_ring_log] mpi/pmix: ERROR: my peerid: 5:node023
+slurmstepd: error: node023 [5] pmixp_coll_ring.c:765 [pmixp_coll_ring_log] mpi/pmix: ERROR: neighbor id: next 6:node024, prev 4:node022
+slurmstepd: error: node023 [5] pmixp_coll_ring.c:775 [pmixp_coll_ring_log] mpi/pmix: ERROR: Context ptr=0x2b69e8005a18, #0, in-use=0
+slurmstepd: error: node023 [5] pmixp_coll_ring.c:775 [pmixp_coll_ring_log] mpi/pmix: ERROR: Context ptr=0x2b69e8005a50, #1, in-use=0
+slurmstepd: error: node023 [5] pmixp_coll_ring.c:775 [pmixp_coll_ring_log] mpi/pmix: ERROR: Context ptr=0x2b69e8005a88, #2, in-use=1
+slurmstepd: error: node023 [5] pmixp_coll_ring.c:786 [pmixp_coll_ring_log] mpi/pmix: ERROR: 	 seq=0 contribs: loc=1/prev=2/fwd=3
+slurmstepd: error: node023 [5] pmixp_coll_ring.c:788 [pmixp_coll_ring_log] mpi/pmix: ERROR: 	 neighbor contribs [9]:
+slurmstepd: error: node023 [5] pmixp_coll_ring.c:821 [pmixp_coll_ring_log] mpi/pmix: ERROR: 		 done contrib: node[020,022]
+slurmstepd: error: node023 [5] pmixp_coll_ring.c:823 [pmixp_coll_ring_log] mpi/pmix: ERROR: 		 wait contrib: node[000,017-018,024,026-027]
+slurmstepd: error: node023 [5] pmixp_coll_ring.c:825 [pmixp_coll_ring_log] mpi/pmix: ERROR: 	 status=PMIXP_COLL_RING_PROGRESS
+slurmstepd: error: node023 [5] pmixp_coll_ring.c:829 [pmixp_coll_ring_log] mpi/pmix: ERROR: 	 buf (offset/size): 57/228
+slurmstepd: error: node017 [1] pmixp_coll_ring.c:738 [pmixp_coll_ring_reset_if_to] mpi/pmix: ERROR: 0x2abb300059a0: collective timeout seq=0
+slurmstepd: error: node017 [1] pmixp_coll.c:281 [pmixp_coll_log] mpi/pmix: ERROR: Dumping collective state
+slurmstepd: error: node017 [1] pmixp_coll_ring.c:756 [pmixp_coll_ring_log] mpi/pmix: ERROR: 0x2abb300059a0: COLL_FENCE_RING state seq=0
+slurmstepd: error: node017 [1] pmixp_coll_ring.c:758 [pmixp_coll_ring_log] mpi/pmix: ERROR: my peerid: 1:node017
+slurmstepd: error: node017 [1] pmixp_coll_ring.c:765 [pmixp_coll_ring_log] mpi/pmix: ERROR: neighbor id: next 2:node018, prev 0:node000
+slurmstepd: error: node017 [1] pmixp_coll_ring.c:775 [pmixp_coll_ring_log] mpi/pmix: ERROR: Context ptr=0x2abb30005a18, #0, in-use=0
+slurmstepd: error: node017 [1] pmixp_coll_ring.c:775 [pmixp_coll_ring_log] mpi/pmix: ERROR: Context ptr=0x2abb30005a50, #1, in-use=0
+slurmstepd: error: node017 [1] pmixp_coll_ring.c:775 [pmixp_coll_ring_log] mpi/pmix: ERROR: Context ptr=0x2abb30005a88, #2, in-use=1
+slurmstepd: error: node017 [1] pmixp_coll_ring.c:786 [pmixp_coll_ring_log] mpi/pmix: ERROR: 	 seq=0 contribs: loc=1/prev=0/fwd=1
+slurmstepd: error: node017 [1] pmixp_coll_ring.c:788 [pmixp_coll_ring_log] mpi/pmix: ERROR: 	 neighbor contribs [9]:
+slurmstepd: error: node017 [1] pmixp_coll_ring.c:821 [pmixp_coll_ring_log] mpi/pmix: ERROR: 		 done contrib: -
+slurmstepd: error: node017 [1] pmixp_coll_ring.c:823 [pmixp_coll_ring_log] mpi/pmix: ERROR: 		 wait contrib: node[000,018,020,022-024,026-027]
+slurmstepd: error: node017 [1] pmixp_coll_ring.c:825 [pmixp_coll_ring_log] mpi/pmix: ERROR: 	 status=PMIXP_COLL_RING_PROGRESS
+slurmstepd: error: node017 [1] pmixp_coll_ring.c:829 [pmixp_coll_ring_log] mpi/pmix: ERROR: 	 buf (offset/size): 19/190
+slurmstepd: error: node024 [6] pmixp_coll_ring.c:738 [pmixp_coll_ring_reset_if_to] mpi/pmix: ERROR: 0x2b02d40059a0: collective timeout seq=0
+slurmstepd: error: node024 [6] pmixp_coll.c:281 [pmixp_coll_log] mpi/pmix: ERROR: Dumping collective state
+slurmstepd: error: node024 [6] pmixp_coll_ring.c:756 [pmixp_coll_ring_log] mpi/pmix: ERROR: 0x2b02d40059a0: COLL_FENCE_RING state seq=0
+slurmstepd: error: node024 [6] pmixp_coll_ring.c:758 [pmixp_coll_ring_log] mpi/pmix: ERROR: my peerid: 6:node024
+slurmstepd: error: node024 [6] pmixp_coll_ring.c:765 [pmixp_coll_ring_log] mpi/pmix: ERROR: neighbor id: next 7:node026, prev 5:node023
+slurmstepd: error: node024 [6] pmixp_coll_ring.c:775 [pmixp_coll_ring_log] mpi/pmix: ERROR: Context ptr=0x2b02d4005a18, #0, in-use=0
+slurmstepd: error: node024 [6] pmixp_coll_ring.c:775 [pmixp_coll_ring_log] mpi/pmix: ERROR: Context ptr=0x2b02d4005a50, #1, in-use=0
+slurmstepd: error: node024 [6] pmixp_coll_ring.c:775 [pmixp_coll_ring_log] mpi/pmix: ERROR: Context ptr=0x2b02d4005a88, #2, in-use=1
+slurmstepd: error: node024 [6] pmixp_coll_ring.c:786 [pmixp_coll_ring_log] mpi/pmix: ERROR: 	 seq=0 contribs: loc=1/prev=2/fwd=3
+slurmstepd: error: node024 [6] pmixp_coll_ring.c:788 [pmixp_coll_ring_log] mpi/pmix: ERROR: 	 neighbor contribs [9]:
+slurmstepd: error: node024 [6] pmixp_coll_ring.c:821 [pmixp_coll_ring_log] mpi/pmix: ERROR: 		 done contrib: node[020,022]
+slurmstepd: error: node024 [6] pmixp_coll_ring.c:823 [pmixp_coll_ring_log] mpi/pmix: ERROR: 		 wait contrib: node[000,017-018,023,026-027]
+slurmstepd: error: node024 [6] pmixp_coll_ring.c:825 [pmixp_coll_ring_log] mpi/pmix: ERROR: 	 status=PMIXP_COLL_RING_PROGRESS
+slurmstepd: error: node024 [6] pmixp_coll_ring.c:829 [pmixp_coll_ring_log] mpi/pmix: ERROR: 	 buf (offset/size): 57/228
+slurmstepd: error: node022 [4] pmixp_coll_ring.c:738 [pmixp_coll_ring_reset_if_to] mpi/pmix: ERROR: 0x2b14640059a0: collective timeout seq=0
+slurmstepd: error: node022 [4] pmixp_coll.c:281 [pmixp_coll_log] mpi/pmix: ERROR: Dumping collective state
+slurmstepd: error: node022 [4] pmixp_coll_ring.c:756 [pmixp_coll_ring_log] mpi/pmix: ERROR: 0x2b14640059a0: COLL_FENCE_RING state seq=0
+slurmstepd: error: node022 [4] pmixp_coll_ring.c:758 [pmixp_coll_ring_log] mpi/pmix: ERROR: my peerid: 4:node022
+slurmstepd: error: node022 [4] pmixp_coll_ring.c:765 [pmixp_coll_ring_log] mpi/pmix: ERROR: neighbor id: next 5:node023, prev 3:node020
+slurmstepd: error: node022 [4] pmixp_coll_ring.c:775 [pmixp_coll_ring_log] mpi/pmix: ERROR: Context ptr=0x2b1464005a18, #0, in-use=0
+slurmstepd: error: node022 [4] pmixp_coll_ring.c:775 [pmixp_coll_ring_log] mpi/pmix: ERROR: Context ptr=0x2b1464005a50, #1, in-use=0
+slurmstepd: error: node022 [4] pmixp_coll_ring.c:775 [pmixp_coll_ring_log] mpi/pmix: ERROR: Context ptr=0x2b1464005a88, #2, in-use=1
+slurmstepd: error: node022 [4] pmixp_coll_ring.c:786 [pmixp_coll_ring_log] mpi/pmix: ERROR: 	 seq=0 contribs: loc=1/prev=1/fwd=2
+slurmstepd: error: node022 [4] pmixp_coll_ring.c:788 [pmixp_coll_ring_log] mpi/pmix: ERROR: 	 neighbor contribs [9]:
+slurmstepd: error: node022 [4] pmixp_coll_ring.c:821 [pmixp_coll_ring_log] mpi/pmix: ERROR: 		 done contrib: node020
+slurmstepd: error: node022 [4] pmixp_coll_ring.c:823 [pmixp_coll_ring_log] mpi/pmix: ERROR: 		 wait contrib: node[000,017-018,023-024,026-027]
+slurmstepd: error: node022 [4] pmixp_coll_ring.c:825 [pmixp_coll_ring_log] mpi/pmix: ERROR: 	 status=PMIXP_COLL_RING_PROGRESS
+slurmstepd: error: node022 [4] pmixp_coll_ring.c:829 [pmixp_coll_ring_log] mpi/pmix: ERROR: 	 buf (offset/size): 38/209
+slurmstepd: error: node027 [8] pmixp_coll_ring.c:738 [pmixp_coll_ring_reset_if_to] mpi/pmix: ERROR: 0x2b42140059a0: collective timeout seq=0
+slurmstepd: error: node027 [8] pmixp_coll.c:281 [pmixp_coll_log] mpi/pmix: ERROR: Dumping collective state
+slurmstepd: error: node027 [8] pmixp_coll_ring.c:756 [pmixp_coll_ring_log] mpi/pmix: ERROR: 0x2b42140059a0: COLL_FENCE_RING state seq=0
+slurmstepd: error: node027 [8] pmixp_coll_ring.c:758 [pmixp_coll_ring_log] mpi/pmix: ERROR: my peerid: 8:node027
+slurmstepd: error: node027 [8] pmixp_coll_ring.c:765 [pmixp_coll_ring_log] mpi/pmix: ERROR: neighbor id: next 0:node000, prev 7:node026
+slurmstepd: error: node027 [8] pmixp_coll_ring.c:775 [pmixp_coll_ring_log] mpi/pmix: ERROR: Context ptr=0x2b4214005a18, #0, in-use=0
+slurmstepd: error: node027 [8] pmixp_coll_ring.c:775 [pmixp_coll_ring_log] mpi/pmix: ERROR: Context ptr=0x2b4214005a50, #1, in-use=0
+slurmstepd: error: node027 [8] pmixp_coll_ring.c:775 [pmixp_coll_ring_log] mpi/pmix: ERROR: Context ptr=0x2b4214005a88, #2, in-use=1
+slurmstepd: error: node027 [8] pmixp_coll_ring.c:786 [pmixp_coll_ring_log] mpi/pmix: ERROR: 	 seq=0 contribs: loc=1/prev=4/fwd=1
+slurmstepd: error: node027 [8] pmixp_coll_ring.c:788 [pmixp_coll_ring_log] mpi/pmix: ERROR: 	 neighbor contribs [9]:
+slurmstepd: error: node027 [8] pmixp_coll_ring.c:821 [pmixp_coll_ring_log] mpi/pmix: ERROR: 		 done contrib: node[020,022,024,026]
+slurmstepd: error: node027 [8] pmixp_coll_ring.c:823 [pmixp_coll_ring_log] mpi/pmix: ERROR: 		 wait contrib: node[000,017-018,023]
+slurmstepd: error: node027 [8] pmixp_coll_ring.c:825 [pmixp_coll_ring_log] mpi/pmix: ERROR: 	 status=PMIXP_COLL_RING_PROGRESS
+slurmstepd: error: node027 [8] pmixp_coll_ring.c:829 [pmixp_coll_ring_log] mpi/pmix: ERROR: 	 buf (offset/size): 95/266
+srun: Job step aborted: Waiting up to 62 seconds for job step to finish.
+slurmstepd: error: *** JOB 109438 ON node000 CANCELLED AT 2022-08-15T22:41:30 DUE TO TIME LIMIT ***

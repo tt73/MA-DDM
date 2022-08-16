@@ -11,7 +11,7 @@
 #SBATCH --exclusive
 module load gnu8 mpich petsc/3.12.0
 N=300
-mpirun ../../maddm -N $N -problem ex1 -snes_type newtonls -snes_linesearch_order 2 -ksp_type pipefgmres -pc_type bjacobi -ksp_rtol 1e-2 >> out9
-mpirun ../../maddm -N $N -problem ex2 -snes_type newtonls -snes_linesearch_order 2 -ksp_type pipefgmres -pc_type bjacobi -ksp_rtol 1e-2 >> out9
-mpirun ../../maddm -N $N -problem ex3 -snes_type newtonls -snes_linesearch_order 2 -ksp_type pipefgmres -pc_type bjacobi -ksp_rtol 1e-2 >> out9
-mpirun ../../maddm -N $N -problem ex4 -snes_type newtonls -snes_linesearch_order 2 -ksp_type pipefgmres -pc_type bjacobi -ksp_rtol 1e-2 >> out9
+mpirun ../../maddm -N $N -problem ex1 -snes_type newtonls -snes_linesearch_order 2 -ksp_type pipefgmres -pc_type bjacobi -ksp_rtol 1e-5 >> out9
+mpirun ../../maddm -N $N -problem ex2 -snes_type newtonls -snes_linesearch_order 2 -ksp_type pipefgmres -pc_type bjacobi -ksp_rtol 1e-5 >> out9
+mpirun ../../maddm -N $N -problem ex3 -snes_type newtonls -snes_linesearch_order 2 -ksp_type pipefgmres -pc_type bjacobi -ksp_rtol 1e-5 >> out9
+mpirun ../../maddm -N $N -problem ex4 -snes_type newtonls -snes_linesearch_order 2 -ksp_type pipefgmres -pc_type bjacobi -ksp_rtol 1e-5 >> out9
