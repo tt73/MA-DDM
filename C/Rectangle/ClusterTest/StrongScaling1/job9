@@ -11,7 +11,7 @@
 #SBATCH --ntasks 9
 module load gnu8 mpich petsc
 N=300
-mpirun ../../maddm -N $N -problem ex1 >> out9
-mpirun ../../maddm -N $N -problem ex2 >> out9
-mpirun ../../maddm -N $N -problem ex3 >> out9
-mpirun ../../maddm -N $N -problem ex4 >> out9
+mpirun ../../maddm -N $N -problem ex1 -ngmres >> out9
+mpirun ../../maddm -N $N -problem ex2 -ngmres >> out9
+mpirun ../../maddm -N $N -problem ex3 -ngmres >> out9
+mpirun ../../maddm -N $N -problem ex4 -ngmres >> out9

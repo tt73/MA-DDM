@@ -180,7 +180,7 @@ int main(int argc,char **args) {
    ExactFcnVec    getuexact;
    InitialType    initial;
    ProblemType    problem;
-   PetscBool      debug,set_N,set_eps,set_width,printSol,mixed,htn,sin,aspin,ilusin,coarse;
+   PetscBool      debug,set_N,set_eps,set_width,printSol,mixed,htn,sin,aspin,ilusin,coarse,ngmres;
    PetscReal      h_eff,hx,hy,eps,errinf,normconst2h,err2h,op;
    char           gridstr[99];
    PetscInt       dim,width,N,Nx,Ny,order,NASM_its,KSP_its,Newt_its;
@@ -211,7 +211,8 @@ int main(int argc,char **args) {
    sin         = PETSC_FALSE; // option to use single-iteration Newton
    aspin       = PETSC_FALSE; // option to use additive schwarz preconditioned inexact newton
    ilusin      = PETSC_FALSE; // experimental
-   coarse      = PETSC_FALSE; // fast might be unstable so leave it off by default
+   coarse      = PETSC_FALSE; // NASM + FAS
+   ngmres      = PETSC_FALSE; // NGMRES -L SIN NASM
 
    ierr = PetscOptionsBegin(PETSC_COMM_WORLD,"","options for maddm.c",""); CHKERRQ(ierr);
    ierr = PetscOptionsInt("-dim","dimension of problem (=1,2,3 only)","maddm.c",dim,&dim,NULL);CHKERRQ(ierr);
@@ -228,6 +229,7 @@ int main(int argc,char **args) {
    ierr = PetscOptionsBool("-aspin","option to use additive schwarz preconditioned inexact newton (ASPIN)","maddm.c",aspin,&aspin,NULL);CHKERRQ(ierr);
    ierr = PetscOptionsBool("-ilusin","trying something","maddm.c",ilusin,&ilusin,NULL);CHKERRQ(ierr);
    ierr = PetscOptionsBool("-coarse","use NASM+FAS additive composite method","maddm.c",coarse,&coarse,NULL);CHKERRQ(ierr);
+   ierr = PetscOptionsBool("-ngmres","use NGMRES-NASM (nonlinear GMRES with SIN NASM as the nonlinear left preeconditioner)","maddm.c",ngmres,&ngmres,NULL);CHKERRQ(ierr);
    ierr = PetscOptionsEnum("-init_type","type of initial iterate","maddm.c",InitialTypes,(PetscEnum)initial,(PetscEnum*)&initial,NULL); CHKERRQ(ierr);
    ierr = PetscOptionsReal("-eps","regularization constant epsilon","maddm.c",eps,&eps,&set_eps);CHKERRQ(ierr);
    ierr = PetscOptionsReal("-op","domain overlap percentage (0.0 to 1.0)","maddm.c",op,&op,NULL);CHKERRQ(ierr);
@@ -379,21 +381,25 @@ int main(int argc,char **args) {
       KSPSetType(subksp,KSPPREONLY);  //  don't use any krylov
       PCSetType(subpc,PCILU);         // use inexact ILU
    } else if (coarse) {
+      // in progress
       PetscOptionsSetValue(NULL,"-snes_type","composite");
       PetscOptionsSetValue(NULL,"-snes_composite_type","additive");
       PetscOptionsSetValue(NULL,"-snes_composite_sneses","nasm,fas");
       PetscOptionsSetValue(NULL,"-sub_0_sub_ksp_type","dgmres");
       PetscOptionsSetValue(NULL,"-sub_0_sub_pc_type","eisenstat");
+   } else if (ngmres) {
+      // in progress
+      PetscOptionsSetValue(NULL,"-snes_type","ngmres");
+      PetscOptionsSetValue(NULL,"-npc_snes_type","nasm");
+      PetscOptionsSetValue(NULL,"-snes_npc_side","right"); // should it be left or right
+      PetscOptionsSetValue(NULL,"-npc_snes_nasm_type","restrict");
+      PetscOptionsSetValue(NULL,"-npc_sub_ksp_type","dgmres");
+      PetscOptionsSetValue(NULL,"-npc_sub_pc_type","eisenstat");
+      PetscOptionsSetValue(NULL,"-npc_sub_snes_max_it","1");
+      PetscOptionsSetValue(NULL,"-npc_sub_ksp_rtol","1e-1");
    }
 
-   // } else if (rank<size-1) { // default settings
-   //    // newton rres < 0.01
-   //    // gmres rres < 0.01
-   //    // ls rres < 0.01
-   //    SNESSetTolerances(subsnes,PETSC_DEFAULT,1.e-2,PETSC_DEFAULT,PETSC_DEFAULT,PETSC_DEFAULT);
-   //    KSPSetTolerances(subksp,1.e-2,PETSC_DEFAULT,PETSC_DEFAULT,PETSC_DEFAULT);
-   //    SNESLineSearchSetTolerances(subls,PETSC_DEFAULT,PETSC_DEFAULT,1.e-2,PETSC_DEFAULT,PETSC_DEFAULT,PETSC_DEFAULT);
-   // }
+
 
 
    // if ((rank==size-1) && mixed) { // final domain
@@ -426,6 +432,7 @@ int main(int argc,char **args) {
    // }
 
    /* ASPIN - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+      * work in progress
       Additive Schwarz Preconditioned Inexact Newton is a completely different
       from NASM. It's using Newton as the global method and using NASM as
       a preconditioner. The default settings are terrible so I made these
@@ -451,6 +458,7 @@ int main(int argc,char **args) {
    }
 
    if (mixed) { // each subdomain gets their own indexed prefix
+      // work in progress
       char prefix[10];
       sprintf(prefix,"sub_%d_",rank);
       SNESSetOptionsPrefix(subsnes,prefix);
@@ -474,6 +482,7 @@ int main(int argc,char **args) {
    ierr = SNESSolve(snes,NULL,u_initial); CHKERRQ(ierr);
    ierr = PetscTime(&t2); CHKERRQ(ierr);
    /* Iterations - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+      (This is a work in progress)
       Get the number of NASM iterations.
       Get the total Newton iterations at the local level.
       Get the total Krylov iterations at the local level.
