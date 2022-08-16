@@ -1,20 +1,14 @@
-*Problem: ex1 on domain [-1.00,1.00]x[-1.00,1.00] with 300x300 point 2D grid
-*Params:  Nd = 2, width = 6, eps = 0.002, op = 0.10
-*Error:   |u-uexact|_inf = 3.385e-03, |u-uexact|_h = 1.069e-03
-*WTime:   398.807298
-*Iters:   19
-*Problem: ex2 on domain [0.00,1.00]x[0.00,1.00] with 300x300 point 2D grid
-*Params:  Nd = 2, width = 7, eps = 0.001, op = 0.10
-*Error:   |u-uexact|_inf = 6.547e-05, |u-uexact|_h = 2.844e-05
-*WTime:   327.625510
-*Iters:   17
-*Problem: ex3 on domain [0.00,1.00]x[0.00,1.00] with 300x300 point 2D grid
-*Params:  Nd = 2, width = 7, eps = 0.001, op = 0.10
-*Error:   |u-uexact|_inf = 1.208e-04, |u-uexact|_h = 4.910e-05
-*WTime:   330.661330
-*Iters:   29
-*Problem: ex4 on domain [-1.00,1.00]x[-1.00,1.00] with 300x300 point 2D grid
-*Params:  Nd = 2, width = 6, eps = 0.002, op = 0.10
-*Error:   |u-uexact|_inf = 1.019e-02, |u-uexact|_h = 6.063e-03
-*WTime:   686.866374
-*Iters:   33
+[mpiexec@ubuntu] Sending Ctrl-C to processes as requested
+[mpiexec@ubuntu] Press Ctrl-C again to force abort
+
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+=   RANK 0 PID 5060 RUNNING AT ubuntu
+=   KILLED BY SIGNAL: 2 (Interrupt)
+===================================================================================
+
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+=   RANK 1 PID 5061 RUNNING AT ubuntu
+=   KILLED BY SIGNAL: 2 (Interrupt)
+===================================================================================
