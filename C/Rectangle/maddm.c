@@ -383,10 +383,13 @@ int main(int argc,char **args) {
    } else if (coarse) {
       // in progress
       PetscOptionsSetValue(NULL,"-snes_type","composite");
-      PetscOptionsSetValue(NULL,"-snes_composite_type","additive");
+      PetscOptionsSetValue(NULL,"-snes_composite_type","additiveoptimal");
       PetscOptionsSetValue(NULL,"-snes_composite_sneses","nasm,fas");
+      PetscOptionsSetValue(NULL,"-sub_0_snes_nasm_type","restrict"); // SIN settings
       PetscOptionsSetValue(NULL,"-sub_0_sub_ksp_type","dgmres");
       PetscOptionsSetValue(NULL,"-sub_0_sub_pc_type","eisenstat");
+      PetscOptionsSetValue(NULL,"-sub_0_sub_snes_max_it","1");
+      PetscOptionsSetValue(NULL,"-sub_0_sub_ksp_rtol","1e-1");
    } else if (ngmres) {
       // in progress
       PetscOptionsSetValue(NULL,"-snes_type","ngmres");
