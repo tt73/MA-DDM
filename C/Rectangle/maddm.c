@@ -390,6 +390,9 @@ int main(int argc,char **args) {
       PetscOptionsSetValue(NULL,"-sub_0_sub_pc_type","eisenstat");
       PetscOptionsSetValue(NULL,"-sub_0_sub_snes_max_it","1");
       PetscOptionsSetValue(NULL,"-sub_0_sub_ksp_rtol","1e-1");
+      PetscOptionsSetValue(NULL,"-sub_0_sub_snes_linesearch_order","2");
+      PetscOptionsSetValue(NULL,"-sub_1_fas_coarse_snes_max_it","1"); // FAS setting
+      PetscOptionsSetValue(NULL,"-sub_1_fas_coarse","1"); // FAS setting
    } else if (ngmres) {
       // in progress
       PetscOptionsSetValue(NULL,"-snes_type","ngmres");
