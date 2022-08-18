@@ -1,4 +1,3 @@
-## Problem 3 aka Example 12
 
 
 
