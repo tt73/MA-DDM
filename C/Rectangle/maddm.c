@@ -295,13 +295,14 @@ int main(int argc,char **args) {
       default:
          SETERRQ(PETSC_COMM_SELF,1,"invalid dim for DMDA creation\n");
    }
-   /* DM setup - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+   /* General setup - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
       The code is set up to mesh a domain [xmin,xmax] x [ymin,ymax]
       with uniformly distributed points. Nx and Ny are the number
       of interior points.
+
       You can adjust the overlapping nodes directly with -da_overlap <int>
       or adjust the percentage with -op <float> where float ranges from 0 to 1.
-   - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+   - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
    PetscInt mm, nn, olx, oly;
    ierr = DMSetUp(da); CHKERRQ(ierr); // initialize the grid distribution, then get mm and nn
    ierr = DMDAGetInfo(da,NULL,NULL,NULL,NULL,&mm,&nn,NULL,NULL,NULL,NULL,NULL,NULL,NULL); CHKERRQ(ierr);
@@ -311,26 +312,19 @@ int main(int argc,char **args) {
    ierr = DMSetFromOptions(da); CHKERRQ(ierr); // the nodes
    ierr = DMDASetUniformCoordinates(da,user.xmin+hx,user.xmax-hx,user.ymin+hy,user.ymax-hy,user.zmin,user.zmax); CHKERRQ(ierr);
    ierr = DMSetApplicationContext(da,&user); CHKERRQ(ierr);
-   /* SNES setup - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+   ierr = SNESCreate(PETSC_COMM_WORLD,&snes); CHKERRQ(ierr);
+   ierr = SNESSetDM(snes,da); CHKERRQ(ierr);
+   ierr = DMDASNESSetFunctionLocal(da,INSERT_VALUES,(DMDASNESFunction)(residual_ptr[dim-1]),&user); CHKERRQ(ierr);
+   ierr = DMDASNESSetJacobianLocal(da,(DMDASNESJacobian)(jacobian_ptr[dim-1]),&user); CHKERRQ(ierr);
+
+   /* Default Solver Settings - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
       By default, we use Nonlinear Additive Schwarz method (NASM) for the
       nonlinear solver. On the local subdomains, we use one step of basic
       newton method. For the Jacobian solve, we use GMRES with a SSOR
       preconditioner.
    - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
-   ierr = SNESCreate(PETSC_COMM_WORLD,&snes); CHKERRQ(ierr);
    ierr = SNESSetType(snes,SNESNASM); CHKERRQ(ierr);
    ierr = SNESNASMSetType(snes,PC_ASM_RESTRICT); CHKERRQ(ierr);
-   ierr = SNESSetDM(snes,da); CHKERRQ(ierr);
-   ierr = DMDASNESSetFunctionLocal(da,INSERT_VALUES,(DMDASNESFunction)(residual_ptr[dim-1]),&user); CHKERRQ(ierr);
-   ierr = DMDASNESSetJacobianLocal(da,(DMDASNESJacobian)(jacobian_ptr[dim-1]),&user); CHKERRQ(ierr);
-   /* Subdomain Solve - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-      The following lines of code extracts the SNES, LS, KSP, and PC
-      objects from the local subsolver given to the current rank.
-
-      By default, we set the local solver to use the deflated GMRES and use an
-      efficient SSOR preconditioner. This was experimentally found to be a
-      fast and reliable linear solver combo.
-   - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
    ierr = SNESSetUp(snes); CHKERRQ(ierr); // initialize subdomains
    MPI_Comm_size(PETSC_COMM_WORLD,&size); // get # of processors
    MPI_Comm_rank(PETSC_COMM_WORLD,&rank); // get index of current procs
@@ -351,7 +345,7 @@ int main(int argc,char **args) {
       SNESSetTolerances(subsnes,PETSC_DEFAULT,PETSC_DEFAULT,PETSC_DEFAULT,10000,PETSC_DEFAULT);
    }
 
-   /* Tuning Local the Solve - - - - - - - - - - - - - - - - - - - - - - - - -
+   /* Other NASM Settings - - - - - - - - - - - - - - - - - - - - - - - - -
       In order to get speedup with NASM, we need to under-solve the local
       Newton, linesearch, and GMRES options.
 
