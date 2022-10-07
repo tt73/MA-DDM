@@ -20,7 +20,7 @@ extern PetscErrorCode ComputeRHS(DMDALocalInfo*, Vec, MACtx*);
    Smooth example.
    Solution    u(x) = exp(|x|^2/2), for x in Rn
    RHS: Det(D^2u(x)) = (1+|x|^2)*exp(n/2*|x|^2)
-   Defualt domain: [-1,-1]^2
+   Defualt domain: [-1,1]^2
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 PetscErrorCode u_exact_1D_ex1(PetscReal x, PetscReal y, PetscReal z, void *ctx, PetscReal * u) {
    u[0] = PetscExpReal(x*x/2.0);
@@ -51,7 +51,7 @@ PetscErrorCode f_rhs_3D_ex1(PetscReal x, PetscReal y, PetscReal z, void *ctx, Pe
    Fully degenerate example.
    Solution    u(x) = 1/2 max(|x-0.5| - 0.2,0)^2        , for x in Rn
    RHS: Det(D^2u(x)) = max(1-0.2/|x-0.5|, 0)
-   Defualt domain: [0,-1]^2
+   Defualt domain: [0,1]^2
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 PetscErrorCode u_exact_1D_ex2(PetscReal x, PetscReal y, PetscReal z, void *ctx, PetscReal * u) {
    u[0] = 0.5*PetscPowReal(PetscMax(PetscAbsReal(x-0.5)-0.2,0),2);
@@ -82,7 +82,7 @@ PetscErrorCode f_rhs_3D_ex2(PetscReal x, PetscReal y, PetscReal z, void *ctx, Pe
    Gradient blow-up on the boundary.
    Solution    u(x) = -sqrt(2 - |x|^2),              for x in Rn
    RHS: Det(D^2u(x)) = 2/(2- |x|^2)^p(n)
-   Defualt domain: [0,-1]^2
+   Defualt domain: [0,1]^2
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 PetscErrorCode u_exact_1D_ex3(PetscReal x, PetscReal y, PetscReal z, void *ctx, PetscReal * u) {
    u[0] = -PetscSqrtReal(2.0 - x*x);
@@ -115,9 +115,11 @@ PetscErrorCode f_rhs_3D_ex3(PetscReal x, PetscReal y, PetscReal z, void *ctx, Pe
    Solution    u(x) = (γ·x)^2,              for x in R2
    RHS: 0
    Defualt domain: [-1,-1]^2
+   Note that there is no 1D equivalent to this problem. The best we do is
+   a linear function.
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 PetscErrorCode u_exact_1D_ex4(PetscReal x, PetscReal y, PetscReal z, void *ctx, PetscReal * u) {
-   u[0] = 0.6*0.6*x*x;
+   u[0] = 0.6*0.6*x;
    return 0;
 }
 PetscErrorCode u_exact_2D_ex4(PetscReal x, PetscReal y, PetscReal z, void *ctx, PetscReal * u) {
