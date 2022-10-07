@@ -30,5 +30,20 @@ printf "\n\nNow doing problem 4\n"
 ../maddm -dim 1 -N 100 -problem ex4 -width 1
 
 
-printf "\n\nRepeat problem 1 with d = 2\n"
-../maddm -dim 1 -N 100 -sol -width 2 -sens_fd
+printf "\n\nRepeat problem 1 with d = 2 with FD Jacobian\n"
+../maddm -dim 1 -N 100 -sol -width 2 -sub_snes_fd
+## this should work
+## if it doesn't, there's something wrong with F
+
+printf "\n\nRepeat problem 1 with d = 2 with handcoded Jacobian\n"
+../maddm -dim 1 -N 100 -sol -width 2
+## its way worse than FD for some odd reason
+## but the error looks fine
+
+printf "\n\nRepeat problem 1 with d = 3 with handcoded Jacobian\n"
+../maddm -dim 1 -N 100 -sol -width 3
+
+printf "\n\nRepeat problem 1 with d = 3 with FD Jacobian\n"
+../maddm -dim 1 -N 100 -sol -width 3 -sub_snes_fd
+
+

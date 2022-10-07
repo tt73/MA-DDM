@@ -192,22 +192,19 @@ PetscErrorCode MA1DFunctionLocal(DMDALocalInfo *info, PetscReal *u, PetscReal *F
          if (in_range_left) {
             uw = u[i-width];
             hw = h*width;
-         } else { // need to prolect
+         } else { // need to project
             // x - width*h < xmin -> project onto xmin
             user->g_bdry(user->xmin,0.0,0.0,user,&uw);
             hw = (x - user->xmin);
          }
          if (user->debug) {
-            PetscPrintf(PETSC_COMM_WORLD,"%d:  he = %f, hw = %f\n",i,he,hw);
+            PetscPrintf(PETSC_COMM_WORLD,"%d:  hw = %f, he = %f\n",i,hw,he);
          }
          // * implement 1d version of this
          // *  SDD[k] = 2.0*(hBak[k]*uFwd[k] - (hBak[k]+hFwd[k])*au[j][i] + hFwd[k]*uBak[k]) / (hBak[k]*hFwd[k]*(hBak[k]+hFwd[k]));
          user->f_rhs(x,0.0,0.0,user,&f);
-         F[i] = 2.0*(hw*ue - hw*he*u[i] + he*uw)/(hw*he*(hw+he)) + f;
+         F[i] = -2.0*(hw*ue - (hw+he)*u[i] + he*uw)/(hw*he*(hw+he)) + f;
       }
-
-
-
    }
    PetscFunctionReturn(0);
 }
@@ -306,24 +303,57 @@ PetscErrorCode MA3DFunctionLocal(DMDALocalInfo *info, PetscReal ***au, PetscReal
 */
 PetscErrorCode MA1DJacobianLocal(DMDALocalInfo *info, PetscScalar *au, Mat J, Mat Jpre, MACtx *user) {
    PetscErrorCode  ierr;
-   PetscInt        i,ncols;
-   PetscReal       h, v[3];
+   PetscInt        i,ncols,width,in_range_left,in_range_right;
+   PetscReal       x,h,hw,he,v[3];
    MatStencil      col[3],row;
    PetscFunctionBeginUser;
 
-   h  = (user->xmax-user->xmin)/(PetscReal)(info->mx+1);
+   width = info->sw;
+   h = (user->xmax-user->xmin)/(PetscReal)(info->mx+1);
    for (i=info->xs; i<info->xs+info->xm; i++) { // loop over each row of J (mx by mx)
+
+      x = user->xmin + (i+1)*h;
       row.i = i;
       col[0].i = i;
       ncols = 1;
-      v[0] = 2.0/(h*h); // middle J_{i,j} = 2/h^2
-      if (i-1 > 0) {
-         col[ncols].i = i-1;
-         v[ncols++] = -1.0/(h*h); // left J_{i-1,j} = -1/h^2
-      }
-      if (i+1 < info->mx-1) {
-         col[ncols].i = i+1;
-         v[ncols++] = -1.0/(h*h); // right J_{i+1,j} = -1/h^2
+      if (width == 1) { // simple centered diff
+
+         v[0] = 2.0/(h*h); // middle J_{i,j} = 2/h^2
+         if (i-1 > 0) {
+            col[ncols].i = i-1;
+            v[ncols++] = -1.0/(h*h); // left J_{i-1,j} = -1/h^2
+         }
+         if (i+1 < info->mx-1) {
+            col[ncols].i = i+1;
+            v[ncols++] = -1.0/(h*h); // right J_{i+1,j} = -1/h^2
+         }
+      } else { // generalized centered diff -2.0*(hw*ue - (hw+he)*u[i] + he*uw)/(hw*he*(hw+he))
+
+         // check if east stencil point is in range
+         in_range_right = (i+width)<=(info->mx-1);
+         if (in_range_right) {
+            he = h*width;
+         } else { // project east point
+            // x + width*h > xmax -> project onto xmax
+            he = (user->xmax - x);
+         }
+         // check if west stencil point is in range
+         in_range_left = (i-width) >= 0;
+         if (in_range_left) {
+            hw = h*width;
+         } else { // need to project
+            // x - width*h < xmin -> project onto xmin
+            hw = (x - user->xmin);
+         }
+         v[0] = 2.0/(hw*he); // middle point
+         if (in_range_left) {
+            col[ncols].i = i-width;
+            v[ncols++] = -2.0/(hw*(he+hw)); // left or west
+         }
+         if (in_range_right) {
+            col[ncols].i = i+width;
+            v[ncols++] = -2.0/(he*(he+hw)); // right or east
+         }
       }
       // Insert up to 3 values of the Jacobian per row
       ierr = MatSetValuesStencil(Jpre,1,&row,ncols,col,v,INSERT_VALUES); CHKERRQ(ierr);
