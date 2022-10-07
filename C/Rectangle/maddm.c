@@ -276,7 +276,7 @@ int main(int argc,char **args) {
    - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
    switch (dim) {
       case 1:
-         ierr = DMDACreate1d(PETSC_COMM_WORLD,DM_BOUNDARY_NONE,Nx,1,1,NULL,&da); CHKERRQ(ierr);
+         ierr = DMDACreate1d(PETSC_COMM_WORLD,DM_BOUNDARY_NONE,Nx,1,width,NULL,&da); CHKERRQ(ierr);
          break;
       case 2:
          ierr = DMDACreate2d(PETSC_COMM_WORLD,     //

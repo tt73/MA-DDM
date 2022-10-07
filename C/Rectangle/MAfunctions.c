@@ -156,19 +156,58 @@ PetscErrorCode InitialState(DM da, InitialType it, Vec u, MACtx *user) {
    Since this is 1D, the ouptut F is represented as an array and so is the input u.
 */
 PetscErrorCode MA1DFunctionLocal(DMDALocalInfo *info, PetscReal *u, PetscReal *F, MACtx *user) {
-   PetscInt  i;
-   PetscReal h, x, ue, uw, f;
+   PetscInt  i, width, in_range_right, in_range_left;
+   PetscReal h, he, hw, x, ue, uw, f;
    PetscFunctionBeginUser;
 
+   width = info->sw;
    h = (user->xmax-user->xmin)/(PetscReal)(info->mx+1);
    for (i=info->xs; i<info->xs+info->xm; i++) {
       x = user->xmin + (i+1)*h;
-      ue = u[i+1];
-      uw = u[i-1];
-      if(i == info->mx-1) {user->g_bdry(x+h,0.0,0.0,user,&ue);}
-      if(i == 0)          {user->g_bdry(x-h,0.0,0.0,user,&uw);}
-      user->f_rhs(x,0.0,0.0,user,&f);
-      F[i] = (-uw + 2.0*u[i] - ue)/(h*h) + f;
+
+      if (width==1) { // basic centered difference
+
+         ue = u[i+1];
+         uw = u[i-1];
+         if(i == info->mx-1) {user->g_bdry(x+h,0.0,0.0,user,&ue);}
+         if(i == 0)          {user->g_bdry(x-h,0.0,0.0,user,&uw);}
+         user->f_rhs(x,0.0,0.0,user,&f);
+         F[i] = (-uw + 2.0*u[i] - ue)/(h*h) + f;
+
+      } else { // use wide stencil scheme
+
+         // check if east stencil point is in range
+         in_range_right = (i+width)<=(info->mx-1);
+         if (in_range_right) {
+            ue = u[i+width];
+            he = h*width;
+         } else { // project east point
+            // x + width*h > xmax -> project onto xmax
+            user->g_bdry(user->xmax,0.0,0.0,user,&ue);
+            he = (user->xmax - x);
+         }
+
+         // check if west stencil point is in range
+         in_range_left = (i-width) >= 0;
+         if (in_range_left) {
+            uw = u[i-width];
+            hw = h*width;
+         } else { // need to prolect
+            // x - width*h < xmin -> project onto xmin
+            user->g_bdry(user->xmin,0.0,0.0,user,&uw);
+            hw = (x - user->xmin);
+         }
+         if (user->debug) {
+            PetscPrintf(PETSC_COMM_WORLD,"%d:  he = %f, hw = %f\n",i,he,hw);
+         }
+         // * implement 1d version of this
+         // *  SDD[k] = 2.0*(hBak[k]*uFwd[k] - (hBak[k]+hFwd[k])*au[j][i] + hFwd[k]*uBak[k]) / (hBak[k]*hFwd[k]*(hBak[k]+hFwd[k]));
+         user->f_rhs(x,0.0,0.0,user,&f);
+         F[i] = 2.0*(hw*ue - hw*he*u[i] + he*uw)/(hw*he*(hw+he)) + f;
+      }
+
+
+
    }
    PetscFunctionReturn(0);
 }
