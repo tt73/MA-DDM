@@ -18,16 +18,3 @@ printf "\nRunning on Nx = $Nx, Ny = $Ny now with width=2... \n"
 ../maddm -ymin -2 -ymax 2 -xmin -1 -xmax 1 -Nx $Nx -Ny $Ny -width 2 -sol
 printf "If you see *Iters: 9999 then it failed.\n"
 
-## Stencil width > 1 seems to fail.
-## ComputeWeights might possibly be the issue. I tried 2nd order but it still doesn't work.
-## The most likely culprits are ComputeSDD or ComputeProjectionIndeces.
-## Can I isolate the issue somehow?
-
-# printf "\n Debugging \n\n "
-# ../maddm -ymin -2 -ymax 2 -xmin -1 -xmax 1 -Nx $Nx -Ny $Ny -width 2 -debug -snes_max_it 2 -problem ex4
-
-## I checked the projections and it looks fine.
-
-# printf "\nRunning on Nx = $Nx, Ny = $Ny now with width=2... \n"
-# ../maddm -ymin -2 -ymax 2 -xmin -1 -xmax 1 -Nx $Nx -Ny $Ny -width 2 -sol
-# printf "If you see *Iters: 9999 then it failed.\n"

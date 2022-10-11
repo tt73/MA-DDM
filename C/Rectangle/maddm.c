@@ -297,6 +297,7 @@ int main(int argc,char **args) {
       default:
          SETERRQ(PETSC_COMM_SELF,1,"invalid dim for DMDA creation\n");
    }
+
    /* General setup - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
       The code is set up to mesh a domain [xmin,xmax] x [ymin,ymax]
       with uniformly distributed points. Nx and Ny are the number
@@ -319,32 +320,42 @@ int main(int argc,char **args) {
    ierr = DMDASNESSetFunctionLocal(da,INSERT_VALUES,(DMDASNESFunction)(residual_ptr[dim-1]),&user); CHKERRQ(ierr);
    ierr = DMDASNESSetJacobianLocal(da,(DMDASNESJacobian)(jacobian_ptr[dim-1]),&user); CHKERRQ(ierr);
 
-   /* Default Solver Settings - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-      By default, we use Nonlinear Additive Schwarz method (NASM) for the
-      nonlinear solver. On the local subdomains, we use one step of basic
-      newton method. For the Jacobian solve, we use GMRES with a SSOR
-      preconditioner.
-   - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
-   ierr = SNESSetType(snes,SNESNASM); CHKERRQ(ierr);
-   ierr = SNESNASMSetType(snes,PC_ASM_RESTRICT); CHKERRQ(ierr);
-   ierr = SNESSetUp(snes); CHKERRQ(ierr); // initialize subdomains
    MPI_Comm_size(PETSC_COMM_WORLD,&size); // get # of processors
    MPI_Comm_rank(PETSC_COMM_WORLD,&rank); // get index of current procs
-   SNESNASMGetSNES(snes,0,&subsnes);      // get local SNES
-   SNESGetLineSearch(subsnes,&subls);     // get local linesearch
-   SNESGetKSP(subsnes,&subksp);           // get local KSP
-   KSPGetPC(subksp,&subpc);               // get local PC
-   KSPSetType(subksp,KSPDGMRES);  // rtol = 1e-5 by default
-   PCSetType(subpc,PCEISENSTAT);  // fast accurate linear solver combo
-
-   /* Serial Code - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-      If the code is run serially, there is only 1 subdomain.
-      In this case, NASM is equivalent to Newton's method.
-      The default SNES iterations is 50. We increase it to avoid needless restarting.
-      You need to add -sub_snes_monitor to view the residues of the method.
-   - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
-   if (size==1) { // only 1 subdomain - increase defualt iterations which is only 50
-      SNESSetTolerances(subsnes,PETSC_DEFAULT,PETSC_DEFAULT,PETSC_DEFAULT,10000,PETSC_DEFAULT);
+   if (size==1) {
+      /* Serial Code - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+         If the code is run serially, there is only 1 subdomain.
+         In this case, NASM is equivalent to Newton's method.
+         The default SNES iterations is 50. We increase it to avoid needless restarting.
+         You need to add -sub_snes_monitor to view the residues of the method.
+         * Edit:
+         I am changing the serial code.
+         The code will switch to Newton-Krylov method so there is no uncertainty in what is going on.
+       - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+      // SNESSetTolerances(subsnes,PETSC_DEFAULT,PETSC_DEFAULT,PETSC_DEFAULT,1000000,PETSC_DEFAULT);
+      ierr = SNESSetType(snes,SNESNEWTONLS); CHKERRQ(ierr); // change to newton linesearch
+      // PetscOptionsSetValue(NULL,"-snes_type","newtonls");
+      ierr = SNESSetUp(snes);                CHKERRQ(ierr); // initialize subdomains
+      ierr = SNESGetKSP(snes,&subksp);       CHKERRQ(ierr); // get global KSP
+      ierr = KSPGetPC(subksp,&subpc);        CHKERRQ(ierr); // get global PC
+      ierr = KSPSetType(subksp,KSPDGMRES);   CHKERRQ(ierr); // change to deflated GMRES (rtol = 1e-5 by default)
+      ierr = PCSetType(subpc,PCEISENSTAT);   CHKERRQ(ierr); // change to eisenstat ssor
+   } else {
+      /* Default Solver Settings - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+         By default, we use Nonlinear Additive Schwarz method (NASM) for the
+         nonlinear solver. On the local subdomains, we use one step of basic
+         newton method. For the Jacobian solve, we use GMRES with a SSOR
+         preconditioner.
+      - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+      ierr = SNESSetType(snes,SNESNASM); CHKERRQ(ierr);
+      ierr = SNESNASMSetType(snes,PC_ASM_RESTRICT); CHKERRQ(ierr);
+      ierr = SNESSetUp(snes); CHKERRQ(ierr); // initialize subdomains
+      SNESNASMGetSNES(snes,0,&subsnes);      // get local SNES
+      SNESGetLineSearch(subsnes,&subls);     // get local linesearch
+      SNESGetKSP(subsnes,&subksp);           // get local KSP
+      KSPGetPC(subksp,&subpc);               // get local PC
+      KSPSetType(subksp,KSPDGMRES);  // rtol = 1e-5 by default
+      PCSetType(subpc,PCEISENSTAT);  // fast accurate linear solver combo
    }
 
    /* Other NASM Settings - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -399,10 +410,36 @@ int main(int argc,char **args) {
       PetscOptionsSetValue(NULL,"-npc_sub_pc_type","eisenstat");
       PetscOptionsSetValue(NULL,"-npc_sub_snes_max_it","1");
       PetscOptionsSetValue(NULL,"-npc_sub_ksp_rtol","1e-1");
+   } else if(aspin) {
+      /* ASPIN - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+         * work in progress
+         Additive Schwarz Preconditioned Inexact Newton is a completely different
+         from NASM. It's using Newton as the global method and using NASM as
+         a preconditioner. The default settings are terrible so I made these
+         options available.
+      - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+      ierr = SNESSetType(snes,SNESASPIN); CHKERRQ(ierr);
+      ierr = SNESGetNPC(snes,&subsnes);
+      // ierr = SNESGetLineSearch(subsnes,&subls); // get local linesearch, default is cubic BT
+      // ierr = SNESGetKSP(subsnes,&subksp);       // get local KSP, default is preonly
+      // ierr = KSPGetPC(subksp,&subpc);           // get local PC, default is lu
+      // ierr = KSPSetType(subksp,KSPDGMRES);      // change KSP to DGMRES
+      // ierr = PCSetType(subpc,PCEISENSTAT);      // change PC to eisenstat
+      // ierr = SNESLineSearchSetOrder(subls,2);   // change BT order to quadratic
+      // ierr = SNESSetNPC(snes,subsnes);          // apply the changes
+      PetscOptionsSetValue(NULL,"-npc_sub_ksp_type","fgmres");
+      PetscOptionsSetValue(NULL,"-npc_sub_pc_type","ilu");
+      PetscOptionsSetValue(NULL,"-npc_sub_snes_linesearch_order","2");
+      // PetscOptionsSetValue(NULL,"-npc_sub_snes_rtol","1e-1");
+      // PetscOptionsSetValue(NULL,"-npc_sub_ksp_rtol","1e-1");
+      // PetscOptionsSetValue(NULL,"-npc_sub_snes_max_it","1");
    }
-
-
-
+   if (mixed) { // each subdomain gets their own indexed prefix
+      // work in progress
+      char prefix[10];
+      sprintf(prefix,"sub_%d_",rank);
+      SNESSetOptionsPrefix(subsnes,prefix);
+   }
 
    // if ((rank==size-1) && mixed) { // final domain
    //    // SNESSetType(subsnes,SNESFAS); CHKERRQ(ierr);
@@ -433,45 +470,19 @@ int main(int argc,char **args) {
    //    PCSetType(subpc,PCEISENSTAT);
    // }
 
-   /* ASPIN - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-      * work in progress
-      Additive Schwarz Preconditioned Inexact Newton is a completely different
-      from NASM. It's using Newton as the global method and using NASM as
-      a preconditioner. The default settings are terrible so I made these
-      options available.
-   - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
-   if(aspin) {
-      ierr = SNESSetType(snes,SNESASPIN); CHKERRQ(ierr);
-      ierr = SNESGetNPC(snes,&subsnes);
-      // ierr = SNESGetLineSearch(subsnes,&subls); // get local linesearch, default is cubic BT
-      // ierr = SNESGetKSP(subsnes,&subksp);       // get local KSP, default is preonly
-      // ierr = KSPGetPC(subksp,&subpc);           // get local PC, default is lu
-      // ierr = KSPSetType(subksp,KSPDGMRES);      // change KSP to DGMRES
-      // ierr = PCSetType(subpc,PCEISENSTAT);      // change PC to eisenstat
-      // ierr = SNESLineSearchSetOrder(subls,2);   // change BT order to quadratic
-      // ierr = SNESSetNPC(snes,subsnes);          // apply the changes
-
-      PetscOptionsSetValue(NULL,"-npc_sub_ksp_type","fgmres");
-      PetscOptionsSetValue(NULL,"-npc_sub_pc_type","ilu");
-      PetscOptionsSetValue(NULL,"-npc_sub_snes_linesearch_order","2");
-      // PetscOptionsSetValue(NULL,"-npc_sub_snes_rtol","1e-1");
-      // PetscOptionsSetValue(NULL,"-npc_sub_ksp_rtol","1e-1");
-      // PetscOptionsSetValue(NULL,"-npc_sub_snes_max_it","1");
-   }
-
-   if (mixed) { // each subdomain gets their own indexed prefix
-      // work in progress
-      char prefix[10];
-      sprintf(prefix,"sub_%d_",rank);
-      SNESSetOptionsPrefix(subsnes,prefix);
-   }
-   ierr = SNESSetFromOptions(subsnes); CHKERRQ(ierr);
+   // End of custom solver settings.
+   // The lines of code below make it possible to make additional changes
+   // to the snes and subsnes.
    ierr = SNESSetFromOptions(snes); CHKERRQ(ierr);
+   if (size > 1) {
+      ierr = SNESSetFromOptions(subsnes); CHKERRQ(ierr);
+   }
    /* Wide-stencil params - - - - - - - - - - - - - - - - - - - - - - - - - - -
       Compute forward stencil directions for the determinant
    - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
    ComputeFwdStencilDirs(width,&user); // Stencil directions based on the L1 norm
    ComputeWeights(width,order,&user);  // Quadrature weights
+
    /* Solve - - - - - - - - - - - - - - - - - - - - - - - - - - - -
       Set up the inital guess on each sub-domain.
       The runtime is calculated for the SNESSolve only.
@@ -483,17 +494,25 @@ int main(int argc,char **args) {
    ierr = PetscTime(&t1); CHKERRQ(ierr);
    ierr = SNESSolve(snes,NULL,u_initial); CHKERRQ(ierr);
    ierr = PetscTime(&t2); CHKERRQ(ierr);
+
    /* Iterations - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
       (This is a work in progress)
       Get the number of NASM iterations.
       Get the total Newton iterations at the local level.
       Get the total Krylov iterations at the local level.
    - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
-   ierr = SNESGetIterationNumber(snes,&NASM_its); CHKERRQ(ierr); // its = # of iterations
-   ierr = KSPGetTotalIterations(subksp,&KSP_its); CHKERRQ(ierr);
-   // ierr = SNESGetIterationNumber(subsnes,&Newt_its); CHKERRQ(ierr);
-   // SNESGetLinearSolveIterations(subsnes,&Newt_its);
-   SNESGetNumberFunctionEvals(subsnes,&Newt_its);
+   if (size==1) { // serial
+      ierr = SNESGetIterationNumber(snes,&NASM_its); CHKERRQ(ierr); // newton iters
+      Newt_its = 0;                                                 // there is no local
+      ierr = KSPGetTotalIterations(subksp,&KSP_its); CHKERRQ(ierr); // krylov iters
+   } else {   // parallel
+      ierr = SNESGetIterationNumber(snes,&NASM_its); CHKERRQ(ierr); // nasm is global
+      ierr = KSPGetTotalIterations(subksp,&KSP_its); CHKERRQ(ierr); // krylov iters
+      SNESGetNumberFunctionEvals(subsnes,&Newt_its); // this is supposed to be newton but not quite right
+      // SNESGetIterationNumber(subsnes,&Newt_its);    // these don't work either
+      // SNESGetLinearSolveIterations(subsnes,&Newt_its);
+   }
+
    /* Error info - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
       Get the solution from DA.
       Get the exact solution with g.
@@ -510,6 +529,7 @@ int main(int argc,char **args) {
    ierr = VecAYPX(err,-1.0,u); CHKERRQ(ierr);   // err <- u + (-1.0)*uexact
    ierr = VecNorm(err,NORM_INFINITY,&errinf); CHKERRQ(ierr);
    ierr = VecNorm(err,NORM_2,&err2h); CHKERRQ(ierr);
+
    /* Print Message - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
       Problem type, grid size, stencil width, epsilon, iterations, and error
    - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
@@ -535,7 +555,7 @@ int main(int argc,char **args) {
                "*Params:  Nd = %d, width = %d, eps = %.3f, op = %.2f\n"
                "*Error:   |u-uexact|_inf = %.3e, |u-uexact|_h = %.3e\n"
                "*WTime:   %.6f\n"
-               "*Iters:   Krylov %d, Newton %d, NASM %d\n",
+               "*Iters:   Krylov %d, Local SNES %d, Global SNES %d\n",
                ProblemTypes[problem],gridstr,size,info.sw,user.epsilon,op,errinf,err2h,t2-t1,KSP_its,Newt_its,NASM_its); CHKERRQ(ierr);
 
    /* Debugging Info - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -559,6 +579,7 @@ int main(int argc,char **args) {
          }
       }
    }
+
    /* MATLAB  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
       Create MATLAB files load_u.m and load_exact.m which loads
       the numerical and exact solutions into a workspace.
@@ -592,6 +613,7 @@ int main(int argc,char **args) {
       }
       ierr = PetscViewerDestroy(&viewer); CHKERRQ(ierr);
    }
+
    // Free memory
    ierr = DMDestroy(&da); CHKERRQ(ierr); // destroying da also destroys snes
    ierr = VecDestroy(&err); CHKERRQ(ierr);

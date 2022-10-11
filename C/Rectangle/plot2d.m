@@ -1,7 +1,8 @@
 %% Notes
 % To set dimension (1,2,3), run ./test1 -t1_dim 2
 % But 2D is default so you don't really need to use the flag and 3D does
-% not work atm. 
+% not work atm.
+% I can edit it.
 
 % To choose problem, run ./test1 -t1_problem ex10
 % ex11 and ex12 are also available.
@@ -23,10 +24,10 @@ end
 s = length(u);
 % n = sqrt(s);
 % m = sqrt(s);
-n = 20; 
-m = 2*n+1; 
+n = 20;
+m = 2*n+1;
 
-%% 
+%%
 
 choice = 3;
 switch(choice)
@@ -62,7 +63,7 @@ surf(u_grid-u_exac)
 title('error')
 
 figure
-try 
+try
     u_init = reshape(u_initial,n,m);
     surf(u_init)
     title('Initial Guess')
