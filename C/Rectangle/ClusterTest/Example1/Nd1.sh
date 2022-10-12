@@ -8,6 +8,8 @@
 #SBATCH --ntasks 1
 #SBATCH --ntasks-per-node 1
 #SBATCH --exclusive
+#SBATCH -o Nd1.slurm
+#SBATCH -e Nd1.slurm
 
 ## Test on 1 subdomain (serial)
 Nd=1
@@ -29,6 +31,7 @@ do
    done
 done
 
+printf "all done."
 
 
 # ## NGMRES -L SIN

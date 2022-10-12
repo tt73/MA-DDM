@@ -332,7 +332,6 @@ int main(int argc,char **args) {
          I am changing the serial code.
          The code will switch to Newton-Krylov method so there is no uncertainty in what is going on.
        - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
-      // SNESSetTolerances(subsnes,PETSC_DEFAULT,PETSC_DEFAULT,PETSC_DEFAULT,1000000,PETSC_DEFAULT);
       ierr = SNESSetType(snes,SNESNEWTONLS); CHKERRQ(ierr); // change to newton linesearch
       // PetscOptionsSetValue(NULL,"-snes_type","newtonls");
       ierr = SNESSetUp(snes);                CHKERRQ(ierr); // initialize subdomains
@@ -340,6 +339,7 @@ int main(int argc,char **args) {
       ierr = KSPGetPC(subksp,&subpc);        CHKERRQ(ierr); // get global PC
       ierr = KSPSetType(subksp,KSPDGMRES);   CHKERRQ(ierr); // change to deflated GMRES (rtol = 1e-5 by default)
       ierr = PCSetType(subpc,PCEISENSTAT);   CHKERRQ(ierr); // change to eisenstat ssor
+      SNESSetTolerances(snes,PETSC_DEFAULT,PETSC_DEFAULT,PETSC_DEFAULT,10000,PETSC_DEFAULT); // def. 50 iter is too little
    } else {
       /* Default Solver Settings - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
          By default, we use Nonlinear Additive Schwarz method (NASM) for the
