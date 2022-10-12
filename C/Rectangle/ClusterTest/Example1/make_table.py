@@ -2,14 +2,22 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 import numpy as np
 
+# choose file
+file = "Nd1.out"
 
-limits = np.array([0.5, 1.0, 1.5, 2.0])
+if (file=="Nd9.out"):
+   limits = np.array([0.5, 1.0, 1.5])
+else:
+   limits = np.array([0.5, 1.0, 1.5, 2.0])
 n_lims = len(limits)
 
 tols   = np.array([1e-1, 1e-4, 1e-6])
 n_tols = len(tols)
 
-sizes  = np.array([100, 200, 300, 400])
+if (file=="Nd1.out" or file == "Nd9.out"):
+   sizes = np.array([100, 200, 300])
+else:
+   sizes  = np.array([100, 200, 300, 400])
 n_sizes = len(sizes)
 
 
@@ -18,14 +26,15 @@ times = np.zeros((n_lims,n_tols,n_sizes),dtype=float)
 errs = np.zeros((n_lims,n_tols,n_sizes),dtype=float)
 iters = np.zeros((n_lims,n_tols,n_sizes),dtype=int)
 
-# choose file
-file = "Nd1.out"
+
 f = open(file)
 for i in range(n_lims):
    for ii in range(n_tols):
       for iii in range(n_sizes):
          f.readline() # skip
          f.readline() # skip
+         if (file=="Nd9.out" or file=='Nd1.out'):
+            f.readline() # skip extra line
          errs[i][ii][iii]  = f.readline().split()[-1]
          times[i][ii][iii] = f.readline().split()[-1]
          iters[i][ii][iii] = f.readline().split()[-1]
@@ -36,7 +45,7 @@ f.close()
 
 
 print("cols: N=100, 200, 300, 400")
-print("rows:\n tol=1e-1\n 1e-4\n 1e-6\n")
+print("rows:\ntol=\n 1e-1,\n 1e-4,\n 1e-6\n")
 for i in range(n_lims):
    print("\nDomain [-{:.2f}, {:.2f}]^2\n".format(limits[i],limits[i]))
    print("Iters:")

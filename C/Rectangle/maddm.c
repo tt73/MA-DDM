@@ -508,8 +508,8 @@ int main(int argc,char **args) {
    } else {   // parallel
       ierr = SNESGetIterationNumber(snes,&NASM_its); CHKERRQ(ierr); // nasm is global
       ierr = KSPGetTotalIterations(subksp,&KSP_its); CHKERRQ(ierr); // krylov iters
-      SNESGetNumberFunctionEvals(subsnes,&Newt_its); // this is supposed to be newton but not quite right
-      // SNESGetIterationNumber(subsnes,&Newt_its);    // these don't work either
+      SNESGetIterationNumber(subsnes,&Newt_its);    // these don't work either
+      // SNESGetNumberFunctionEvals(subsnes,&Newt_its); // this is supposed to be newton but not quite right
       // SNESGetLinearSolveIterations(subsnes,&Newt_its);
    }
 

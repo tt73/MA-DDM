@@ -23,10 +23,10 @@ do
    for tol in {1e-1,1e-4,1e-6}
    do
       printf "tol = $tol\n"
-      for N in {100,200,300,400}
+      for N in {100,200,300}
       do
          printf "Now running mpiexec -np $Nd ../../maddm -N $N -problem ex1 -sub_snes_rtol $tol -sub_ksp_rtol $tol -xmin -$limit -xmax $limit -ymin -$limit -ymax $limit\n"
-         ../../maddm -N $N -problem ex1 -sub_snes_rtol $tol -sub_ksp_rtol $tol -xmin -$limit -xmax $limit -ymin -$limit -ymax $limit >> Nd1.out
+         ../../maddm -N $N -problem ex1 -snes_rtol $tol -ksp_rtol $tol -xmin -$limit -xmax $limit -ymin -$limit -ymax $limit -snes_converged_reason >> Nd1.out
       done
    done
 done
