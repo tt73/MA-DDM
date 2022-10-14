@@ -3,7 +3,8 @@ import seaborn as sns
 import numpy as np
 
 # choose file
-file = "Nd1.out"
+file = "Nd4.out"
+# file = "Nd4.out"
 
 if (file=="Nd9.out"):
    limits = np.array([0.5, 1.0, 1.5])
@@ -11,30 +12,29 @@ else:
    limits = np.array([0.5, 1.0, 1.5, 2.0])
 n_lims = len(limits)
 
-tols   = np.array([1e-1, 1e-4, 1e-6])
+tols   = np.array([1e-1,1e-2,1e-3,1e-4,1e-5,1e-6])
 n_tols = len(tols)
+print(n_tols)
 
-if (file=="Nd1.out" or file == "Nd9.out"):
-   sizes = np.array([100, 200, 300])
+if (file=="Nd1.out"):
+   sizes = np.array([0.05, 0.01, 0.005])
 else:
-   sizes  = np.array([100, 200, 300, 400])
+   sizes  = np.array([0.05, 0.01])
 n_sizes = len(sizes)
-
 
 # creates arrays for data
 times = np.zeros((n_lims,n_tols,n_sizes),dtype=float)
 errs = np.zeros((n_lims,n_tols,n_sizes),dtype=float)
 iters = np.zeros((n_lims,n_tols,n_sizes),dtype=int)
 
-
 f = open(file)
 for i in range(n_lims):
-   for ii in range(n_tols):
-      for iii in range(n_sizes):
+   for ii in range(n_tols): # 6 tols
+      for iii in range(n_sizes): # 2 hs
          f.readline() # skip
          f.readline() # skip
-         if (file=="Nd9.out" or file=='Nd1.out'):
-            f.readline() # skip extra line
+         if (file=='Nd1.out'):
+            f.readline() # skip extra line for -snes_converged_reason
          errs[i][ii][iii]  = f.readline().split()[-1]
          times[i][ii][iii] = f.readline().split()[-1]
          iters[i][ii][iii] = f.readline().split()[-1]
@@ -44,8 +44,8 @@ f.close()
 # print(times)
 
 
-print("cols: N=100, 200, 300, 400")
-print("rows:\ntol=\n 1e-1,\n 1e-4,\n 1e-6\n")
+print("cols: h = 0.05, 0.01")
+print("rows:\ntol=\n 1e-1,\n 1e-2,\n,1e-3,\n1e-4,\n1e-5,\n 1e-6\n")
 for i in range(n_lims):
    print("\nDomain [-{:.2f}, {:.2f}]^2\n".format(limits[i],limits[i]))
    print("Iters:")
@@ -56,7 +56,25 @@ for i in range(n_lims):
    print(times[i,:,:])
 
 
+for j in range(n_lims):
+   print("{} {} ".format("h=0.05","h=0.01"),end="")
+print("")
 
+
+# for i in range(6):
+#    for j in range(n_lims):
+#       print("{} {} ".format(iters[j,i,0],iters[j,i,1]),end="")
+#    print("")
+
+# for i in range(6):
+#    for j in range(n_lims):
+#       print("{} {} ".format(errs[j,i,0],errs[j,i,1]),end="")
+#    print("")
+
+for i in range(6):
+   for j in range(n_lims):
+      print("{} {} ".format(times[j,i,0],times[j,i,1]),end="")
+   print("")
 
 # plot runtime vs Nd
 
