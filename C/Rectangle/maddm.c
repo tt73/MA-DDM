@@ -78,6 +78,38 @@ PetscErrorCode f_rhs_3D_ex2(PetscReal x, PetscReal y, PetscReal z, void *ctx, Pe
    return 0;
 }
 
+
+/* Problem 2 Centered - - - - - - - - - - - - - - - - - - - - - - - - - - -
+   Its the same as before except it is centered at 0.
+   Solution    u(x) = 1/2 max(|x| - 0.2,0)^2        , for x in Rn
+   RHS: Det(D^2u(x)) = max(1-0.2/|x|, 0)
+   Defualt domain: [-1,1]^2
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+PetscErrorCode u_exact_1D_ex2c(PetscReal x, PetscReal y, PetscReal z, void *ctx, PetscReal * u) {
+   u[0] = 0.5*PetscPowReal(PetscMax(PetscAbsReal(x)-0.2,0),2);
+   return 0;
+}
+PetscErrorCode u_exact_2D_ex2c(PetscReal x, PetscReal y, PetscReal z, void *ctx, PetscReal * u) {
+   u[0] = 0.5*PetscPowReal(PetscMax(PetscSqrtReal(PetscSqr(x)+PetscSqr(y))-0.2,0),2);
+   return 0;
+}
+PetscErrorCode u_exact_3D_ex2c(PetscReal x, PetscReal y, PetscReal z, void *ctx, PetscReal * u) {
+   u[0] = 0.5*PetscPowReal(PetscMax(PetscSqrtReal(PetscSqr(x)+PetscSqr(y)+PetscSqr(z))-0.2,0),2);
+   return 0;
+}
+PetscErrorCode f_rhs_1D_ex2c(PetscReal x, PetscReal y, PetscReal z, void *ctx, PetscReal * f) {
+   f[0] = (x<=0.3 || x>=0.7) ? 1.0 : 0.0;
+   return 0;
+}
+PetscErrorCode f_rhs_2D_ex2c(PetscReal x, PetscReal y, PetscReal z, void *ctx, PetscReal * f) {
+   f[0] = PetscMax(1-0.2/PetscSqrtReal(PetscSqr(x)+PetscSqr(y)),0);
+   return 0;
+}
+PetscErrorCode f_rhs_3D_ex2c(PetscReal x, PetscReal y, PetscReal z, void *ctx, PetscReal * f) {
+   f[0] = PetscMax(1-0.2/PetscSqrtReal(PetscSqr(x)+PetscSqr(y)),0);
+   return 0;
+}
+
 /* Problem 3 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
    Gradient blow-up on the boundary.
    Solution    u(x) = -sqrt(2 - |x|^2),              for x in Rn
@@ -135,6 +167,7 @@ PetscErrorCode f_rhs_ex4(PetscReal x, PetscReal y, PetscReal z, void *ctx, Petsc
    return 0;
 }
 
+
 // arrays of pointers to functions
 static DMDASNESFunction residual_ptr[3]
     = {(DMDASNESFunction)&MA1DFunctionLocal,
@@ -151,20 +184,20 @@ typedef PetscErrorCode (*ExactFcnVec)(DMDALocalInfo*,Vec,MACtx*);
 static ExactFcnVec getuexact_ptr[3] = {&Form1DUExact, &Form2DUExact, &Form3DUExact};
 
 typedef enum {ex1, ex2, ex3, ex4} ProblemType;
-static const char* ProblemTypes[] = {"ex1","ex2","ex3","ex4","ProblemType","", NULL};
+static const char* ProblemTypes[] = {"ex1","ex2","ex3","ex4","ex2c","ProblemType","", NULL};
 
 // more arrays of pointers to functions:   ..._ptr[DIMS][PROBLEMS]
 typedef PetscErrorCode (*PointwiseFcn)(PetscReal,PetscReal,PetscReal,void*,PetscReal*);
 
-static PointwiseFcn g_bdry_ptr[3][4]
-    = {{&u_exact_1D_ex1, &u_exact_1D_ex2, &u_exact_1D_ex3, &u_exact_1D_ex4},
-       {&u_exact_2D_ex1, &u_exact_2D_ex2, &u_exact_2D_ex3, &u_exact_2D_ex4},
-       {&u_exact_3D_ex1, &u_exact_3D_ex2, &u_exact_3D_ex3, &u_exact_3D_ex3}};
+static PointwiseFcn g_bdry_ptr[3][5]
+    = {{&u_exact_1D_ex1, &u_exact_1D_ex2, &u_exact_1D_ex3, &u_exact_1D_ex4, &u_exact_1D_ex2c},
+       {&u_exact_2D_ex1, &u_exact_2D_ex2, &u_exact_2D_ex3, &u_exact_2D_ex4, &u_exact_2D_ex2c},
+       {&u_exact_3D_ex1, &u_exact_3D_ex2, &u_exact_3D_ex3, &u_exact_3D_ex4, &u_exact_3D_ex2c}};
 
-static PointwiseFcn f_rhs_ptr[3][4]
-    = {{&f_rhs_1D_ex1, &f_rhs_1D_ex2, &f_rhs_1D_ex3, &f_rhs_ex4},
-       {&f_rhs_2D_ex1, &f_rhs_2D_ex2, &f_rhs_2D_ex3, &f_rhs_ex4},
-       {&f_rhs_3D_ex1, &f_rhs_3D_ex2, &f_rhs_3D_ex3, &f_rhs_ex4}};
+static PointwiseFcn f_rhs_ptr[3][5]
+    = {{&f_rhs_1D_ex1, &f_rhs_1D_ex2, &f_rhs_1D_ex3, &f_rhs_ex4, &f_rhs_1D_ex2c},
+       {&f_rhs_2D_ex1, &f_rhs_2D_ex2, &f_rhs_2D_ex3, &f_rhs_ex4, &f_rhs_2D_ex2c},
+       {&f_rhs_3D_ex1, &f_rhs_3D_ex2, &f_rhs_3D_ex3, &f_rhs_ex4, &f_rhs_3D_ex2c}};
 
 static const char* InitialTypes[] = {"zeros","random","corner","pyramid","InitialType","", NULL};
 
@@ -182,7 +215,7 @@ int main(int argc,char **args) {
    ExactFcnVec    getuexact;
    InitialType    initial;
    ProblemType    problem;
-   PetscBool      debug,set_N,set_eps,set_width,printSol,mixed,htn,sin,aspin,ilusin,coarse,ngmres;
+   PetscBool      debug,set_N,set_eps,set_width,printSol,mixed,htn,sin,aspin,ilusin,coarse,ngmres,nks;
    PetscReal      h_eff,hx,hy,eps,errinf,normconst2h,err2h,op;
    char           gridstr[99];
    PetscInt       dim,width,N,Nx,Ny,order,NASM_its,KSP_its,Newt_its;
@@ -215,6 +248,7 @@ int main(int argc,char **args) {
    ilusin      = PETSC_FALSE; // experimental
    coarse      = PETSC_FALSE; // NASM + FAS
    ngmres      = PETSC_FALSE; // NGMRES -L SIN NASM
+   nks         = PETSC_FALSE; // Newton Krylov Schwarz
 
    ierr = PetscOptionsBegin(PETSC_COMM_WORLD,"","options for maddm.c",""); CHKERRQ(ierr);
    ierr = PetscOptionsInt("-dim","dimension of problem (=1,2,3 only)","maddm.c",dim,&dim,NULL);CHKERRQ(ierr);
@@ -228,6 +262,7 @@ int main(int argc,char **args) {
    ierr = PetscOptionsBool("-mixed","sub-index the local domains and use a different solver on the last subdomain","maddm.c",mixed,&mixed,NULL);CHKERRQ(ierr);
    ierr = PetscOptionsBool("-htn","option to use high-tolerance Newton (HTN)","maddm.c",htn,&htn,NULL);CHKERRQ(ierr);
    ierr = PetscOptionsBool("-sin","option to use single-iteration Newton (HTN)","maddm.c",sin,&sin,NULL);CHKERRQ(ierr);
+   ierr = PetscOptionsBool("-nks","option to use Newton-Kyrlov-Schwarz (NKS)","maddm.c",nks,&nks,NULL);CHKERRQ(ierr);
    ierr = PetscOptionsBool("-aspin","option to use additive schwarz preconditioned inexact newton (ASPIN)","maddm.c",aspin,&aspin,NULL);CHKERRQ(ierr);
    ierr = PetscOptionsBool("-ilusin","trying something","maddm.c",ilusin,&ilusin,NULL);CHKERRQ(ierr);
    ierr = PetscOptionsBool("-coarse","use NASM+FAS additive composite method","maddm.c",coarse,&coarse,NULL);CHKERRQ(ierr);
@@ -341,21 +376,37 @@ int main(int argc,char **args) {
       ierr = PCSetType(subpc,PCEISENSTAT);   CHKERRQ(ierr); // change to eisenstat ssor
       SNESSetTolerances(snes,PETSC_DEFAULT,PETSC_DEFAULT,PETSC_DEFAULT,10000,PETSC_DEFAULT); // def. 50 iter is too little
    } else {
-      /* Default Solver Settings - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-         By default, we use Nonlinear Additive Schwarz method (NASM) for the
-         nonlinear solver. On the local subdomains, we use one step of basic
-         newton method. For the Jacobian solve, we use GMRES with a SSOR
-         preconditioner.
-      - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
-      ierr = SNESSetType(snes,SNESNASM); CHKERRQ(ierr);
-      ierr = SNESNASMSetType(snes,PC_ASM_RESTRICT); CHKERRQ(ierr);
-      ierr = SNESSetUp(snes); CHKERRQ(ierr); // initialize subdomains
-      SNESNASMGetSNES(snes,0,&subsnes);      // get local SNES
-      SNESGetLineSearch(subsnes,&subls);     // get local linesearch
-      SNESGetKSP(subsnes,&subksp);           // get local KSP
-      KSPGetPC(subksp,&subpc);               // get local PC
-      KSPSetType(subksp,KSPDGMRES);  // rtol = 1e-5 by default
-      PCSetType(subpc,PCEISENSTAT);  // fast accurate linear solver combo
+      if (nks) {
+         /* NKS - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+            NKS is very different from NASM.
+            When this code is run with mpiexec -np Nd .. -nks, the local solver
+            automatically uses block Jacobi with Nd blocks. The blocks are
+            solved with with no Krylov and just iLU.
+         - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+         SNESSetType(snes,SNESNEWTONLS); // newton linesearch
+         SNESSetUp(snes);
+         SNESGetLineSearch(snes,&subls);     // get local linesearch
+         SNESGetKSP(snes,&subksp);           // get local KSP
+         KSPGetPC(subksp,&subpc);            // get local PC
+         KSPSetType(subksp,KSPPIPEFGMRES);   // rtol = 1e-5 by default
+         SNESLineSearchSetOrder(subls,2);    // 2nd order BT
+      } else {
+         /* Default Solver Settings - - - - - - - - - - - - - - - - - - - - - - - -
+            By default, we use Nonlinear Additive Schwarz method (NASM) for the
+            nonlinear solver. On the local subdomains, we use one step of basic
+            newton method. For the Jacobian solve, we use GMRES with a SSOR
+            preconditioner.
+         - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+         ierr = SNESSetType(snes,SNESNASM); CHKERRQ(ierr);
+         ierr = SNESNASMSetType(snes,PC_ASM_RESTRICT); CHKERRQ(ierr);
+         ierr = SNESSetUp(snes); CHKERRQ(ierr); // initialize subdomains
+         SNESNASMGetSNES(snes,0,&subsnes);      // get local SNES
+         SNESGetLineSearch(subsnes,&subls);     // get local linesearch
+         SNESGetKSP(subsnes,&subksp);           // get local KSP
+         KSPGetPC(subksp,&subpc);               // get local PC
+         KSPSetType(subksp,KSPDGMRES);  // rtol = 1e-5 by default
+         PCSetType(subpc,PCEISENSTAT);  // fast accurate linear solver combo
+      }
    }
 
    /* Other NASM Settings - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -375,7 +426,7 @@ int main(int argc,char **args) {
       KSPSetTolerances(subksp,1.e-1,PETSC_DEFAULT,PETSC_DEFAULT,PETSC_DEFAULT);
       SNESLineSearchSetType(subls,SNESLINESEARCHBT);
       SNESLineSearchSetOrder(subls,2);
-   } else if(htn) {
+   } else if (htn) {
       SNESSetTolerances(subsnes,PETSC_DEFAULT,1.e-1,PETSC_DEFAULT,PETSC_DEFAULT,PETSC_DEFAULT);
       KSPSetTolerances(subksp,1.e-1,PETSC_DEFAULT,PETSC_DEFAULT,PETSC_DEFAULT);
       SNESLineSearchSetType(subls,SNESLINESEARCHBT);
@@ -474,7 +525,7 @@ int main(int argc,char **args) {
    // The lines of code below make it possible to make additional changes
    // to the snes and subsnes.
    ierr = SNESSetFromOptions(snes); CHKERRQ(ierr);
-   if (size > 1) {
+   if (size > 1 && !nks) {
       ierr = SNESSetFromOptions(subsnes); CHKERRQ(ierr);
    }
    /* Wide-stencil params - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -505,6 +556,10 @@ int main(int argc,char **args) {
       ierr = SNESGetIterationNumber(snes,&NASM_its); CHKERRQ(ierr); // newton iters
       Newt_its = 0;                                                 // there is no local
       ierr = KSPGetTotalIterations(subksp,&KSP_its); CHKERRQ(ierr); // krylov iters
+   } else if (nks) {
+      ierr = SNESGetIterationNumber(snes,&NASM_its); CHKERRQ(ierr); // global
+      ierr = KSPGetTotalIterations(subksp,&KSP_its); CHKERRQ(ierr); // krylov iters
+      Newt_its = 0;                                                 // no local
    } else {   // parallel
       ierr = SNESGetIterationNumber(snes,&NASM_its); CHKERRQ(ierr); // nasm is global
       ierr = KSPGetTotalIterations(subksp,&KSP_its); CHKERRQ(ierr); // krylov iters

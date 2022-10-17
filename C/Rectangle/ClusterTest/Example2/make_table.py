@@ -16,10 +16,7 @@ tols   = np.array([1e-1,1e-2,1e-3,1e-4,1e-5,1e-6])
 n_tols = len(tols)
 print(n_tols)
 
-if (file=="Nd1.out"):
-   sizes = np.array([0.05, 0.01, 0.005])
-else:
-   sizes  = np.array([0.05, 0.01])
+sizes  = np.array([0.05, 0.01])
 n_sizes = len(sizes)
 
 # creates arrays for data
