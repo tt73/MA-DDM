@@ -45,11 +45,12 @@ print(iters[:,:,0])
 
 print(iters[:,:,1])
 
+# h = 0.05
 print("limit, iter, error, runtime")
 for i in range(n_lims):
    print("{}, {:3d}, {:8.6f}, {:8.4f}".format(limits[i],iters[i,0,0],errs[i,0,0],times[i,0,0]))
 
-
+# h = 0.01
 print("limit, iter, error, runtime")
 for i in range(n_lims):
    print("{}, {:3d}, {:8.6f}, {:8.4f}".format(limits[i],iters[i,0,1],errs[i,0,1],times[i,0,1]))

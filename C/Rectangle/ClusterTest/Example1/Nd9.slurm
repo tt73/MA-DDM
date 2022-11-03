@@ -4,11 +4,11 @@ Starting /home/t/tt73/.bash_profile ... standard AFS bash profile
 Home directory : /home/t/tt73 is not in AFS -- skipping quota check
 ========================
 
-On host node011 :
-	 10:04:04 up 579 days, 15:17,  0 users,  load average: 0.08, 0.03, 0.05
+On host node000 :
+	 13:24:11 up 601 days, 18:37,  0 users,  load average: 0.08, 0.03, 0.05
 
 === === === Your Kerberos ticket and AFS token status === === ===
-klist: No credentials cache found (filename: /tmp/krb5cc_90502_uK4JewCEBu)
+klist: No credentials cache found (filename: /tmp/krb5cc_90502_XkEizAyZlO)
 Kerberos : 
 AFS      : 
 
@@ -22,50 +22,12 @@ Currently Loaded Modules:
 
  
 
-[-0.5, 0.5]^2
-tol = 1e-1
-Now running mpiexec -np 9 ../../maddm -N 100 -problem ex1 -sub_snes_rtol 1e-1 -sub_ksp_rtol 1e-1 -xmin -0.5 -xmax 0.5 -ymin -0.5 -ymax 0.5
-Now running mpiexec -np 9 ../../maddm -N 200 -problem ex1 -sub_snes_rtol 1e-1 -sub_ksp_rtol 1e-1 -xmin -0.5 -xmax 0.5 -ymin -0.5 -ymax 0.5
-Now running mpiexec -np 9 ../../maddm -N 300 -problem ex1 -sub_snes_rtol 1e-1 -sub_ksp_rtol 1e-1 -xmin -0.5 -xmax 0.5 -ymin -0.5 -ymax 0.5
-tol = 1e-4
-Now running mpiexec -np 9 ../../maddm -N 100 -problem ex1 -sub_snes_rtol 1e-4 -sub_ksp_rtol 1e-4 -xmin -0.5 -xmax 0.5 -ymin -0.5 -ymax 0.5
-Now running mpiexec -np 9 ../../maddm -N 200 -problem ex1 -sub_snes_rtol 1e-4 -sub_ksp_rtol 1e-4 -xmin -0.5 -xmax 0.5 -ymin -0.5 -ymax 0.5
-Now running mpiexec -np 9 ../../maddm -N 300 -problem ex1 -sub_snes_rtol 1e-4 -sub_ksp_rtol 1e-4 -xmin -0.5 -xmax 0.5 -ymin -0.5 -ymax 0.5
-tol = 1e-6
-Now running mpiexec -np 9 ../../maddm -N 100 -problem ex1 -sub_snes_rtol 1e-6 -sub_ksp_rtol 1e-6 -xmin -0.5 -xmax 0.5 -ymin -0.5 -ymax 0.5
-Now running mpiexec -np 9 ../../maddm -N 200 -problem ex1 -sub_snes_rtol 1e-6 -sub_ksp_rtol 1e-6 -xmin -0.5 -xmax 0.5 -ymin -0.5 -ymax 0.5
-Now running mpiexec -np 9 ../../maddm -N 300 -problem ex1 -sub_snes_rtol 1e-6 -sub_ksp_rtol 1e-6 -xmin -0.5 -xmax 0.5 -ymin -0.5 -ymax 0.5
-[-1.0, 1.0]^2
-tol = 1e-1
-Now running mpiexec -np 9 ../../maddm -N 100 -problem ex1 -sub_snes_rtol 1e-1 -sub_ksp_rtol 1e-1 -xmin -1.0 -xmax 1.0 -ymin -1.0 -ymax 1.0
-Now running mpiexec -np 9 ../../maddm -N 200 -problem ex1 -sub_snes_rtol 1e-1 -sub_ksp_rtol 1e-1 -xmin -1.0 -xmax 1.0 -ymin -1.0 -ymax 1.0
-Now running mpiexec -np 9 ../../maddm -N 300 -problem ex1 -sub_snes_rtol 1e-1 -sub_ksp_rtol 1e-1 -xmin -1.0 -xmax 1.0 -ymin -1.0 -ymax 1.0
-tol = 1e-4
-Now running mpiexec -np 9 ../../maddm -N 100 -problem ex1 -sub_snes_rtol 1e-4 -sub_ksp_rtol 1e-4 -xmin -1.0 -xmax 1.0 -ymin -1.0 -ymax 1.0
-Now running mpiexec -np 9 ../../maddm -N 200 -problem ex1 -sub_snes_rtol 1e-4 -sub_ksp_rtol 1e-4 -xmin -1.0 -xmax 1.0 -ymin -1.0 -ymax 1.0
-Now running mpiexec -np 9 ../../maddm -N 300 -problem ex1 -sub_snes_rtol 1e-4 -sub_ksp_rtol 1e-4 -xmin -1.0 -xmax 1.0 -ymin -1.0 -ymax 1.0
-tol = 1e-6
-Now running mpiexec -np 9 ../../maddm -N 100 -problem ex1 -sub_snes_rtol 1e-6 -sub_ksp_rtol 1e-6 -xmin -1.0 -xmax 1.0 -ymin -1.0 -ymax 1.0
-Now running mpiexec -np 9 ../../maddm -N 200 -problem ex1 -sub_snes_rtol 1e-6 -sub_ksp_rtol 1e-6 -xmin -1.0 -xmax 1.0 -ymin -1.0 -ymax 1.0
-Now running mpiexec -np 9 ../../maddm -N 300 -problem ex1 -sub_snes_rtol 1e-6 -sub_ksp_rtol 1e-6 -xmin -1.0 -xmax 1.0 -ymin -1.0 -ymax 1.0
 [-1.5, 1.5]^2
-tol = 1e-1
-Now running mpiexec -np 9 ../../maddm -N 100 -problem ex1 -sub_snes_rtol 1e-1 -sub_ksp_rtol 1e-1 -xmin -1.5 -xmax 1.5 -ymin -1.5 -ymax 1.5
-Now running mpiexec -np 9 ../../maddm -N 200 -problem ex1 -sub_snes_rtol 1e-1 -sub_ksp_rtol 1e-1 -xmin -1.5 -xmax 1.5 -ymin -1.5 -ymax 1.5
-Now running mpiexec -np 9 ../../maddm -N 300 -problem ex1 -sub_snes_rtol 1e-1 -sub_ksp_rtol 1e-1 -xmin -1.5 -xmax 1.5 -ymin -1.5 -ymax 1.5
-tol = 1e-4
-Now running mpiexec -np 9 ../../maddm -N 100 -problem ex1 -sub_snes_rtol 1e-4 -sub_ksp_rtol 1e-4 -xmin -1.5 -xmax 1.5 -ymin -1.5 -ymax 1.5
-Now running mpiexec -np 9 ../../maddm -N 200 -problem ex1 -sub_snes_rtol 1e-4 -sub_ksp_rtol 1e-4 -xmin -1.5 -xmax 1.5 -ymin -1.5 -ymax 1.5
-Now running mpiexec -np 9 ../../maddm -N 300 -problem ex1 -sub_snes_rtol 1e-4 -sub_ksp_rtol 1e-4 -xmin -1.5 -xmax 1.5 -ymin -1.5 -ymax 1.5
 tol = 1e-6
-Now running mpiexec -np 9 ../../maddm -N 100 -problem ex1 -sub_snes_rtol 1e-6 -sub_ksp_rtol 1e-6 -xmin -1.5 -xmax 1.5 -ymin -1.5 -ymax 1.5
-Now running mpiexec -np 9 ../../maddm -N 200 -problem ex1 -sub_snes_rtol 1e-6 -sub_ksp_rtol 1e-6 -xmin -1.5 -xmax 1.5 -ymin -1.5 -ymax 1.5
-Now running mpiexec -np 9 ../../maddm -N 300 -problem ex1 -sub_snes_rtol 1e-6 -sub_ksp_rtol 1e-6 -xmin -1.5 -xmax 1.5 -ymin -1.5 -ymax 1.5
+Now running mpiexec -np 9 ../../maddm -N 60 -problem ex1 -sub_snes_rtol 1e-6 -sub_ksp_rtol 1e-6 -xmin -1.5 -xmax 1.5 -ymin -1.5 -ymax 1.5 -snes_converged_reason
+Now running mpiexec -np 9 ../../maddm -N 300 -problem ex1 -sub_snes_rtol 1e-6 -sub_ksp_rtol 1e-6 -xmin -1.5 -xmax 1.5 -ymin -1.5 -ymax 1.5 -snes_converged_reason
 [-2.0, 2.0]^2
-tol = 1e-1
-Now running mpiexec -np 9 ../../maddm -N 100 -problem ex1 -sub_snes_rtol 1e-1 -sub_ksp_rtol 1e-1 -xmin -2.0 -xmax 2.0 -ymin -2.0 -ymax 2.0
-Now running mpiexec -np 9 ../../maddm -N 200 -problem ex1 -sub_snes_rtol 1e-1 -sub_ksp_rtol 1e-1 -xmin -2.0 -xmax 2.0 -ymin -2.0 -ymax 2.0
-Now running mpiexec -np 9 ../../maddm -N 300 -problem ex1 -sub_snes_rtol 1e-1 -sub_ksp_rtol 1e-1 -xmin -2.0 -xmax 2.0 -ymin -2.0 -ymax 2.0
-srun: Job step aborted: Waiting up to 62 seconds for job step to finish.
-slurmstepd: error: *** STEP 110502.29 ON node011 CANCELLED AT 2022-10-12T15:26:16 ***
-slurmstepd: error: *** JOB 110502 ON node011 CANCELLED AT 2022-10-12T15:26:16 ***
+tol = 1e-6
+Now running mpiexec -np 9 ../../maddm -N 80 -problem ex1 -sub_snes_rtol 1e-6 -sub_ksp_rtol 1e-6 -xmin -2.0 -xmax 2.0 -ymin -2.0 -ymax 2.0 -snes_converged_reason
+Now running mpiexec -np 9 ../../maddm -N 400 -problem ex1 -sub_snes_rtol 1e-6 -sub_ksp_rtol 1e-6 -xmin -2.0 -xmax 2.0 -ymin -2.0 -ymax 2.0 -snes_converged_reason
+done
