@@ -3,7 +3,7 @@ import seaborn as sns
 import numpy as np
 
 # choose file
-file = "Nd1.out"
+file = "Nd4.out"
 # file = "Nd4.out"
 
 if (file=="Nd9.out"):
@@ -97,7 +97,7 @@ plt.legend(fontsize=14)
 # plt.ylim([0,1.1])
 plt.xlabel('Tolerance')
 plt.ylabel('Iterations')
-plt.savefig('iters_h05.png',dpi=600,bbox_inches='tight')
+plt.savefig('ex2_nd4_iters_h05.png',dpi=600,bbox_inches='tight')
 # plt.show()
 plt.clf()
 
@@ -121,7 +121,7 @@ plt.legend(fontsize=14)
 
 plt.xlabel('Tolerance')
 plt.ylabel('Iterations')
-plt.savefig('iters_h01.png',dpi=600,bbox_inches='tight')
+plt.savefig('ex2_nd4_iters_h01.png',dpi=600,bbox_inches='tight')
 plt.clf()
 
 
@@ -145,7 +145,7 @@ plt.legend(fontsize=14)
 
 plt.xlabel('Tolerance')
 plt.ylabel('Error')
-plt.savefig('errs_h05.png',dpi=600,bbox_inches='tight')
+plt.savefig('ex2_nd4_errs_h05.png',dpi=600,bbox_inches='tight')
 plt.clf()
 
 
@@ -169,7 +169,7 @@ plt.legend(fontsize=14)
 
 plt.xlabel('Tolerance')
 plt.ylabel('Error')
-plt.savefig('errs_h01.png',dpi=600,bbox_inches='tight')
+plt.savefig('ex2_nd4_errs_h01.png',dpi=600,bbox_inches='tight')
 plt.clf()
 
 
@@ -193,7 +193,7 @@ plt.legend(fontsize=14)
 
 plt.xlabel('Tolerance')
 plt.ylabel('Runtime (s)')
-plt.savefig('times_h05.png',dpi=600,bbox_inches='tight')
+plt.savefig('ex2_nd4_times_h05.png',dpi=600,bbox_inches='tight')
 plt.clf()
 
 
@@ -216,5 +216,5 @@ plt.legend(fontsize=14)
 
 plt.xlabel('Tolerance')
 plt.ylabel('Runtime (s)')
-plt.savefig('times_h01.png',dpi=600,bbox_inches='tight')
+plt.savefig('ex2_nd4_times_h01.png',dpi=600,bbox_inches='tight')
 plt.clf()

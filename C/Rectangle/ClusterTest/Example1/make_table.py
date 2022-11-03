@@ -1,9 +1,12 @@
 import matplotlib.pyplot as plt
 import seaborn as sns
 import numpy as np
+import sys
+sys.path.append('../../')
+import table_module as tm
 
 # choose file
-file = "Nd1.out"
+file = "Nd4.out"
 # file = "Nd4.out"
 
 if (file=="Nd9.out"):
@@ -61,20 +64,34 @@ for j in range(n_lims):
 print("")
 
 
-# for i in range(6):
-#    for j in range(n_lims):
-#       print("{} {} ".format(iters[j,i,0],iters[j,i,1]),end="")
-#    print("")
+# n = n_tols
+# m = n_lims
+# row_name = "Tols"
+# col_name = "Limits"
+# row_labs = tols
+# col_labs = limits
+# A = np.zeros((n,m),dtype=float)
+# for i in range(n):
+#    for j in range(m):
+#       A[i,j] = iters[j,i,0]
+# print(A)
 
-# for i in range(6):
-#    for j in range(n_lims):
-#       print("{} {} ".format(errs[j,i,0],errs[j,i,1]),end="")
-#    print("")
+# tm.print_table(n,m,row_name,col_name,row_labs,col_labs,A)
 
-# for i in range(6):
-#    for j in range(n_lims):
-#       print("{} {} ".format(times[j,i,0],times[j,i,1]),end="")
-#    print("")
+for i in range(6):
+   for j in range(n_lims):
+      print("{} {} ".format(iters[j,i,0],iters[j,i,1]),end="")
+   print("")
+
+for i in range(6):
+   for j in range(n_lims):
+      print("{} {} ".format(errs[j,i,0],errs[j,i,1]),end="")
+   print("")
+
+for i in range(6):
+   for j in range(n_lims):
+      print("{} {} ".format(times[j,i,0],times[j,i,1]),end="")
+   print("")
 
 
 
@@ -100,7 +117,7 @@ plt.legend(fontsize=14)
 # plt.ylim([0,1.1])
 plt.xlabel('Tolerance')
 plt.ylabel('Iterations')
-plt.savefig('iters_h05.png',dpi=600,bbox_inches='tight')
+plt.savefig('ex1_nd4_iters_h05.png',dpi=600,bbox_inches='tight')
 # plt.show()
 plt.clf()
 
@@ -124,7 +141,7 @@ plt.legend(fontsize=14)
 
 plt.xlabel('Tolerance')
 plt.ylabel('Iterations')
-plt.savefig('iters_h01.png',dpi=600,bbox_inches='tight')
+plt.savefig('ex1_nd4_iters_h01.png',dpi=600,bbox_inches='tight')
 plt.clf()
 
 
@@ -148,7 +165,7 @@ plt.legend(fontsize=14)
 
 plt.xlabel('Tolerance')
 plt.ylabel('Error')
-plt.savefig('errs_h05.png',dpi=600,bbox_inches='tight')
+plt.savefig('ex1_nd4_errs_h05.png',dpi=600,bbox_inches='tight')
 plt.clf()
 
 
@@ -172,7 +189,7 @@ plt.legend(fontsize=14)
 
 plt.xlabel('Tolerance')
 plt.ylabel('Error')
-plt.savefig('errs_h01.png',dpi=600,bbox_inches='tight')
+plt.savefig('ex1_nd4_errs_h01.png',dpi=600,bbox_inches='tight')
 plt.clf()
 
 
@@ -196,7 +213,7 @@ plt.legend(fontsize=14)
 
 plt.xlabel('Tolerance')
 plt.ylabel('Runtime (s)')
-plt.savefig('times_h05.png',dpi=600,bbox_inches='tight')
+plt.savefig('ex1_nd4_times_h05.png',dpi=600,bbox_inches='tight')
 plt.clf()
 
 
@@ -219,5 +236,5 @@ plt.legend(fontsize=14)
 
 plt.xlabel('Tolerance')
 plt.ylabel('Runtime (s)')
-plt.savefig('times_h01.png',dpi=600,bbox_inches='tight')
+plt.savefig('ex1_nd4_times_h01.png',dpi=600,bbox_inches='tight')
 plt.clf()

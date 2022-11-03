@@ -24,8 +24,8 @@ do
       for h in {0.05,0.01}
       do
          N=$(echo "scale = 0; 2*$limit/$h" | bc)
-         printf "Now running mpiexec -np $Nd ../../maddm  -nks -N $N -problem ex1 -snes_type newtonls -snes_linesearch_order 2 -ksp_type pipefgmres -pc_type bjacobi -ksp_rtol $tol -snes_rtol $tol -xmin -$limit -xmax $limit -ymin -$limit -ymax $limit\n"
-         mpiexec -np $Nd ../../maddm -N $N -nks  -problem ex1 -snes_type newtonls -snes_linesearch_order 2 -ksp_type pipefgmres -pc_type bjacobi -ksp_rtol $tol -snes_rtol $tol -xmin -$limit -xmax $limit -ymin -$limit -ymax $limit -snes_max_it 2000 >> Nd4.out
+         printf "Now running mpiexec -np $Nd ../../maddm  -nks -N $N -problem ex2c -snes_type newtonls -snes_linesearch_order 2 -ksp_type pipefgmres -pc_type bjacobi -ksp_rtol $tol -snes_rtol $tol -xmin -$limit -xmax $limit -ymin -$limit -ymax $limit\n"
+         mpiexec -np $Nd ../../maddm -N $N -nks  -problem ex2c -snes_type newtonls -snes_linesearch_order 2 -ksp_type pipefgmres -pc_type bjacobi -ksp_rtol $tol -snes_rtol $tol -xmin -$limit -xmax $limit -ymin -$limit -ymax $limit -snes_max_it 2000 -snes_converged_reason >> Nd4.out
       done
    done
 done

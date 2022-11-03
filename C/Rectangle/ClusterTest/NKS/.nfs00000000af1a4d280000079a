@@ -1,7 +1,0 @@
-*Problem: ex1 on domain [-0.50,0.50]x[-0.50,0.50] with 20x20 point 2D grid
-*Params:  Nd = 4, width = 3, eps = 0.020, op = 0.10
-*Error:   |u-uexact|_inf = 1.863e-03, |u-uexact|_h = 1.124e-03
-*WTime:   2.215774
-*Iters:   Krylov 1243, Local SNES 2, Global SNES 38
-[mpiexec@login-2] Sending Ctrl-C to processes as requested
-[mpiexec@login-2] Press Ctrl-C again to force abort
