@@ -18,14 +18,14 @@ rm -f Nd6.out
 for limit in {1.5,2.0}
 do
    printf "[-$limit, $limit]^2\n"
-   for tol in 1e-6
+   for tol in 1e-2
    do
       printf "tol = $tol\n"
       for h in {0.05,0.01}
       do
          N=$(echo "scale = 0; 2*$limit/$h" | bc)
-         printf "Now running mpiexec -np $Nd ../../maddm -N $N -problem ex1 -sub_snes_rtol $tol -sub_ksp_rtol $tol -xmin -$limit -xmax $limit -ymin -$limit -ymax $limit -snes_converged_reason\n"
-         mpiexec -np $Nd ../../maddm -N $N -problem ex1 -sub_snes_rtol $tol -sub_ksp_rtol $tol -xmin -$limit -xmax $limit -ymin -$limit -ymax $limit -snes_converged_reason >> Nd6.out
+         printf "Now running mpiexec -np $Nd ../../maddm -N $N -problem ex1 -sub_snes_rtol $tol -sub_ksp_rtol $tol -xmin -$limit -xmax $limit -ymin -$limit -ymax $limit -snes_converged_reason -snes_rtol 1e-9 \n"
+         mpiexec -np $Nd ../../maddm -N $N -problem ex1 -sub_snes_rtol $tol -sub_ksp_rtol $tol -xmin -$limit -xmax $limit -ymin -$limit -ymax $limit -snes_converged_reason -snes_rtol 1e-9 >> Nd6.out
       done
    done
 done

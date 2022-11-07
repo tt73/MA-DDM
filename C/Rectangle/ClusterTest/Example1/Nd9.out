@@ -1,24 +1,24 @@
-Nonlinear solve converged due to CONVERGED_FNORM_RELATIVE iterations 61
+Nonlinear solve converged due to CONVERGED_FNORM_RELATIVE iterations 76
 *Problem: ex1 on domain [-1.50,1.50]x[-1.50,1.50] with 60x60 point 2D grid
 *Params:  Nd = 9, width = 3, eps = 0.022, op = 0.10
-*Error:   |u-uexact|_inf = 2.456e-02, |u-uexact|_h = 1.707e-02
-*WTime:   0.946703
-*Iters:   Krylov 4467, Local SNES 2, Global SNES 61
-Nonlinear solve converged due to CONVERGED_FNORM_RELATIVE iterations 49
+*Error:   |u-uexact|_inf = 2.485e-02, |u-uexact|_h = 1.721e-02
+*WTime:   0.641354
+*Iters:   Krylov 1390, Local SNES 1, Global SNES 76
+Nonlinear solve converged due to CONVERGED_FNORM_RELATIVE iterations 74
 *Problem: ex1 on domain [-1.50,1.50]x[-1.50,1.50] with 300x300 point 2D grid
 *Params:  Nd = 9, width = 5, eps = 0.002, op = 0.10
-*Error:   |u-uexact|_inf = 1.148e-02, |u-uexact|_h = 5.719e-03
-*WTime:   208.959436
-*Iters:   Krylov 28087, Local SNES 3, Global SNES 49
-Nonlinear solve converged due to CONVERGED_FNORM_RELATIVE iterations 47
+*Error:   |u-uexact|_inf = 2.943e-03, |u-uexact|_h = 1.378e-03
+*WTime:   86.622674
+*Iters:   Krylov 6979, Local SNES 1, Global SNES 74
+Nonlinear solve converged due to CONVERGED_FNORM_RELATIVE iterations 64
 *Problem: ex1 on domain [-2.00,2.00]x[-2.00,2.00] with 80x80 point 2D grid
 *Params:  Nd = 9, width = 3, eps = 0.022, op = 0.10
-*Error:   |u-uexact|_inf = 2.298e-01, |u-uexact|_h = 1.200e-01
-*WTime:   2.777925
-*Iters:   Krylov 9563, Local SNES 2, Global SNES 47
-Nonlinear solve converged due to CONVERGED_FNORM_RELATIVE iterations 46
+*Error:   |u-uexact|_inf = 2.298e-01, |u-uexact|_h = 1.219e-01
+*WTime:   2.043931
+*Iters:   Krylov 3899, Local SNES 1, Global SNES 64
+Nonlinear solve converged due to CONVERGED_FNORM_RELATIVE iterations 139
 *Problem: ex1 on domain [-2.00,2.00]x[-2.00,2.00] with 400x400 point 2D grid
 *Params:  Nd = 9, width = 5, eps = 0.002, op = 0.10
-*Error:   |u-uexact|_inf = 2.343e-01, |u-uexact|_h = 1.148e-01
-*WTime:   1307.128969
-*Iters:   Krylov 91572, Local SNES 8, Global SNES 46
+*Error:   |u-uexact|_inf = 3.418e-02, |u-uexact|_h = 1.169e-02
+*WTime:   1619.449545
+*Iters:   Krylov 59964, Local SNES 2, Global SNES 139

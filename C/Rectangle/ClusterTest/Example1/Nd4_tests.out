@@ -1,0 +1,12 @@
+Nonlinear solve converged due to CONVERGED_FNORM_RELATIVE iterations 134
+*Problem: ex1 on domain [-2.00,2.00]x[-2.00,2.00] with 400x400 point 2D grid
+*Params:  Nd = 4, width = 5, eps = 0.002, op = 0.10
+*Error:   |u-uexact|_inf = 8.897e-02, |u-uexact|_h = 2.512e-02
+*WTime:   2279.807159
+*Iters:   Krylov 32835, Local SNES 5, Global SNES 134
+Nonlinear solve converged due to CONVERGED_FNORM_RELATIVE iterations 152
+*Problem: ex1 on domain [-2.00,2.00]x[-2.00,2.00] with 400x400 point 2D grid
+*Params:  Nd = 4, width = 5, eps = 0.002, op = 0.10
+*Error:   |u-uexact|_inf = 3.459e-02, |u-uexact|_h = 1.367e-02
+*WTime:   2271.728467
+*Iters:   Krylov 33188, Local SNES 1, Global SNES 152
