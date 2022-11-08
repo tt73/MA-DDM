@@ -1,0 +1,40 @@
+*Problem: ex1 on domain [-0.50,0.50]x[-0.50,0.50] with 20x20 point 2D grid
+*Params:  Nd = 4, width = 3, eps = 0.020, op = 0.10
+*Error:   |u-uexact|_inf = 1.872e-03, |u-uexact|_h = 1.127e-03
+*WTime:   0.054413
+*Iters:   Krylov 128, Local SNES 0, Global SNES 11
+*Problem: ex1 on domain [-0.50,0.50]x[-0.50,0.50] with 100x100 point 2D grid
+*Params:  Nd = 4, width = 5, eps = 0.002, op = 0.10
+*Error:   |u-uexact|_inf = 2.285e-04, |u-uexact|_h = 1.283e-04
+*WTime:   0.652562
+*Iters:   Krylov 245, Local SNES 0, Global SNES 14
+*Problem: ex1 on domain [-1.00,1.00]x[-1.00,1.00] with 40x40 point 2D grid
+*Params:  Nd = 4, width = 3, eps = 0.021, op = 0.10
+*Error:   |u-uexact|_inf = 7.956e-03, |u-uexact|_h = 4.638e-03
+*WTime:   0.109439
+*Iters:   Krylov 235, Local SNES 0, Global SNES 13
+*Problem: ex1 on domain [-1.00,1.00]x[-1.00,1.00] with 200x200 point 2D grid
+*Params:  Nd = 4, width = 5, eps = 0.002, op = 0.10
+*Error:   |u-uexact|_inf = 9.265e-04, |u-uexact|_h = 5.258e-04
+*WTime:   9.631417
+*Iters:   Krylov 1267, Local SNES 0, Global SNES 30
+*Problem: ex1 on domain [-1.50,1.50]x[-1.50,1.50] with 60x60 point 2D grid
+*Params:  Nd = 4, width = 3, eps = 0.022, op = 0.10
+*Error:   |u-uexact|_inf = 2.488e-02, |u-uexact|_h = 1.723e-02
+*WTime:   0.482491
+*Iters:   Krylov 909, Local SNES 0, Global SNES 34
+*Problem: ex1 on domain [-1.50,1.50]x[-1.50,1.50] with 300x300 point 2D grid
+*Params:  Nd = 4, width = 5, eps = 0.002, op = 0.10
+*Error:   |u-uexact|_inf = 3.051e-03, |u-uexact|_h = 1.973e-03
+*WTime:   55.937489
+*Iters:   Krylov 3883, Local SNES 0, Global SNES 60
+*Problem: ex1 on domain [-2.00,2.00]x[-2.00,2.00] with 80x80 point 2D grid
+*Params:  Nd = 4, width = 3, eps = 0.022, op = 0.10
+*Error:   |u-uexact|_inf = 2.299e-01, |u-uexact|_h = 1.221e-01
+*WTime:   2.547472
+*Iters:   Krylov 3566, Local SNES 0, Global SNES 102
+*Problem: ex1 on domain [-2.00,2.00]x[-2.00,2.00] with 400x400 point 2D grid
+*Params:  Nd = 4, width = 5, eps = 0.002, op = 0.10
+*Error:   |u-uexact|_inf = 3.462e-02, |u-uexact|_h = 1.408e-02
+*WTime:   758.049634
+*Iters:   Krylov 29368, Local SNES 0, Global SNES 378

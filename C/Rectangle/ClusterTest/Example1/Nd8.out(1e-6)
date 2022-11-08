@@ -22,3 +22,5 @@ Nonlinear solve converged due to CONVERGED_FNORM_RELATIVE iterations 50
 *Error:   |u-uexact|_inf = 3.625e-01, |u-uexact|_h = 1.233e-01
 *WTime:   1470.682151
 *Iters:   Krylov 92137, Local SNES 9, Global SNES 50
+These results were for snes_rtol 1e-8 (default)
+Might want to rerun with rtol 1e-9

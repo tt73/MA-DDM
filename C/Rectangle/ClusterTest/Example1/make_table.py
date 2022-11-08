@@ -7,7 +7,12 @@ sys.path.append('../../')
 import table_module as tm
 
 # choose file
-file = "Nd9.out"
+Nd = 4
+loc = 2
+glo = 9
+file = "Nd{}_loc{}_glo{}.out".format(Nd,loc,glo)
+
+# file = "Nd9.out"
 
 if (file=="Nd6.out" or file=="Nd8.out" or file=="Nd9.out"):
    limits = np.array([1.5, 2.0])
