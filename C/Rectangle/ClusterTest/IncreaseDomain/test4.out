@@ -1,0 +1,48 @@
+Nonlinear solve converged due to CONVERGED_FNORM_RELATIVE iterations 39
+*Problem: ex1 on domain [-0.50,0.50]x[-0.50,0.50] with 20x20 point 2D grid
+*Params:  Nd = 4, width = 3, eps = 0.020, op = 0.10
+*Error:   |u-uexact|_inf = 1.863e-03, |u-uexact|_h = 1.124e-03
+*WTime:   0.041135
+*Iters:   Krylov 117, Local SNES 1, Global SNES 39
+Nonlinear solve converged due to CONVERGED_FNORM_RELATIVE iterations 49
+*Problem: ex1 on domain [-0.50,0.50]x[-0.50,0.50] with 100x100 point 2D grid
+*Params:  Nd = 4, width = 5, eps = 0.002, op = 0.10
+*Error:   |u-uexact|_inf = 6.013e-05, |u-uexact|_h = 3.318e-05
+*WTime:   1.791294
+*Iters:   Krylov 348, Local SNES 1, Global SNES 49
+Nonlinear solve converged due to CONVERGED_FNORM_RELATIVE iterations 43
+*Problem: ex1 on domain [-1.00,1.00]x[-1.00,1.00] with 40x40 point 2D grid
+*Params:  Nd = 4, width = 3, eps = 0.021, op = 0.10
+*Error:   |u-uexact|_inf = 7.921e-03, |u-uexact|_h = 4.626e-03
+*WTime:   0.158002
+*Iters:   Krylov 219, Local SNES 1, Global SNES 43
+Nonlinear solve converged due to CONVERGED_FNORM_RELATIVE iterations 44
+*Problem: ex1 on domain [-1.00,1.00]x[-1.00,1.00] with 200x200 point 2D grid
+*Params:  Nd = 4, width = 5, eps = 0.002, op = 0.10
+*Error:   |u-uexact|_inf = 1.325e-03, |u-uexact|_h = 3.244e-04
+*WTime:   13.784008
+*Iters:   Krylov 845, Local SNES 1, Global SNES 44
+Nonlinear solve converged due to CONVERGED_FNORM_RELATIVE iterations 42
+*Problem: ex1 on domain [-1.50,1.50]x[-1.50,1.50] with 60x60 point 2D grid
+*Params:  Nd = 4, width = 3, eps = 0.022, op = 0.10
+*Error:   |u-uexact|_inf = 2.446e-02, |u-uexact|_h = 1.710e-02
+*WTime:   0.600782
+*Iters:   Krylov 529, Local SNES 1, Global SNES 42
+Nonlinear solve converged due to CONVERGED_FNORM_RELATIVE iterations 46
+*Problem: ex1 on domain [-1.50,1.50]x[-1.50,1.50] with 300x300 point 2D grid
+*Params:  Nd = 4, width = 5, eps = 0.002, op = 0.10
+*Error:   |u-uexact|_inf = 2.257e-02, |u-uexact|_h = 6.204e-03
+*WTime:   106.185077
+*Iters:   Krylov 2795, Local SNES 2, Global SNES 46
+Nonlinear solve converged due to CONVERGED_FNORM_RELATIVE iterations 44
+*Problem: ex1 on domain [-2.00,2.00]x[-2.00,2.00] with 80x80 point 2D grid
+*Params:  Nd = 4, width = 3, eps = 0.022, op = 0.10
+*Error:   |u-uexact|_inf = 2.298e-01, |u-uexact|_h = 1.200e-01
+*WTime:   3.876013
+*Iters:   Krylov 2071, Local SNES 1, Global SNES 44
+Nonlinear solve converged due to CONVERGED_FNORM_RELATIVE iterations 119
+*Problem: ex1 on domain [-2.00,2.00]x[-2.00,2.00] with 400x400 point 2D grid
+*Params:  Nd = 4, width = 5, eps = 0.002, op = 0.10
+*Error:   |u-uexact|_inf = 1.901e-01, |u-uexact|_h = 5.187e-02
+*WTime:   2095.117879
+*Iters:   Krylov 29498, Local SNES 9, Global SNES 119

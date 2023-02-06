@@ -1,0 +1,105 @@
+ksptol = 1.e-5
+*Problem: ex1 on domain [-1.00,1.00]x[-1.00,1.00] with 300x300 point 2D grid
+*Params:  Nd = 4, width = 6, eps = 0.002, op = 0.00
+*Error:   |u-uexact|_inf = 5.739e-04, |u-uexact|_h = 3.161e-04
+*WTime:   25.961965
+*Iters:   Krylov 1060, Local SNES 0, Global SNES 28
+*Problem: ex2 on domain [0.00,1.00]x[0.00,1.00] with 300x300 point 2D grid
+*Params:  Nd = 4, width = 7, eps = 0.001, op = 0.00
+*Error:   |u-uexact|_inf = 9.277e-05, |u-uexact|_h = 5.092e-05
+*WTime:   14.621645
+*Iters:   Krylov 263, Local SNES 0, Global SNES 13
+*Problem: ex3 on domain [0.00,1.00]x[0.00,1.00] with 300x300 point 2D grid
+*Params:  Nd = 4, width = 7, eps = 0.001, op = 0.00
+*Error:   |u-uexact|_inf = 1.208e-04, |u-uexact|_h = 4.885e-05
+*WTime:   81.943520
+*Iters:   Krylov 2007, Local SNES 0, Global SNES 58
+*Problem: ex4 on domain [-1.00,1.00]x[-1.00,1.00] with 300x300 point 2D grid
+*Params:  Nd = 4, width = 6, eps = 0.002, op = 0.00
+*Error:   |u-uexact|_inf = 1.036e-02, |u-uexact|_h = 6.134e-03
+*WTime:   11.023893
+*Iters:   Krylov 401, Local SNES 0, Global SNES 14
+ksptol = 1.e-4
+*Problem: ex1 on domain [-1.00,1.00]x[-1.00,1.00] with 300x300 point 2D grid
+*Params:  Nd = 4, width = 6, eps = 0.002, op = 0.00
+*Error:   |u-uexact|_inf = 5.744e-04, |u-uexact|_h = 3.161e-04
+*WTime:   23.764459
+*Iters:   Krylov 805, Local SNES 0, Global SNES 31
+*Problem: ex2 on domain [0.00,1.00]x[0.00,1.00] with 300x300 point 2D grid
+*Params:  Nd = 4, width = 7, eps = 0.001, op = 0.00
+*Error:   |u-uexact|_inf = 9.317e-05, |u-uexact|_h = 5.114e-05
+*WTime:   13.095839
+*Iters:   Krylov 176, Local SNES 0, Global SNES 13
+*Problem: ex3 on domain [0.00,1.00]x[0.00,1.00] with 300x300 point 2D grid
+*Params:  Nd = 4, width = 7, eps = 0.001, op = 0.00
+*Error:   |u-uexact|_inf = 1.208e-04, |u-uexact|_h = 4.885e-05
+*WTime:   64.149285
+*Iters:   Krylov 1261, Local SNES 0, Global SNES 51
+*Problem: ex4 on domain [-1.00,1.00]x[-1.00,1.00] with 300x300 point 2D grid
+*Params:  Nd = 4, width = 6, eps = 0.002, op = 0.00
+*Error:   |u-uexact|_inf = 1.044e-02, |u-uexact|_h = 6.140e-03
+*WTime:   10.080719
+*Iters:   Krylov 307, Local SNES 0, Global SNES 15
+ksptol = 1.e-3
+*Problem: ex1 on domain [-1.00,1.00]x[-1.00,1.00] with 300x300 point 2D grid
+*Params:  Nd = 4, width = 6, eps = 0.002, op = 0.00
+*Error:   |u-uexact|_inf = 5.799e-04, |u-uexact|_h = 3.190e-04
+*WTime:   20.366039
+*Iters:   Krylov 537, Local SNES 0, Global SNES 34
+*Problem: ex2 on domain [0.00,1.00]x[0.00,1.00] with 300x300 point 2D grid
+*Params:  Nd = 4, width = 7, eps = 0.001, op = 0.00
+*Error:   |u-uexact|_inf = 9.304e-05, |u-uexact|_h = 5.114e-05
+*WTime:   14.561509
+*Iters:   Krylov 176, Local SNES 0, Global SNES 15
+*Problem: ex3 on domain [0.00,1.00]x[0.00,1.00] with 300x300 point 2D grid
+*Params:  Nd = 4, width = 7, eps = 0.001, op = 0.00
+*Error:   |u-uexact|_inf = 1.208e-04, |u-uexact|_h = 4.900e-05
+*WTime:   67.941675
+*Iters:   Krylov 1035, Local SNES 0, Global SNES 64
+*Problem: ex4 on domain [-1.00,1.00]x[-1.00,1.00] with 300x300 point 2D grid
+*Params:  Nd = 4, width = 6, eps = 0.002, op = 0.00
+*Error:   |u-uexact|_inf = 1.065e-02, |u-uexact|_h = 6.137e-03
+*WTime:   8.541672
+*Iters:   Krylov 184, Local SNES 0, Global SNES 15
+ksptol = 1.e-2
+*Problem: ex1 on domain [-1.00,1.00]x[-1.00,1.00] with 300x300 point 2D grid
+*Params:  Nd = 4, width = 6, eps = 0.002, op = 0.00
+*Error:   |u-uexact|_inf = 3.674e-04, |u-uexact|_h = 2.248e-04
+*WTime:   21.577627
+*Iters:   Krylov 361, Local SNES 0, Global SNES 43
+*Problem: ex2 on domain [0.00,1.00]x[0.00,1.00] with 300x300 point 2D grid
+*Params:  Nd = 4, width = 7, eps = 0.001, op = 0.00
+*Error:   |u-uexact|_inf = 1.150e-04, |u-uexact|_h = 5.292e-05
+*WTime:   14.694992
+*Iters:   Krylov 142, Local SNES 0, Global SNES 16
+*Problem: ex3 on domain [0.00,1.00]x[0.00,1.00] with 300x300 point 2D grid
+*Params:  Nd = 4, width = 7, eps = 0.001, op = 0.00
+*Error:   |u-uexact|_inf = 1.208e-04, |u-uexact|_h = 4.885e-05
+*WTime:   52.319801
+*Iters:   Krylov 566, Local SNES 0, Global SNES 56
+*Problem: ex4 on domain [-1.00,1.00]x[-1.00,1.00] with 300x300 point 2D grid
+*Params:  Nd = 4, width = 6, eps = 0.002, op = 0.00
+*Error:   |u-uexact|_inf = 1.056e-02, |u-uexact|_h = 6.138e-03
+*WTime:   7.972910
+*Iters:   Krylov 136, Local SNES 0, Global SNES 16
+ksptol = 1.e-1
+*Problem: ex1 on domain [-1.00,1.00]x[-1.00,1.00] with 300x300 point 2D grid
+*Params:  Nd = 4, width = 6, eps = 0.002, op = 0.00
+*Error:   |u-uexact|_inf = 4.518e-03, |u-uexact|_h = 1.779e-03
+*WTime:   15.373754
+*Iters:   Krylov 198, Local SNES 0, Global SNES 32
+*Problem: ex2 on domain [0.00,1.00]x[0.00,1.00] with 300x300 point 2D grid
+*Params:  Nd = 4, width = 7, eps = 0.001, op = 0.00
+*Error:   |u-uexact|_inf = 1.007e-04, |u-uexact|_h = 5.030e-05
+*WTime:   18.424345
+*Iters:   Krylov 157, Local SNES 0, Global SNES 21
+*Problem: ex3 on domain [0.00,1.00]x[0.00,1.00] with 300x300 point 2D grid
+*Params:  Nd = 4, width = 7, eps = 0.001, op = 0.00
+*Error:   |u-uexact|_inf = 1.208e-04, |u-uexact|_h = 4.922e-05
+*WTime:   51.554796
+*Iters:   Krylov 337, Local SNES 0, Global SNES 61
+*Problem: ex4 on domain [-1.00,1.00]x[-1.00,1.00] with 300x300 point 2D grid
+*Params:  Nd = 4, width = 6, eps = 0.002, op = 0.00
+*Error:   |u-uexact|_inf = 1.065e-02, |u-uexact|_h = 6.134e-03
+*WTime:   8.138138
+*Iters:   Krylov 104, Local SNES 0, Global SNES 18

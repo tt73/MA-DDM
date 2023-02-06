@@ -219,6 +219,7 @@ int main(int argc,char **args) {
    PetscReal      h_eff,hx,hy,eps,errinf,normconst2h,err2h,op;
    char           gridstr[99];
    PetscInt       dim,width,N,Nx,Ny,order,NASM_its,KSP_its,Newt_its;
+   PetscInt       mm, nn, olx, oly;
    PetscLogDouble t1,t2;
    PetscMPIInt    rank,size;
 
@@ -341,7 +342,6 @@ int main(int argc,char **args) {
       You can adjust the overlapping nodes directly with -da_overlap <int>
       or adjust the percentage with -op <float> where float ranges from 0 to 1.
    - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
-   PetscInt mm, nn, olx, oly;
    ierr = DMSetUp(da); CHKERRQ(ierr); // initialize the grid distribution, then get mm and nn
    ierr = DMDAGetInfo(da,NULL,NULL,NULL,NULL,&mm,&nn,NULL,NULL,NULL,NULL,NULL,NULL,NULL); CHKERRQ(ierr);
    olx = PetscCeilReal(op*Nx/(PetscReal)mm); // x overlap
@@ -388,8 +388,12 @@ int main(int argc,char **args) {
          SNESGetLineSearch(snes,&subls);     // get local linesearch
          SNESGetKSP(snes,&subksp);           // get local KSP
          KSPGetPC(subksp,&subpc);            // get local PC
+         PCSetType(subpc,PCASM);             // additive schwarz
+         PCASMSetOverlap(subpc, olx);         // set the overlap
          KSPSetType(subksp,KSPPIPEFGMRES);   // rtol = 1e-5 by default
          SNESLineSearchSetOrder(subls,2);    // 2nd order BT
+         SNESSetTolerances(snes,PETSC_DEFAULT,PETSC_DEFAULT,PETSC_DEFAULT,10000,PETSC_DEFAULT); // def. 50 iter is too little
+
       } else {
          /* Default Solver Settings - - - - - - - - - - - - - - - - - - - - - - - -
             By default, we use Nonlinear Additive Schwarz method (NASM) for the
