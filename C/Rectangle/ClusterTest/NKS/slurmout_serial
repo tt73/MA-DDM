@@ -1,0 +1,109 @@
+Starting /home/t/tt73/.bash_profile ... standard AFS bash profile
+
+========================
+Home directory : /home/t/tt73 is not in AFS -- skipping quota check
+========================
+
+On host node018 :
+	 13:30:43 up 96 days, 19:51,  0 users,  load average: 0.00, 0.01, 0.05
+
+=== === === Your Kerberos ticket and AFS token status === === ===
+klist: No credentials cache found (filename: /tmp/krb5cc_90502_4E4h48N0tj)
+Kerberos : 
+AFS      : 
+
+Loading default modules ...
+Create file : "/home/t/tt73/.modules" to customize.
+
+
+Currently Loaded Modules:
+  1) python/3.8   3) mpich/3.3.1    5) openblas/0.3.7    7) petsc/3.12.0
+  2) gnu8/8.3.0   4) phdf5/1.10.5   6) scalapack/2.0.2
+
+ 
+
+N  = 100
+*Problem: ex1 on domain [-1.00,1.00]x[-1.00,1.00] with 100x100 point 2D grid
+*Params:  Nd = 1, width = 4, eps = 0.006, op = 0.10
+*Error:   |u-uexact|_inf = 2.475e-03, |u-uexact|_h = 1.482e-03
+*WTime:   1.479496
+*Iters:   Krylov 593, Local SNES 0, Global SNES 24
+*Problem: ex1 on domain [-1.00,1.00]x[-1.00,1.00] with 100x100 point 2D grid
+*Params:  Nd = 1, width = 4, eps = 0.006, op = 0.10
+*Error:   |u-uexact|_inf = 2.476e-03, |u-uexact|_h = 1.482e-03
+*WTime:   2.644885
+*Iters:   Krylov 504, Local SNES 0, Global SNES 24
+*Problem: ex1 on domain [-1.00,1.00]x[-1.00,1.00] with 100x100 point 2D grid
+*Params:  Nd = 1, width = 4, eps = 0.006, op = 0.10
+*Error:   |u-uexact|_inf = 2.476e-03, |u-uexact|_h = 1.482e-03
+*WTime:   2.680313
+*Iters:   Krylov 497, Local SNES 0, Global SNES 22
+
+N  = 150
+*Problem: ex1 on domain [-1.00,1.00]x[-1.00,1.00] with 150x150 point 2D grid
+*Params:  Nd = 1, width = 5, eps = 0.004, op = 0.10
+*Error:   |u-uexact|_inf = 1.610e-03, |u-uexact|_h = 9.042e-04
+*WTime:   10.503949
+*Iters:   Krylov 852, Local SNES 0, Global SNES 30
+*Problem: ex1 on domain [-1.00,1.00]x[-1.00,1.00] with 150x150 point 2D grid
+*Params:  Nd = 1, width = 5, eps = 0.004, op = 0.10
+*Error:   |u-uexact|_inf = 1.610e-03, |u-uexact|_h = 9.041e-04
+*WTime:   17.289424
+*Iters:   Krylov 687, Local SNES 0, Global SNES 30
+*Problem: ex1 on domain [-1.00,1.00]x[-1.00,1.00] with 150x150 point 2D grid
+*Params:  Nd = 1, width = 5, eps = 0.004, op = 0.10
+*Error:   |u-uexact|_inf = 1.610e-03, |u-uexact|_h = 9.042e-04
+*WTime:   19.376019
+*Iters:   Krylov 759, Local SNES 0, Global SNES 31
+
+N  = 200
+*Problem: ex1 on domain [-1.00,1.00]x[-1.00,1.00] with 200x200 point 2D grid
+*Params:  Nd = 1, width = 5, eps = 0.002, op = 0.10
+*Error:   |u-uexact|_inf = 9.265e-04, |u-uexact|_h = 5.258e-04
+*WTime:   26.905657
+*Iters:   Krylov 1258, Local SNES 0, Global SNES 31
+*Problem: ex1 on domain [-1.00,1.00]x[-1.00,1.00] with 200x200 point 2D grid
+*Params:  Nd = 1, width = 5, eps = 0.002, op = 0.10
+*Error:   |u-uexact|_inf = 9.266e-04, |u-uexact|_h = 5.259e-04
+*WTime:   29.735988
+*Iters:   Krylov 869, Local SNES 0, Global SNES 29
+*Problem: ex1 on domain [-1.00,1.00]x[-1.00,1.00] with 200x200 point 2D grid
+*Params:  Nd = 1, width = 5, eps = 0.002, op = 0.10
+*Error:   |u-uexact|_inf = 9.265e-04, |u-uexact|_h = 5.258e-04
+*WTime:   31.827287
+*Iters:   Krylov 920, Local SNES 0, Global SNES 29
+
+N  = 250
+*Problem: ex1 on domain [-1.00,1.00]x[-1.00,1.00] with 250x250 point 2D grid
+*Params:  Nd = 1, width = 5, eps = 0.002, op = 0.10
+*Error:   |u-uexact|_inf = 6.072e-04, |u-uexact|_h = 3.497e-04
+*WTime:   46.757335
+*Iters:   Krylov 1414, Local SNES 0, Global SNES 29
+*Problem: ex1 on domain [-1.00,1.00]x[-1.00,1.00] with 250x250 point 2D grid
+*Params:  Nd = 1, width = 5, eps = 0.002, op = 0.10
+*Error:   |u-uexact|_inf = 6.072e-04, |u-uexact|_h = 3.497e-04
+*WTime:   53.273359
+*Iters:   Krylov 1166, Local SNES 0, Global SNES 30
+*Problem: ex1 on domain [-1.00,1.00]x[-1.00,1.00] with 250x250 point 2D grid
+*Params:  Nd = 1, width = 5, eps = 0.002, op = 0.10
+*Error:   |u-uexact|_inf = 6.072e-04, |u-uexact|_h = 3.497e-04
+*WTime:   58.922729
+*Iters:   Krylov 1258, Local SNES 0, Global SNES 31
+
+N  = 300
+*Problem: ex1 on domain [-1.00,1.00]x[-1.00,1.00] with 300x300 point 2D grid
+*Params:  Nd = 1, width = 6, eps = 0.002, op = 0.10
+*Error:   |u-uexact|_inf = 5.716e-04, |u-uexact|_h = 3.151e-04
+*WTime:   80.024959
+*Iters:   Krylov 1526, Local SNES 0, Global SNES 30
+*Problem: ex1 on domain [-1.00,1.00]x[-1.00,1.00] with 300x300 point 2D grid
+*Params:  Nd = 1, width = 6, eps = 0.002, op = 0.10
+*Error:   |u-uexact|_inf = 5.715e-04, |u-uexact|_h = 3.151e-04
+*WTime:   87.885099
+*Iters:   Krylov 1106, Local SNES 0, Global SNES 27
+*Problem: ex1 on domain [-1.00,1.00]x[-1.00,1.00] with 300x300 point 2D grid
+*Params:  Nd = 1, width = 6, eps = 0.002, op = 0.10
+*Error:   |u-uexact|_inf = 5.716e-04, |u-uexact|_h = 3.152e-04
+*WTime:   112.866719
+*Iters:   Krylov 1415, Local SNES 0, Global SNES 33
+

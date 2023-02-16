@@ -1,5 +1,0 @@
-
-
-
-
-## Find the optimal overlap.

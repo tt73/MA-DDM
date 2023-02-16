@@ -1,0 +1,84 @@
+Running: mpiexec -np 4 ../../maddm -sin -N 400 -op 0.025 -problem ex1 -xmin -2.0 -xmax 2.0 -ymin -2.0 -ymax 2.0 -sub_ksp_rtol 1e-2 -snes_converged_reason -snes_max_it 1000 
+Nonlinear solve did not converge due to DIVERGED_MAX_IT iterations 1000
+*Problem: ex1 on domain [-2.00,2.00]x[-2.00,2.00] with 400x400 point 2D grid
+*Params:  Nd = 4, width = 5, eps = 0.002, op = 0.03
+*Error:   |u-uexact|_inf = 1.001e+02, |u-uexact|_h = 4.380e+01
+*WTime:   508.656858
+*Iters:   Krylov 14239, Local SNES 1, Global SNES 1000
+Running: mpiexec -np 4 ../../maddm -sin -N 400 -op 0.05 -problem ex1 -xmin -2.0 -xmax 2.0 -ymin -2.0 -ymax 2.0 -sub_ksp_rtol 1e-2 -snes_converged_reason -snes_max_it 1000 
+Nonlinear solve did not converge due to DIVERGED_MAX_IT iterations 1000
+*Problem: ex1 on domain [-2.00,2.00]x[-2.00,2.00] with 400x400 point 2D grid
+*Params:  Nd = 4, width = 5, eps = 0.002, op = 0.05
+*Error:   |u-uexact|_inf = 7.677e+01, |u-uexact|_h = 3.289e+01
+*WTime:   542.721229
+*Iters:   Krylov 14969, Local SNES 1, Global SNES 1000
+Running: mpiexec -np 4 ../../maddm -sin -N 400 -op 0.075 -problem ex1 -xmin -2.0 -xmax 2.0 -ymin -2.0 -ymax 2.0 -sub_ksp_rtol 1e-2 -snes_converged_reason -snes_max_it 1000 
+Nonlinear solve did not converge due to DIVERGED_MAX_IT iterations 1000
+*Problem: ex1 on domain [-2.00,2.00]x[-2.00,2.00] with 400x400 point 2D grid
+*Params:  Nd = 4, width = 5, eps = 0.002, op = 0.07
+*Error:   |u-uexact|_inf = 5.276e+01, |u-uexact|_h = 2.201e+01
+*WTime:   590.614827
+*Iters:   Krylov 15673, Local SNES 1, Global SNES 1000
+Running: mpiexec -np 4 ../../maddm -sin -N 400 -op 0.10 -problem ex1 -xmin -2.0 -xmax 2.0 -ymin -2.0 -ymax 2.0 -sub_ksp_rtol 1e-2 -snes_converged_reason -snes_max_it 1000 
+Nonlinear solve did not converge due to DIVERGED_MAX_IT iterations 1000
+*Problem: ex1 on domain [-2.00,2.00]x[-2.00,2.00] with 400x400 point 2D grid
+*Params:  Nd = 4, width = 5, eps = 0.002, op = 0.10
+*Error:   |u-uexact|_inf = 1.724e+03, |u-uexact|_h = 1.142e+03
+*WTime:   550.633878
+*Iters:   Krylov 14565, Local SNES 1, Global SNES 1000
+Running: mpiexec -np 4 ../../maddm -sin -N 400 -op 0.025 -problem ex1 -xmin -2.0 -xmax 2.0 -ymin -2.0 -ymax 2.0 -sub_ksp_rtol 1e-3 -snes_converged_reason -snes_max_it 1000 
+Nonlinear solve did not converge due to DIVERGED_MAX_IT iterations 1000
+*Problem: ex1 on domain [-2.00,2.00]x[-2.00,2.00] with 400x400 point 2D grid
+*Params:  Nd = 4, width = 5, eps = 0.002, op = 0.03
+*Error:   |u-uexact|_inf = 7.859e+01, |u-uexact|_h = 3.154e+01
+*WTime:   780.191260
+*Iters:   Krylov 28131, Local SNES 1, Global SNES 1000
+Running: mpiexec -np 4 ../../maddm -sin -N 400 -op 0.05 -problem ex1 -xmin -2.0 -xmax 2.0 -ymin -2.0 -ymax 2.0 -sub_ksp_rtol 1e-3 -snes_converged_reason -snes_max_it 1000 
+Nonlinear solve did not converge due to DIVERGED_MAX_IT iterations 1000
+*Problem: ex1 on domain [-2.00,2.00]x[-2.00,2.00] with 400x400 point 2D grid
+*Params:  Nd = 4, width = 5, eps = 0.002, op = 0.05
+*Error:   |u-uexact|_inf = 4.356e+01, |u-uexact|_h = 1.597e+01
+*WTime:   848.630509
+*Iters:   Krylov 29469, Local SNES 1, Global SNES 1000
+Running: mpiexec -np 4 ../../maddm -sin -N 400 -op 0.075 -problem ex1 -xmin -2.0 -xmax 2.0 -ymin -2.0 -ymax 2.0 -sub_ksp_rtol 1e-3 -snes_converged_reason -snes_max_it 1000 
+Nonlinear solve did not converge due to DIVERGED_MAX_IT iterations 1000
+*Problem: ex1 on domain [-2.00,2.00]x[-2.00,2.00] with 400x400 point 2D grid
+*Params:  Nd = 4, width = 5, eps = 0.002, op = 0.07
+*Error:   |u-uexact|_inf = 3.543e+01, |u-uexact|_h = 1.302e+01
+*WTime:   961.234008
+*Iters:   Krylov 33158, Local SNES 1, Global SNES 1000
+Running: mpiexec -np 4 ../../maddm -sin -N 400 -op 0.10 -problem ex1 -xmin -2.0 -xmax 2.0 -ymin -2.0 -ymax 2.0 -sub_ksp_rtol 1e-3 -snes_converged_reason -snes_max_it 1000 
+Nonlinear solve did not converge due to DIVERGED_MAX_IT iterations 1000
+*Problem: ex1 on domain [-2.00,2.00]x[-2.00,2.00] with 400x400 point 2D grid
+*Params:  Nd = 4, width = 5, eps = 0.002, op = 0.10
+*Error:   |u-uexact|_inf = 2.874e+01, |u-uexact|_h = 1.020e+01
+*WTime:   1005.050389
+*Iters:   Krylov 34388, Local SNES 1, Global SNES 1000
+Running: mpiexec -np 4 ../../maddm -sin -N 400 -op 0.025 -problem ex1 -xmin -2.0 -xmax 2.0 -ymin -2.0 -ymax 2.0 -sub_ksp_rtol 1e-4 -snes_converged_reason -snes_max_it 1000 
+Nonlinear solve did not converge due to DIVERGED_MAX_IT iterations 1000
+*Problem: ex1 on domain [-2.00,2.00]x[-2.00,2.00] with 400x400 point 2D grid
+*Params:  Nd = 4, width = 5, eps = 0.002, op = 0.03
+*Error:   |u-uexact|_inf = 5.893e+01, |u-uexact|_h = 2.296e+01
+*WTime:   1051.975570
+*Iters:   Krylov 44519, Local SNES 1, Global SNES 1000
+Running: mpiexec -np 4 ../../maddm -sin -N 400 -op 0.05 -problem ex1 -xmin -2.0 -xmax 2.0 -ymin -2.0 -ymax 2.0 -sub_ksp_rtol 1e-4 -snes_converged_reason -snes_max_it 1000 
+Nonlinear solve did not converge due to DIVERGED_MAX_IT iterations 1000
+*Problem: ex1 on domain [-2.00,2.00]x[-2.00,2.00] with 400x400 point 2D grid
+*Params:  Nd = 4, width = 5, eps = 0.002, op = 0.05
+*Error:   |u-uexact|_inf = 3.866e+01, |u-uexact|_h = 1.439e+01
+*WTime:   1142.711192
+*Iters:   Krylov 48133, Local SNES 1, Global SNES 1000
+Running: mpiexec -np 4 ../../maddm -sin -N 400 -op 0.075 -problem ex1 -xmin -2.0 -xmax 2.0 -ymin -2.0 -ymax 2.0 -sub_ksp_rtol 1e-4 -snes_converged_reason -snes_max_it 1000 
+Nonlinear solve did not converge due to DIVERGED_MAX_IT iterations 1000
+*Problem: ex1 on domain [-2.00,2.00]x[-2.00,2.00] with 400x400 point 2D grid
+*Params:  Nd = 4, width = 5, eps = 0.002, op = 0.07
+*Error:   |u-uexact|_inf = 3.004e+01, |u-uexact|_h = 1.072e+01
+*WTime:   1247.943777
+*Iters:   Krylov 51302, Local SNES 1, Global SNES 1000
+Running: mpiexec -np 4 ../../maddm -sin -N 400 -op 0.10 -problem ex1 -xmin -2.0 -xmax 2.0 -ymin -2.0 -ymax 2.0 -sub_ksp_rtol 1e-4 -snes_converged_reason -snes_max_it 1000 
+Nonlinear solve did not converge due to DIVERGED_MAX_IT iterations 1000
+*Problem: ex1 on domain [-2.00,2.00]x[-2.00,2.00] with 400x400 point 2D grid
+*Params:  Nd = 4, width = 5, eps = 0.002, op = 0.10
+*Error:   |u-uexact|_inf = 1.984e+01, |u-uexact|_h = 6.830e+00
+*WTime:   1301.344335
+*Iters:   Krylov 51042, Local SNES 1, Global SNES 1000

@@ -1,0 +1,234 @@
+Starting /home/t/tt73/.bash_profile ... standard AFS bash profile
+
+========================
+Home directory : /home/t/tt73 is not in AFS -- skipping quota check
+========================
+
+On host node000 :
+	 13:09:17 up 704 days, 19:22,  0 users,  load average: 1.00, 0.99, 0.78
+
+=== === === Your Kerberos ticket and AFS token status === === ===
+klist: No credentials cache found (filename: /tmp/krb5cc_90502_4E4h48N0tj)
+Kerberos : 
+AFS      : 
+
+Loading default modules ...
+Create file : "/home/t/tt73/.modules" to customize.
+
+
+Currently Loaded Modules:
+  1) python/3.8   3) mpich/3.3.1    5) openblas/0.3.7    7) petsc/3.12.0
+  2) gnu8/8.3.0   4) phdf5/1.10.5   6) scalapack/2.0.2
+
+ 
+
+*Problem: ex1 on domain [-1.00,1.00]x[-1.00,1.00] with 200x200 point 2D grid
+*Params:  Nd = 1, width = 5, eps = 0.002, op = 0.10
+*Error:   |u-uexact|_inf = 9.268e-04, |u-uexact|_h = 5.261e-04
+*WTime:   24.621225
+*Iters:   Krylov 1292, Local SNES 0, Global SNES 30
+SNES Object: 4 MPI processes
+  type: newtonls
+  maximum iterations=10000, maximum function evaluations=10000
+  tolerances: relative=1e-08, absolute=1e-50, solution=1e-08
+  total number of linear solver iterations=583
+  total number of function evaluations=41
+  norm schedule ALWAYS
+  Jacobian is built using a DMDA local Jacobian
+  SNESLineSearch Object: 4 MPI processes
+    type: bt
+      interpolation: quadratic
+      alpha=1.000000e-04
+    maxstep=1.000000e+08, minlambda=1.000000e-12
+    tolerances: relative=1.000000e-08, absolute=1.000000e-15, lambda=1.000000e-08
+    maximum iterations=40
+  KSP Object: 4 MPI processes
+    type: pipefgmres
+      restart=30
+      happy breakdown tolerance 1e-30
+      shift=1.
+    maximum iterations=10000, initial guess is zero
+    tolerances:  relative=1e-05, absolute=1e-50, divergence=10000.
+    right preconditioning
+    using UNPRECONDITIONED norm type for convergence test
+  PC Object: 4 MPI processes
+    type: asm
+      total subdomain blocks = 4, amount of overlap = 10
+      restriction/interpolation type - RESTRICT
+      Local solve is same for all blocks, in the following KSP and PC objects:
+    KSP Object: (sub_) 1 MPI processes
+      type: preonly
+      maximum iterations=10000, initial guess is zero
+      tolerances:  relative=1e-05, absolute=1e-50, divergence=10000.
+      left preconditioning
+      using NONE norm type for convergence test
+    PC Object: (sub_) 1 MPI processes
+      type: ilu
+        out-of-place factorization
+        0 levels of fill
+        tolerance for zero pivot 2.22045e-14
+        matrix ordering: natural
+        factor fill ratio given 1., needed 1.
+          Factored matrix follows:
+            Mat Object: 1 MPI processes
+              type: seqaij
+              rows=22500, cols=22500
+              package used to perform factorization: petsc
+              total: nonzeros=2624400, allocated nonzeros=2624400
+              total number of mallocs used during MatSetValues calls =0
+                not using I-node routines
+      linear system matrix = precond matrix:
+      Mat Object: 1 MPI processes
+        type: seqaij
+        rows=22500, cols=22500
+        total: nonzeros=2624400, allocated nonzeros=2624400
+        total number of mallocs used during MatSetValues calls =0
+          not using I-node routines
+    linear system matrix = precond matrix:
+    Mat Object: 4 MPI processes
+      type: mpiaij
+      rows=40000, cols=40000
+      total: nonzeros=4708900, allocated nonzeros=4708900
+      total number of mallocs used during MatSetValues calls =0
+*Problem: ex1 on domain [-1.00,1.00]x[-1.00,1.00] with 200x200 point 2D grid
+*Params:  Nd = 4, width = 5, eps = 0.002, op = 0.10
+*Error:   |u-uexact|_inf = 9.267e-04, |u-uexact|_h = 5.259e-04
+*WTime:   16.296044
+*Iters:   Krylov 583, Local SNES 0, Global SNES 27
+SNES Object: 4 MPI processes
+  type: nasm
+    total subdomain blocks = 4
+    Local solve is the same for all blocks:
+    SNES Object: (sub_) 1 MPI processes
+      type: newtonls
+      maximum iterations=50, maximum function evaluations=10000
+      tolerances: relative=0.1, absolute=1e-50, solution=1e-08
+      total number of linear solver iterations=8
+      total number of function evaluations=2
+      norm schedule ALWAYS
+      Jacobian is built using a DMDA local Jacobian
+      SNESLineSearch Object: (sub_) 1 MPI processes
+        type: bt
+          interpolation: quadratic
+          alpha=1.000000e-04
+        maxstep=1.000000e+08, minlambda=1.000000e-12
+        tolerances: relative=1.000000e-08, absolute=1.000000e-15, lambda=1.000000e-08
+        maximum iterations=40
+      KSP Object: (sub_) 1 MPI processes
+        type: dgmres
+          restart=30, using Classical (unmodified) Gram-Schmidt Orthogonalization with no iterative refinement
+          happy breakdown tolerance 1e-30
+            Adaptive strategy is used: TRUE
+           Frequency of extracted eigenvalues = 1 using Ritz values 
+           Total number of extracted eigenvalues = 0
+           Maximum number of eigenvalues set to be extracted = 9
+           relaxation parameter for the adaptive strategy(smv)  = 1.
+           Number of matvecs : 9
+        maximum iterations=10000, initial guess is zero
+        tolerances:  relative=0.1, absolute=1e-50, divergence=10000.
+        left preconditioning
+        using PRECONDITIONED norm type for convergence test
+      PC Object: (sub_) 1 MPI processes
+        type: eisenstat
+          omega = 1.
+          Using diagonal scaling (default)
+        linear system matrix = precond matrix:
+        Mat Object: 1 MPI processes
+          type: seqaij
+          rows=12100, cols=12100
+          total: nonzeros=1392400, allocated nonzeros=1392400
+          total number of mallocs used during MatSetValues calls =0
+            not using I-node routines
+  maximum iterations=10000, maximum function evaluations=10000
+  tolerances: relative=1e-08, absolute=1e-50, solution=1e-08
+  total number of function evaluations=45
+  norm schedule ALWAYS
+  Jacobian is built using a DMDA local Jacobian
+*Problem: ex1 on domain [-1.00,1.00]x[-1.00,1.00] with 200x200 point 2D grid
+*Params:  Nd = 4, width = 5, eps = 0.002, op = 0.10
+*Error:   |u-uexact|_inf = 1.314e-03, |u-uexact|_h = 3.207e-04
+*WTime:   13.995275
+*Iters:   Krylov 773, Local SNES 1, Global SNES 44
+SNES Object: 4 MPI processes
+  type: nasm
+    total subdomain blocks = 4
+    Local solve is the same for all blocks:
+    SNES Object: (sub_) 1 MPI processes
+      type: newtonls
+      maximum iterations=50, maximum function evaluations=10000
+      tolerances: relative=0.1, absolute=1e-50, solution=1e-08
+      total number of linear solver iterations=5
+      total number of function evaluations=2
+      norm schedule ALWAYS
+      Jacobian is built using a DMDA local Jacobian
+      SNESLineSearch Object: (sub_) 1 MPI processes
+        type: bt
+          interpolation: quadratic
+          alpha=1.000000e-04
+        maxstep=1.000000e+08, minlambda=1.000000e-12
+        tolerances: relative=1.000000e-08, absolute=1.000000e-15, lambda=1.000000e-08
+        maximum iterations=40
+      KSP Object: (sub_) 1 MPI processes
+        type: dgmres
+          restart=30, using Classical (unmodified) Gram-Schmidt Orthogonalization with no iterative refinement
+          happy breakdown tolerance 1e-30
+            Adaptive strategy is used: TRUE
+           Frequency of extracted eigenvalues = 1 using Ritz values 
+           Total number of extracted eigenvalues = 0
+           Maximum number of eigenvalues set to be extracted = 9
+           relaxation parameter for the adaptive strategy(smv)  = 1.
+           Number of matvecs : 6
+        maximum iterations=10000, initial guess is zero
+        tolerances:  relative=0.1, absolute=1e-50, divergence=10000.
+        left preconditioning
+        using PRECONDITIONED norm type for convergence test
+      PC Object: (sub_) 1 MPI processes
+        type: asm
+          total subdomain blocks = 2, amount of overlap = 1
+          restriction/interpolation type - RESTRICT
+          Local solve is same for all blocks, in the following KSP and PC objects:
+          KSP Object: (sub_sub_) 1 MPI processes
+            type: preonly
+            maximum iterations=10000, initial guess is zero
+            tolerances:  relative=1e-05, absolute=1e-50, divergence=10000.
+            left preconditioning
+            using NONE norm type for convergence test
+          PC Object: (sub_sub_) 1 MPI processes
+            type: ilu
+              out-of-place factorization
+              0 levels of fill
+              tolerance for zero pivot 2.22045e-14
+              matrix ordering: natural
+              factor fill ratio given 1., needed 1.
+                Factored matrix follows:
+                  Mat Object: 1 MPI processes
+                    type: seqaij
+                    rows=6600, cols=6600
+                    package used to perform factorization: petsc
+                    total: nonzeros=743400, allocated nonzeros=743400
+                    total number of mallocs used during MatSetValues calls =0
+                      not using I-node routines
+            linear system matrix = precond matrix:
+            Mat Object: 1 MPI processes
+              type: seqaij
+              rows=6600, cols=6600
+              total: nonzeros=743400, allocated nonzeros=743400
+              total number of mallocs used during MatSetValues calls =0
+                not using I-node routines
+        linear system matrix = precond matrix:
+        Mat Object: 1 MPI processes
+          type: seqaij
+          rows=12100, cols=12100
+          total: nonzeros=1392400, allocated nonzeros=1392400
+          total number of mallocs used during MatSetValues calls =0
+            not using I-node routines
+  maximum iterations=10000, maximum function evaluations=10000
+  tolerances: relative=1e-08, absolute=1e-50, solution=1e-08
+  total number of function evaluations=40
+  norm schedule ALWAYS
+  Jacobian is built using a DMDA local Jacobian
+*Problem: ex1 on domain [-1.00,1.00]x[-1.00,1.00] with 200x200 point 2D grid
+*Params:  Nd = 4, width = 5, eps = 0.002, op = 0.10
+*Error:   |u-uexact|_inf = 3.975e-04, |u-uexact|_h = 1.450e-04
+*WTime:   27.135062
+*Iters:   Krylov 665, Local SNES 1, Global SNES 39

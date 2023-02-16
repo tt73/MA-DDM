@@ -1,0 +1,120 @@
+Starting /home/t/tt73/.bash_profile ... standard AFS bash profile
+
+========================
+Home directory : /home/t/tt73 is not in AFS -- skipping quota check
+========================
+
+On host node000 :
+	 12:43:26 up 704 days, 18:56,  0 users,  load average: 0.00, 0.01, 0.05
+
+=== === === Your Kerberos ticket and AFS token status === === ===
+klist: No credentials cache found (filename: /tmp/krb5cc_90502_4E4h48N0tj)
+Kerberos : 
+AFS      : 
+
+Loading default modules ...
+Create file : "/home/t/tt73/.modules" to customize.
+
+
+Currently Loaded Modules:
+  1) python/3.8   3) mpich/3.3.1    5) openblas/0.3.7    7) petsc/3.12.0
+  2) gnu8/8.3.0   4) phdf5/1.10.5   6) scalapack/2.0.2
+
+ 
+
+  0 SNES Function norm 3.436650256445e+08 
+  1 SNES Function norm 8.557498177661e+07 
+  2 SNES Function norm 2.138573588858e+07 
+  3 SNES Function norm 5.336922317764e+06 
+  4 SNES Function norm 1.328632485412e+06 
+  5 SNES Function norm 3.315841754071e+05 
+  6 SNES Function norm 8.393372096861e+04 
+  7 SNES Function norm 2.495468651055e+04 
+  8 SNES Function norm 1.626298292892e+04 
+  9 SNES Function norm 1.064176511517e+04 
+ 10 SNES Function norm 5.620340768572e+03 
+ 11 SNES Function norm 4.464966744816e+03 
+ 12 SNES Function norm 3.156054756721e+03 
+ 13 SNES Function norm 2.426019586451e+03 
+ 14 SNES Function norm 2.168619997720e+03 
+ 15 SNES Function norm 1.860856076342e+03 
+ 16 SNES Function norm 1.410912115026e+03 
+ 17 SNES Function norm 9.634695334816e+02 
+ 18 SNES Function norm 6.458405154372e+02 
+ 19 SNES Function norm 4.799597701355e+02 
+ 20 SNES Function norm 2.664429726215e+02 
+ 21 SNES Function norm 2.358905994399e+02 
+ 22 SNES Function norm 2.094871315810e+02 
+ 23 SNES Function norm 1.706022780810e+02 
+ 24 SNES Function norm 5.906340143295e+01 
+ 25 SNES Function norm 4.890907207203e+01 
+ 26 SNES Function norm 9.405660736460e+00 
+ 27 SNES Function norm 2.578838348699e-01 
+SNES Object: 4 MPI processes
+  type: newtonls
+  maximum iterations=1000, maximum function evaluations=10000
+  tolerances: relative=1e-08, absolute=1e-50, solution=1e-08
+  total number of linear solver iterations=583
+  total number of function evaluations=41
+  norm schedule ALWAYS
+  Jacobian is built using a DMDA local Jacobian
+  SNESLineSearch Object: 4 MPI processes
+    type: bt
+      interpolation: quadratic
+      alpha=1.000000e-04
+    maxstep=1.000000e+08, minlambda=1.000000e-12
+    tolerances: relative=1.000000e-08, absolute=1.000000e-15, lambda=1.000000e-08
+    maximum iterations=40
+  KSP Object: 4 MPI processes
+    type: pipefgmres
+      restart=30
+      happy breakdown tolerance 1e-30
+      shift=1.
+    maximum iterations=10000, initial guess is zero
+    tolerances:  relative=1e-05, absolute=1e-50, divergence=10000.
+    right preconditioning
+    using UNPRECONDITIONED norm type for convergence test
+  PC Object: 4 MPI processes
+    type: asm
+      total subdomain blocks = 4, amount of overlap = 10
+      restriction/interpolation type - RESTRICT
+      Local solve is same for all blocks, in the following KSP and PC objects:
+    KSP Object: (sub_) 1 MPI processes
+      type: preonly
+      maximum iterations=10000, initial guess is zero
+      tolerances:  relative=1e-05, absolute=1e-50, divergence=10000.
+      left preconditioning
+      using NONE norm type for convergence test
+    PC Object: (sub_) 1 MPI processes
+      type: ilu
+        out-of-place factorization
+        0 levels of fill
+        tolerance for zero pivot 2.22045e-14
+        matrix ordering: natural
+        factor fill ratio given 1., needed 1.
+          Factored matrix follows:
+            Mat Object: 1 MPI processes
+              type: seqaij
+              rows=22500, cols=22500
+              package used to perform factorization: petsc
+              total: nonzeros=2624400, allocated nonzeros=2624400
+              total number of mallocs used during MatSetValues calls =0
+                not using I-node routines
+      linear system matrix = precond matrix:
+      Mat Object: 1 MPI processes
+        type: seqaij
+        rows=22500, cols=22500
+        total: nonzeros=2624400, allocated nonzeros=2624400
+        total number of mallocs used during MatSetValues calls =0
+          not using I-node routines
+    linear system matrix = precond matrix:
+    Mat Object: 4 MPI processes
+      type: mpiaij
+      rows=40000, cols=40000
+      total: nonzeros=4708900, allocated nonzeros=4708900
+      total number of mallocs used during MatSetValues calls =0
+*Problem: ex1 on domain [-1.00,1.00]x[-1.00,1.00] with 200x200 point 2D grid
+*Params:  Nd = 4, width = 5, eps = 0.002, op = 0.10
+*Error:   |u-uexact|_inf = 9.267e-04, |u-uexact|_h = 5.259e-04
+*WTime:   16.560498
+*Iters:   Krylov 583, Local SNES 0, Global SNES 27
