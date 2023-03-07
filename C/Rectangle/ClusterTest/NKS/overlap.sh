@@ -16,7 +16,7 @@ rm -f overlap.out
 
 N=200
 np=4
-for op in {0.0,0.05,0.10,0.15,0.20,0.25}
+for op in {0.0,0.05,0.10,0.15,0.20,0.25,0.30}
 do
    printf "overlap = $op\n" >> overlap.out
    mpirun ../../maddm -N $N -op $op -problem ex1 -nks >> overlap.out

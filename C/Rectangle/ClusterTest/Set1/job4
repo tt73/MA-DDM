@@ -1,0 +1,40 @@
+#!/bin/bash -l
+## This is the overlap percentage test.
+## Using mesh size 100x100
+
+
+## NAMING
+#SBATCH -J j4
+#SBATCH -p public
+#SBATCH -o slurmout1
+#SBATCH -e slurmout1
+
+## partition/queue
+#SBATCH -p dms-cpu
+
+## EMAIL NOTIFICATION
+#SBATCH --mail-user tt73@njit.edu
+##SBATCH --mail-type=END ## don't need this
+#SBATCH -A tt73
+
+## RUNTIME HOURS:MIN:SEC and MEMORY
+#SBATCH -t 8:0:0
+#SBATCH --mem=16G
+#SBATCH -N 4
+#SBATCH --ntasks-per-node 1
+#SBATCH --exclusive
+
+module load gnu8 mpich petsc/3.12.0
+
+rm -f out4
+
+N=100
+np=4
+for op in {0.0,0.05,0.10,0.15,0.20,0.25,0.30,0.35,.40,.45,.50}
+do
+   printf "overlap = $op\n" >> out4
+   mpiexec -np $np ../../maddm -N $N -op $op -sin -problem ex1 >> out4
+   mpiexec -np $np ../../maddm -N $N -op $op -sin -problem ex2 >> out4
+   mpiexec -np $np ../../maddm -N $N -op $op -sin -problem ex3 >> out4
+   mpiexec -np $np ../../maddm -N $N -op $op -sin -problem ex4 >> out4
+done

@@ -15,3 +15,7 @@ mv load_exact.m load_exact2.m
 mv load_u.m load_u3.m
 mv load_exact.m load_exact3.m
 
+../maddm -N $N -problem ex4 -sol
+mv load_u.m load_u4.m
+mv load_exact.m load_exact4.m
+
