@@ -5,6 +5,10 @@
 
    Compile this code with the makefile. Run with `./maddm`.
    You can type  `./maddm -help | grep maddm` to see the options for this code.
+
+   On the Stheno cluster type `module load gnu8 mpich petsc/3.12.0` to
+   load up the necessary modules. Then type `make maddm` to compile.
+
 */
 static char help[] = "Solve the Monge-Ampere equation for one of three example problems in 1D or 2D using a wide-stencil discretization scheme on a rectangular grid.\n\n";
 
@@ -167,6 +171,42 @@ PetscErrorCode f_rhs_ex4(PetscReal x, PetscReal y, PetscReal z, void *ctx, Petsc
    return 0;
 }
 
+/* Problem 5 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+   Solution    u(x,y) = max{ sqrt{x^2+y^2} - 1/5, 0}^(5/2),            for x in R2
+   RHS: (3/8) * max{-1 + 5 * sqrt{x^2+y^2}, 0}^2 / sqrt(x^2+y^2)
+   Defualt domain: [-1,1]^2
+   It has a symmetric bowl shape with a flat bottom near x=0.
+   1D and 3D are not supported.
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+PetscErrorCode u_exact_1D_ex5(PetscReal x, PetscReal y, PetscReal z, void *ctx, PetscReal * u) {
+   // unsupported
+   return 0;
+}
+PetscErrorCode u_exact_2D_ex5(PetscReal x, PetscReal y, PetscReal z, void *ctx, PetscReal * u) {
+   // PetscReal temp = -PetscSqrtReal(2.0 - x*x - y*y);
+   // u[0] = PetscIsInfOrNanScalar(temp) ? 0.0 : temp;
+   u[0] = PetscPowReal(PetscMax(PetscSqrtReal(x*x+y*y)-0.2,0), 2.5);
+   return 0;
+}
+PetscErrorCode u_exact_3D_ex5(PetscReal x, PetscReal y, PetscReal z, void *ctx, PetscReal * u) {
+   // unsupported
+   return 0;
+}
+PetscErrorCode f_rhs_1D_ex5(PetscReal x, PetscReal y, PetscReal z, void *ctx, PetscReal * f) {
+   // unsupported
+   return 0;
+}
+PetscErrorCode f_rhs_2D_ex5(PetscReal x, PetscReal y, PetscReal z, void *ctx, PetscReal * f) {
+   PetscReal temp1 = PetscSqrtReal(x*x+y*y);
+   PetscReal temp2 = 0.375*PetscPowReal(PetscMax(-1.0+5.0*temp1,0),2);
+   f[0] = PetscIsInfOrNanScalar(temp2/temp1) ? 0.0 : temp2/temp1;  // for safety... avoid division by zero
+   return 0;
+}
+PetscErrorCode f_rhs_3D_ex5(PetscReal x, PetscReal y, PetscReal z, void *ctx, PetscReal * f) {
+   // unsupported
+   return 0;
+}
+
 
 // arrays of pointers to functions
 static DMDASNESFunction residual_ptr[3]
@@ -184,20 +224,20 @@ typedef PetscErrorCode (*ExactFcnVec)(DMDALocalInfo*,Vec,MACtx*);
 static ExactFcnVec getuexact_ptr[3] = {&Form1DUExact, &Form2DUExact, &Form3DUExact};
 
 typedef enum {ex1, ex2, ex3, ex4} ProblemType;
-static const char* ProblemTypes[] = {"ex1","ex2","ex3","ex4","ex2c","ProblemType","", NULL};
+static const char* ProblemTypes[] = {"ex1","ex2","ex3","ex4","ex2c","ex5","ProblemType","", NULL};
 
 // more arrays of pointers to functions:   ..._ptr[DIMS][PROBLEMS]
 typedef PetscErrorCode (*PointwiseFcn)(PetscReal,PetscReal,PetscReal,void*,PetscReal*);
 
-static PointwiseFcn g_bdry_ptr[3][5]
-    = {{&u_exact_1D_ex1, &u_exact_1D_ex2, &u_exact_1D_ex3, &u_exact_1D_ex4, &u_exact_1D_ex2c},
-       {&u_exact_2D_ex1, &u_exact_2D_ex2, &u_exact_2D_ex3, &u_exact_2D_ex4, &u_exact_2D_ex2c},
-       {&u_exact_3D_ex1, &u_exact_3D_ex2, &u_exact_3D_ex3, &u_exact_3D_ex4, &u_exact_3D_ex2c}};
+static PointwiseFcn g_bdry_ptr[3][6]
+    = {{&u_exact_1D_ex1, &u_exact_1D_ex2, &u_exact_1D_ex3, &u_exact_1D_ex4, &u_exact_1D_ex2c, &u_exact_1D_ex5},
+       {&u_exact_2D_ex1, &u_exact_2D_ex2, &u_exact_2D_ex3, &u_exact_2D_ex4, &u_exact_2D_ex2c, &u_exact_2D_ex5},
+       {&u_exact_3D_ex1, &u_exact_3D_ex2, &u_exact_3D_ex3, &u_exact_3D_ex4, &u_exact_3D_ex2c, &u_exact_3D_ex5}};
 
-static PointwiseFcn f_rhs_ptr[3][5]
-    = {{&f_rhs_1D_ex1, &f_rhs_1D_ex2, &f_rhs_1D_ex3, &f_rhs_ex4, &f_rhs_1D_ex2c},
-       {&f_rhs_2D_ex1, &f_rhs_2D_ex2, &f_rhs_2D_ex3, &f_rhs_ex4, &f_rhs_2D_ex2c},
-       {&f_rhs_3D_ex1, &f_rhs_3D_ex2, &f_rhs_3D_ex3, &f_rhs_ex4, &f_rhs_3D_ex2c}};
+static PointwiseFcn f_rhs_ptr[3][6]
+    = {{&f_rhs_1D_ex1, &f_rhs_1D_ex2, &f_rhs_1D_ex3, &f_rhs_ex4, &f_rhs_1D_ex2c, &f_rhs_1D_ex5},
+       {&f_rhs_2D_ex1, &f_rhs_2D_ex2, &f_rhs_2D_ex3, &f_rhs_ex4, &f_rhs_2D_ex2c, &f_rhs_2D_ex5},
+       {&f_rhs_3D_ex1, &f_rhs_3D_ex2, &f_rhs_3D_ex3, &f_rhs_ex4, &f_rhs_3D_ex2c, &f_rhs_3D_ex5}};
 
 static const char* InitialTypes[] = {"zeros","random","corner","pyramid","InitialType","", NULL};
 
