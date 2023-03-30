@@ -1,0 +1,35 @@
+*Problem: ex5 on domain [-1.00,1.00]x[-1.00,1.00] with 200x200 point 2D grid
+*Params:  Nd = 9, width = 5, eps = 0.002, op = 0.05
+*Error:   |u-uexact|_inf = 8.710e-04, |u-uexact|_h = 3.756e-04
+*WTime:   9.747169
+*Iters:   Krylov 743, Local SNES 1, Global SNES 216
+*Problem: ex5 on domain [-1.00,1.00]x[-1.00,1.00] with 200x200 point 2D grid
+*Params:  Nd = 9, width = 5, eps = 0.002, op = 0.10
+*Error:   |u-uexact|_inf = 1.010e-03, |u-uexact|_h = 4.421e-04
+*WTime:   8.311829
+*Iters:   Krylov 637, Local SNES 1, Global SNES 166
+*Problem: ex5 on domain [-1.00,1.00]x[-1.00,1.00] with 200x200 point 2D grid
+*Params:  Nd = 9, width = 5, eps = 0.002, op = 0.15
+*Error:   |u-uexact|_inf = 1.063e-03, |u-uexact|_h = 4.315e-04
+*WTime:   7.932357
+*Iters:   Krylov 626, Local SNES 1, Global SNES 145
+*Problem: ex5 on domain [-1.00,1.00]x[-1.00,1.00] with 200x200 point 2D grid
+*Params:  Nd = 9, width = 5, eps = 0.002, op = 0.20
+*Error:   |u-uexact|_inf = 1.033e-03, |u-uexact|_h = 4.357e-04
+*WTime:   8.463640
+*Iters:   Krylov 586, Local SNES 1, Global SNES 135
+*Problem: ex5 on domain [-1.00,1.00]x[-1.00,1.00] with 200x200 point 2D grid
+*Params:  Nd = 9, width = 5, eps = 0.002, op = 0.25
+*Error:   |u-uexact|_inf = 1.146e-03, |u-uexact|_h = 4.482e-04
+*WTime:   9.740526
+*Iters:   Krylov 570, Local SNES 1, Global SNES 130
+*Problem: ex5 on domain [-1.00,1.00]x[-1.00,1.00] with 200x200 point 2D grid
+*Params:  Nd = 9, width = 5, eps = 0.002, op = 0.30
+*Error:   |u-uexact|_inf = 9.989e-04, |u-uexact|_h = 4.478e-04
+*WTime:   10.106987
+*Iters:   Krylov 532, Local SNES 1, Global SNES 125
+*Problem: ex5 on domain [-1.00,1.00]x[-1.00,1.00] with 200x200 point 2D grid
+*Params:  Nd = 9, width = 5, eps = 0.002, op = 0.35
+*Error:   |u-uexact|_inf = 1.034e-03, |u-uexact|_h = 4.439e-04
+*WTime:   11.305023
+*Iters:   Krylov 549, Local SNES 1, Global SNES 121

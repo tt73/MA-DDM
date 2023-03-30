@@ -1,7 +1,7 @@
 import numpy as np
 import subprocess
 
-nps = np.array([2,4,6,8,9])
+nps = np.array([2,4,9])
 
 # loop to create job files
 for i in range(len(nps)):
@@ -21,11 +21,9 @@ for i in range(len(nps)):
    f.write("#SBATCH --ntasks-per-node 1\n")
    f.write("module load gnu8 mpich petsc/3.12.0\n")
 
-   f.write("N=300\n")
-   f.fwrite()
-   f.write("   mpirun ../../maddm -N $N -problem ex1 -htn >> out{:d}\n".format(nps[i]))
-   f.write("   mpirun ../../maddm -N $N -problem ex2 -htn >> out{:d}\n".format(nps[i]))
-   f.write("   mpirun ../../maddm -N $N -problem ex3 -htn >> out{:d}\n".format(nps[i]))
-   f.write("   mpirun ../../maddm -N $N -problem ex4 -htn >> out{:d}\n".format(nps[i]))
+   f.write("N=450\n")
+   f.write("rm -f out{:d}\n".format(nps[i]))
+   f.write("mpiexec -np {:d} ../../maddm -N $N -problem ex5 -htn -op 0.10 -sub_snes_rtol 1e-2 >> out{:d}\n".format(nps[i],nps[i]))
+   # f.write("mpiexec -np {:d} ../../maddm -N $N -problem ex5 -sin -op 0.10 >> out{:d}\n".format(nps[i],nps[i]))
+   f.write("mpiexec -np {:d} ../../maddm -N $N -problem ex5 -nks -op 0 -ksp_rtol 1e-2 >> out{:d}\n".format(nps[i],nps[i]))
    f.close()
-

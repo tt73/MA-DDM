@@ -1,0 +1,25 @@
+#!/bin/bash -l
+#SBATCH -J opt9
+#SBATCH -p public
+#SBATCH -o slurmout9
+#SBATCH -p dms-cpu
+#SBATCH --mail-user tt73@njit.edu
+#SBATCH -A tt73
+#SBATCH -t 8:0:0
+#SBATCH --mem=16G
+#SBATCH --nodes 9
+#SBATCH --ntasks 9
+#SBATCH --ntasks-per-node 1
+module load gnu8 mpich petsc/3.12.0
+N=450
+file=out9htn
+rm -f $file
+
+for ntol in {1e-2,1e-3}
+do
+   for op in {0.05,0.10,0.15,0.20,0.25}
+   do
+      printf "Running: [mpiexec -np 2 ../../maddm -htn -N $N -op $op -problem ex5 -sub_ksp_rtol 1e-1 -sub_snes_rtol $ntol -snes_converged_reason -snes_max_it 100]\n" >> $file
+      mpiexec -np 2 ../../maddm -htn -N $N -op $op -problem ex5 -sub_ksp_rtol 1e-1 -sub_snes_rtol $ntol -snes_converged_reason -snes_max_it 100 >> $file
+   done
+done

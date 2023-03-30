@@ -1,126 +1,253 @@
-Running: mpiexec -np 4 ../../maddm -htn -N 400 -op 0.05 -problem ex1 -xmin -2.0 -xmax 2.0 -ymin -2.0 -ymax 2.0 -sub_ksp_rtol 1e-1 -sub_snes_rtol 1e-2 -snes_converged_reason -snes_max_it 1000
-Nonlinear solve converged due to CONVERGED_FNORM_RELATIVE iterations 107
-*Problem: ex1 on domain [-2.00,2.00]x[-2.00,2.00] with 400x400 point 2D grid
+Running: mpiexec -np 4 ../../maddm -htn -N 400 -op 0.05 -problem ex5 -xmin -2.0 -xmax 2.0 -ymin -2.0 -ymax 2.0 -sub_ksp_rtol 1e-1 -sub_snes_rtol 1e-1 -snes_converged_reason -snes_max_it 1000
+Nonlinear solve converged due to CONVERGED_FNORM_RELATIVE iterations 113
+*Problem: ex5 on domain [-2.00,2.00]x[-2.00,2.00] with 400x400 point 2D grid
 *Params:  Nd = 4, width = 5, eps = 0.002, op = 0.05
-*Error:   |u-uexact|_inf = 4.762e-01, |u-uexact|_h = 1.262e-01
-*WTime:   1566.692418
-*Iters:   Krylov 29332, Local SNES 12, Global SNES 107
-Running: mpiexec -np 4 ../../maddm -htn -N 400 -op 0.10 -problem ex1 -xmin -2.0 -xmax 2.0 -ymin -2.0 -ymax 2.0 -sub_ksp_rtol 1e-1 -sub_snes_rtol 1e-2 -snes_converged_reason -snes_max_it 1000
-Nonlinear solve converged due to CONVERGED_FNORM_RELATIVE iterations 89
-*Problem: ex1 on domain [-2.00,2.00]x[-2.00,2.00] with 400x400 point 2D grid
+*Error:   |u-uexact|_inf = 3.047e-02, |u-uexact|_h = 8.357e-03
+*WTime:   181.143586
+*Iters:   Krylov 3790, Local SNES 2, Global SNES 113
+Running: mpiexec -np 4 ../../maddm -htn -N 400 -op 0.10 -problem ex5 -xmin -2.0 -xmax 2.0 -ymin -2.0 -ymax 2.0 -sub_ksp_rtol 1e-1 -sub_snes_rtol 1e-1 -snes_converged_reason -snes_max_it 1000
+Nonlinear solve converged due to CONVERGED_FNORM_RELATIVE iterations 75
+*Problem: ex5 on domain [-2.00,2.00]x[-2.00,2.00] with 400x400 point 2D grid
 *Params:  Nd = 4, width = 5, eps = 0.002, op = 0.10
-*Error:   |u-uexact|_inf = 3.444e-01, |u-uexact|_h = 9.034e-02
-*WTime:   1548.118667
-*Iters:   Krylov 27808, Local SNES 10, Global SNES 89
-Running: mpiexec -np 4 ../../maddm -htn -N 400 -op 0.05 -problem ex1 -xmin -2.0 -xmax 2.0 -ymin -2.0 -ymax 2.0 -sub_ksp_rtol 1e-2 -sub_snes_rtol 1e-2 -snes_converged_reason -snes_max_it 1000
-Nonlinear solve converged due to CONVERGED_FNORM_RELATIVE iterations 82
-*Problem: ex1 on domain [-2.00,2.00]x[-2.00,2.00] with 400x400 point 2D grid
-*Params:  Nd = 4, width = 5, eps = 0.002, op = 0.05
-*Error:   |u-uexact|_inf = 4.926e-01, |u-uexact|_h = 1.303e-01
-*WTime:   1608.986013
-*Iters:   Krylov 49263, Local SNES 8, Global SNES 82
-Running: mpiexec -np 4 ../../maddm -htn -N 400 -op 0.10 -problem ex1 -xmin -2.0 -xmax 2.0 -ymin -2.0 -ymax 2.0 -sub_ksp_rtol 1e-2 -sub_snes_rtol 1e-2 -snes_converged_reason -snes_max_it 1000
-Nonlinear solve converged due to CONVERGED_FNORM_RELATIVE iterations 61
-*Problem: ex1 on domain [-2.00,2.00]x[-2.00,2.00] with 400x400 point 2D grid
-*Params:  Nd = 4, width = 5, eps = 0.002, op = 0.10
-*Error:   |u-uexact|_inf = 3.864e-01, |u-uexact|_h = 1.024e-01
-*WTime:   1492.767448
-*Iters:   Krylov 42542, Local SNES 8, Global SNES 61
-Running: mpiexec -np 4 ../../maddm -htn -N 400 -op 0.05 -problem ex1 -xmin -2.0 -xmax 2.0 -ymin -2.0 -ymax 2.0 -sub_ksp_rtol 1e-3 -sub_snes_rtol 1e-2 -snes_converged_reason -snes_max_it 1000
-Nonlinear solve converged due to CONVERGED_FNORM_RELATIVE iterations 66
-*Problem: ex1 on domain [-2.00,2.00]x[-2.00,2.00] with 400x400 point 2D grid
-*Params:  Nd = 4, width = 5, eps = 0.002, op = 0.05
-*Error:   |u-uexact|_inf = 4.560e-01, |u-uexact|_h = 1.201e-01
-*WTime:   1776.177834
-*Iters:   Krylov 69266, Local SNES 8, Global SNES 66
-Running: mpiexec -np 4 ../../maddm -htn -N 400 -op 0.10 -problem ex1 -xmin -2.0 -xmax 2.0 -ymin -2.0 -ymax 2.0 -sub_ksp_rtol 1e-3 -sub_snes_rtol 1e-2 -snes_converged_reason -snes_max_it 1000
-Nonlinear solve converged due to CONVERGED_FNORM_RELATIVE iterations 51
-*Problem: ex1 on domain [-2.00,2.00]x[-2.00,2.00] with 400x400 point 2D grid
-*Params:  Nd = 4, width = 5, eps = 0.002, op = 0.10
-*Error:   |u-uexact|_inf = 2.476e-01, |u-uexact|_h = 6.394e-02
-*WTime:   1942.972922
-*Iters:   Krylov 71955, Local SNES 16, Global SNES 51
-Running: mpiexec -np 4 ../../maddm -htn -N 400 -op 0.05 -problem ex1 -xmin -2.0 -xmax 2.0 -ymin -2.0 -ymax 2.0 -sub_ksp_rtol 1e-1 -sub_snes_rtol 1e-3 -snes_converged_reason -snes_max_it 1000
-Nonlinear solve converged due to CONVERGED_FNORM_RELATIVE iterations 99
-*Problem: ex1 on domain [-2.00,2.00]x[-2.00,2.00] with 400x400 point 2D grid
-*Params:  Nd = 4, width = 5, eps = 0.002, op = 0.05
-*Error:   |u-uexact|_inf = 3.772e-01, |u-uexact|_h = 9.805e-02
-*WTime:   1477.982237
-*Iters:   Krylov 27584, Local SNES 9, Global SNES 99
-Running: mpiexec -np 4 ../../maddm -htn -N 400 -op 0.10 -problem ex1 -xmin -2.0 -xmax 2.0 -ymin -2.0 -ymax 2.0 -sub_ksp_rtol 1e-1 -sub_snes_rtol 1e-3 -snes_converged_reason -snes_max_it 1000
-Nonlinear solve converged due to CONVERGED_FNORM_RELATIVE iterations 104
-*Problem: ex1 on domain [-2.00,2.00]x[-2.00,2.00] with 400x400 point 2D grid
-*Params:  Nd = 4, width = 5, eps = 0.002, op = 0.10
-*Error:   |u-uexact|_inf = 1.998e-01, |u-uexact|_h = 5.089e-02
-*WTime:   1854.715948
-*Iters:   Krylov 31939, Local SNES 14, Global SNES 104
-Running: mpiexec -np 4 ../../maddm -htn -N 400 -op 0.05 -problem ex1 -xmin -2.0 -xmax 2.0 -ymin -2.0 -ymax 2.0 -sub_ksp_rtol 1e-2 -sub_snes_rtol 1e-3 -snes_converged_reason -snes_max_it 1000
-Nonlinear solve converged due to CONVERGED_FNORM_RELATIVE iterations 60
-*Problem: ex1 on domain [-2.00,2.00]x[-2.00,2.00] with 400x400 point 2D grid
-*Params:  Nd = 4, width = 5, eps = 0.002, op = 0.05
-*Error:   |u-uexact|_inf = 4.409e-01, |u-uexact|_h = 1.158e-01
-*WTime:   1115.474109
-*Iters:   Krylov 34683, Local SNES 10, Global SNES 60
-Running: mpiexec -np 4 ../../maddm -htn -N 400 -op 0.10 -problem ex1 -xmin -2.0 -xmax 2.0 -ymin -2.0 -ymax 2.0 -sub_ksp_rtol 1e-2 -sub_snes_rtol 1e-3 -snes_converged_reason -snes_max_it 1000
-Nonlinear solve converged due to CONVERGED_FNORM_RELATIVE iterations 52
-*Problem: ex1 on domain [-2.00,2.00]x[-2.00,2.00] with 400x400 point 2D grid
-*Params:  Nd = 4, width = 5, eps = 0.002, op = 0.10
-*Error:   |u-uexact|_inf = 2.439e-01, |u-uexact|_h = 6.232e-02
-*WTime:   1312.569410
-*Iters:   Krylov 39053, Local SNES 11, Global SNES 52
-Running: mpiexec -np 4 ../../maddm -htn -N 400 -op 0.05 -problem ex1 -xmin -2.0 -xmax 2.0 -ymin -2.0 -ymax 2.0 -sub_ksp_rtol 1e-3 -sub_snes_rtol 1e-3 -snes_converged_reason -snes_max_it 1000
-Nonlinear solve converged due to CONVERGED_FNORM_RELATIVE iterations 42
-*Problem: ex1 on domain [-2.00,2.00]x[-2.00,2.00] with 400x400 point 2D grid
-*Params:  Nd = 4, width = 5, eps = 0.002, op = 0.05
-*Error:   |u-uexact|_inf = 4.720e-01, |u-uexact|_h = 1.246e-01
-*WTime:   988.742930
-*Iters:   Krylov 37037, Local SNES 9, Global SNES 42
-Running: mpiexec -np 4 ../../maddm -htn -N 400 -op 0.10 -problem ex1 -xmin -2.0 -xmax 2.0 -ymin -2.0 -ymax 2.0 -sub_ksp_rtol 1e-3 -sub_snes_rtol 1e-3 -snes_converged_reason -snes_max_it 1000
-Nonlinear solve converged due to CONVERGED_FNORM_RELATIVE iterations 34
-*Problem: ex1 on domain [-2.00,2.00]x[-2.00,2.00] with 400x400 point 2D grid
-*Params:  Nd = 4, width = 5, eps = 0.002, op = 0.10
-*Error:   |u-uexact|_inf = 2.903e-01, |u-uexact|_h = 7.526e-02
-*WTime:   1210.962034
-*Iters:   Krylov 42548, Local SNES 11, Global SNES 34
-Running: mpiexec -np 4 ../../maddm -htn -N 400 -op 0.05 -problem ex1 -xmin -2.0 -xmax 2.0 -ymin -2.0 -ymax 2.0 -sub_ksp_rtol 1e-1 -sub_snes_rtol 1e-4 -snes_converged_reason -snes_max_it 1000
-Nonlinear solve converged due to CONVERGED_FNORM_RELATIVE iterations 95
-*Problem: ex1 on domain [-2.00,2.00]x[-2.00,2.00] with 400x400 point 2D grid
-*Params:  Nd = 4, width = 5, eps = 0.002, op = 0.05
-*Error:   |u-uexact|_inf = 4.674e-01, |u-uexact|_h = 1.233e-01
-*WTime:   1375.064950
-*Iters:   Krylov 26992, Local SNES 12, Global SNES 95
-Running: mpiexec -np 4 ../../maddm -htn -N 400 -op 0.10 -problem ex1 -xmin -2.0 -xmax 2.0 -ymin -2.0 -ymax 2.0 -sub_ksp_rtol 1e-1 -sub_snes_rtol 1e-4 -snes_converged_reason -snes_max_it 1000
-Nonlinear solve converged due to CONVERGED_FNORM_RELATIVE iterations 89
-*Problem: ex1 on domain [-2.00,2.00]x[-2.00,2.00] with 400x400 point 2D grid
-*Params:  Nd = 4, width = 5, eps = 0.002, op = 0.10
-*Error:   |u-uexact|_inf = 2.806e-01, |u-uexact|_h = 7.243e-02
-*WTime:   1603.201949
-*Iters:   Krylov 28491, Local SNES 16, Global SNES 89
-Running: mpiexec -np 4 ../../maddm -htn -N 400 -op 0.05 -problem ex1 -xmin -2.0 -xmax 2.0 -ymin -2.0 -ymax 2.0 -sub_ksp_rtol 1e-2 -sub_snes_rtol 1e-4 -snes_converged_reason -snes_max_it 1000
-Nonlinear solve converged due to CONVERGED_FNORM_RELATIVE iterations 60
-*Problem: ex1 on domain [-2.00,2.00]x[-2.00,2.00] with 400x400 point 2D grid
-*Params:  Nd = 4, width = 5, eps = 0.002, op = 0.05
-*Error:   |u-uexact|_inf = 4.277e-01, |u-uexact|_h = 1.122e-01
-*WTime:   1103.954039
-*Iters:   Krylov 32221, Local SNES 11, Global SNES 60
-Running: mpiexec -np 4 ../../maddm -htn -N 400 -op 0.10 -problem ex1 -xmin -2.0 -xmax 2.0 -ymin -2.0 -ymax 2.0 -sub_ksp_rtol 1e-2 -sub_snes_rtol 1e-4 -snes_converged_reason -snes_max_it 1000
-Nonlinear solve converged due to CONVERGED_FNORM_RELATIVE iterations 46
-*Problem: ex1 on domain [-2.00,2.00]x[-2.00,2.00] with 400x400 point 2D grid
-*Params:  Nd = 4, width = 5, eps = 0.002, op = 0.10
-*Error:   |u-uexact|_inf = 3.695e-01, |u-uexact|_h = 9.748e-02
-*WTime:   1099.567024
-*Iters:   Krylov 31524, Local SNES 15, Global SNES 46
-Running: mpiexec -np 4 ../../maddm -htn -N 400 -op 0.05 -problem ex1 -xmin -2.0 -xmax 2.0 -ymin -2.0 -ymax 2.0 -sub_ksp_rtol 1e-3 -sub_snes_rtol 1e-4 -snes_converged_reason -snes_max_it 1000
+*Error:   |u-uexact|_inf = 1.772e-02, |u-uexact|_h = 4.798e-03
+*WTime:   156.993865
+*Iters:   Krylov 3069, Local SNES 2, Global SNES 75
+Running: mpiexec -np 4 ../../maddm -htn -N 400 -op 0.15 -problem ex5 -xmin -2.0 -xmax 2.0 -ymin -2.0 -ymax 2.0 -sub_ksp_rtol 1e-1 -sub_snes_rtol 1e-1 -snes_converged_reason -snes_max_it 1000
+Nonlinear solve converged due to CONVERGED_FNORM_RELATIVE iterations 56
+*Problem: ex5 on domain [-2.00,2.00]x[-2.00,2.00] with 400x400 point 2D grid
+*Params:  Nd = 4, width = 5, eps = 0.002, op = 0.15
+*Error:   |u-uexact|_inf = 8.818e-04, |u-uexact|_h = 2.815e-04
+*WTime:   138.562971
+*Iters:   Krylov 2665, Local SNES 3, Global SNES 56
+Running: mpiexec -np 4 ../../maddm -htn -N 400 -op 0.20 -problem ex5 -xmin -2.0 -xmax 2.0 -ymin -2.0 -ymax 2.0 -sub_ksp_rtol 1e-1 -sub_snes_rtol 1e-1 -snes_converged_reason -snes_max_it 1000
+Nonlinear solve converged due to CONVERGED_FNORM_RELATIVE iterations 49
+*Problem: ex5 on domain [-2.00,2.00]x[-2.00,2.00] with 400x400 point 2D grid
+*Params:  Nd = 4, width = 5, eps = 0.002, op = 0.20
+*Error:   |u-uexact|_inf = 2.103e-03, |u-uexact|_h = 3.513e-04
+*WTime:   127.655452
+*Iters:   Krylov 2303, Local SNES 2, Global SNES 49
+Running: mpiexec -np 4 ../../maddm -htn -N 400 -op 0.25 -problem ex5 -xmin -2.0 -xmax 2.0 -ymin -2.0 -ymax 2.0 -sub_ksp_rtol 1e-1 -sub_snes_rtol 1e-1 -snes_converged_reason -snes_max_it 1000
 Nonlinear solve converged due to CONVERGED_FNORM_RELATIVE iterations 43
-*Problem: ex1 on domain [-2.00,2.00]x[-2.00,2.00] with 400x400 point 2D grid
+*Problem: ex5 on domain [-2.00,2.00]x[-2.00,2.00] with 400x400 point 2D grid
+*Params:  Nd = 4, width = 5, eps = 0.002, op = 0.25
+*Error:   |u-uexact|_inf = 1.079e-03, |u-uexact|_h = 2.580e-04
+*WTime:   137.575392
+*Iters:   Krylov 2394, Local SNES 4, Global SNES 43
+Running: mpiexec -np 4 ../../maddm -htn -N 400 -op 0.30 -problem ex5 -xmin -2.0 -xmax 2.0 -ymin -2.0 -ymax 2.0 -sub_ksp_rtol 1e-1 -sub_snes_rtol 1e-1 -snes_converged_reason -snes_max_it 1000
+Nonlinear solve converged due to CONVERGED_FNORM_RELATIVE iterations 42
+*Problem: ex5 on domain [-2.00,2.00]x[-2.00,2.00] with 400x400 point 2D grid
+*Params:  Nd = 4, width = 5, eps = 0.002, op = 0.30
+*Error:   |u-uexact|_inf = 1.115e-03, |u-uexact|_h = 3.432e-04
+*WTime:   137.532127
+*Iters:   Krylov 2049, Local SNES 2, Global SNES 42
+Running: mpiexec -np 4 ../../maddm -htn -N 400 -op 0.35 -problem ex5 -xmin -2.0 -xmax 2.0 -ymin -2.0 -ymax 2.0 -sub_ksp_rtol 1e-1 -sub_snes_rtol 1e-1 -snes_converged_reason -snes_max_it 1000
+Nonlinear solve converged due to CONVERGED_FNORM_RELATIVE iterations 49
+*Problem: ex5 on domain [-2.00,2.00]x[-2.00,2.00] with 400x400 point 2D grid
+*Params:  Nd = 4, width = 5, eps = 0.002, op = 0.35
+*Error:   |u-uexact|_inf = 1.135e-03, |u-uexact|_h = 3.072e-04
+*WTime:   156.152746
+*Iters:   Krylov 2406, Local SNES 2, Global SNES 49
+Running: mpiexec -np 4 ../../maddm -htn -N 400 -op 0.40 -problem ex5 -xmin -2.0 -xmax 2.0 -ymin -2.0 -ymax 2.0 -sub_ksp_rtol 1e-1 -sub_snes_rtol 1e-1 -snes_converged_reason -snes_max_it 1000
+Nonlinear solve converged due to CONVERGED_FNORM_RELATIVE iterations 41
+*Problem: ex5 on domain [-2.00,2.00]x[-2.00,2.00] with 400x400 point 2D grid
+*Params:  Nd = 4, width = 5, eps = 0.002, op = 0.40
+*Error:   |u-uexact|_inf = 2.873e-03, |u-uexact|_h = 7.454e-04
+*WTime:   132.313763
+*Iters:   Krylov 1965, Local SNES 2, Global SNES 41
+Running: mpiexec -np 4 ../../maddm -htn -N 400 -op 0.45 -problem ex5 -xmin -2.0 -xmax 2.0 -ymin -2.0 -ymax 2.0 -sub_ksp_rtol 1e-1 -sub_snes_rtol 1e-1 -snes_converged_reason -snes_max_it 1000
+Nonlinear solve converged due to CONVERGED_FNORM_RELATIVE iterations 41
+*Problem: ex5 on domain [-2.00,2.00]x[-2.00,2.00] with 400x400 point 2D grid
+*Params:  Nd = 4, width = 5, eps = 0.002, op = 0.45
+*Error:   |u-uexact|_inf = 1.808e-03, |u-uexact|_h = 3.061e-04
+*WTime:   177.451134
+*Iters:   Krylov 2087, Local SNES 3, Global SNES 41
+Running: mpiexec -np 4 ../../maddm -htn -N 400 -op 0.05 -problem ex5 -xmin -2.0 -xmax 2.0 -ymin -2.0 -ymax 2.0 -sub_ksp_rtol 1e-2 -sub_snes_rtol 1e-1 -snes_converged_reason -snes_max_it 1000
+Nonlinear solve converged due to CONVERGED_FNORM_RELATIVE iterations 75
+*Problem: ex5 on domain [-2.00,2.00]x[-2.00,2.00] with 400x400 point 2D grid
 *Params:  Nd = 4, width = 5, eps = 0.002, op = 0.05
-*Error:   |u-uexact|_inf = 5.023e-01, |u-uexact|_h = 1.337e-01
-*WTime:   1052.709417
-*Iters:   Krylov 41354, Local SNES 12, Global SNES 43
-Running: mpiexec -np 4 ../../maddm -htn -N 400 -op 0.10 -problem ex1 -xmin -2.0 -xmax 2.0 -ymin -2.0 -ymax 2.0 -sub_ksp_rtol 1e-3 -sub_snes_rtol 1e-4 -snes_converged_reason -snes_max_it 1000
-Nonlinear solve converged due to CONVERGED_FNORM_RELATIVE iterations 31
-*Problem: ex1 on domain [-2.00,2.00]x[-2.00,2.00] with 400x400 point 2D grid
+*Error:   |u-uexact|_inf = 3.477e-02, |u-uexact|_h = 9.504e-03
+*WTime:   167.811149
+*Iters:   Krylov 5518, Local SNES 2, Global SNES 75
+Running: mpiexec -np 4 ../../maddm -htn -N 400 -op 0.10 -problem ex5 -xmin -2.0 -xmax 2.0 -ymin -2.0 -ymax 2.0 -sub_ksp_rtol 1e-2 -sub_snes_rtol 1e-1 -snes_converged_reason -snes_max_it 1000
+Nonlinear solve converged due to CONVERGED_FNORM_RELATIVE iterations 66
+*Problem: ex5 on domain [-2.00,2.00]x[-2.00,2.00] with 400x400 point 2D grid
 *Params:  Nd = 4, width = 5, eps = 0.002, op = 0.10
-*Error:   |u-uexact|_inf = 4.055e-01, |u-uexact|_h = 1.074e-01
-*WTime:   1064.031083
-*Iters:   Krylov 37554, Local SNES 10, Global SNES 31
+*Error:   |u-uexact|_inf = 3.153e-02, |u-uexact|_h = 8.725e-03
+*WTime:   148.556038
+*Iters:   Krylov 4181, Local SNES 2, Global SNES 66
+Running: mpiexec -np 4 ../../maddm -htn -N 400 -op 0.15 -problem ex5 -xmin -2.0 -xmax 2.0 -ymin -2.0 -ymax 2.0 -sub_ksp_rtol 1e-2 -sub_snes_rtol 1e-1 -snes_converged_reason -snes_max_it 1000
+Nonlinear solve converged due to CONVERGED_FNORM_RELATIVE iterations 41
+*Problem: ex5 on domain [-2.00,2.00]x[-2.00,2.00] with 400x400 point 2D grid
+*Params:  Nd = 4, width = 5, eps = 0.002, op = 0.15
+*Error:   |u-uexact|_inf = 2.509e-02, |u-uexact|_h = 6.662e-03
+*WTime:   133.482484
+*Iters:   Krylov 3831, Local SNES 2, Global SNES 41
+Running: mpiexec -np 4 ../../maddm -htn -N 400 -op 0.20 -problem ex5 -xmin -2.0 -xmax 2.0 -ymin -2.0 -ymax 2.0 -sub_ksp_rtol 1e-2 -sub_snes_rtol 1e-1 -snes_converged_reason -snes_max_it 1000
+Nonlinear solve converged due to CONVERGED_FNORM_RELATIVE iterations 36
+*Problem: ex5 on domain [-2.00,2.00]x[-2.00,2.00] with 400x400 point 2D grid
+*Params:  Nd = 4, width = 5, eps = 0.002, op = 0.20
+*Error:   |u-uexact|_inf = 2.024e-02, |u-uexact|_h = 4.811e-03
+*WTime:   125.958603
+*Iters:   Krylov 3086, Local SNES 1, Global SNES 36
+Running: mpiexec -np 4 ../../maddm -htn -N 400 -op 0.25 -problem ex5 -xmin -2.0 -xmax 2.0 -ymin -2.0 -ymax 2.0 -sub_ksp_rtol 1e-2 -sub_snes_rtol 1e-1 -snes_converged_reason -snes_max_it 1000
+Nonlinear solve converged due to CONVERGED_FNORM_RELATIVE iterations 48
+*Problem: ex5 on domain [-2.00,2.00]x[-2.00,2.00] with 400x400 point 2D grid
+*Params:  Nd = 4, width = 5, eps = 0.002, op = 0.25
+*Error:   |u-uexact|_inf = 1.958e-02, |u-uexact|_h = 4.754e-03
+*WTime:   164.664760
+*Iters:   Krylov 4141, Local SNES 2, Global SNES 48
+Running: mpiexec -np 4 ../../maddm -htn -N 400 -op 0.30 -problem ex5 -xmin -2.0 -xmax 2.0 -ymin -2.0 -ymax 2.0 -sub_ksp_rtol 1e-2 -sub_snes_rtol 1e-1 -snes_converged_reason -snes_max_it 1000
+Nonlinear solve converged due to CONVERGED_FNORM_RELATIVE iterations 26
+*Problem: ex5 on domain [-2.00,2.00]x[-2.00,2.00] with 400x400 point 2D grid
+*Params:  Nd = 4, width = 5, eps = 0.002, op = 0.30
+*Error:   |u-uexact|_inf = 1.034e-02, |u-uexact|_h = 2.742e-03
+*WTime:   111.865706
+*Iters:   Krylov 2587, Local SNES 2, Global SNES 26
+Running: mpiexec -np 4 ../../maddm -htn -N 400 -op 0.35 -problem ex5 -xmin -2.0 -xmax 2.0 -ymin -2.0 -ymax 2.0 -sub_ksp_rtol 1e-2 -sub_snes_rtol 1e-1 -snes_converged_reason -snes_max_it 1000
+Nonlinear solve converged due to CONVERGED_FNORM_RELATIVE iterations 36
+*Problem: ex5 on domain [-2.00,2.00]x[-2.00,2.00] with 400x400 point 2D grid
+*Params:  Nd = 4, width = 5, eps = 0.002, op = 0.35
+*Error:   |u-uexact|_inf = 2.378e-02, |u-uexact|_h = 5.913e-03
+*WTime:   156.631163
+*Iters:   Krylov 3008, Local SNES 2, Global SNES 36
+Running: mpiexec -np 4 ../../maddm -htn -N 400 -op 0.40 -problem ex5 -xmin -2.0 -xmax 2.0 -ymin -2.0 -ymax 2.0 -sub_ksp_rtol 1e-2 -sub_snes_rtol 1e-1 -snes_converged_reason -snes_max_it 1000
+Nonlinear solve converged due to CONVERGED_FNORM_RELATIVE iterations 58
+*Problem: ex5 on domain [-2.00,2.00]x[-2.00,2.00] with 400x400 point 2D grid
+*Params:  Nd = 4, width = 5, eps = 0.002, op = 0.40
+*Error:   |u-uexact|_inf = 1.066e-02, |u-uexact|_h = 1.939e-03
+*WTime:   254.143105
+*Iters:   Krylov 4585, Local SNES 1, Global SNES 58
+Running: mpiexec -np 4 ../../maddm -htn -N 400 -op 0.45 -problem ex5 -xmin -2.0 -xmax 2.0 -ymin -2.0 -ymax 2.0 -sub_ksp_rtol 1e-2 -sub_snes_rtol 1e-1 -snes_converged_reason -snes_max_it 1000
+Nonlinear solve converged due to CONVERGED_FNORM_RELATIVE iterations 25
+*Problem: ex5 on domain [-2.00,2.00]x[-2.00,2.00] with 400x400 point 2D grid
+*Params:  Nd = 4, width = 5, eps = 0.002, op = 0.45
+*Error:   |u-uexact|_inf = 2.250e-03, |u-uexact|_h = 3.425e-04
+*WTime:   153.430681
+*Iters:   Krylov 2826, Local SNES 5, Global SNES 25
+Running: mpiexec -np 4 ../../maddm -htn -N 400 -op 0.05 -problem ex5 -xmin -2.0 -xmax 2.0 -ymin -2.0 -ymax 2.0 -sub_ksp_rtol 1e-1 -sub_snes_rtol 1e-2 -snes_converged_reason -snes_max_it 1000
+Nonlinear solve converged due to CONVERGED_FNORM_RELATIVE iterations 58
+*Problem: ex5 on domain [-2.00,2.00]x[-2.00,2.00] with 400x400 point 2D grid
+*Params:  Nd = 4, width = 5, eps = 0.002, op = 0.05
+*Error:   |u-uexact|_inf = 2.911e-02, |u-uexact|_h = 8.356e-03
+*WTime:   190.432345
+*Iters:   Krylov 4773, Local SNES 5, Global SNES 58
+Running: mpiexec -np 4 ../../maddm -htn -N 400 -op 0.10 -problem ex5 -xmin -2.0 -xmax 2.0 -ymin -2.0 -ymax 2.0 -sub_ksp_rtol 1e-1 -sub_snes_rtol 1e-2 -snes_converged_reason -snes_max_it 1000
+Nonlinear solve converged due to CONVERGED_FNORM_RELATIVE iterations 34
+*Problem: ex5 on domain [-2.00,2.00]x[-2.00,2.00] with 400x400 point 2D grid
+*Params:  Nd = 4, width = 5, eps = 0.002, op = 0.10
+*Error:   |u-uexact|_inf = 3.149e-02, |u-uexact|_h = 9.201e-03
+*WTime:   137.005035
+*Iters:   Krylov 3310, Local SNES 5, Global SNES 34
+Running: mpiexec -np 4 ../../maddm -htn -N 400 -op 0.15 -problem ex5 -xmin -2.0 -xmax 2.0 -ymin -2.0 -ymax 2.0 -sub_ksp_rtol 1e-1 -sub_snes_rtol 1e-2 -snes_converged_reason -snes_max_it 1000
+Nonlinear solve converged due to CONVERGED_FNORM_RELATIVE iterations 25
+*Problem: ex5 on domain [-2.00,2.00]x[-2.00,2.00] with 400x400 point 2D grid
+*Params:  Nd = 4, width = 5, eps = 0.002, op = 0.15
+*Error:   |u-uexact|_inf = 1.827e-02, |u-uexact|_h = 5.383e-03
+*WTime:   118.965354
+*Iters:   Krylov 2550, Local SNES 5, Global SNES 25
+Running: mpiexec -np 4 ../../maddm -htn -N 400 -op 0.20 -problem ex5 -xmin -2.0 -xmax 2.0 -ymin -2.0 -ymax 2.0 -sub_ksp_rtol 1e-1 -sub_snes_rtol 1e-2 -snes_converged_reason -snes_max_it 1000
+Nonlinear solve converged due to CONVERGED_FNORM_RELATIVE iterations 20
+*Problem: ex5 on domain [-2.00,2.00]x[-2.00,2.00] with 400x400 point 2D grid
+*Params:  Nd = 4, width = 5, eps = 0.002, op = 0.20
+*Error:   |u-uexact|_inf = 2.095e-02, |u-uexact|_h = 6.258e-03
+*WTime:   98.986820
+*Iters:   Krylov 2121, Local SNES 5, Global SNES 20
+Running: mpiexec -np 4 ../../maddm -htn -N 400 -op 0.25 -problem ex5 -xmin -2.0 -xmax 2.0 -ymin -2.0 -ymax 2.0 -sub_ksp_rtol 1e-1 -sub_snes_rtol 1e-2 -snes_converged_reason -snes_max_it 1000
+Nonlinear solve converged due to CONVERGED_FNORM_RELATIVE iterations 17
+*Problem: ex5 on domain [-2.00,2.00]x[-2.00,2.00] with 400x400 point 2D grid
+*Params:  Nd = 4, width = 5, eps = 0.002, op = 0.25
+*Error:   |u-uexact|_inf = 2.152e-02, |u-uexact|_h = 6.635e-03
+*WTime:   98.444103
+*Iters:   Krylov 2008, Local SNES 4, Global SNES 17
+Running: mpiexec -np 4 ../../maddm -htn -N 400 -op 0.30 -problem ex5 -xmin -2.0 -xmax 2.0 -ymin -2.0 -ymax 2.0 -sub_ksp_rtol 1e-1 -sub_snes_rtol 1e-2 -snes_converged_reason -snes_max_it 1000
+Nonlinear solve converged due to CONVERGED_FNORM_RELATIVE iterations 15
+*Problem: ex5 on domain [-2.00,2.00]x[-2.00,2.00] with 400x400 point 2D grid
+*Params:  Nd = 4, width = 5, eps = 0.002, op = 0.30
+*Error:   |u-uexact|_inf = 1.729e-02, |u-uexact|_h = 5.354e-03
+*WTime:   97.943780
+*Iters:   Krylov 1802, Local SNES 4, Global SNES 15
+Running: mpiexec -np 4 ../../maddm -htn -N 400 -op 0.35 -problem ex5 -xmin -2.0 -xmax 2.0 -ymin -2.0 -ymax 2.0 -sub_ksp_rtol 1e-1 -sub_snes_rtol 1e-2 -snes_converged_reason -snes_max_it 1000
+Nonlinear solve converged due to CONVERGED_FNORM_RELATIVE iterations 15
+*Problem: ex5 on domain [-2.00,2.00]x[-2.00,2.00] with 400x400 point 2D grid
+*Params:  Nd = 4, width = 5, eps = 0.002, op = 0.35
+*Error:   |u-uexact|_inf = 2.901e-02, |u-uexact|_h = 8.992e-03
+*WTime:   100.133985
+*Iters:   Krylov 1617, Local SNES 3, Global SNES 15
+Running: mpiexec -np 4 ../../maddm -htn -N 400 -op 0.40 -problem ex5 -xmin -2.0 -xmax 2.0 -ymin -2.0 -ymax 2.0 -sub_ksp_rtol 1e-1 -sub_snes_rtol 1e-2 -snes_converged_reason -snes_max_it 1000
+Nonlinear solve converged due to CONVERGED_FNORM_RELATIVE iterations 14
+*Problem: ex5 on domain [-2.00,2.00]x[-2.00,2.00] with 400x400 point 2D grid
+*Params:  Nd = 4, width = 5, eps = 0.002, op = 0.40
+*Error:   |u-uexact|_inf = 1.811e-02, |u-uexact|_h = 5.623e-03
+*WTime:   106.994920
+*Iters:   Krylov 1716, Local SNES 3, Global SNES 14
+Running: mpiexec -np 4 ../../maddm -htn -N 400 -op 0.45 -problem ex5 -xmin -2.0 -xmax 2.0 -ymin -2.0 -ymax 2.0 -sub_ksp_rtol 1e-1 -sub_snes_rtol 1e-2 -snes_converged_reason -snes_max_it 1000
+Nonlinear solve converged due to CONVERGED_FNORM_RELATIVE iterations 13
+*Problem: ex5 on domain [-2.00,2.00]x[-2.00,2.00] with 400x400 point 2D grid
+*Params:  Nd = 4, width = 5, eps = 0.002, op = 0.45
+*Error:   |u-uexact|_inf = 8.129e-03, |u-uexact|_h = 2.382e-03
+*WTime:   109.773519
+*Iters:   Krylov 1719, Local SNES 3, Global SNES 13
+Running: mpiexec -np 4 ../../maddm -htn -N 400 -op 0.05 -problem ex5 -xmin -2.0 -xmax 2.0 -ymin -2.0 -ymax 2.0 -sub_ksp_rtol 1e-2 -sub_snes_rtol 1e-2 -snes_converged_reason -snes_max_it 1000
+Nonlinear solve converged due to CONVERGED_FNORM_RELATIVE iterations 58
+*Problem: ex5 on domain [-2.00,2.00]x[-2.00,2.00] with 400x400 point 2D grid
+*Params:  Nd = 4, width = 5, eps = 0.002, op = 0.05
+*Error:   |u-uexact|_inf = 2.470e-02, |u-uexact|_h = 6.900e-03
+*WTime:   282.184443
+*Iters:   Krylov 8764, Local SNES 3, Global SNES 58
+Running: mpiexec -np 4 ../../maddm -htn -N 400 -op 0.10 -problem ex5 -xmin -2.0 -xmax 2.0 -ymin -2.0 -ymax 2.0 -sub_ksp_rtol 1e-2 -sub_snes_rtol 1e-2 -snes_converged_reason -snes_max_it 1000
+Nonlinear solve converged due to CONVERGED_FNORM_RELATIVE iterations 33
+*Problem: ex5 on domain [-2.00,2.00]x[-2.00,2.00] with 400x400 point 2D grid
+*Params:  Nd = 4, width = 5, eps = 0.002, op = 0.10
+*Error:   |u-uexact|_inf = 2.625e-02, |u-uexact|_h = 7.600e-03
+*WTime:   176.084145
+*Iters:   Krylov 5124, Local SNES 5, Global SNES 33
+Running: mpiexec -np 4 ../../maddm -htn -N 400 -op 0.15 -problem ex5 -xmin -2.0 -xmax 2.0 -ymin -2.0 -ymax 2.0 -sub_ksp_rtol 1e-2 -sub_snes_rtol 1e-2 -snes_converged_reason -snes_max_it 1000
+Nonlinear solve converged due to CONVERGED_FNORM_RELATIVE iterations 24
+*Problem: ex5 on domain [-2.00,2.00]x[-2.00,2.00] with 400x400 point 2D grid
+*Params:  Nd = 4, width = 5, eps = 0.002, op = 0.15
+*Error:   |u-uexact|_inf = 2.291e-02, |u-uexact|_h = 6.690e-03
+*WTime:   139.088906
+*Iters:   Krylov 4213, Local SNES 4, Global SNES 24
+Running: mpiexec -np 4 ../../maddm -htn -N 400 -op 0.20 -problem ex5 -xmin -2.0 -xmax 2.0 -ymin -2.0 -ymax 2.0 -sub_ksp_rtol 1e-2 -sub_snes_rtol 1e-2 -snes_converged_reason -snes_max_it 1000
+Nonlinear solve converged due to CONVERGED_FNORM_RELATIVE iterations 18
+*Problem: ex5 on domain [-2.00,2.00]x[-2.00,2.00] with 400x400 point 2D grid
+*Params:  Nd = 4, width = 5, eps = 0.002, op = 0.20
+*Error:   |u-uexact|_inf = 3.075e-02, |u-uexact|_h = 8.992e-03
+*WTime:   126.918332
+*Iters:   Krylov 3668, Local SNES 3, Global SNES 18
+Running: mpiexec -np 4 ../../maddm -htn -N 400 -op 0.25 -problem ex5 -xmin -2.0 -xmax 2.0 -ymin -2.0 -ymax 2.0 -sub_ksp_rtol 1e-2 -sub_snes_rtol 1e-2 -snes_converged_reason -snes_max_it 1000
+Nonlinear solve converged due to CONVERGED_FNORM_RELATIVE iterations 16
+*Problem: ex5 on domain [-2.00,2.00]x[-2.00,2.00] with 400x400 point 2D grid
+*Params:  Nd = 4, width = 5, eps = 0.002, op = 0.25
+*Error:   |u-uexact|_inf = 1.636e-02, |u-uexact|_h = 4.849e-03
+*WTime:   134.604687
+*Iters:   Krylov 3284, Local SNES 3, Global SNES 16
+Running: mpiexec -np 4 ../../maddm -htn -N 400 -op 0.30 -problem ex5 -xmin -2.0 -xmax 2.0 -ymin -2.0 -ymax 2.0 -sub_ksp_rtol 1e-2 -sub_snes_rtol 1e-2 -snes_converged_reason -snes_max_it 1000
+Nonlinear solve converged due to CONVERGED_FNORM_RELATIVE iterations 14
+*Problem: ex5 on domain [-2.00,2.00]x[-2.00,2.00] with 400x400 point 2D grid
+*Params:  Nd = 4, width = 5, eps = 0.002, op = 0.30
+*Error:   |u-uexact|_inf = 1.720e-02, |u-uexact|_h = 5.184e-03
+*WTime:   127.596724
+*Iters:   Krylov 2885, Local SNES 3, Global SNES 14
+Running: mpiexec -np 4 ../../maddm -htn -N 400 -op 0.35 -problem ex5 -xmin -2.0 -xmax 2.0 -ymin -2.0 -ymax 2.0 -sub_ksp_rtol 1e-2 -sub_snes_rtol 1e-2 -snes_converged_reason -snes_max_it 1000
+Nonlinear solve converged due to CONVERGED_FNORM_RELATIVE iterations 12
+*Problem: ex5 on domain [-2.00,2.00]x[-2.00,2.00] with 400x400 point 2D grid
+*Params:  Nd = 4, width = 5, eps = 0.002, op = 0.35
+*Error:   |u-uexact|_inf = 2.652e-02, |u-uexact|_h = 7.741e-03
+*WTime:   130.037669
+*Iters:   Krylov 2614, Local SNES 2, Global SNES 12
+Running: mpiexec -np 4 ../../maddm -htn -N 400 -op 0.40 -problem ex5 -xmin -2.0 -xmax 2.0 -ymin -2.0 -ymax 2.0 -sub_ksp_rtol 1e-2 -sub_snes_rtol 1e-2 -snes_converged_reason -snes_max_it 1000
+Nonlinear solve converged due to CONVERGED_FNORM_RELATIVE iterations 13
+*Problem: ex5 on domain [-2.00,2.00]x[-2.00,2.00] with 400x400 point 2D grid
+*Params:  Nd = 4, width = 5, eps = 0.002, op = 0.40
+*Error:   |u-uexact|_inf = 1.100e-02, |u-uexact|_h = 3.117e-03
+*WTime:   144.473686
+*Iters:   Krylov 2790, Local SNES 2, Global SNES 13
+Running: mpiexec -np 4 ../../maddm -htn -N 400 -op 0.45 -problem ex5 -xmin -2.0 -xmax 2.0 -ymin -2.0 -ymax 2.0 -sub_ksp_rtol 1e-2 -sub_snes_rtol 1e-2 -snes_converged_reason -snes_max_it 1000
+Nonlinear solve converged due to CONVERGED_FNORM_RELATIVE iterations 13
+*Problem: ex5 on domain [-2.00,2.00]x[-2.00,2.00] with 400x400 point 2D grid
+*Params:  Nd = 4, width = 5, eps = 0.002, op = 0.45
+*Error:   |u-uexact|_inf = 2.230e-02, |u-uexact|_h = 6.424e-03
+*WTime:   144.718493
+*Iters:   Krylov 2512, Local SNES 2, Global SNES 13
+Running: mpiexec -np 2 ../../maddm -htn -N 450 -op 0.05 -problem ex5 -sub_ksp_rtol 1e-1 -sub_snes_rtol 1e-1 -snes_converged_reason -snes_max_it 1000 

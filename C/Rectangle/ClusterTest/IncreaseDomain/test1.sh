@@ -21,7 +21,7 @@ do
    for h in {0.05,0.01}
    do
       N=$(echo "scale = 0; 2*$limit/$h" | bc)
-      mpiexec -np $Nd ../../maddm -N $N -problem ex1 -snes_rtol 1e-8 -ksp_rtol 1e-5 -xmin -$limit -xmax $limit -ymin -$limit -ymax $limit -snes_converged_reason >> test1.out
+      mpiexec -np $Nd ../../maddm -N $N -problem ex1 -snes_rtol 1e-8 -ksp_rtol 1e-4 -xmin -$limit -xmax $limit -ymin -$limit -ymax $limit -snes_converged_reason >> test1.out
    done
 done
 

@@ -7,7 +7,7 @@ sys.path.append('../../')
 import table_module as tm
 
 # choose file
-file = "test1.out"
+file = "test1ex5.out"
 
 limits = np.array([0.5, 1.0, 1.5, 2.0])
 n_lims = len(limits)

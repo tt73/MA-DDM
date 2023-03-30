@@ -1,5 +1,5 @@
 #!/bin/bash -l
-#SBATCH -J j2
+#SBATCH -J opt2
 #SBATCH -p public
 #SBATCH -o slurmout2
 #SBATCH -p dms-cpu
@@ -11,7 +11,10 @@
 #SBATCH --ntasks 2
 #SBATCH --ntasks-per-node 1
 module load gnu8 mpich petsc/3.12.0
-N=450
-rm -f out2
-mpiexec -np 2 ../../maddm -N $N -problem ex5 -htn -op 0.10 -sub_snes_rtol 1e-2 >> out2
-mpiexec -np 2 ../../maddm -N $N -problem ex5 -nks -op 0 -ksp_rtol 1e-2 >> out2
+N=200
+rm -f out2sin
+# for op in {0.05,0.10,0.15,0.20,0.25,0.30,0.35}
+for op in {0.35,0.40,0.45,0.50,0.55,0.60,0.65}
+do
+   mpiexec -np 4 ../../maddm -N $N -problem ex5 -sin -op $op -sub_ksp_rtol 1e-1 >> out2sin
+done

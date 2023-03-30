@@ -1,0 +1,31 @@
+Running: mpiexec -np 4 ../../maddm -nks -N 300 -op 0 -problem ex5 -xmin -1.5 -xmax 1.5 -ymin -1.5 -ymax 1.5 -sub_ksp_rtol 1e-1 -snes_converged_reason -snes_max_it 1000
+Nonlinear solve converged due to CONVERGED_FNORM_RELATIVE iterations 34
+*Problem: ex5 on domain [-1.50,1.50]x[-1.50,1.50] with 300x300 point 2D grid
+*Params:  Nd = 4, width = 5, eps = 0.002, op = 0.00
+*Error:   |u-uexact|_inf = 3.830e-03, |u-uexact|_h = 1.352e-03
+*WTime:   13.676638
+*Iters:   Krylov 282, Local SNES 0, Global SNES 34
+
+Running: mpiexec -np 4 ../../maddm -nks -N 400 -op 0 -problem ex5 -xmin -2.0 -xmax 2.0 -ymin -2.0 -ymax 2.0 -sub_ksp_rtol 1e-1 -snes_converged_reason -snes_max_it 1000
+Nonlinear solve converged due to CONVERGED_FNORM_RELATIVE iterations 31
+*Problem: ex5 on domain [-2.00,2.00]x[-2.00,2.00] with 400x400 point 2D grid
+*Params:  Nd = 4, width = 5, eps = 0.002, op = 0.00
+*Error:   |u-uexact|_inf = 1.198e-02, |u-uexact|_h = 3.586e-03
+*WTime:   24.873362
+*Iters:   Krylov 408, Local SNES 0, Global SNES 31
+
+Running: mpiexec -np 4 ../../maddm -htn -N 300 -op 0.40 -problem ex5 -xmin -1.5 -xmax 1.5 -ymin -1.5 -ymax 1.5 -sub_ksp_rtol 1e-1 -sub_snes_rtol 1e-2 -snes_converged_reason -snes_max_it 1000
+Nonlinear solve converged due to CONVERGED_FNORM_RELATIVE iterations 11
+*Problem: ex5 on domain [-1.50,1.50]x[-1.50,1.50] with 300x300 point 2D grid
+*Params:  Nd = 4, width = 5, eps = 0.002, op = 0.40
+*Error:   |u-uexact|_inf = 3.884e-03, |u-uexact|_h = 1.142e-03
+*WTime:   36.158490
+*Iters:   Krylov 947, Local SNES 7, Global SNES 11
+
+Running: mpiexec -np 4 ../../maddm -htn -N 400 -op 0.30 -problem ex5 -xmin -2.0 -xmax 2.0 -ymin -2.0 -ymax 2.0 -sub_ksp_rtol 1e-1 -sub_snes_rtol 1e-2 -snes_converged_reason -snes_max_it 1000
+Nonlinear solve converged due to CONVERGED_FNORM_RELATIVE iterations 15
+*Problem: ex5 on domain [-2.00,2.00]x[-2.00,2.00] with 400x400 point 2D grid
+*Params:  Nd = 4, width = 5, eps = 0.002, op = 0.30
+*Error:   |u-uexact|_inf = 1.729e-02, |u-uexact|_h = 5.354e-03
+*WTime:   97.943780
+*Iters:   Krylov 1802, Local SNES 4, Global SNES 15

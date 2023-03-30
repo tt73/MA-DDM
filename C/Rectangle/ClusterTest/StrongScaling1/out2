@@ -1,14 +1,10 @@
-[mpiexec@ubuntu] Sending Ctrl-C to processes as requested
-[mpiexec@ubuntu] Press Ctrl-C again to force abort
-
-===================================================================================
-=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
-=   RANK 0 PID 5060 RUNNING AT ubuntu
-=   KILLED BY SIGNAL: 2 (Interrupt)
-===================================================================================
-
-===================================================================================
-=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
-=   RANK 1 PID 5061 RUNNING AT ubuntu
-=   KILLED BY SIGNAL: 2 (Interrupt)
-===================================================================================
+*Problem: ex5 on domain [-1.00,1.00]x[-1.00,1.00] with 450x450 point 2D grid
+*Params:  Nd = 2, width = 7, eps = 0.001, op = 0.10
+*Error:   |u-uexact|_inf = 2.294e-03, |u-uexact|_h = 6.679e-04
+*WTime:   244.263756
+*Iters:   Krylov 1789, Local SNES 7, Global SNES 22
+*Problem: ex5 on domain [-1.00,1.00]x[-1.00,1.00] with 450x450 point 2D grid
+*Params:  Nd = 2, width = 7, eps = 0.001, op = 0.00
+*Error:   |u-uexact|_inf = 3.334e-04, |u-uexact|_h = 1.239e-04
+*WTime:   115.786112
+*Iters:   Krylov 397, Local SNES 0, Global SNES 28

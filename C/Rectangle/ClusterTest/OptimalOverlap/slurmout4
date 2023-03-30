@@ -5,10 +5,10 @@ Home directory : /home/t/tt73 is not in AFS -- skipping quota check
 ========================
 
 On host node000 :
-	 15:13:17 up 728 days, 21:26,  0 users,  load average: 0.08, 0.03, 0.13
+	 12:47:03 up 738 days, 18:00,  0 users,  load average: 0.00, 0.01, 0.21
 
 === === === Your Kerberos ticket and AFS token status === === ===
-klist: No credentials cache found (filename: /tmp/krb5cc_90502_agF7fn9AsD)
+klist: No credentials cache found (filename: /tmp/krb5cc_90502_rbLuDvwwGF)
 Kerberos : 
 AFS      : 
 
@@ -22,6 +22,3 @@ Currently Loaded Modules:
 
  
 
-srun: Job step aborted: Waiting up to 62 seconds for job step to finish.
-slurmstepd: error: *** STEP 111426.3 ON node000 CANCELLED AT 2023-03-10T15:15:01 ***
-slurmstepd: error: *** JOB 111426 ON node000 CANCELLED AT 2023-03-10T15:15:01 ***
