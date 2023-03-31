@@ -1,0 +1,48 @@
+Starting /home/t/tt73/.bash_profile ... standard AFS bash profile
+
+========================
+Home directory : /home/t/tt73 is not in AFS -- skipping quota check
+========================
+
+On host node009 :
+	 10:53:09 up 105 days, 17:01,  0 users,  load average: 0.08, 0.03, 0.05
+
+=== === === Your Kerberos ticket and AFS token status === === ===
+klist: No credentials cache found (filename: /tmp/krb5cc_90502_wLCBymYwNw)
+Kerberos : 
+AFS      : 
+
+Loading default modules ...
+Create file : "/home/t/tt73/.modules" to customize.
+
+No modules loaded
+Nonlinear solve converged due to CONVERGED_FNORM_RELATIVE iterations 16
+*Problem: ex5 on domain [-2.00,2.00]x[-2.00,2.00] with 400x400 point 2D grid
+*Params:  Nd = 2, width = 5, eps = 0.002, op = 0.20
+*Error:   |u-uexact|_inf = 1.787e-03, |u-uexact|_h = 7.148e-04
+*WTime:   368.343356
+*Iters:   Krylov 5810, Local SNES 5, Global SNES 16
+Nonlinear solve converged due to CONVERGED_FNORM_RELATIVE iterations 17
+*Problem: ex5 on domain [-2.00,2.00]x[-2.00,2.00] with 400x400 point 2D grid
+*Params:  Nd = 4, width = 5, eps = 0.002, op = 0.20
+*Error:   |u-uexact|_inf = 2.229e-02, |u-uexact|_h = 6.776e-03
+*WTime:   282.160979
+*Iters:   Krylov 5142, Local SNES 7, Global SNES 17
+Nonlinear solve converged due to CONVERGED_FNORM_RELATIVE iterations 27
+*Problem: ex5 on domain [-2.00,2.00]x[-2.00,2.00] with 400x400 point 2D grid
+*Params:  Nd = 6, width = 5, eps = 0.002, op = 0.20
+*Error:   |u-uexact|_inf = 1.186e-02, |u-uexact|_h = 5.049e-03
+*WTime:   388.301079
+*Iters:   Krylov 6023, Local SNES 2, Global SNES 27
+Nonlinear solve converged due to CONVERGED_FNORM_RELATIVE iterations 38
+*Problem: ex5 on domain [-2.00,2.00]x[-2.00,2.00] with 400x400 point 2D grid
+*Params:  Nd = 8, width = 5, eps = 0.002, op = 0.20
+*Error:   |u-uexact|_inf = 1.230e-02, |u-uexact|_h = 4.848e-03
+*WTime:   589.499102
+*Iters:   Krylov 6493, Local SNES 2, Global SNES 38
+Nonlinear solve converged due to CONVERGED_FNORM_RELATIVE iterations 34
+*Problem: ex5 on domain [-2.00,2.00]x[-2.00,2.00] with 400x400 point 2D grid
+*Params:  Nd = 9, width = 5, eps = 0.002, op = 0.20
+*Error:   |u-uexact|_inf = 1.001e-02, |u-uexact|_h = 5.213e-03
+*WTime:   605.478068
+*Iters:   Krylov 6813, Local SNES 2, Global SNES 34
