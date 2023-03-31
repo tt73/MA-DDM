@@ -18,14 +18,13 @@ clear, close all
 
 load_u % load petsc's numerical solution, u
 load_exact % load exact solution coded in petsc
-try
-    load_initial
-end
+% try
+%     load_initial
+% end
 s = length(u);
-% n = sqrt(s);
-% m = sqrt(s);
-n = 20;
-m = 2*n+1;
+n = sqrt(s);
+m = sqrt(s);
+
 
 %%
 
@@ -58,15 +57,15 @@ u_exac = reshape(u_exact,n,m);
 surf(u_exac)
 title('Exact solution')
 
-figure
-surf(u_grid-u_exac)
-title('error')
+% figure
+% surf(u_grid-u_exac)
+% title('error')
 
-figure
-try
-    u_init = reshape(u_initial,n,m);
-    surf(u_init)
-    title('Initial Guess')
-end
+% figure
+% try
+%     u_init = reshape(u_initial,n,m);
+%     surf(u_init)
+%     title('Initial Guess')
+% end
 
-fprintf('|error|_inf = %f\n',norm(u_grid(:)-u_exac(:),inf))
+% fprintf('|error|_inf = %f\n',norm(u_grid(:)-u_exac(:),inf))
