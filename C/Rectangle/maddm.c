@@ -638,7 +638,7 @@ int main(int argc,char **args) {
          snprintf(gridstr,99,"domain [%.2f,%.2f] with %d point 1D",user.xmin,user.xmax,info.mx);
          break;
       case 2:
-         normconst2h = PetscSqrtReal((PetscReal)(info.mx-1)*(info.my-1));
+         normconst2h = PetscSqrtReal((PetscReal)(info.mx-1)*(info.my-1));  // sqrt((N-1)(N-1))=N-1
          snprintf(gridstr,99,"domain [%.2f,%.2f]x[%.2f,%.2f] with %dx%d point 2D",user.xmin,user.xmax,user.ymin,user.ymax,info.mx,info.my);
          break;
       case 3:
