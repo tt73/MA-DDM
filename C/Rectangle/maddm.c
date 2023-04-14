@@ -384,6 +384,12 @@ int main(int argc,char **args) {
    - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
    ierr = DMSetUp(da); CHKERRQ(ierr); // initialize the grid distribution, then get mm and nn
    ierr = DMDAGetInfo(da,NULL,NULL,NULL,NULL,&mm,&nn,NULL,NULL,NULL,NULL,NULL,NULL,NULL); CHKERRQ(ierr);
+   /*
+      mm = number of procs along the horizontal dimension
+      nn = number of procs along the vertical dimension
+      For 0 <= op < 1, the actual amount of overlap in terms of number of rows/cols is
+      given by the quantity op*N/mm or op*N/nn
+   */
    olx = PetscCeilReal(op*Nx/(PetscReal)mm); // x overlap
    oly = PetscCeilReal(op*Ny/(PetscReal)nn); // y overlap
    ierr = DMDASetOverlap(da,olx,oly,olx);
