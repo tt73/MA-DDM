@@ -1,0 +1,18 @@
+#!/bin/bash -l
+#SBATCH -J j36
+#SBATCH -o slurmout36
+#SBATCH -p lowpriority
+#SBATCH --constraint=avx512
+#SBATCH -A tt73
+#SBATCH -t 8:0:0
+#SBATCH --mem=0G
+#SBATCH --nodes 36
+#SBATCH --ntasks 36
+#SBATCH --ntasks-per-node 1
+module load gnu8 mpich petsc/3.12.0
+N=300
+op=0.05
+mpirun ../../../maddm -N $N -problem ex1 -sin -op $op >> out36
+mpirun ../../../maddm -N $N -problem ex2 -sin -op $op >> out36
+mpirun ../../../maddm -N $N -problem ex3 -sin -op $op >> out36
+mpirun ../../../maddm -N $N -problem ex4 -sin -op $op >> out36

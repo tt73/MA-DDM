@@ -1,9 +1,10 @@
 #!/bin/bash -l
-#SBATCH -J j2
+#SBATCH -J j2-low2
 #SBATCH -o slurmout2
-#SBATCH -p dms-cpu
+#SBATCH -p lowpriority
+#SBATCH --constraint=avx512
 #SBATCH -A tt73
-#SBATCH -t 8:0:0
+#SBATCH -t 3:0:0
 #SBATCH --mem=0G
 #SBATCH --nodes 2
 #SBATCH --ntasks 2

@@ -1,0 +1,17 @@
+#!/bin/bash -l
+#SBATCH -J j1
+#SBATCH -o slurmout1
+#SBATCH -p lowpriority
+#SBATCH --constraint=avx512
+#SBATCH -A tt73
+#SBATCH -t 8:0:0
+#SBATCH --mem=0G
+#SBATCH --nodes 1
+#SBATCH --ntasks 1
+#SBATCH --ntasks-per-node 1
+module load gnu8 mpich petsc/3.12.0
+N=300
+../../../maddm -N $N -problem ex1 -op >> out1
+../../../maddm -N $N -problem ex2 -op >> out1
+../../../maddm -N $N -problem ex3 -op >> out1
+../../../maddm -N $N -problem ex4 -op >> out1

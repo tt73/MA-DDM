@@ -255,7 +255,7 @@ int main(int argc,char **args) {
    ExactFcnVec    getuexact;
    InitialType    initial;
    ProblemType    problem;
-   PetscBool      debug,set_N,set_eps,set_width,printSol,mixed,htn,sin,aspin,ilusin,coarse,ngmres,nks;
+   PetscBool      debug,set_N,set_eps,set_width,printSol,mixed,htn,sin,aspin,ilusin,coarse,ngmres,nks,reltol;
    PetscReal      h_eff,hx,hy,eps,errinf,normconst2h,err2h,op;
    char           gridstr[99];
    PetscInt       dim,width,N,Nx,Ny,order,NASM_its,KSP_its,Newt_its;
@@ -290,6 +290,7 @@ int main(int argc,char **args) {
    coarse      = PETSC_FALSE; // NASM + FAS
    ngmres      = PETSC_FALSE; // NGMRES -L SIN NASM
    nks         = PETSC_FALSE; // Newton Krylov Schwarz
+   reltol      = PETSC_FALSE; // use the global relative tol of 1e-8, else abs. tol of h
 
    ierr = PetscOptionsBegin(PETSC_COMM_WORLD,"","options for maddm.c",""); CHKERRQ(ierr);
    ierr = PetscOptionsInt("-dim","dimension of problem (=1,2,3 only)","maddm.c",dim,&dim,NULL);CHKERRQ(ierr);
@@ -304,6 +305,7 @@ int main(int argc,char **args) {
    ierr = PetscOptionsBool("-htn","option to use high-tolerance Newton (HTN)","maddm.c",htn,&htn,NULL);CHKERRQ(ierr);
    ierr = PetscOptionsBool("-sin","option to use single-iteration Newton (HTN)","maddm.c",sin,&sin,NULL);CHKERRQ(ierr);
    ierr = PetscOptionsBool("-nks","option to use Newton-Kyrlov-Schwarz (NKS)","maddm.c",nks,&nks,NULL);CHKERRQ(ierr);
+   ierr = PetscOptionsBool("-reltol","option to use relative tol of 1e-8 for global convergence","maddm.c",reltol,&reltol,NULL);CHKERRQ(ierr);
    ierr = PetscOptionsBool("-aspin","option to use additive schwarz preconditioned inexact newton (ASPIN)","maddm.c",aspin,&aspin,NULL);CHKERRQ(ierr);
    ierr = PetscOptionsBool("-ilusin","trying something","maddm.c",ilusin,&ilusin,NULL);CHKERRQ(ierr);
    ierr = PetscOptionsBool("-coarse","use NASM+FAS additive composite method","maddm.c",coarse,&coarse,NULL);CHKERRQ(ierr);
@@ -458,6 +460,31 @@ int main(int argc,char **args) {
          PCSetType(subpc,PCEISENSTAT);  // fast accurate linear solver combo
       }
    }
+
+   /* Convergence - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+      There are two main ways of controlling the convergence.
+      The 1st is relative residue: if initial residue r0 falls by a factor of 1e8.
+      The 2nd is absolute residue: if |r_n| falls below h.
+      The other option is max iterations but this is a more of a way to prevent
+      the code from running forover.
+
+      You can control them directly during the runtime with:
+       	-snes_atol <atol>	  (e.g. -snes_atol 1e-1)
+         -snes_rtol <rtol>	  (e.g. -snes_rtol 1e-8)
+         -snes_max_it <maxit>	 (e.g. -snes_max_it 1000)
+
+      You can use the options
+         -snes_monitor           -to see the residue at each iteration
+         -snes_converged_reason  -to ses why SNES stopped (atol,rtol,max it)
+
+      Update May-02-2023: the default convergence is with atol < h
+   - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+   if (reltol) {
+      SNESSetTolerances(snes,1e-99,1e-8,PETSC_DEFAULT,100000,PETSC_DEFAULT);
+   } else { // abs. tol is the default
+      SNESSetTolerances(snes,h_eff,1e-99,PETSC_DEFAULT,100000,PETSC_DEFAULT);
+   }
+
 
    /* Other NASM Settings - - - - - - - - - - - - - - - - - - - - - - - - -
       In order to get speedup with NASM, we need to under-solve the local
