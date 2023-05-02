@@ -139,6 +139,11 @@ PetscErrorCode InitialState(DM da, InitialType it, Vec u, MACtx *user) {
                SETERRQ(PETSC_COMM_SELF,5,"invalid dim from DMDALocalInfo\n");
          }
          break;
+      case COARSE: // solve on coarse grid of size 4h, then interpolate to regular grid
+         // put code here
+         ierr = VecSet(u,0.0); CHKERRQ(ierr);
+         break;
+
       default:
          SETERRQ(PETSC_COMM_SELF,4,"invalid InitialType ... how did I get here?\n");
    }

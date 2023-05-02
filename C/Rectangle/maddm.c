@@ -239,7 +239,7 @@ static PointwiseFcn f_rhs_ptr[3][6]
        {&f_rhs_2D_ex1, &f_rhs_2D_ex2, &f_rhs_2D_ex3, &f_rhs_ex4, &f_rhs_2D_ex2c, &f_rhs_2D_ex5},
        {&f_rhs_3D_ex1, &f_rhs_3D_ex2, &f_rhs_3D_ex3, &f_rhs_ex4, &f_rhs_3D_ex2c, &f_rhs_3D_ex5}};
 
-static const char* InitialTypes[] = {"zeros","random","corner","pyramid","InitialType","", NULL};
+static const char* InitialTypes[] = {"zeros","random","corner","pyramid","coarse","InitialType","", NULL};
 
 
 int main(int argc,char **args) {
