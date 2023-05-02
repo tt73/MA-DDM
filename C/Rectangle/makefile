@@ -1,4 +1,7 @@
-## To compile this on Stheno, type `module load petsc` first. Then type `make maddm`.
+## To compile this on Stheno or Lochness, type `module load gnu8 mpich petsc/3.12.0`. Then type `make maddm`.
+## You can run the compiled code serially with `./maddm`.
+## You can use `mpirun` or `mpiexec` to run in parallel.
+## The NJIT cluster offers a more recent version of PETSc, but it fails to run to some parallel examples.
 
 include ${PETSC_DIR}/lib/petsc/conf/variables
 include ${PETSC_DIR}/lib/petsc/conf/rules

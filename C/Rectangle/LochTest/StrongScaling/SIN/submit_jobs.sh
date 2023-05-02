@@ -6,7 +6,7 @@
 rm out*
 
 # submit all the jobs
-for N in 1 2 4 9 16 25 36
+for N in 1 2 4 9 16 25 36 49
 do
    sbatch job$N
 done

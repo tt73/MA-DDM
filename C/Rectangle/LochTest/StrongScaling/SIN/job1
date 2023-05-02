@@ -11,7 +11,7 @@
 #SBATCH --ntasks-per-node 1
 module load gnu8 mpich petsc/3.12.0
 N=300
-../../../maddm -N $N -problem ex1 -op >> out1
-../../../maddm -N $N -problem ex2 -op >> out1
-../../../maddm -N $N -problem ex3 -op >> out1
-../../../maddm -N $N -problem ex4 -op >> out1
+../../../maddm -N $N -problem ex1 >> out1
+../../../maddm -N $N -problem ex2 >> out1
+../../../maddm -N $N -problem ex3 >> out1
+../../../maddm -N $N -problem ex4 >> out1
