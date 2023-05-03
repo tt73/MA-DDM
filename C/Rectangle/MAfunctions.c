@@ -7,6 +7,7 @@
    The available options are: zeros, random, corner, and pyramid.
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 PetscErrorCode InitialState(DM da, InitialType it, Vec u, MACtx *user) {
+   SNES           snes;
    PetscErrorCode ierr;
    DMDALocalInfo  info;
    PetscRandom    rctx;
@@ -140,8 +141,13 @@ PetscErrorCode InitialState(DM da, InitialType it, Vec u, MACtx *user) {
          }
          break;
       case COARSE: // solve on coarse grid of size 4h, then interpolate to regular grid
-         // put code here
-         ierr = VecSet(u,0.0); CHKERRQ(ierr);
+         SNESCreate(PETSC_COMM_WORLD,&snes);
+         SNESSetDM(snes,da);
+         SNESSetType(snes,SNESFAS); // multigrid
+         SNESSetTolerances(snes,PETSC_DEFAULT,PETSC_DEFAULT,PETSC_DEFAULT,1,PETSC_DEFAULT); // one iteration
+         VecSet(u,0.0);
+         SNESSolve(snes,NULL,u);
+         SNESGetSolution(snes,&u);
          break;
 
       default:

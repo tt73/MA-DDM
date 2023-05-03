@@ -481,8 +481,12 @@ int main(int argc,char **args) {
    - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
    if (reltol) {
       SNESSetTolerances(snes,1e-99,1e-8,PETSC_DEFAULT,100000,PETSC_DEFAULT);
-   } else { // abs. tol is the default
+   } else {
+      // abs. tol is the default
+      // caveat: sometimes abs tol is already satisfied
+      // need to make sure at least 1 iteration happens
       SNESSetTolerances(snes,h_eff,1e-99,PETSC_DEFAULT,100000,PETSC_DEFAULT);
+      SNESSetForceIteration(snes,PETSC_TRUE);
    }
 
 
