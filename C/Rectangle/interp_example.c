@@ -1,14 +1,6 @@
 /*
-   This is a code to solve the Monge-Ampere on a 2D rectangular domain
-   discretized into a structured grid. It is set to solve the problem
-   with nonlinear additive schwarz + Newton's method.
-
-   Compile this code with the makefile. Run with `./maddm`.
-   You can type  `./maddm -help | grep maddm` to see the options for this code.
-
-   On the Stheno cluster type `module load gnu8 mpich petsc/3.12.0` to
-   load up the necessary modules. Then type `make maddm` to compile.
-
+   I am trying to figure out how to do a coarse solve and then interpolate using the PETSc subroutines
+   provided in the library.
 */
 static char help[] = "Solve the Monge-Ampere equation for one of three example problems in 1D or 2D using a wide-stencil discretization scheme on a rectangular grid.\n\n";
 
@@ -264,6 +256,24 @@ int main(int argc,char **args) {
    PetscLogDouble t1,t2;
    PetscMPIInt    rank,size;
 
+
+   /* - - new variables - - -
+      cnb = coarse no border
+      cwb = coarse with border
+    - - - - - - - - - - - - - - */
+   Vec          global, cnb_sol, cwb_sol, interp_sol;
+   DM           coord_da, cnb_da, cwb_da;
+   DMDACoor2d   **coors;
+   MACtx        coarse_user;
+   PetscInt     i, j, k, mstart, m, nstart, n, N_cnb, N_cwb;
+   PetscReal    kh, **cwb_u, **cnb_u;
+   PetscViewer  cviewer;
+   Mat          interp;
+   PetscReal    x, y, u_temp;
+
+
+
+
    ierr = PetscInitialize(&argc,&args,NULL,help); if (ierr) return ierr;
    /*  Get parameters  - - - - - - - - - - - - - - - - - - - - - - - - - - -
       The defualt parameters are initialized below.
@@ -404,6 +414,173 @@ int main(int argc,char **args) {
    ierr = DMDASNESSetFunctionLocal(da,INSERT_VALUES,(DMDASNESFunction)(residual_ptr[dim-1]),&user); CHKERRQ(ierr);
    ierr = DMDASNESSetJacobianLocal(da,(DMDASNESJacobian)(jacobian_ptr[dim-1]),&user); CHKERRQ(ierr);
 
+
+
+
+
+
+
+
+
+   /*
+      The N by N DMDA for the interior solution is now setup.
+
+      Now comes the changes...
+      1. set up a coarse problem N^2h by N^2h
+      2. solve it
+      3. create a larger vector which combines the solution and the dirichlet data
+      4. create an interpolation mapping from large vector to
+   */
+
+   // 1a) try printing out coordinates of `da`
+   DMGetCoordinateDM(da, &coord_da);
+   DMGetCoordinates(da, &global);
+   DMDAVecGetArray(coord_da, global, &coors);
+   DMDAGetCorners(coord_da, &mstart, &nstart, 0, &m, &n, 0);
+   printf("Now printing coords of borderless da with N = %d\n",Nx);
+   for (i=mstart; i<mstart+m; i++) {
+      for (j=nstart; j<nstart+n; j++) {
+         PetscPrintf(PETSC_COMM_WORLD,"(%5.2f,%5.2f) ",coors[j][i].x,coors[j][i].y);
+      }
+      PetscPrintf(PETSC_COMM_WORLD,"\n");
+   }
+
+   // 1b) try to create a coarse grid - no boundary
+   k = 2;
+   N_cwb = PetscCeilReal( (Nx-1)/((PetscReal)k)+1);
+   N_cnb = N_cwb - 2;
+   kh = (user.xmax-user.xmin)/(N_cnb+1);
+   DMDACreate2d(PETSC_COMM_WORLD,     //
+                        DM_BOUNDARY_NONE,          // no periodicity in x
+                        DM_BOUNDARY_NONE,          // no periodicity in y
+                        DMDA_STENCIL_STAR, // star = cardinal directions, box = more general
+                        N_cnb,N_cnb,                     // mesh size in x & y directions
+                        PETSC_DECIDE,PETSC_DECIDE, // local mesh size
+                        1,                         // degree of freedom
+                        1,                         // stencil width
+                        NULL,NULL,                 // not important
+                        &cnb_da);
+   DMSetUp(cnb_da);
+   DMDASetUniformCoordinates(cnb_da,user.xmin+kh,user.xmax-kh,user.ymin+kh,user.ymax-kh,user.zmin,user.zmax);
+   DMGetCoordinateDM(cnb_da, &coord_da);
+   DMGetCoordinates(cnb_da, &global);
+   DMDAVecGetArray(coord_da, global, &coors);
+   DMDAGetCorners(coord_da, &mstart, &nstart, 0, &m, &n, 0);
+   printf("Now printing coords of borderless cooard_da with N_coarse = %d\n",N_cnb);
+   for (i=mstart; i<mstart+m; i++) {
+      for (j=nstart; j<nstart+n; j++) {
+         PetscPrintf(PETSC_COMM_WORLD,"(%5.2f,%5.2f) ",coors[j][i].x,coors[j][i].y);
+      }
+      PetscPrintf(PETSC_COMM_WORLD,"\n");
+   }
+
+   // 2 a) Solve coarse problem
+   SNESCreate(PETSC_COMM_WORLD,&snes);
+   SNESSetDM(snes,cnb_da);
+   coarse_user = user;
+   coarse_user.width = 1;
+   ComputeFwdStencilDirs(1,&coarse_user); // Stencil directions based on the L1 norm
+   ComputeWeights(1,order,&coarse_user);  // Quadrature weights
+   DMSetApplicationContext(cnb_da,&coarse_user);
+   DMDASNESSetFunctionLocal(cnb_da,INSERT_VALUES,(DMDASNESFunction)(residual_ptr[dim-1]),&coarse_user);
+   DMDASNESSetJacobianLocal(cnb_da,(DMDASNESJacobian)(jacobian_ptr[dim-1]),&coarse_user);
+   DMGetGlobalVector(cnb_da,&cnb_sol);
+   VecSet(cnb_sol,0.0);
+   SNESSetUp(snes);
+   SNESSolve(snes,NULL,cnb_sol);
+   SNESGetSolution(snes,&cnb_sol);
+
+   // 2 b) print the solution
+   PetscViewerCreate(PETSC_COMM_WORLD,&cviewer);
+   PetscViewerASCIIOpen(PETSC_COMM_WORLD,"load_cnb.m",&cviewer);
+   PetscViewerPushFormat(cviewer,PETSC_VIEWER_ASCII_MATLAB);
+   PetscObjectSetName((PetscObject)cnb_sol,"u_cnb");
+   VecView(cnb_sol,cviewer);
+
+   // 3 a) set up another da with the border points
+   N_cwb = N_cnb + 2;
+   DMDACreate2d(PETSC_COMM_WORLD,     //
+               DM_BOUNDARY_NONE,          // no periodicity in x
+               DM_BOUNDARY_NONE,          // no periodicity in y
+               DMDA_STENCIL_BOX,       // star = cardinal directions, box = more general
+               N_cwb,N_cwb,                     // mesh size in x & y directions
+               PETSC_DECIDE,PETSC_DECIDE, // local mesh size
+               1,                         // degree of freedom
+               width,                         // stencil width
+               NULL,NULL,                 // not important
+               &cwb_da);
+   DMSetUp(cwb_da);
+   DMDASetUniformCoordinates(cwb_da,user.xmin,user.xmax,user.ymin,user.ymax,user.zmin,user.zmax);
+   DMGetCoordinateDM(cwb_da, &coord_da);
+   DMGetCoordinates(cwb_da, &global);
+   DMDAVecGetArray(coord_da, global, &coors);
+   DMDAGetCorners(coord_da, &mstart, &nstart, 0, &m, &n, 0);
+   printf("Now printing coords of borderded cwb_da with N = %d\n",N_cwb);
+   for (i=mstart; i<mstart+m; i++) {
+      for (j=nstart; j<nstart+n; j++) {
+         PetscPrintf(PETSC_COMM_WORLD,"(%5.2f,%5.2f) ",coors[j][i].x,coors[j][i].y);
+      }
+      PetscPrintf(PETSC_COMM_WORLD,"\n");
+   }
+
+   // 3 b) set up a big vector for cwb_da
+   DMGetGlobalVector(cwb_da,&cwb_sol);
+   VecSet(cwb_sol,0.0);
+   DMDAVecGetArray(cwb_da, cwb_sol, &cwb_u);
+   DMDAVecGetArray(cnb_da, cnb_sol, &cnb_u);
+   for (i=0; i<N_cnb; i++) { // fill the interior
+      for (j=0; j<N_cnb; j++) {
+         cwb_u[j+1][i+1] = cnb_u[j][i];
+      }
+   }
+   for (i=0; i<N_cwb; i++) { // top & bottom border
+      x = user.xmin + kh*i;
+      user.g_bdry(x,user.ymin,0,NULL,&cwb_u[0][i]);       // bottom
+      user.g_bdry(x,user.ymax,0,NULL,&cwb_u[N_cwb-1][i]); // top
+   }
+   for (j=1; j<N_cwb-1; j++) { // left & right border
+      y = user.ymin + kh*j;
+      user.g_bdry(user.xmin,y,0,NULL,&cwb_u[j][0]);       // left
+      user.g_bdry(user.xmax,y,0,NULL,&cwb_u[j][N_cwb-1]); // right
+   }
+   DMDAVecRestoreArray(cwb_da, cwb_sol, &cwb_u);
+   DMDAVecRestoreArray(cnb_da, cnb_sol, &cnb_u);
+
+   // 3 b) print the cwb solution
+   PetscViewerASCIIOpen(PETSC_COMM_WORLD,"load_cwb.m",&cviewer);
+   PetscViewerPushFormat(cviewer,PETSC_VIEWER_ASCII_MATLAB);
+   PetscObjectSetName((PetscObject)cwb_sol,"u_cwb");
+   VecView(cwb_sol,cviewer);
+
+
+
+   // 4 a) set up interpolation matrix
+   DMCreateInterpolation(cwb_da,da,&interp, NULL);              // compute mapping from cda to da
+   // DMCreateGlobalVector(cda,&csol); VecSet(csol,0.0);       // initialize coarse solution
+
+   // 4 b) compute the interpolatieon
+   DMGetGlobalVector(da,&u_initial);
+   MatInterpolate(interp, cwb_sol, u_initial); // u_initial = interpolation of cwb_sol
+   PetscViewerASCIIOpen(PETSC_COMM_WORLD,"load_interp.m",&cviewer);
+   PetscViewerPushFormat(cviewer,PETSC_VIEWER_ASCII_MATLAB);
+   PetscObjectSetName((PetscObject)u_initial,"u_interp");
+   VecView(u_initial,cviewer);
+
+  return(0);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
    MPI_Comm_size(PETSC_COMM_WORLD,&size); // get # of processors
    MPI_Comm_rank(PETSC_COMM_WORLD,&rank); // get index of current procs
    if (size==1) {
@@ -513,95 +690,7 @@ int main(int argc,char **args) {
       KSPSetTolerances(subksp,1.e-1,PETSC_DEFAULT,PETSC_DEFAULT,PETSC_DEFAULT);
       SNESLineSearchSetType(subls,SNESLINESEARCHBT);
       SNESLineSearchSetOrder(subls,2);
-   } else if (ilusin) {
-      SNESSetTolerances(subsnes,PETSC_DEFAULT,PETSC_DEFAULT,PETSC_DEFAULT,1,PETSC_DEFAULT); // one iteration
-      // KSPSetTolerances(subksp,1.e-1,PETSC_DEFAULT,PETSC_DEFAULT,PETSC_DEFAULT); //
-      SNESLineSearchSetType(subls,SNESLINESEARCHBT);
-      SNESLineSearchSetOrder(subls,2);
-      KSPSetType(subksp,KSPPREONLY);  //  don't use any krylov
-      PCSetType(subpc,PCILU);         // use inexact ILU
-   } else if (coarse) {
-      // in progress
-      PetscOptionsSetValue(NULL,"-snes_type","composite");
-      PetscOptionsSetValue(NULL,"-snes_composite_type","additiveoptimal");
-      PetscOptionsSetValue(NULL,"-snes_composite_sneses","nasm,fas");
-      PetscOptionsSetValue(NULL,"-sub_0_snes_nasm_type","restrict"); // SIN settings
-      PetscOptionsSetValue(NULL,"-sub_0_sub_ksp_type","dgmres");
-      PetscOptionsSetValue(NULL,"-sub_0_sub_pc_type","eisenstat");
-      PetscOptionsSetValue(NULL,"-sub_0_sub_snes_max_it","1");
-      PetscOptionsSetValue(NULL,"-sub_0_sub_ksp_rtol","1e-1");
-      PetscOptionsSetValue(NULL,"-sub_0_sub_snes_linesearch_order","2");
-      PetscOptionsSetValue(NULL,"-sub_1_fas_coarse_snes_max_it","1"); // FAS setting
-      PetscOptionsSetValue(NULL,"-sub_1_fas_coarse","1"); // FAS setting
-   } else if (ngmres) {
-      // in progress
-      PetscOptionsSetValue(NULL,"-snes_type","ngmres");
-      PetscOptionsSetValue(NULL,"-npc_snes_type","nasm");
-      PetscOptionsSetValue(NULL,"-snes_npc_side","right"); // should it be left or right
-      PetscOptionsSetValue(NULL,"-npc_snes_nasm_type","restrict");
-      PetscOptionsSetValue(NULL,"-npc_sub_ksp_type","dgmres");
-      PetscOptionsSetValue(NULL,"-npc_sub_pc_type","eisenstat");
-      PetscOptionsSetValue(NULL,"-npc_sub_snes_max_it","1");
-      PetscOptionsSetValue(NULL,"-npc_sub_ksp_rtol","1e-1");
-   } else if(aspin) {
-      /* ASPIN - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-         * work in progress
-         Additive Schwarz Preconditioned Inexact Newton is a completely different
-         from NASM. It's using Newton as the global method and using NASM as
-         a preconditioner. The default settings are terrible so I made these
-         options available.
-      - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
-      ierr = SNESSetType(snes,SNESASPIN); CHKERRQ(ierr);
-      ierr = SNESGetNPC(snes,&subsnes);
-      // ierr = SNESGetLineSearch(subsnes,&subls); // get local linesearch, default is cubic BT
-      // ierr = SNESGetKSP(subsnes,&subksp);       // get local KSP, default is preonly
-      // ierr = KSPGetPC(subksp,&subpc);           // get local PC, default is lu
-      // ierr = KSPSetType(subksp,KSPDGMRES);      // change KSP to DGMRES
-      // ierr = PCSetType(subpc,PCEISENSTAT);      // change PC to eisenstat
-      // ierr = SNESLineSearchSetOrder(subls,2);   // change BT order to quadratic
-      // ierr = SNESSetNPC(snes,subsnes);          // apply the changes
-      PetscOptionsSetValue(NULL,"-npc_sub_ksp_type","fgmres");
-      PetscOptionsSetValue(NULL,"-npc_sub_pc_type","ilu");
-      PetscOptionsSetValue(NULL,"-npc_sub_snes_linesearch_order","2");
-      // PetscOptionsSetValue(NULL,"-npc_sub_snes_rtol","1e-1");
-      // PetscOptionsSetValue(NULL,"-npc_sub_ksp_rtol","1e-1");
-      // PetscOptionsSetValue(NULL,"-npc_sub_snes_max_it","1");
    }
-   if (mixed) { // each subdomain gets their own indexed prefix
-      // work in progress
-      char prefix[10];
-      sprintf(prefix,"sub_%d_",rank);
-      SNESSetOptionsPrefix(subsnes,prefix);
-   }
-
-   // if ((rank==size-1) && mixed) { // final domain
-   //    // SNESSetType(subsnes,SNESFAS); CHKERRQ(ierr);
-   //    SNESSetType(subsnes,SNESNEWTONLS);
-   //    if (fast){
-   //       // do 1 iteration
-   //       SNESSetTolerances(subsnes,PETSC_DEFAULT,PETSC_DEFAULT,PETSC_DEFAULT,1,PETSC_DEFAULT);
-   //    } else {
-   //       SNESSetTolerances(subsnes,PETSC_DEFAULT,1.e-1,PETSC_DEFAULT,PETSC_DEFAULT,PETSC_DEFAULT);
-   //    }
-   //    KSPSetType(subksp,KSPGMRES);
-   //    PCSetType(subpc,PCEISENSTAT);
-   // } else  {
-   //    if (fast) {
-   //       // 1 iteration only + L2 linesearch
-   //       SNESLineSearchSetType(subls,SNESLINESEARCHL2); // secant L2 linesearch
-   //       SNESSetTolerances(subsnes,PETSC_DEFAULT,PETSC_DEFAULT,PETSC_DEFAULT,1,PETSC_DEFAULT);
-   //       KSPSetTolerances(subksp,1.e-1,PETSC_DEFAULT,PETSC_DEFAULT,PETSC_DEFAULT);
-   //       SNESLineSearchSetTolerances(subls,PETSC_DEFAULT,PETSC_DEFAULT,1.e-1,PETSC_DEFAULT,PETSC_DEFAULT,PETSC_DEFAULT);
-   //    } else if (size > 1) {
-   //       // newton rres < 0.1
-   //       // gmres res < 0.1
-   //       SNESSetTolerances(subsnes,PETSC_DEFAULT,1.e-1,PETSC_DEFAULT,PETSC_DEFAULT,PETSC_DEFAULT);
-   //       KSPSetTolerances(subksp,1.e-1,PETSC_DEFAULT,PETSC_DEFAULT,PETSC_DEFAULT);
-   //       SNESLineSearchSetTolerances(subls,PETSC_DEFAULT,PETSC_DEFAULT,1.e-1,PETSC_DEFAULT,PETSC_DEFAULT,PETSC_DEFAULT);
-   //    }
-   //    KSPSetType(subksp,KSPGMRES);
-   //    PCSetType(subpc,PCEISENSTAT);
-   // }
 
    // End of custom solver settings.
    // The lines of code below make it possible to make additional changes
@@ -638,6 +727,7 @@ int main(int argc,char **args) {
    ierr = SNESSolve(snes,NULL,u_initial); CHKERRQ(ierr);
    ierr = PetscTime(&t2); CHKERRQ(ierr);
 
+
    /* Iterations - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
       (This is a work in progress)
       Get the number of NASM iterations.
@@ -656,8 +746,6 @@ int main(int argc,char **args) {
       ierr = SNESGetIterationNumber(snes,&NASM_its); CHKERRQ(ierr); // nasm is global
       ierr = KSPGetTotalIterations(subksp,&KSP_its); CHKERRQ(ierr); // krylov iters
       SNESGetIterationNumber(subsnes,&Newt_its);    // these don't work either
-      // SNESGetNumberFunctionEvals(subsnes,&Newt_its); // this is supposed to be newton but not quite right
-      // SNESGetLinearSolveIterations(subsnes,&Newt_its);
    }
 
    /* Error info - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -

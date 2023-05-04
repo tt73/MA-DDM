@@ -10,6 +10,10 @@ maddm: maddm.o MAfunctions.o
 	-${CLINKER} -o maddm maddm.o MAfunctions.o ${PETSC_LIB}
 	${RM} maddm.o MAfunctions.o
 
+interp: interp_example.o MAfunctions.o
+	-${CLINKER} -o interp interp_example.o MAfunctions.o ${PETSC_LIB}
+	${RM} interp_example.o MAfunctions.o
+
 bratu: bratu.c
 	${CC} $^ ${PETSC_LIB} ${PETSC_CCPPFLAGS} ${CC_FLAGS} -o $@
 
