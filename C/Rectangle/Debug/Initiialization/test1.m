@@ -7,6 +7,7 @@ h = 2/(N+1);
 
 init = "coarse";
 % init = "zeros";
+% init = "random";
 cmd = sprintf("../../maddm -problem ex2 -N %d -sol -debug -snes_max_it 100 -init_type %s -snes_atol 1e-10",N,init);
 
 out = system(cmd);

@@ -19,6 +19,7 @@ extern PetscErrorCode Form1DUExact(DMDALocalInfo*, Vec, MACtx*);
 extern PetscErrorCode Form2DUExact(DMDALocalInfo*, Vec, MACtx*);
 extern PetscErrorCode Form3DUExact(DMDALocalInfo*, Vec, MACtx*);
 extern PetscErrorCode ComputeRHS(DMDALocalInfo*, Vec, MACtx*);
+extern PetscErrorCode InitialState(DM, InitialType, Vec, MACtx*);
 
 /* Problem 1 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
    Smooth example.
@@ -622,6 +623,16 @@ int main(int argc,char **args) {
    - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
    ierr = DMGetGlobalVector(da,&u_initial); CHKERRQ(ierr);
    ierr = InitialState(da,initial,u_initial,&user); CHKERRQ(ierr);
+   if (debug) {
+      // print out intial guess in matlab format
+      PetscViewer viewer; // Viewer object fascilitates printing out solution
+      ierr = PetscViewerCreate(PETSC_COMM_WORLD,&viewer);
+      ierr = PetscViewerASCIIOpen(PETSC_COMM_WORLD,"load_initial.m",&viewer);
+      ierr = PetscViewerPushFormat(viewer,PETSC_VIEWER_ASCII_MATLAB);
+      ierr = PetscObjectSetName((PetscObject)u_initial,"u_initial");
+      ierr = VecView(u_initial,viewer);
+      ierr = PetscViewerDestroy(&viewer); CHKERRQ(ierr);
+   }
    // SNESSetCountersReset(subsnes,0); // prevent newton iteration count from resetting
    ierr = PetscTime(&t1); CHKERRQ(ierr);
    ierr = SNESSolve(snes,NULL,u_initial); CHKERRQ(ierr);
@@ -695,7 +706,7 @@ int main(int argc,char **args) {
                ProblemTypes[problem],gridstr,size,info.sw,user.epsilon,op,errinf,err2h,t2-t1,KSP_its,Newt_its,NASM_its); CHKERRQ(ierr);
 
    /* Debugging Info - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-      To print out debugging info, add the option -t1_debug.
+      To print out debugging info, add the option -debug.
       The goal is to get info about the subdomains.
    - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
    if (debug) {
@@ -731,13 +742,7 @@ int main(int argc,char **args) {
       ierr = PetscViewerPushFormat(viewer,PETSC_VIEWER_ASCII_MATLAB);
       ierr = PetscObjectSetName((PetscObject)u_exact,"u_exact");
       ierr = VecView(u_exact,viewer);
-      if (debug) { // extras for sanity check
-         // print out intial guess in matlab format
-         InitialState(da,initial,u_initial,&user);
-         ierr = PetscViewerASCIIOpen(PETSC_COMM_WORLD,"load_initial.m",&viewer);
-         ierr = PetscViewerPushFormat(viewer,PETSC_VIEWER_ASCII_MATLAB);
-         ierr = PetscObjectSetName((PetscObject)u_initial,"u_initial");
-         ierr = VecView(u_initial,viewer);
+      if (debug) {
          Vec  RHS; // print out the source term or the RHS
          ierr = VecDuplicate(u_exact,&RHS);
          ierr = ComputeRHS(&info,RHS,&user);
@@ -837,4 +842,166 @@ PetscErrorCode ComputeRHS(DMDALocalInfo *info, Vec u, MACtx* user) {
    }
    ierr = DMDAVecRestoreArray(info->da, u, &au);CHKERRQ(ierr);
    return 0;
+}
+
+
+/* Initial State - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+   This function sets up the intial guess for the outer SNES method.
+   The available options are: zeros, random, corner, and pyramid.
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+PetscErrorCode InitialState(DM da, InitialType it, Vec u, MACtx *user) {
+   SNES           csnes;
+   DM             cda;  // coarse mesh
+   Vec            csol; // coarse solution
+   Mat            interp; // interpolation matrix
+   PetscErrorCode ierr;
+   DMDALocalInfo  info;
+   PetscRandom    rctx;
+   PetscReal      temp,temp1,temp2;
+   PetscFunctionBeginUser;
+
+   switch (it) {
+      case ZEROS: // just set u = 0
+         ierr = VecSet(u,0.0); CHKERRQ(ierr);
+         break;
+      case RANDOM:
+         ierr = PetscRandomCreate(PETSC_COMM_WORLD,&rctx); CHKERRQ(ierr);
+         ierr = VecSetRandom(u,rctx); CHKERRQ(ierr);
+         ierr = PetscRandomDestroy(&rctx); CHKERRQ(ierr);
+         break;
+      case CORNER:
+         /* Corner - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+            Get largest Dirichlet data on all corners.
+            Set the initial guess to that constant.
+            We may want to experiment with the smallest values of the 4 corners.
+         - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+         ierr = DMDAGetLocalInfo(da,&info); CHKERRQ(ierr);
+         switch (info.dim) {
+            case 1:
+            {
+               user->g_bdry(user->xmin,0.0,0.0,user,&temp1);
+               user->g_bdry(user->xmax,0.0,0.0,user,&temp2);
+               temp = PetscMax(temp1,temp2);
+               break;
+            }
+            case 2:
+            {
+               user->g_bdry(user->xmin,user->ymin,0.0,user,&temp1);
+               user->g_bdry(user->xmax,user->ymin,0.0,user,&temp2);
+               temp = PetscMax(temp1,temp2);
+               user->g_bdry(user->xmin,user->ymax,0.0,user,&temp1);
+               user->g_bdry(user->xmax,user->ymax,0.0,user,&temp2);
+               temp = PetscMax(temp,PetscMax(temp1,temp2));
+               break;
+            }
+            case 3:
+            {
+               SETERRQ(PETSC_COMM_SELF,3,"dim = 3 not yet supported\n");
+               break;
+            }
+            default:
+               SETERRQ(PETSC_COMM_SELF,5,"invalid dim from DMDALocalInfo\n");
+
+         }
+         ierr = VecSet(u,temp); CHKERRQ(ierr);
+         break;
+      case PYRAMID: // needs fixing
+         /*
+            Convex pyramid:
+
+            In 1D we have, a < x < b and u(a) = ga and u(b) = gb.
+            We want the initial guess to be two line segments connecting
+            (a,ga) to ((a+b)/2, gm ) to (b,gb). The midpoint is slightly
+            lower than ga and gb. We will let gm = min(ga,gb) - (ga+gb)/2.
+            This is equivalent to letting u0(x) = max(ma*(x-a)+ga,mb*(x-b)+gb)
+            where the slopes are given by ma = 2(gm-ga)/(b-a), and
+            mb = 2(gb-gm)/(b-a).
+
+            In 1D, u0 is shaped like a V. We can generalize this shape to a convex
+            pyramid in 2D. We let u0 be the max of 4 lines:
+            u0(x,y) = max( mxa*(x-xmin)+gxa,
+                           mxb*(x-xmax)+gxb,
+                           mya*(y-ymin)+gya,
+                           myb*(y-ymax)+gyb)
+            In 2D, we let gm = min(gxa,gxb,gya,gyb) - avg(gxa,gxb,gya,gyb).
+         */
+         ierr = DMDAGetLocalInfo(da,&info); CHKERRQ(ierr);
+         switch (info.dim) {
+            case 1: // 1D V-shape
+            {
+               PetscInt  i;
+               PetscReal hx,x,*au,ga,gb,gm,ma,mb;
+
+               ierr = DMDAVecGetArray(da, u, &au); CHKERRQ(ierr);
+               hx = (user->xmax - user->xmin)/(PetscReal)(info.mx + 1);
+               user->g_bdry(user->xmin,0.0,0.0,user,&ga);
+               user->g_bdry(user->xmax,0.0,0.0,user,&gb);
+               gm = PetscMin(ga,gb) - (ga+gb)/2.0;
+               ma = 2.0*(gm-ga)/(user->xmax-user->xmin);
+               mb = 2.0*(gb-gm)/(user->xmax-user->xmin);
+               for (i=info.xs; i<info.xs+info.xm; i++) {
+                  x = user->xmin + (i+1)*hx;
+                  au[i] = PetscMax(ma*(x-user->xmin)+ga,mb*(x-user->xmax)+gb);
+               }
+               ierr = DMDAVecRestoreArray(da, u, &au); CHKERRQ(ierr);
+               break;
+            }
+            case 2: // 2D pyramid-shape
+            {
+               PetscInt   i, j;
+               PetscReal  hx,hy,x,y,**au,gxa,gxb,gya,gyb,gmin,gm,mxa,mxb,mya,myb,temp;
+
+               ierr = DMDAVecGetArray(da, u, &au); CHKERRQ(ierr);
+               hx = (user->xmax - user->xmin)/(PetscReal)(info.mx + 1);
+               hy = (user->ymax - user->ymin)/(PetscReal)(info.my + 1);
+               for (j = info.ys; j < info.ys + info.ym; j++) {
+                  y = user->ymin + (j+1)*hy;
+                  user->g_bdry(user->xmin,y,0.0,user,&gya);
+                  user->g_bdry(user->xmax,y,0.0,user,&gyb);
+                  for (i = info.xs; i < info.xs+info.xm; i++) {
+                     x    = user->xmin + (i+1)*hx;
+                     temp = PetscMin(gya,gyb);
+                     user->g_bdry(x,user->ymin,0.0,user,&gxa);
+                     user->g_bdry(x,user->ymax,0.0,user,&gxb);
+                     gmin = PetscMin(temp,PetscMin(gxa,gxb));
+                     gm   = gmin - (gxa+gxb+gya+gyb)/4.0;
+                     // gxm = PetscMin(gxa,gxb) - (gxa+gxb)/2.0;
+                     mya = 2.0*(gm-gya)/(user->xmax - user->xmin);
+                     myb = 2.0*(gyb-gm)/(user->xmax - user->xmin);
+                     mxa = 2.0*(gm-gxa)/(user->ymax - user->ymin);
+                     mxb = 2.0*(gxb-gm)/(user->ymax - user->ymin);
+                     temp = PetscMax(mya*(y-user->ymin)+gya,myb*(y-user->ymax)+gyb);
+                     au[j][i] = PetscMax(temp,PetscMax(mxa*(x-user->xmin)+gxa,mxb*(x-user->xmax)+gxb));
+                  }
+               }
+               ierr = DMDAVecRestoreArray(da, u, &au); CHKERRQ(ierr);
+               break;
+            }
+            case 3:
+            {
+               SETERRQ(PETSC_COMM_SELF,3,"dim = 3 not yet supported\n");
+               break;
+            }
+            default:
+               SETERRQ(PETSC_COMM_SELF,5,"invalid dim from DMDALocalInfo\n");
+         }
+         break;
+      case COARSE:
+         DMCoarsen(da,PETSC_COMM_WORLD,&cda);                      // make a coarse mesh
+         DMCreateInterpolation(cda,da,&interp, NULL);              // compute mapping from cda to da
+         // DMInterpolate(snes->dm, interp, fine)
+         SNESCreate(PETSC_COMM_WORLD,&csnes); SNESSetDM(csnes,cda); // snes for cda
+         // SNESSetType(snes,SNESNEWTONLS);
+         SNESSetTolerances(csnes,PETSC_DEFAULT,PETSC_DEFAULT,PETSC_DEFAULT,1,PETSC_DEFAULT); // one iteration
+         DMCreateGlobalVector(cda,&csol); VecSet(csol,0.0);       // initialize coarse solution
+         SNESSolve(csnes,NULL,csol); SNESGetSolution(csnes,&csol);  // solve coarse problem
+         SNESConvergedReasonViewFromOptions(csnes);
+         MatInterpolate(interp, u, csol);                         // interpolate solution to original mesh
+         MatDestroy(&interp); VecDestroy(&csol); DMDestroy(&cda); // clean up
+         break;
+
+      default:
+         SETERRQ(PETSC_COMM_SELF,4,"invalid InitialType ... how did I get here?\n");
+   }
+   PetscFunctionReturn(0);
 }
