@@ -2,10 +2,12 @@
 % and see how the initial guess evolves. 
 
 
-N = 32; 
+N = 31; 
 h = 2/(N+1);
 
-cmd = sprintf("../../maddm -N %d -sol -debug -snes_max_it 1 -init_type coarse",N);
+init = "coarse";
+% init = "zeros";
+cmd = sprintf("../../maddm -problem ex2 -N %d -sol -debug -snes_max_it 100 -init_type %s -snes_atol 1e-10",N,init);
 
 out = system(cmd);
 

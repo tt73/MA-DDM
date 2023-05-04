@@ -8,6 +8,9 @@
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 PetscErrorCode InitialState(DM da, InitialType it, Vec u, MACtx *user) {
    SNES           snes;
+   DM             cda;  // coarse mesh
+   Vec            csol; // coarse solution
+   Mat            interp; // interpolation matrix
    PetscErrorCode ierr;
    DMDALocalInfo  info;
    PetscRandom    rctx;
@@ -140,14 +143,17 @@ PetscErrorCode InitialState(DM da, InitialType it, Vec u, MACtx *user) {
                SETERRQ(PETSC_COMM_SELF,5,"invalid dim from DMDALocalInfo\n");
          }
          break;
-      case COARSE: // solve on coarse grid of size 4h, then interpolate to regular grid
-         SNESCreate(PETSC_COMM_WORLD,&snes);
-         SNESSetDM(snes,da);
-         SNESSetType(snes,SNESFAS); // multigrid
+      case COARSE:
+         DMCoarsen(da,PETSC_COMM_WORLD,&cda);                     // make a coarse mesh
+         SNESCreate(PETSC_COMM_WORLD,&snes); SNESSetDM(snes,cda); // snes for cda
+         // SNESSetType(snes,SNESNEWTONLS);
          SNESSetTolerances(snes,PETSC_DEFAULT,PETSC_DEFAULT,PETSC_DEFAULT,1,PETSC_DEFAULT); // one iteration
-         VecSet(u,0.0);
-         SNESSolve(snes,NULL,u);
-         SNESGetSolution(snes,&u);
+         DMCreateGlobalVector(cda,&csol); VecSet(csol,0.0);       // initialize coarse solution
+         SNESSolve(snes,NULL,csol); SNESGetSolution(snes,&csol);  // solve coarse problem
+         SNESConvergedReasonViewFromOptions(snes);
+         DMCreateInterpolation(cda,da,&interp, NULL);             // compute mapping from cda to da
+         MatInterpolate(interp, u, csol);                         // interpolate solution to original mesh
+         MatDestroy(&interp); VecDestroy(&csol); DMDestroy(&cda); // clean up
          break;
 
       default:
