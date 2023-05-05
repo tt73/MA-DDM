@@ -998,6 +998,7 @@ PetscErrorCode InitialState(DM da, InitialType it, Vec u, MACtx *user) {
             PetscReal **u_cnb, ** u_cwb, temp, kh, x, y;
             Vec       sol_cnb, sol_cwb;
             Mat       interp;
+            PetscViewer  cviewer;
 
 
             N = user->N;
@@ -1074,6 +1075,11 @@ PetscErrorCode InitialState(DM da, InitialType it, Vec u, MACtx *user) {
                MatInterpolate(interp, sol_cwb, u); // u_initial = interpolation of cwb_sol
 
 
+               PetscViewerCreate(PETSC_COMM_WORLD,&cviewer);
+               PetscViewerASCIIOpen(PETSC_COMM_WORLD,"load_cwb.m",&cviewer);
+               PetscViewerPushFormat(cviewer,PETSC_VIEWER_ASCII_MATLAB);
+               PetscObjectSetName((PetscObject)sol_cwb,"u_cwb");
+               VecView(sol_cwb,cviewer);
 
 
 
