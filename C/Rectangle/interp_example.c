@@ -270,6 +270,7 @@ int main(int argc,char **args) {
    PetscViewer  cviewer;
    Mat          interp;
    PetscReal    x, y, u_temp;
+   PetscInt     coarseness;
 
 
 
@@ -310,6 +311,7 @@ int main(int argc,char **args) {
    ierr = PetscOptionsInt("-Ny","number of interior nodes vertically","maddm.c",Ny,&Ny,NULL);CHKERRQ(ierr);
    ierr = PetscOptionsInt("-order","order of quadrature (default is 2)","maddm.c",order,&order,NULL);CHKERRQ(ierr);
    ierr = PetscOptionsInt("-width","stencil width for MA discretization","maddm.c",width,&width,&set_width);CHKERRQ(ierr);
+   ierr = PetscOptionsInt("-coarseness","integer coarseness factor as in coarseness*h","maddm.c",coarseness,&coarseness,NULL);CHKERRQ(ierr);
    ierr = PetscOptionsBool("-debug","print out extra info","maddm.c",debug,&debug,NULL);CHKERRQ(ierr);
    ierr = PetscOptionsBool("-sol","generate MATLAB solution files","maddm.c",printSol,&printSol,NULL);CHKERRQ(ierr);
    ierr = PetscOptionsBool("-mixed","sub-index the local domains and use a different solver on the last subdomain","maddm.c",mixed,&mixed,NULL);CHKERRQ(ierr);
@@ -446,15 +448,15 @@ int main(int argc,char **args) {
    }
 
    // 1b) try to create a coarse grid - no boundary
-   k = 2;
+   k = coarseness;
    N_cwb = PetscCeilReal( (Nx-1)/((PetscReal)k)+1);
    N_cnb = N_cwb - 2;
    kh = (user.xmax-user.xmin)/(N_cnb+1);
    DMDACreate2d(PETSC_COMM_WORLD,     //
                         DM_BOUNDARY_NONE,          // no periodicity in x
                         DM_BOUNDARY_NONE,          // no periodicity in y
-                        DMDA_STENCIL_STAR, // star = cardinal directions, box = more general
-                        N_cnb,N_cnb,                     // mesh size in x & y directions
+                        DMDA_STENCIL_STAR,         // star = cardinal directions, box = more general
+                        N_cnb,N_cnb,               // mesh size in x & y directions
                         PETSC_DECIDE,PETSC_DECIDE, // local mesh size
                         1,                         // degree of freedom
                         1,                         // stencil width
@@ -551,8 +553,6 @@ int main(int argc,char **args) {
    PetscViewerPushFormat(cviewer,PETSC_VIEWER_ASCII_MATLAB);
    PetscObjectSetName((PetscObject)cwb_sol,"u_cwb");
    VecView(cwb_sol,cviewer);
-
-
 
    // 4 a) set up interpolation matrix
    DMCreateInterpolation(cwb_da,da,&interp, NULL);              // compute mapping from cda to da

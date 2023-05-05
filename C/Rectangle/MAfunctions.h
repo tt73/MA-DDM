@@ -4,6 +4,10 @@
 
 */
 typedef struct {
+   // Size of N by N mesh
+   PetscInt N;
+   // Coarseness of initilization mesh as in ~ k*h resolution
+   PetscInt k;
    // Stencil width
    PetscInt  width;
    // domain dimensions

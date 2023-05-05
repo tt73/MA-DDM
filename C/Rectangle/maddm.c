@@ -260,7 +260,7 @@ int main(int argc,char **args) {
    PetscReal      h_eff,hx,hy,eps,errinf,normconst2h,err2h,op;
    char           gridstr[99];
    PetscInt       dim,width,N,Nx,Ny,order,NASM_its,KSP_its,Newt_its;
-   PetscInt       mm, nn, olx, oly;
+   PetscInt       mm, nn, olx, oly, coarseness;
    PetscLogDouble t1,t2;
    PetscMPIInt    rank,size;
 
@@ -277,6 +277,7 @@ int main(int argc,char **args) {
    order       = 2;     // guadrature order
    op          = 0.1;   // domain overlap percentage
    initial     = ZEROS; // initial guess for outer iterative method
+   coarseness  = 2;     // we may opt to solve on coarse problem with resolution h*coarseness for the initialization
    problem     = ex1;   // choose ex1, ex2, or ex3
    user.xmin   = -1.0; user.xmax = 1.0; // x limits [-1, 1]
    user.ymin   = -1.0; user.ymax = 1.0; // y limits [-1, 1]
@@ -300,6 +301,7 @@ int main(int argc,char **args) {
    ierr = PetscOptionsInt("-Ny","number of interior nodes vertically","maddm.c",Ny,&Ny,NULL);CHKERRQ(ierr);
    ierr = PetscOptionsInt("-order","order of quadrature (default is 2)","maddm.c",order,&order,NULL);CHKERRQ(ierr);
    ierr = PetscOptionsInt("-width","stencil width for MA discretization","maddm.c",width,&width,&set_width);CHKERRQ(ierr);
+   ierr = PetscOptionsInt("-coarseness","integer coarseness of initialization","maddm.c",coarseness,&coarseness,NULL);CHKERRQ(ierr);
    ierr = PetscOptionsBool("-debug","print out extra info","maddm.c",debug,&debug,NULL);CHKERRQ(ierr);
    ierr = PetscOptionsBool("-sol","generate MATLAB solution files","maddm.c",printSol,&printSol,NULL);CHKERRQ(ierr);
    ierr = PetscOptionsBool("-mixed","sub-index the local domains and use a different solver on the last subdomain","maddm.c",mixed,&mixed,NULL);CHKERRQ(ierr);
@@ -333,8 +335,9 @@ int main(int argc,char **args) {
       Epsilon is the regularization constant. We choose epsilon = (hd)^2 by default.
       We may change epsilon during runtime with "-t1_eps <f>", where <f> is a float
    */
-   if (set_N)
+   if (set_N){
       Nx = Ny = N;
+   }
    hx    = (user.xmax - user.xmin)/(Nx+1);
    hy    = (user.ymax - user.ymin)/(Ny+1);
    h_eff = PetscMax(hx,hy);
@@ -343,7 +346,9 @@ int main(int argc,char **args) {
    h_eff *= width;
    if (!set_eps)
       eps = h_eff*h_eff; // epsilon = (h*d)^2
+   user.N       = N;
    user.debug   = debug;
+   user.k       = coarseness;
    user.width   = width;
    user.epsilon = eps;
    user.g_bdry  = g_bdry_ptr[dim-1][problem];
@@ -851,10 +856,6 @@ PetscErrorCode ComputeRHS(DMDALocalInfo *info, Vec u, MACtx* user) {
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 PetscErrorCode InitialState(DM da, InitialType it, Vec u, MACtx *user) {
    PetscErrorCode ierr;
-   SNES           csnes;
-   DM             cda;  // coarse mesh
-   Vec            csol; // coarse solution
-   Mat            interp; // interpolation matrix
    DMDALocalInfo  info;
    PetscRandom    rctx;
    PetscReal      temp,temp1,temp2;
@@ -862,7 +863,7 @@ PetscErrorCode InitialState(DM da, InitialType it, Vec u, MACtx *user) {
 
    switch (it) {
       case ZEROS: // just set u = 0
-         ierr = VecSet(u,0.0); CHKERRQ(ierr);
+         zero_init: ierr = VecSet(u,0.0); CHKERRQ(ierr);
          break;
       case RANDOM:
          ierr = PetscRandomCreate(PETSC_COMM_WORLD,&rctx); CHKERRQ(ierr);
@@ -987,20 +988,34 @@ PetscErrorCode InitialState(DM da, InitialType it, Vec u, MACtx *user) {
          }
          break;
       case COARSE:
-         // DMDAGetLocalInfo(da,&info);
-         DMCoarsen(da,PETSC_COMM_WORLD,&cda);                      // make a coarse mesh
-         DMCreateInterpolation(cda,da,&interp, NULL);              // compute mapping from cda to da
-         SNESCreate(PETSC_COMM_WORLD,&csnes); SNESSetDM(csnes,cda); // snes for cda
-         // DMDASNESSetFunctionLocal(cda,INSERT_VALUES,(DMDASNESFunction)(residual_ptr[1]),&user);
-         // DMDASNESSetJacobianLocal(cda,(DMDASNESJacobian)(jacobian_ptr[1]),&user);
-         // SNESSetType(snes,SNESNEWTONLS);
-         // SNESSetTolerances(csnes,PETSC_DEFAULT,PETSC_DEFAULT,PETSC_DEFAULT,1,PETSC_DEFAULT); // one iteration
-         DMCreateGlobalVector(cda,&csol); VecSet(csol,0.0);       // initialize coarse solution
-         SNESSolve(csnes,NULL,csol); SNESGetSolution(csnes,&csol);  // solve coarse problem
-         SNESConvergedReasonViewFromOptions(csnes);
-         MatInterpolate(interp, u, csol);                         // interpolate solution to original mesh
-         MatDestroy(&interp); VecDestroy(&csol); DMDestroy(&cda); // clean up
-         break;
+         {  // local variables
+
+            SNES      csnes;
+            DM        da_cnb, da_cwb;  // no boundary, with boundary
+            Vec       csol; // coarse solution
+            Mat       interp; // interpolation matrix
+            PetscInt  N, N_cnb, N_cwb;
+            PetscReal temp;
+
+            // First, compute the size of the coarse problem
+            N = user->N;
+            temp = (N-1)/((PetscReal)user->k)+1;
+            if (PetscCeilReal(temp)==temp) {
+               printf("interpolation with k = %d is doable\n",user->k);
+            } else {
+               printf("WARNING: interpolation with k = %d is not possible for N = %d. Initializing with zero.\n",user->k,N);
+               goto zero_init; // go initialize with zero
+            }
+
+            // DMCreateInterpolation(cda,da,&interp, NULL);              // compute mapping from cda to da
+            // SNESCreate(PETSC_COMM_WORLD,&csnes); SNESSetDM(csnes,cda); // snes for cda
+            // DMCreateGlobalVector(cda,&csol); VecSet(csol,0.0);       // initialize coarse solution
+            // SNESSolve(csnes,NULL,csol); SNESGetSolution(csnes,&csol);  // solve coarse problem
+            // SNESConvergedReasonViewFromOptions(csnes);
+            // MatInterpolate(interp, u, csol);                         // interpolate solution to original mesh
+            // MatDestroy(&interp); VecDestroy(&csol); DMDestroy(&cda); // clean up
+            break;
+         }
 
       default:
          SETERRQ(PETSC_COMM_SELF,4,"invalid InitialType ... how did I get here?\n");
