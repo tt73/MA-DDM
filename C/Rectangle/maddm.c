@@ -347,6 +347,7 @@ int main(int argc,char **args) {
    if (!set_eps)
       eps = h_eff*h_eff; // epsilon = (h*d)^2
    user.N       = N;
+   user.order   = order;
    user.debug   = debug;
    user.k       = coarseness;
    user.width   = width;
@@ -990,30 +991,98 @@ PetscErrorCode InitialState(DM da, InitialType it, Vec u, MACtx *user) {
       case COARSE:
          {  // local variables
 
-            SNES      csnes;
+            MACtx     cuser;
+            SNES      snes;
             DM        da_cnb, da_cwb;  // no boundary, with boundary
-            Vec       csol; // coarse solution
-            Mat       interp; // interpolation matrix
-            PetscInt  N, N_cnb, N_cwb;
-            PetscReal temp;
+            PetscInt  N, N_cnb, N_cwb, cwidth, i, j;
+            PetscReal **u_cnb, ** u_cwb, temp, kh, x, y;
+            Vec       sol_cnb, sol_cwb;
+            Mat       interp;
 
-            // First, compute the size of the coarse problem
+
             N = user->N;
             temp = (N-1)/((PetscReal)user->k)+1;
             if (PetscCeilReal(temp)==temp) {
                printf("interpolation with k = %d is doable\n",user->k);
+
+               // Solve coarse problem
+               N_cwb = (N-1)/((PetscReal)user->k)+1; // dimension of coarse w/ border
+               N_cnb = N_cwb - 2;                    // dimension of coarse w/o border
+               kh = (user->xmax-user->xmin)/(N_cnb+1)*user->k; // coarse resolution
+               cwidth = PetscCeilReal(PetscPowReal(kh,-0.333)); // coarse stencil width
+               DMDACreate2d(PETSC_COMM_WORLD,     //
+                        DM_BOUNDARY_NONE,          // no periodicity in x
+                        DM_BOUNDARY_NONE,          // no periodicity in y
+                        cwidth==1?DMDA_STENCIL_STAR:DMDA_STENCIL_BOX,         // star = cardinal directions, box = more general
+                        N_cnb,N_cnb,               // mesh size in x & y directions
+                        PETSC_DECIDE,PETSC_DECIDE, // local mesh size
+                        1,                         // degree of freedom
+                        cwidth,                    // stencil width
+                        NULL,NULL,                 // not important
+                        &da_cnb);
+               DMSetUp(da_cnb);
+               SNESCreate(PETSC_COMM_WORLD,&snes); SNESSetDM(snes,da_cnb);
+               cuser = *user; cuser.width = cwidth;
+               ComputeFwdStencilDirs(cwidth,&cuser);
+               ComputeWeights(cwidth,user->order,&cuser);
+               DMDASNESSetFunctionLocal(da_cnb,INSERT_VALUES,(DMDASNESFunction)(residual_ptr[1]),&cuser);
+               DMDASNESSetJacobianLocal(da_cnb,(DMDASNESJacobian)(jacobian_ptr[1]),&cuser);
+               DMGetGlobalVector(da_cnb,&sol_cnb);
+
+               VecSet(sol_cnb,0.0);             // zero initial condition
+               SNESSetUp(snes);                 // you can add more solve options here
+               SNESSolve(snes,NULL,sol_cnb);    // coarse solve
+               SNESGetSolution(snes,&sol_cnb);  // get the solution
+
+               // put solution into coarse grid with boundary
+               DMDACreate2d(PETSC_COMM_WORLD,     //
+                           DM_BOUNDARY_NONE,          // no periodicity in x
+                           DM_BOUNDARY_NONE,          // no periodicity in y
+                           DMDA_STENCIL_BOX,       // star = cardinal directions, box = more general
+                           N_cwb,N_cwb,                     // mesh size in x & y directions
+                           PETSC_DECIDE,PETSC_DECIDE, // local mesh size
+                           1,                         // degree of freedom
+                           user->width,               // stencil width
+                           NULL,NULL,                 // not important
+                           &da_cwb);
+               DMSetUp(da_cwb);
+               DMDASetUniformCoordinates(da_cwb,cuser.xmin,cuser.xmax,cuser.ymin,cuser.ymax,0,0);
+               DMGetGlobalVector(da_cwb,&sol_cwb);
+               VecSet(sol_cwb,0.0);
+               DMDAVecGetArray(da_cwb, sol_cwb, &u_cwb);
+               DMDAVecGetArray(da_cnb, sol_cnb, &u_cnb);
+               for (i=0; i<N_cnb; i++) { // fill the interior
+                  for (j=0; j<N_cnb; j++) {
+                     u_cwb[j+1][i+1] = u_cnb[j][i];
+                  }
+               }
+               for (i=0; i<N_cwb; i++) { // top & bottom border
+                  x = user->xmin + kh*i;
+                  user->g_bdry(x,user->ymin,0,NULL,&u_cwb[0][i]);       // bottom
+                  user->g_bdry(x,user->ymax,0,NULL,&u_cwb[N_cwb-1][i]); // top
+               }
+               for (j=1; j<N_cwb-1; j++) { // left & right border
+                  y = user->ymin + kh*j;
+                  user->g_bdry(user->xmin,y,0,NULL,&u_cwb[j][0]);       // left
+                  user->g_bdry(user->xmax,y,0,NULL,&u_cwb[j][N_cwb-1]); // right
+               }
+               DMDAVecRestoreArray(da_cwb, sol_cwb, &u_cwb);
+               DMDAVecRestoreArray(da_cnb, sol_cnb, &u_cnb);
+
+               // interpolate the solution
+               DMCreateInterpolation(da_cwb,da,&interp, NULL);
+               MatInterpolate(interp, sol_cwb, u); // u_initial = interpolation of cwb_sol
+
+
+
+
+
+
+
             } else {
                printf("WARNING: interpolation with k = %d is not possible for N = %d. Initializing with zero.\n",user->k,N);
                goto zero_init; // go initialize with zero
             }
-
-            // DMCreateInterpolation(cda,da,&interp, NULL);              // compute mapping from cda to da
-            // SNESCreate(PETSC_COMM_WORLD,&csnes); SNESSetDM(csnes,cda); // snes for cda
-            // DMCreateGlobalVector(cda,&csol); VecSet(csol,0.0);       // initialize coarse solution
-            // SNESSolve(csnes,NULL,csol); SNESGetSolution(csnes,&csol);  // solve coarse problem
-            // SNESConvergedReasonViewFromOptions(csnes);
-            // MatInterpolate(interp, u, csol);                         // interpolate solution to original mesh
-            // MatDestroy(&interp); VecDestroy(&csol); DMDestroy(&cda); // clean up
             break;
          }
 

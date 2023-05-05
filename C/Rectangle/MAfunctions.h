@@ -9,7 +9,9 @@ typedef struct {
    // Coarseness of initilization mesh as in ~ k*h resolution
    PetscInt k;
    // Stencil width
-   PetscInt  width;
+   PetscInt width;
+   // Order of quadrature
+   PetscInt order;
    // domain dimensions
    PetscReal xmin, xmax, ymin, ymax, zmin, zmax;
    // epsilon is the regularization term
