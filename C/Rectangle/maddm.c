@@ -629,9 +629,9 @@ int main(int argc,char **args) {
    - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
    ierr = DMGetGlobalVector(da,&u_initial); CHKERRQ(ierr);
 
-   if (rank==0){
-      ierr = InitialState(da,initial,u_initial,&user); CHKERRQ(ierr); // only one processor computes initial guess
-   }
+
+   ierr = InitialState(da,initial,u_initial,&user); CHKERRQ(ierr); // only one processor computes initial guess
+
 
 
    if (debug) {
@@ -1002,14 +1002,9 @@ PetscErrorCode InitialState(DM da, InitialType it, Vec u, MACtx *user) {
             PetscReal **u_cnb, ** u_cwb, temp, kh, x, y;
             Vec       sol_cnb, sol_cwb;
             Mat       interp;
-            // PetscMPIInt    rank,size;
-            // DMDALocalInfo  info_cwb;
+            PetscLogDouble t1,t2;
 
-
-            // MPI_Comm_size(PETSC_COMM_WORLD,&size); // get # of processors
-            // MPI_Comm_rank(PETSC_COMM_WORLD,&rank); // get index of current procs
-
-            N = user->N;
+            N = user->N; // mesh size of original problem
             temp = (N-1)/((PetscReal)user->k)+1;
             if (PetscCeilReal(temp)==temp) {
                // Solve coarse problem, no boundary
@@ -1021,7 +1016,7 @@ PetscErrorCode InitialState(DM da, InitialType it, Vec u, MACtx *user) {
                   printf("ratio kh to h: %f\n",kh/h);
                }
                cwidth = PetscCeilReal(PetscPowReal(kh,-0.333)); // coarse stencil width
-               DMDACreate2d(PETSC_COMM_SELF,     //
+               DMDACreate2d(PETSC_COMM_WORLD,     //
                         DM_BOUNDARY_NONE,          // no periodicity in x
                         DM_BOUNDARY_NONE,          // no periodicity in y
                         cwidth==1?DMDA_STENCIL_STAR:DMDA_STENCIL_BOX,  // star = cardinal directions, box = more general
@@ -1032,7 +1027,7 @@ PetscErrorCode InitialState(DM da, InitialType it, Vec u, MACtx *user) {
                         NULL,NULL,                 // not important
                         &da_cnb);
                DMSetUp(da_cnb);
-               SNESCreate(PETSC_COMM_SELF,&snes); SNESSetDM(snes,da_cnb);
+               SNESCreate(PETSC_COMM_WORLD,&snes); SNESSetDM(snes,da_cnb);
                cuser = *user; cuser.width = cwidth;
                ComputeFwdStencilDirs(cwidth,&cuser);
                ComputeWeights(cwidth,user->order,&cuser);
@@ -1042,13 +1037,16 @@ PetscErrorCode InitialState(DM da, InitialType it, Vec u, MACtx *user) {
 
                VecSet(sol_cnb,0.0);             // zero initial condition
                SNESSetUp(snes);                 // you can add more solve options here
+               PetscTime(&t1);
                SNESSolve(snes,NULL,sol_cnb);    // coarse solve
+               PetscTime(&t2);
+               if (user->debug){
+                  PetscPrintf(PETSC_COMM_SELF,"Coarse solve runtime: %.6f\n",t2-t1);
+               }
                SNESGetSolution(snes,&sol_cnb);  // get the solution
 
-
-
                // put solution into coarse grid with boundary
-               DMDACreate2d(PETSC_COMM_SELF,
+               DMDACreate2d(PETSC_COMM_WORLD,
                            DM_BOUNDARY_NONE,          // no periodicity in x
                            DM_BOUNDARY_NONE,          // no periodicity in y
                            user->width==1?DMDA_STENCIL_STAR:DMDA_STENCIL_BOX,           // star = cardinal directions, box = more general
@@ -1059,43 +1057,43 @@ PetscErrorCode InitialState(DM da, InitialType it, Vec u, MACtx *user) {
                            NULL,NULL,                 // not important
                            &da_cwb);
                DMSetUp(da_cwb);
-
-               // printf("Fine after da_cwb. rank %d out of %d\n",rank,size);
-
-
                DMDASetUniformCoordinates(da_cwb,cuser.xmin,cuser.xmax,cuser.ymin,cuser.ymax,0,0);
                DMGetGlobalVector(da_cwb,&sol_cwb);
                DMDAVecGetArray(da_cwb, sol_cwb, &u_cwb);
                DMDAVecGetArray(da_cnb, sol_cnb, &u_cnb);
-               // printf("rank %d out of %d: in charge of indeces %d to %d\n",rank,size, info_cwb.xs,info_cwb.xs+info_cwb.xm-1);
-               printf("now starting for loops\n");
-               for (i=0; i<N_cnb; i++) {
-                  for (j=0; j<N_cnb; j++) {
+               DMDAGetLocalInfo(da_cnb,&info);
+               for (i=info.xs; i<info.xs+info.xm; i++) {
+                  for (j=info.ys; j<info.ys+info.ym; j++) {
                      u_cwb[j+1][i+1] = u_cnb[j][i]; // fill the inteior
                   }
                }
-               for (i=0; i<N_cwb; i++) {
+               DMDAGetLocalInfo(da_cwb,&info); // fill the boundary
+               for (i=info.xs; i<info.xs+info.xm; i++) {
                   x = user->xmin + kh*i;
-                  user->g_bdry(x,user->ymin,0,NULL,&u_cwb[0][i]);       // bottom
-                  user->g_bdry(x,user->ymax,0,NULL,&u_cwb[N_cwb-1][i]); // top
+                  if (info.ys==0) {
+                     user->g_bdry(x,user->ymin,0,NULL,&u_cwb[0][i]);       // bottom
+                  } if (info.ys+info.ym==N_cwb) {
+                     user->g_bdry(x,user->ymax,0,NULL,&u_cwb[N_cwb-1][i]); // top
+                  }
                }
-               for (j=1; j<N_cwb-1; j++) {
+               for (j=info.ys; j<info.ys+info.ym; j++) {
                   y = user->ymin + kh*j;
-                  user->g_bdry(user->xmin,y,0,NULL,&u_cwb[j][0]);       // left
-                  user->g_bdry(user->xmax,y,0,NULL,&u_cwb[j][N_cwb-1]); // right
+                  if (info.xs==0) {
+                     user->g_bdry(user->xmin,y,0,NULL,&u_cwb[j][0]);       // left
+                  } if (info.xs+info.xm==N_cwb) {
+                     user->g_bdry(user->xmax,y,0,NULL,&u_cwb[j][N_cwb-1]); // right
+                  } else {
+                  }
                }
                DMDAVecRestoreArray(da_cwb, sol_cwb, &u_cwb);
                DMDAVecRestoreArray(da_cnb, sol_cnb, &u_cnb);
 
                // interpolate the solution
-               printf("Now starting interpolation\n");
-               DMCreateInterpolation(da_cwb,da,&interp, NULL);
+               DMCreateInterpolation(da_cwb, da, &interp, NULL);
                MatInterpolate(interp, sol_cwb, u); // u_initial = interpolation of cwb_sol
 
-               SNESDestroy(&snes);
+               DMDestroy(&da_cnb);   DMDestroy(&da_cwb); // clearing da also clears vec & snes
                MatDestroy(&interp);
-               VecDestroy(&sol_cnb); VecDestroy(&sol_cwb);
-               DMDestroy(&da_cnb);   DMDestroy(&da_cwb);
             } else {
                printf("---------------------------------------------------------------------------------------------\n");
                printf("WARNING: Interpolation with k=%d is not possible for N=%d. Initializing with zero.\n",user->k,N);

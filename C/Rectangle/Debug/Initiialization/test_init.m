@@ -5,7 +5,7 @@
 N = 17; 
 k = 2;
 
-cmd = sprintf("../../maddm -problem ex3 -N %d -init_type coarse -coarseness %d -sol -debug",N,k);
+cmd = sprintf("../../maddm -problem ex1 -N %d -init_type coarse -coarseness %d -sol -debug",N,k);
 out = system(cmd);
 
 
@@ -15,15 +15,13 @@ load_initial
 load_interp
 
 % reshape the solutions 
-u     = reshape(u,sqrt(length(u)),sqrt(length(u)));
-u_initial     = reshape(u_initial,sqrt(length(u_initial)),sqrt(length(u_initial)));
-u_interp = reshape(u_interp,sqrt(length(u_interp)),sqrt(length(u_interp)));
+u         = reshape(u,sqrt(length(u)),sqrt(length(u)));
+u_initial = reshape(u_initial,sqrt(length(u_initial)),sqrt(length(u_initial)));
 
 figure 
-subplot(131), surf(u), title('solution')
+subplot(121), surf(u), title('solution')
 
-subplot(132), surf(u_initial), title('initial guess') 
+subplot(122), surf(u_initial), title('initial guess') 
 
-subplot(133), surf(u_interp), title('interpolated solution')
 
 
