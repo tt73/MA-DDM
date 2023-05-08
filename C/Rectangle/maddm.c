@@ -451,10 +451,10 @@ int main(int argc,char **args) {
 
       } else {
          /* Default Solver Settings - - - - - - - - - - - - - - - - - - - - - - - -
-            By default, we use Nonlinear Additive Schwarz method (NASM) for the
-            nonlinear solver. On the local subdomains, we use one step of basic
-            newton method. For the Jacobian solve, we use GMRES with a SSOR
-            preconditioner.
+            When this code is run with mpiexec, we use Nonlinear Additive Schwarz
+            method (NASM) for the as the default nonlinear solver. For the Jacobian
+            solve, we use GMRES with a SSOR preconditioner.
+            We force the local Newton to iterate until the absolute residue falls to h.
          - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
          ierr = SNESSetType(snes,SNESNASM); CHKERRQ(ierr);
          ierr = SNESNASMSetType(snes,PC_ASM_RESTRICT); CHKERRQ(ierr);
@@ -465,6 +465,8 @@ int main(int argc,char **args) {
          KSPGetPC(subksp,&subpc);               // get local PC
          KSPSetType(subksp,KSPDGMRES);  // rtol = 1e-5 by default
          PCSetType(subpc,PCEISENSTAT);  // fast accurate linear solver combo
+         SNESSetTolerances(subsnes,h_eff,1e-99,PETSC_DEFAULT,100000,PETSC_DEFAULT);
+         SNESSetForceIteration(subsnes,PETSC_TRUE);
       }
    }
 
