@@ -451,7 +451,7 @@ int main(int argc,char **args) {
    k = coarseness;
    N_cwb = PetscCeilReal( (Nx-1)/((PetscReal)k)+1);
    N_cnb = N_cwb - 2;
-   kh = (user.xmax-user.xmin)/(N_cnb+1)*k;
+   kh = (user.xmax-user.xmin)/(N_cnb+1);
    DMDACreate2d(PETSC_COMM_WORLD,     //
                         DM_BOUNDARY_NONE,          // no periodicity in x
                         DM_BOUNDARY_NONE,          // no periodicity in y

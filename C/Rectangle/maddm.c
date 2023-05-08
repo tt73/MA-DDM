@@ -628,7 +628,12 @@ int main(int argc,char **args) {
       The number of outer SNES iterations is also obtained.
    - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
    ierr = DMGetGlobalVector(da,&u_initial); CHKERRQ(ierr);
-   ierr = InitialState(da,initial,u_initial,&user); CHKERRQ(ierr);
+
+   if (rank==0){
+      ierr = InitialState(da,initial,u_initial,&user); CHKERRQ(ierr); // only one processor computes initial guess
+   }
+
+
    if (debug) {
       // print out intial guess in matlab format
       PetscViewer viewer; // Viewer object fascilitates printing out solution
@@ -990,7 +995,6 @@ PetscErrorCode InitialState(DM da, InitialType it, Vec u, MACtx *user) {
          break;
       case COARSE:
          {  // local variables
-
             MACtx     cuser;
             SNES      snes;
             DM        da_cnb, da_cwb;  // no boundary, with boundary
@@ -998,23 +1002,29 @@ PetscErrorCode InitialState(DM da, InitialType it, Vec u, MACtx *user) {
             PetscReal **u_cnb, ** u_cwb, temp, kh, x, y;
             Vec       sol_cnb, sol_cwb;
             Mat       interp;
-            PetscViewer  cviewer;
+            // PetscMPIInt    rank,size;
+            // DMDALocalInfo  info_cwb;
 
+
+            // MPI_Comm_size(PETSC_COMM_WORLD,&size); // get # of processors
+            // MPI_Comm_rank(PETSC_COMM_WORLD,&rank); // get index of current procs
 
             N = user->N;
             temp = (N-1)/((PetscReal)user->k)+1;
             if (PetscCeilReal(temp)==temp) {
-               printf("interpolation with k = %d is doable\n",user->k);
-
-               // Solve coarse problem
-               N_cwb = (N-1)/((PetscReal)user->k)+1; // dimension of coarse w/ border
-               N_cnb = N_cwb - 2;                    // dimension of coarse w/o border
-               kh = (user->xmax-user->xmin)/(N_cnb+1)*user->k; // coarse resolution
+               // Solve coarse problem, no boundary
+               N_cwb = (N-1)/((PetscReal)user->k)+1;   // dimension of coarse w/ border
+               N_cnb = N_cwb - 2;                      // dimension of coarse w/o border
+               kh = (user->xmax-user->xmin)/(N_cnb+1); // coarse resolution
+               if (user->debug) {
+                  PetscReal h = (user->xmax-user->xmin)/(N+1);
+                  printf("ratio kh to h: %f\n",kh/h);
+               }
                cwidth = PetscCeilReal(PetscPowReal(kh,-0.333)); // coarse stencil width
-               DMDACreate2d(PETSC_COMM_WORLD,     //
+               DMDACreate2d(PETSC_COMM_SELF,     //
                         DM_BOUNDARY_NONE,          // no periodicity in x
                         DM_BOUNDARY_NONE,          // no periodicity in y
-                        cwidth==1?DMDA_STENCIL_STAR:DMDA_STENCIL_BOX,         // star = cardinal directions, box = more general
+                        cwidth==1?DMDA_STENCIL_STAR:DMDA_STENCIL_BOX,  // star = cardinal directions, box = more general
                         N_cnb,N_cnb,               // mesh size in x & y directions
                         PETSC_DECIDE,PETSC_DECIDE, // local mesh size
                         1,                         // degree of freedom
@@ -1022,7 +1032,7 @@ PetscErrorCode InitialState(DM da, InitialType it, Vec u, MACtx *user) {
                         NULL,NULL,                 // not important
                         &da_cnb);
                DMSetUp(da_cnb);
-               SNESCreate(PETSC_COMM_WORLD,&snes); SNESSetDM(snes,da_cnb);
+               SNESCreate(PETSC_COMM_SELF,&snes); SNESSetDM(snes,da_cnb);
                cuser = *user; cuser.width = cwidth;
                ComputeFwdStencilDirs(cwidth,&cuser);
                ComputeWeights(cwidth,user->order,&cuser);
@@ -1035,11 +1045,13 @@ PetscErrorCode InitialState(DM da, InitialType it, Vec u, MACtx *user) {
                SNESSolve(snes,NULL,sol_cnb);    // coarse solve
                SNESGetSolution(snes,&sol_cnb);  // get the solution
 
+
+
                // put solution into coarse grid with boundary
-               DMDACreate2d(PETSC_COMM_WORLD,     //
+               DMDACreate2d(PETSC_COMM_SELF,
                            DM_BOUNDARY_NONE,          // no periodicity in x
                            DM_BOUNDARY_NONE,          // no periodicity in y
-                           DMDA_STENCIL_BOX,       // star = cardinal directions, box = more general
+                           user->width==1?DMDA_STENCIL_STAR:DMDA_STENCIL_BOX,           // star = cardinal directions, box = more general
                            N_cwb,N_cwb,                     // mesh size in x & y directions
                            PETSC_DECIDE,PETSC_DECIDE, // local mesh size
                            1,                         // degree of freedom
@@ -1047,22 +1059,27 @@ PetscErrorCode InitialState(DM da, InitialType it, Vec u, MACtx *user) {
                            NULL,NULL,                 // not important
                            &da_cwb);
                DMSetUp(da_cwb);
+
+               // printf("Fine after da_cwb. rank %d out of %d\n",rank,size);
+
+
                DMDASetUniformCoordinates(da_cwb,cuser.xmin,cuser.xmax,cuser.ymin,cuser.ymax,0,0);
                DMGetGlobalVector(da_cwb,&sol_cwb);
-               VecSet(sol_cwb,0.0);
                DMDAVecGetArray(da_cwb, sol_cwb, &u_cwb);
                DMDAVecGetArray(da_cnb, sol_cnb, &u_cnb);
-               for (i=0; i<N_cnb; i++) { // fill the interior
+               // printf("rank %d out of %d: in charge of indeces %d to %d\n",rank,size, info_cwb.xs,info_cwb.xs+info_cwb.xm-1);
+               printf("now starting for loops\n");
+               for (i=0; i<N_cnb; i++) {
                   for (j=0; j<N_cnb; j++) {
-                     u_cwb[j+1][i+1] = u_cnb[j][i];
+                     u_cwb[j+1][i+1] = u_cnb[j][i]; // fill the inteior
                   }
                }
-               for (i=0; i<N_cwb; i++) { // top & bottom border
+               for (i=0; i<N_cwb; i++) {
                   x = user->xmin + kh*i;
                   user->g_bdry(x,user->ymin,0,NULL,&u_cwb[0][i]);       // bottom
                   user->g_bdry(x,user->ymax,0,NULL,&u_cwb[N_cwb-1][i]); // top
                }
-               for (j=1; j<N_cwb-1; j++) { // left & right border
+               for (j=1; j<N_cwb-1; j++) {
                   y = user->ymin + kh*j;
                   user->g_bdry(user->xmin,y,0,NULL,&u_cwb[j][0]);       // left
                   user->g_bdry(user->xmax,y,0,NULL,&u_cwb[j][N_cwb-1]); // right
@@ -1071,22 +1088,19 @@ PetscErrorCode InitialState(DM da, InitialType it, Vec u, MACtx *user) {
                DMDAVecRestoreArray(da_cnb, sol_cnb, &u_cnb);
 
                // interpolate the solution
+               printf("Now starting interpolation\n");
                DMCreateInterpolation(da_cwb,da,&interp, NULL);
                MatInterpolate(interp, sol_cwb, u); // u_initial = interpolation of cwb_sol
 
-
-               PetscViewerCreate(PETSC_COMM_WORLD,&cviewer);
-               PetscViewerASCIIOpen(PETSC_COMM_WORLD,"load_cwb.m",&cviewer);
-               PetscViewerPushFormat(cviewer,PETSC_VIEWER_ASCII_MATLAB);
-               PetscObjectSetName((PetscObject)sol_cwb,"u_cwb");
-               VecView(sol_cwb,cviewer);
-
-
-
-
-
+               SNESDestroy(&snes);
+               MatDestroy(&interp);
+               VecDestroy(&sol_cnb); VecDestroy(&sol_cwb);
+               DMDestroy(&da_cnb);   DMDestroy(&da_cwb);
             } else {
-               printf("WARNING: interpolation with k = %d is not possible for N = %d. Initializing with zero.\n",user->k,N);
+               printf("---------------------------------------------------------------------------------------------\n");
+               printf("WARNING: Interpolation with k=%d is not possible for N=%d. Initializing with zero.\n",user->k,N);
+               printf("         The number (N-1)/k must be an integer. Choose N=k*p+1, where p is an integer.\n");
+               printf("---------------------------------------------------------------------------------------------\n");
                goto zero_init; // go initialize with zero
             }
             break;

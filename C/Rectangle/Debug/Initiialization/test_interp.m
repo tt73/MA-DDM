@@ -31,6 +31,3 @@ subplot(132), surf(u_cwb), title('coarse solution with border')
 subplot(133), surf(u_interp), title('interpolated solution')
 
 
-N4h =@(N) (N+1)/4 - 1;
-Nh =@(N4h) 4*(N4h+1)-1;
-
