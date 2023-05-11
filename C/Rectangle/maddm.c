@@ -391,6 +391,7 @@ int main(int argc,char **args) {
       You can adjust the overlapping nodes directly with -da_overlap <int>
       or adjust the percentage with -op <float> where float ranges from 0 to 1.
    - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+   ierr = DMSetFromOptions(da); CHKERRQ(ierr); // the nodes
    ierr = DMSetUp(da); CHKERRQ(ierr); // initialize the grid distribution, then get mm and nn
    ierr = DMDAGetInfo(da,NULL,NULL,NULL,NULL,&mm,&nn,NULL,NULL,NULL,NULL,NULL,NULL,NULL); CHKERRQ(ierr);
    /*
@@ -402,7 +403,6 @@ int main(int argc,char **args) {
    olx = PetscCeilReal(op*Nx/(PetscReal)mm); // x overlap
    oly = PetscCeilReal(op*Ny/(PetscReal)nn); // y overlap
    ierr = DMDASetOverlap(da,olx,oly,olx);
-   ierr = DMSetFromOptions(da); CHKERRQ(ierr); // the nodes
    ierr = DMDASetUniformCoordinates(da,user.xmin+hx,user.xmax-hx,user.ymin+hy,user.ymax-hy,user.zmin,user.zmax); CHKERRQ(ierr);
    ierr = DMSetApplicationContext(da,&user); CHKERRQ(ierr);
    ierr = SNESCreate(PETSC_COMM_WORLD,&snes); CHKERRQ(ierr);
@@ -463,9 +463,9 @@ int main(int argc,char **args) {
          SNESGetLineSearch(subsnes,&subls);     // get local linesearch
          SNESGetKSP(subsnes,&subksp);           // get local KSP
          KSPGetPC(subksp,&subpc);               // get local PC
-         KSPSetType(subksp,KSPDGMRES);  // rtol = 1e-5 by default
-         PCSetType(subpc,PCEISENSTAT);  // fast accurate linear solver combo
-         SNESSetTolerances(subsnes,h_eff,1e-99,PETSC_DEFAULT,100000,PETSC_DEFAULT);
+         KSPSetType(subksp,KSPDGMRES);  // deflated GMRES, rtol = 1e-5 by default
+         PCSetType(subpc,PCEISENSTAT);  // SOR preconditioner for GMRES
+         SNESSetTolerances(subsnes,hx,1e-99,PETSC_DEFAULT,100000,PETSC_DEFAULT);
          SNESSetForceIteration(subsnes,PETSC_TRUE);
       }
    }
@@ -494,7 +494,7 @@ int main(int argc,char **args) {
       // abs. tol is the default
       // caveat: sometimes abs tol is already satisfied
       // need to make sure at least 1 iteration happens
-      SNESSetTolerances(snes,h_eff,1e-99,PETSC_DEFAULT,100000,PETSC_DEFAULT);
+      SNESSetTolerances(snes,hx,1e-99,PETSC_DEFAULT,100000,PETSC_DEFAULT);
       SNESSetForceIteration(snes,PETSC_TRUE);
    }
 
@@ -997,23 +997,28 @@ PetscErrorCode InitialState(DM da, InitialType it, Vec u, MACtx *user) {
          break;
       case COARSE:
          {  // local variables
-            MACtx     cuser;
-            SNES      snes;
-            DM        da_cnb, da_cwb;  // no boundary, with boundary
-            PetscInt  N, N_cnb, N_cwb, cwidth, i, j;
-            PetscReal **u_cnb, ** u_cwb, temp, kh, x, y;
-            Vec       sol_cnb, sol_cwb;
-            Mat       interp;
-            PetscLogDouble t1,t2;
+            MACtx             cuser;
+            SNES              snes;
+            DM                da_cnb, da_cwb;
+            PetscInt          N, N_cnb, N_cwb, cwidth, i, j, mm, nn;
+            PetscReal         **u_cnb, **u_cwb, frac, kh, x, y;
+            Vec               sol_cnb, sol_cwb;
+            Mat               interp;
+            DMDALocalInfo     info_cnb, info_cwb;
+            PetscLogDouble    t1,t2;
+            PetscMPIInt       rank,size;
+
+            MPI_Comm_size(PETSC_COMM_WORLD,&size); // get # of processors
+            MPI_Comm_rank(PETSC_COMM_WORLD,&rank); // get index of current procs
 
             N = user->N; // mesh size of original problem
-            temp = (N-1)/((PetscReal)user->k)+1;
-            if (PetscCeilReal(temp)==temp) {
+            frac = (N-1)/((PetscReal)user->k)+1;
+            if (PetscCeilReal(frac)==frac) {
                // Solve coarse problem, no boundary
                N_cwb = (N-1)/((PetscReal)user->k)+1;   // dimension of coarse w/ border
                N_cnb = N_cwb - 2;                      // dimension of coarse w/o border
                kh = (user->xmax-user->xmin)/(N_cnb+1); // coarse resolution
-               if (user->debug) {
+               if (user->debug && rank==0) {
                   PetscReal h = (user->xmax-user->xmin)/(N+1);
                   printf("ratio kh to h: %f\n",kh/h);
                }
@@ -1039,60 +1044,115 @@ PetscErrorCode InitialState(DM da, InitialType it, Vec u, MACtx *user) {
 
                VecSet(sol_cnb,0.0);             // zero initial condition
                SNESSetUp(snes);                 // you can add more solve options here
+               SNESSetTolerances(snes,kh,1e-99,PETSC_DEFAULT,100000,PETSC_DEFAULT); // converge when abs residue falls below k*h
                PetscTime(&t1);
                SNESSolve(snes,NULL,sol_cnb);    // coarse solve
                PetscTime(&t2);
-               if (user->debug){
-                  PetscPrintf(PETSC_COMM_SELF,"Coarse solve runtime: %.6f\n",t2-t1);
+               if (user->debug && rank==0){
+                  PetscPrintf(PETSC_COMM_SELF,"Coarse solve on %d ky %d runtime: %.6f (s)\n",N_cnb, N_cnb,t2-t1);
                }
                SNESGetSolution(snes,&sol_cnb);  // get the solution
 
-               // put solution into coarse grid with boundary
-               DMDACreate2d(PETSC_COMM_WORLD,
-                           DM_BOUNDARY_NONE,          // no periodicity in x
-                           DM_BOUNDARY_NONE,          // no periodicity in y
-                           user->width==1?DMDA_STENCIL_STAR:DMDA_STENCIL_BOX,           // star = cardinal directions, box = more general
-                           N_cwb,N_cwb,                     // mesh size in x & y directions
-                           PETSC_DECIDE,PETSC_DECIDE, // local mesh size
-                           1,                         // degree of freedom
-                           user->width,               // stencil width
-                           NULL,NULL,                 // not important
-                           &da_cwb);
+               /* put solution into coarse grid with boundary */
+               DMDAGetLocalInfo(da_cnb,&info_cnb);
+               DMDAGetInfo(da,NULL,NULL,NULL,NULL,&mm,&nn,NULL,NULL,NULL,NULL,NULL,NULL,NULL);
+               if (size > 1) {
+                  /* Compute the lx[] and ly[] = number of nodes in x & y directions for each subblock*/
+                  PetscInt total, block;
+                  PetscInt lx[mm], ly[nn];
+                  total = N_cnb;
+                  block = PetscCeilReal(N_cnb/(PetscReal)mm);
+                  for (i = 0; i < mm-1; i++) {
+                     lx[i] = block;
+                     total -= block;
+                  }
+                  lx[mm-1] = total;
+                  total = N_cnb;
+                  block = PetscCeilReal(N_cnb/(PetscReal)nn);
+                  for (j = 0; j < nn-1; j++) {
+                     ly[j] = block;
+                     total -= block;
+                  }
+                  ly[nn-1] = total;
+
+                  /* Adjust the nodes for boundary */
+                  if (mm==1) {
+                     lx[0] += 2;
+                  } else {
+                     lx[0] += 1;
+                     lx[mm-1] += 1;
+                  }
+                  if (nn==1) {
+                     ly[0] += 2;
+                  } else {
+                     ly[0] += 1;
+                     ly[nn-1] += 1;
+                  }
+                  DMDACreate2d(PETSC_COMM_WORLD,
+                        DM_BOUNDARY_NONE,          // no periodicity in x
+                        DM_BOUNDARY_NONE,          // no periodicity in y
+                        user->width==1?DMDA_STENCIL_STAR:DMDA_STENCIL_BOX,           // star = cardinal directions, box = more general
+                        N_cwb,N_cwb,               // mesh size in x & y directions
+                        mm,nn,                     // # of blocks in x & y directions
+                        1,                         // degree of freedom
+                        user->width,               // stencil width
+                        lx,ly,                     // explict number of nodes for each subblock!
+                        &da_cwb);
+
+               } else { // if serial, just create it like always
+                  DMDACreate2d(PETSC_COMM_WORLD,
+                        DM_BOUNDARY_NONE,          // no periodicity in x
+                        DM_BOUNDARY_NONE,          // no periodicity in y
+                        user->width==1?DMDA_STENCIL_STAR:DMDA_STENCIL_BOX,           // star = cardinal directions, box = more general
+                        N_cwb,N_cwb,               // mesh size in x & y directions
+                        mm,nn,                     // # of blocks in x & y directions
+                        1,                         // degree of freedom
+                        user->width,               // stencil width
+                        NULL,NULL,                 // lx and ly can be automatic
+                        &da_cwb);
+               }
                DMSetUp(da_cwb);
                DMDASetUniformCoordinates(da_cwb,cuser.xmin,cuser.xmax,cuser.ymin,cuser.ymax,0,0);
                DMGetGlobalVector(da_cwb,&sol_cwb);
                DMDAVecGetArray(da_cwb, sol_cwb, &u_cwb);
                DMDAVecGetArray(da_cnb, sol_cnb, &u_cnb);
-               DMDAGetLocalInfo(da_cnb,&info);
-               for (i=info.xs; i<info.xs+info.xm; i++) {
-                  for (j=info.ys; j<info.ys+info.ym; j++) {
-                     u_cwb[j+1][i+1] = u_cnb[j][i]; // fill the inteior
+               DMDAGetLocalInfo(da_cwb,&info_cwb);
+
+               for (i=info_cnb.xs; i<info_cnb.xs+info_cnb.xm; i++) {
+                  for (j=info_cnb.ys; j<info_cnb.ys+info_cnb.ym; j++) {
+                     u_cwb[j+1][i+1] = u_cnb[j][i];
                   }
                }
-               DMDAGetLocalInfo(da_cwb,&info); // fill the boundary
-               for (i=info.xs; i<info.xs+info.xm; i++) {
+
+               for (i=info_cwb.xs; i<info_cwb.xs+info_cwb.xm; i++) {
                   x = user->xmin + kh*i;
-                  if (info.ys==0) {
+                  if (info_cwb.ys==0) {
                      user->g_bdry(x,user->ymin,0,NULL,&u_cwb[0][i]);       // bottom
-                  } if (info.ys+info.ym==N_cwb) {
+                  } if (info_cwb.ys+info_cwb.ym==N_cwb) {
                      user->g_bdry(x,user->ymax,0,NULL,&u_cwb[N_cwb-1][i]); // top
                   }
                }
-               for (j=info.ys; j<info.ys+info.ym; j++) {
+               for (j=info_cwb.ys; j<info_cwb.ys+info_cwb.ym; j++) {
                   y = user->ymin + kh*j;
-                  if (info.xs==0) {
+                  if (info_cwb.xs==0) {
                      user->g_bdry(user->xmin,y,0,NULL,&u_cwb[j][0]);       // left
-                  } if (info.xs+info.xm==N_cwb) {
+                  } if (info_cwb.xs+info_cwb.xm==N_cwb) {
                      user->g_bdry(user->xmax,y,0,NULL,&u_cwb[j][N_cwb-1]); // right
                   } else {
                   }
                }
+
                DMDAVecRestoreArray(da_cwb, sol_cwb, &u_cwb);
                DMDAVecRestoreArray(da_cnb, sol_cnb, &u_cnb);
 
-               // interpolate the solution
+               /* interpolate the solution */
+               PetscTime(&t1);
                DMCreateInterpolation(da_cwb, da, &interp, NULL);
-               MatInterpolate(interp, sol_cwb, u); // u_initial = interpolation of cwb_sol
+               MatInterpolate(interp, sol_cwb, u);
+               PetscTime(&t2);
+               if (user->debug && rank==0){
+                  PetscPrintf(PETSC_COMM_SELF,"Intepolation runtime: %.6f (s)\n",t2-t1);
+               }
 
                DMDestroy(&da_cnb);   DMDestroy(&da_cwb); // clearing da also clears vec & snes
                MatDestroy(&interp);
