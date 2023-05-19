@@ -33,8 +33,11 @@ do
          for h in {0.05,0.01}
          do
             N=$(echo "scale = 0; 2*$limit/$h+1" | bc)
-            mpiexec -np $Nd ../maddm -N $N -problem ex1 -xmin -$limit -xmax $limit -ymin -$limit -ymax $limit -op $op -init_type coarse -coarseness 4 -snes_converged_reason >> out
+            # mpiexec -np $Nd ../maddm -N $N -problem ex1 -xmin -$limit -xmax $limit -ymin -$limit -ymax $limit -op $op -init_type coarse -coarseness 4 -snes_converged_reason
+            echo mpiexec -np $Nd ../maddm -N $N -problem ex1 -xmin -$limit -xmax $limit -ymin -$limit -ymax $limit -op $op -init_type coarse -coarseness 4 -snes_converged_reason
          done
       done
    done
 done
+
+
