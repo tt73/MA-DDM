@@ -1,0 +1,864 @@
+serial with h = .009900
+Nonlinear solve converged due to CONVERGED_FNORM_ABS iterations 15
+Nonlinear solve converged due to CONVERGED_FNORM_ABS iterations 13
+*Problem: ex1 on domain [-1.00,1.00]x[-1.00,1.00] with 201x201 point 2D grid
+*Params:  Nd = 1, width = 5, eps = 0.002, op = 0.20
+*Error:   |u-uexact|_inf = 9.178e-04, |u-uexact|_h = 5.209e-04
+*WTime:   7.542829
+*Iters:   Krylov 378, Local SNES 0, Global SNES 13
+done
+
+
+parallel
+tol = .009900
+Nonlinear solve converged due to CONVERGED_FNORM_ABS iterations 18
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 13
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 17
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 20
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 20
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 3
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 3
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 3
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 3
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 2
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 2
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 2
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 2
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 2
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 2
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 2
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 2
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 2
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 2
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 2
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 2
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+Nonlinear solve converged due to CONVERGED_FNORM_ABS iterations 15
+*Problem: ex1 on domain [-1.00,1.00]x[-1.00,1.00] with 201x201 point 2D grid
+*Params:  Nd = 4, width = 5, eps = 0.002, op = 0.20
+*Error:   |u-uexact|_inf = 9.233e-04, |u-uexact|_h = 5.227e-04
+*WTime:   8.524513
+*Iters:   Krylov 1056, Local SNES 1, Global SNES 15
+done
+
+
+tol = .019800
+Nonlinear solve converged due to CONVERGED_FNORM_ABS iterations 18
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 13
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 17
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 20
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 20
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 3
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 3
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 3
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 3
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 2
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 2
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 2
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 2
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 2
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 2
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 2
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 2
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+Nonlinear solve converged due to CONVERGED_FNORM_ABS iterations 15
+*Problem: ex1 on domain [-1.00,1.00]x[-1.00,1.00] with 201x201 point 2D grid
+*Params:  Nd = 4, width = 5, eps = 0.002, op = 0.20
+*Error:   |u-uexact|_inf = 9.233e-04, |u-uexact|_h = 5.227e-04
+*WTime:   8.350296
+*Iters:   Krylov 1028, Local SNES 1, Global SNES 15
+done
+
+
+tol = .039600
+Nonlinear solve converged due to CONVERGED_FNORM_ABS iterations 18
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 13
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 16
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 20
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 20
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 2
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 2
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 2
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 2
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 2
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 2
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 2
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 2
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+Nonlinear solve converged due to CONVERGED_FNORM_ABS iterations 15
+*Problem: ex1 on domain [-1.00,1.00]x[-1.00,1.00] with 201x201 point 2D grid
+*Params:  Nd = 4, width = 5, eps = 0.002, op = 0.20
+*Error:   |u-uexact|_inf = 9.233e-04, |u-uexact|_h = 5.227e-04
+*WTime:   7.933804
+*Iters:   Krylov 974, Local SNES 1, Global SNES 15
+done
+
+
+tol = .079200
+Nonlinear solve converged due to CONVERGED_FNORM_ABS iterations 18
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 13
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 16
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 20
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 20
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 2
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 2
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 2
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 2
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 2
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 2
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 2
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 2
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+    Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+Nonlinear solve converged due to CONVERGED_FNORM_ABS iterations 15
+*Problem: ex1 on domain [-1.00,1.00]x[-1.00,1.00] with 201x201 point 2D grid
+*Params:  Nd = 4, width = 5, eps = 0.002, op = 0.20
+*Error:   |u-uexact|_inf = 9.233e-04, |u-uexact|_h = 5.227e-04
+*WTime:   7.894872
+*Iters:   Krylov 974, Local SNES 1, Global SNES 15
+done
+
+
+tol = .158400
+Nonlinear solve converged due to CONVERGED_FNORM_ABS iterations 18
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 13
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 16
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 20
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 20
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 2
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 2
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 2
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 2
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+Nonlinear solve converged due to CONVERGED_FNORM_ABS iterations 15
+*Problem: ex1 on domain [-1.00,1.00]x[-1.00,1.00] with 201x201 point 2D grid
+*Params:  Nd = 4, width = 5, eps = 0.002, op = 0.20
+*Error:   |u-uexact|_inf = 9.233e-04, |u-uexact|_h = 5.227e-04
+*WTime:   7.689580
+*Iters:   Krylov 945, Local SNES 1, Global SNES 15
+done
+
+
+tol = .316800
+Nonlinear solve converged due to CONVERGED_FNORM_ABS iterations 18
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 13
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 16
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 20
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 20
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 2
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 2
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 2
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 2
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+    Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+Nonlinear solve converged due to CONVERGED_FNORM_ABS iterations 15
+*Problem: ex1 on domain [-1.00,1.00]x[-1.00,1.00] with 201x201 point 2D grid
+*Params:  Nd = 4, width = 5, eps = 0.002, op = 0.20
+*Error:   |u-uexact|_inf = 9.233e-04, |u-uexact|_h = 5.227e-04
+*WTime:   7.619832
+*Iters:   Krylov 945, Local SNES 1, Global SNES 15
+done
+
+
+tol = .633600
+Nonlinear solve converged due to CONVERGED_FNORM_ABS iterations 18
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 13
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 16
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 19
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 20
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 2
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 2
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 2
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 2
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+Nonlinear solve converged due to CONVERGED_FNORM_ABS iterations 15
+*Problem: ex1 on domain [-1.00,1.00]x[-1.00,1.00] with 201x201 point 2D grid
+*Params:  Nd = 4, width = 5, eps = 0.002, op = 0.20
+*Error:   |u-uexact|_inf = 9.233e-04, |u-uexact|_h = 5.227e-04
+*WTime:   7.640145
+*Iters:   Krylov 921, Local SNES 1, Global SNES 15
+done
+
+
+tol = 1.267200
+Nonlinear solve converged due to CONVERGED_FNORM_ABS iterations 18
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 12
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 16
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 19
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 19
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 2
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 2
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 2
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 2
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+    Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+Nonlinear solve converged due to CONVERGED_FNORM_ABS iterations 15
+*Problem: ex1 on domain [-1.00,1.00]x[-1.00,1.00] with 201x201 point 2D grid
+*Params:  Nd = 4, width = 5, eps = 0.002, op = 0.20
+*Error:   |u-uexact|_inf = 9.233e-04, |u-uexact|_h = 5.227e-04
+*WTime:   7.479867
+*Iters:   Krylov 921, Local SNES 1, Global SNES 15
+done
+
+
+tol = 2.534400
+Nonlinear solve converged due to CONVERGED_FNORM_ABS iterations 18
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 12
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 15
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 19
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 19
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+Nonlinear solve converged due to CONVERGED_FNORM_ABS iterations 15
+*Problem: ex1 on domain [-1.00,1.00]x[-1.00,1.00] with 201x201 point 2D grid
+*Params:  Nd = 4, width = 5, eps = 0.002, op = 0.20
+*Error:   |u-uexact|_inf = 9.232e-04, |u-uexact|_h = 5.227e-04
+*WTime:   7.307997
+*Iters:   Krylov 893, Local SNES 1, Global SNES 15
+done
+
+
+tol = 5.068800
+Nonlinear solve converged due to CONVERGED_FNORM_ABS iterations 18
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 12
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 15
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 19
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 19
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+Nonlinear solve converged due to CONVERGED_FNORM_ABS iterations 15
+*Problem: ex1 on domain [-1.00,1.00]x[-1.00,1.00] with 201x201 point 2D grid
+*Params:  Nd = 4, width = 5, eps = 0.002, op = 0.20
+*Error:   |u-uexact|_inf = 9.232e-04, |u-uexact|_h = 5.227e-04
+*WTime:   7.307991
+*Iters:   Krylov 893, Local SNES 1, Global SNES 15
+done
+
+
+tol = 10.137600
+Nonlinear solve converged due to CONVERGED_FNORM_ABS iterations 18
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 12
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 15
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 18
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 19
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+Nonlinear solve converged due to CONVERGED_FNORM_ABS iterations 15
+*Problem: ex1 on domain [-1.00,1.00]x[-1.00,1.00] with 201x201 point 2D grid
+*Params:  Nd = 4, width = 5, eps = 0.002, op = 0.20
+*Error:   |u-uexact|_inf = 9.232e-04, |u-uexact|_h = 5.227e-04
+*WTime:   7.332309
+*Iters:   Krylov 871, Local SNES 1, Global SNES 15
+done
+
+
+tol = 20.275200
+Nonlinear solve converged due to CONVERGED_FNORM_ABS iterations 18
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 12
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 15
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 18
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 18
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+  Nonlinear sub_ solve converged due to CONVERGED_FNORM_ABS iterations 1
+Nonlinear solve converged due to CONVERGED_FNORM_ABS iterations 15
+*Problem: ex1 on domain [-1.00,1.00]x[-1.00,1.00] with 201x201 point 2D grid
+*Params:  Nd = 4, width = 5, eps = 0.002, op = 0.20
+*Error:   |u-uexact|_inf = 9.232e-04, |u-uexact|_h = 5.227e-04
+*WTime:   7.141849
+*Iters:   Krylov 871, Local SNES 1, Global SNES 15
+done
+
+

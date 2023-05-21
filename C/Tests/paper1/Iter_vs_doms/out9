@@ -1,0 +1,56 @@
+Nonlinear solve converged due to CONVERGED_FNORM_ABS iterations 135
+Nonlinear solve converged due to CONVERGED_FNORM_ABS iterations 74
+*Problem: ex1 on domain [-2.00,2.00]x[-2.00,2.00] with 401x401 point 2D grid
+*Params:  Nd = 9, width = 5, eps = 0.002, op = 0.10
+*Error:   |u-uexact|_inf = 3.460e-02, |u-uexact|_h = 1.406e-02
+*WTime:   155.541192
+*Iters:   Krylov 14576, Local SNES 1, Global SNES 74
+Nonlinear solve converged due to CONVERGED_FNORM_ABS iterations 25
+Nonlinear solve converged due to CONVERGED_FNORM_ABS iterations 70
+*Problem: ex5 on domain [-2.00,2.00]x[-2.00,2.00] with 401x401 point 2D grid
+*Params:  Nd = 9, width = 5, eps = 0.002, op = 0.10
+*Error:   |u-uexact|_inf = 2.523e-03, |u-uexact|_h = 1.075e-03
+*WTime:   50.220848
+*Iters:   Krylov 4166, Local SNES 1, Global SNES 70
+Nonlinear solve converged due to CONVERGED_FNORM_ABS iterations 135
+Nonlinear solve converged due to CONVERGED_FNORM_ABS iterations 41
+*Problem: ex1 on domain [-2.00,2.00]x[-2.00,2.00] with 401x401 point 2D grid
+*Params:  Nd = 9, width = 5, eps = 0.002, op = 0.20
+*Error:   |u-uexact|_inf = 3.460e-02, |u-uexact|_h = 1.406e-02
+*WTime:   180.347049
+*Iters:   Krylov 15307, Local SNES 1, Global SNES 41
+Nonlinear solve converged due to CONVERGED_FNORM_ABS iterations 25
+Nonlinear solve converged due to CONVERGED_FNORM_ABS iterations 40
+*Problem: ex5 on domain [-2.00,2.00]x[-2.00,2.00] with 401x401 point 2D grid
+*Params:  Nd = 9, width = 5, eps = 0.002, op = 0.20
+*Error:   |u-uexact|_inf = 2.522e-03, |u-uexact|_h = 1.074e-03
+*WTime:   50.479518
+*Iters:   Krylov 3317, Local SNES 1, Global SNES 40
+Nonlinear solve converged due to CONVERGED_FNORM_ABS iterations 135
+Nonlinear solve converged due to CONVERGED_FNORM_ABS iterations 29
+*Problem: ex1 on domain [-2.00,2.00]x[-2.00,2.00] with 401x401 point 2D grid
+*Params:  Nd = 9, width = 5, eps = 0.002, op = 0.30
+*Error:   |u-uexact|_inf = 3.460e-02, |u-uexact|_h = 1.406e-02
+*WTime:   215.119525
+*Iters:   Krylov 14656, Local SNES 1, Global SNES 29
+Nonlinear solve converged due to CONVERGED_FNORM_ABS iterations 25
+Nonlinear solve converged due to CONVERGED_FNORM_ABS iterations 28
+*Problem: ex5 on domain [-2.00,2.00]x[-2.00,2.00] with 401x401 point 2D grid
+*Params:  Nd = 9, width = 5, eps = 0.002, op = 0.30
+*Error:   |u-uexact|_inf = 2.521e-03, |u-uexact|_h = 1.073e-03
+*WTime:   69.688095
+*Iters:   Krylov 2932, Local SNES 1, Global SNES 28
+Nonlinear solve converged due to CONVERGED_FNORM_ABS iterations 135
+Nonlinear solve converged due to CONVERGED_FNORM_ABS iterations 23
+*Problem: ex1 on domain [-2.00,2.00]x[-2.00,2.00] with 401x401 point 2D grid
+*Params:  Nd = 9, width = 5, eps = 0.002, op = 0.40
+*Error:   |u-uexact|_inf = 3.460e-02, |u-uexact|_h = 1.406e-02
+*WTime:   260.476315
+*Iters:   Krylov 13596, Local SNES 1, Global SNES 23
+Nonlinear solve converged due to CONVERGED_FNORM_ABS iterations 25
+Nonlinear solve converged due to CONVERGED_FNORM_ABS iterations 22
+*Problem: ex5 on domain [-2.00,2.00]x[-2.00,2.00] with 401x401 point 2D grid
+*Params:  Nd = 9, width = 5, eps = 0.002, op = 0.40
+*Error:   |u-uexact|_inf = 2.521e-03, |u-uexact|_h = 1.073e-03
+*WTime:   90.417700
+*Iters:   Krylov 2719, Local SNES 1, Global SNES 22

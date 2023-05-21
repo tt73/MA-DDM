@@ -1,0 +1,1477 @@
+Starting /home/t/tt73/.bash_profile ... standard AFS bash profile
+
+========================
+Home directory : /home/t/tt73 is not in AFS -- skipping quota check
+========================
+
+On host node481 :
+	 16:55:24 up 147 days, 23:02,  0 users,  load average: 0.10, 0.04, 0.05
+
+=== === === Your Kerberos ticket and AFS token status === === ===
+klist: No credentials cache found (filename: /tmp/krb5cc_90502_gVnKV8zH1W)
+Kerberos : 
+AFS      : 
+
+Loading default modules ...
+Create file : "/home/t/tt73/.modules" to customize.
+
+
+Currently Loaded Modules:
+  1) gnu8/8.3.0    3) phdf5/1.10.5     5) scalapack/2.0.2   7) python/3.8
+  2) mpich/3.3.1   4) openblas/0.3.7   6) petsc/3.12.0
+
+ 
+
+[34]PETSC ERROR: [24]PETSC ERROR: [33]PETSC ERROR: ------------------------------------------------------------------------
+[27]PETSC ERROR: [25]PETSC ERROR: [26]PETSC ERROR: [28]PETSC ERROR: [31]PETSC ERROR: [32]PETSC ERROR: [30]PETSC ERROR: [29]PETSC ERROR: [35]PETSC ERROR: ------------------------------------------------------------------------
+[35]PETSC ERROR: Caught signal number 11 SEGV: Segmentation Violation, probably memory access out of range
+[35]PETSC ERROR: Try option -start_in_debugger or -on_error_attach_debugger
+[35]PETSC ERROR: or see https://www.mcs.anl.gov/petsc/documentation/faq.html#valgrind
+[35]PETSC ERROR: or try http://valgrind.org on GNU/linux and Apple Mac OS X to find memory corruption errors
+[35]PETSC ERROR: configure using --with-debugging=yes, recompile, link, and run 
+[35]PETSC ERROR: to get more information on the crash.
+------------------------------------------------------------------------
+------------------------------------------------------------------------
+[34]PETSC ERROR: ------------------------------------------------------------------------
+------------------------------------------------------------------------
+------------------------------------------------------------------------
+------------------------------------------------------------------------
+------------------------------------------------------------------------
+------------------------------------------------------------------------
+------------------------------------------------------------------------
+------------------------------------------------------------------------
+[35]PETSC ERROR: --------------------- Error Message --------------------------------------------------------------
+[24]PETSC ERROR: [33]PETSC ERROR: Caught signal number 11 SEGV: Segmentation Violation, probably memory access out of range
+[27]PETSC ERROR: [25]PETSC ERROR: [26]PETSC ERROR: [28]PETSC ERROR: [31]PETSC ERROR: [32]PETSC ERROR: [30]PETSC ERROR: [29]PETSC ERROR: [35]PETSC ERROR: Signal received
+[35]PETSC ERROR: Caught signal number 11 SEGV: Segmentation Violation, probably memory access out of range
+Caught signal number 11 SEGV: Segmentation Violation, probably memory access out of range
+[34]PETSC ERROR: Caught signal number 11 SEGV: Segmentation Violation, probably memory access out of range
+Caught signal number 11 SEGV: Segmentation Violation, probably memory access out of range
+Caught signal number 11 SEGV: Segmentation Violation, probably memory access out of range
+Caught signal number 11 SEGV: Segmentation Violation, probably memory access out of range
+Caught signal number 11 SEGV: Segmentation Violation, probably memory access out of range
+Caught signal number 11 SEGV: Segmentation Violation, probably memory access out of range
+Caught signal number 11 SEGV: Segmentation Violation, probably memory access out of range
+Caught signal number 11 SEGV: Segmentation Violation, probably memory access out of range
+See https://www.mcs.anl.gov/petsc/documentation/faq.html for trouble shooting.
+[35]PETSC ERROR: [24]PETSC ERROR: [33]PETSC ERROR: Try option -start_in_debugger or -on_error_attach_debugger
+[27]PETSC ERROR: [25]PETSC ERROR: [26]PETSC ERROR: [28]PETSC ERROR: [31]PETSC ERROR: [32]PETSC ERROR: [30]PETSC ERROR: [29]PETSC ERROR: Petsc Release Version 3.12.0, Sep, 29, 2019 
+[35]PETSC ERROR: Try option -start_in_debugger or -on_error_attach_debugger
+Try option -start_in_debugger or -on_error_attach_debugger
+[34]PETSC ERROR: Try option -start_in_debugger or -on_error_attach_debugger
+Try option -start_in_debugger or -on_error_attach_debugger
+Try option -start_in_debugger or -on_error_attach_debugger
+Try option -start_in_debugger or -on_error_attach_debugger
+Try option -start_in_debugger or -on_error_attach_debugger
+Try option -start_in_debugger or -on_error_attach_debugger
+Try option -start_in_debugger or -on_error_attach_debugger
+Try option -start_in_debugger or -on_error_attach_debugger
+../../maddm on a  named node819 by tt73 Fri May 12 16:55:27 2023
+[24]PETSC ERROR: [33]PETSC ERROR: or see https://www.mcs.anl.gov/petsc/documentation/faq.html#valgrind
+[27]PETSC ERROR: [25]PETSC ERROR: [26]PETSC ERROR: [28]PETSC ERROR: [31]PETSC ERROR: [32]PETSC ERROR: [30]PETSC ERROR: [29]PETSC ERROR: [35]PETSC ERROR: or see https://www.mcs.anl.gov/petsc/documentation/faq.html#valgrind
+or see https://www.mcs.anl.gov/petsc/documentation/faq.html#valgrind
+[34]PETSC ERROR: or see https://www.mcs.anl.gov/petsc/documentation/faq.html#valgrind
+or see https://www.mcs.anl.gov/petsc/documentation/faq.html#valgrind
+or see https://www.mcs.anl.gov/petsc/documentation/faq.html#valgrind
+or see https://www.mcs.anl.gov/petsc/documentation/faq.html#valgrind
+or see https://www.mcs.anl.gov/petsc/documentation/faq.html#valgrind
+or see https://www.mcs.anl.gov/petsc/documentation/faq.html#valgrind
+or see https://www.mcs.anl.gov/petsc/documentation/faq.html#valgrind
+or see https://www.mcs.anl.gov/petsc/documentation/faq.html#valgrind
+Configure options --prefix=/opt/ohpc/pub/libs/gnu8/mpich/petsc/3.12.0 --CFLAGS="-fPIC -DPIC" --CXXFLAGS="-fPIC -DPIC" --FFLAGS=-fPIC --with-blaslapack-lib=/opt/ohpc/pub/libs/gnu8/openblas/0.3.7/lib/libopenblas.so --with-scalapack-dir=/opt/ohpc/pub/libs/gnu8/mpich/scalapack/2.0.2 --with-clanguage=C++ --with-c-support --with-fortran-interfaces=1 --with-debugging=no --with-shared-libraries --with-mpi=1 --with-batch=0 --with-hdf5=1 --with-hdf5-lib=/opt/ohpc/pub/libs/gnu8/mpich/hdf5/1.10.5/lib/libhdf5.so --with-hdf5-include=/opt/ohpc/pub/libs/gnu8/mpich/hdf5/1.10.5/include
+[35]PETSC ERROR: [24]PETSC ERROR: [33]PETSC ERROR: or try http://valgrind.org on GNU/linux and Apple Mac OS X to find memory corruption errors
+[27]PETSC ERROR: [25]PETSC ERROR: [26]PETSC ERROR: [28]PETSC ERROR: [31]PETSC ERROR: [32]PETSC ERROR: [30]PETSC ERROR: [29]PETSC ERROR: #1 User provided function() line 0 in  unknown file
+or try http://valgrind.org on GNU/linux and Apple Mac OS X to find memory corruption errors
+or try http://valgrind.org on GNU/linux and Apple Mac OS X to find memory corruption errors
+[34]PETSC ERROR: or try http://valgrind.org on GNU/linux and Apple Mac OS X to find memory corruption errors
+or try http://valgrind.org on GNU/linux and Apple Mac OS X to find memory corruption errors
+or try http://valgrind.org on GNU/linux and Apple Mac OS X to find memory corruption errors
+or try http://valgrind.org on GNU/linux and Apple Mac OS X to find memory corruption errors
+or try http://valgrind.org on GNU/linux and Apple Mac OS X to find memory corruption errors
+or try http://valgrind.org on GNU/linux and Apple Mac OS X to find memory corruption errors
+or try http://valgrind.org on GNU/linux and Apple Mac OS X to find memory corruption errors
+or try http://valgrind.org on GNU/linux and Apple Mac OS X to find memory corruption errors
+application called MPI_Abort(MPI_COMM_WORLD, 59) - process 35
+[24]PETSC ERROR: [33]PETSC ERROR: configure using --with-debugging=yes, recompile, link, and run 
+[27]PETSC ERROR: [25]PETSC ERROR: [26]PETSC ERROR: [28]PETSC ERROR: [31]PETSC ERROR: [32]PETSC ERROR: [30]PETSC ERROR: [29]PETSC ERROR: configure using --with-debugging=yes, recompile, link, and run 
+configure using --with-debugging=yes, recompile, link, and run 
+[34]PETSC ERROR: configure using --with-debugging=yes, recompile, link, and run 
+configure using --with-debugging=yes, recompile, link, and run 
+configure using --with-debugging=yes, recompile, link, and run 
+configure using --with-debugging=yes, recompile, link, and run 
+configure using --with-debugging=yes, recompile, link, and run 
+configure using --with-debugging=yes, recompile, link, and run 
+configure using --with-debugging=yes, recompile, link, and run 
+configure using --with-debugging=yes, recompile, link, and run 
+[24]PETSC ERROR: [33]PETSC ERROR: to get more information on the crash.
+[27]PETSC ERROR: [25]PETSC ERROR: [26]PETSC ERROR: [28]PETSC ERROR: [31]PETSC ERROR: [32]PETSC ERROR: [30]PETSC ERROR: [29]PETSC ERROR: to get more information on the crash.
+to get more information on the crash.
+[34]PETSC ERROR: to get more information on the crash.
+to get more information on the crash.
+to get more information on the crash.
+to get more information on the crash.
+to get more information on the crash.
+to get more information on the crash.
+to get more information on the crash.
+to get more information on the crash.
+[24]PETSC ERROR: [33]PETSC ERROR: --------------------- Error Message --------------------------------------------------------------
+[27]PETSC ERROR: [25]PETSC ERROR: [26]PETSC ERROR: [28]PETSC ERROR: [31]PETSC ERROR: [32]PETSC ERROR: [30]PETSC ERROR: [29]PETSC ERROR: --------------------- Error Message --------------------------------------------------------------
+--------------------- Error Message --------------------------------------------------------------
+[34]PETSC ERROR: --------------------- Error Message --------------------------------------------------------------
+--------------------- Error Message --------------------------------------------------------------
+--------------------- Error Message --------------------------------------------------------------
+--------------------- Error Message --------------------------------------------------------------
+--------------------- Error Message --------------------------------------------------------------
+--------------------- Error Message --------------------------------------------------------------
+--------------------- Error Message --------------------------------------------------------------
+--------------------- Error Message --------------------------------------------------------------
+[24]PETSC ERROR: [33]PETSC ERROR: Signal received
+[27]PETSC ERROR: [25]PETSC ERROR: [26]PETSC ERROR: [28]PETSC ERROR: [31]PETSC ERROR: [32]PETSC ERROR: [30]PETSC ERROR: [29]PETSC ERROR: Signal received
+Signal received
+[34]PETSC ERROR: Signal received
+Signal received
+Signal received
+Signal received
+Signal received
+Signal received
+Signal received
+Signal received
+[24]PETSC ERROR: [33]PETSC ERROR: See https://www.mcs.anl.gov/petsc/documentation/faq.html for trouble shooting.
+[27]PETSC ERROR: [25]PETSC ERROR: [26]PETSC ERROR: [28]PETSC ERROR: [31]PETSC ERROR: [32]PETSC ERROR: [30]PETSC ERROR: [29]PETSC ERROR: See https://www.mcs.anl.gov/petsc/documentation/faq.html for trouble shooting.
+See https://www.mcs.anl.gov/petsc/documentation/faq.html for trouble shooting.
+[34]PETSC ERROR: See https://www.mcs.anl.gov/petsc/documentation/faq.html for trouble shooting.
+See https://www.mcs.anl.gov/petsc/documentation/faq.html for trouble shooting.
+See https://www.mcs.anl.gov/petsc/documentation/faq.html for trouble shooting.
+See https://www.mcs.anl.gov/petsc/documentation/faq.html for trouble shooting.
+See https://www.mcs.anl.gov/petsc/documentation/faq.html for trouble shooting.
+See https://www.mcs.anl.gov/petsc/documentation/faq.html for trouble shooting.
+See https://www.mcs.anl.gov/petsc/documentation/faq.html for trouble shooting.
+See https://www.mcs.anl.gov/petsc/documentation/faq.html for trouble shooting.
+[24]PETSC ERROR: [33]PETSC ERROR: Petsc Release Version 3.12.0, Sep, 29, 2019 
+[27]PETSC ERROR: [25]PETSC ERROR: [26]PETSC ERROR: [28]PETSC ERROR: [31]PETSC ERROR: [32]PETSC ERROR: [30]PETSC ERROR: [29]PETSC ERROR: Petsc Release Version 3.12.0, Sep, 29, 2019 
+Petsc Release Version 3.12.0, Sep, 29, 2019 
+[34]PETSC ERROR: Petsc Release Version 3.12.0, Sep, 29, 2019 
+Petsc Release Version 3.12.0, Sep, 29, 2019 
+Petsc Release Version 3.12.0, Sep, 29, 2019 
+Petsc Release Version 3.12.0, Sep, 29, 2019 
+Petsc Release Version 3.12.0, Sep, 29, 2019 
+Petsc Release Version 3.12.0, Sep, 29, 2019 
+Petsc Release Version 3.12.0, Sep, 29, 2019 
+Petsc Release Version 3.12.0, Sep, 29, 2019 
+[24]PETSC ERROR: [33]PETSC ERROR: ../../maddm on a  named node814 by tt73 Fri May 12 16:55:27 2023
+[27]PETSC ERROR: [25]PETSC ERROR: [26]PETSC ERROR: [28]PETSC ERROR: [31]PETSC ERROR: [32]PETSC ERROR: [30]PETSC ERROR: [29]PETSC ERROR: ../../maddm on a  named node677 by tt73 Fri May 12 16:55:27 2023
+../../maddm on a  named node813 by tt73 Fri May 12 16:55:27 2023
+[34]PETSC ERROR: ../../maddm on a  named node710 by tt73 Fri May 12 16:55:27 2023
+../../maddm on a  named node701 by tt73 Fri May 12 16:55:27 2023
+../../maddm on a  named node702 by tt73 Fri May 12 16:55:27 2023
+../../maddm on a  named node711 by tt73 Fri May 12 16:55:27 2023
+../../maddm on a  named node811 by tt73 Fri May 12 16:55:27 2023
+../../maddm on a  named node812 by tt73 Fri May 12 16:55:27 2023
+../../maddm on a  named node810 by tt73 Fri May 12 16:55:27 2023
+../../maddm on a  named node802 by tt73 Fri May 12 16:55:27 2023
+[24]PETSC ERROR: [33]PETSC ERROR: Configure options --prefix=/opt/ohpc/pub/libs/gnu8/mpich/petsc/3.12.0 --CFLAGS="-fPIC -DPIC" --CXXFLAGS="-fPIC -DPIC" --FFLAGS=-fPIC --with-blaslapack-lib=/opt/ohpc/pub/libs/gnu8/openblas/0.3.7/lib/libopenblas.so --with-scalapack-dir=/opt/ohpc/pub/libs/gnu8/mpich/scalapack/2.0.2 --with-clanguage=C++ --with-c-support --with-fortran-interfaces=1 --with-debugging=no --with-shared-libraries --with-mpi=1 --with-batch=0 --with-hdf5=1 --with-hdf5-lib=/opt/ohpc/pub/libs/gnu8/mpich/hdf5/1.10.5/lib/libhdf5.so --with-hdf5-include=/opt/ohpc/pub/libs/gnu8/mpich/hdf5/1.10.5/include
+[27]PETSC ERROR: [25]PETSC ERROR: [26]PETSC ERROR: [28]PETSC ERROR: [31]PETSC ERROR: [32]PETSC ERROR: [30]PETSC ERROR: [29]PETSC ERROR: Configure options --prefix=/opt/ohpc/pub/libs/gnu8/mpich/petsc/3.12.0 --CFLAGS="-fPIC -DPIC" --CXXFLAGS="-fPIC -DPIC" --FFLAGS=-fPIC --with-blaslapack-lib=/opt/ohpc/pub/libs/gnu8/openblas/0.3.7/lib/libopenblas.so --with-scalapack-dir=/opt/ohpc/pub/libs/gnu8/mpich/scalapack/2.0.2 --with-clanguage=C++ --with-c-support --with-fortran-interfaces=1 --with-debugging=no --with-shared-libraries --with-mpi=1 --with-batch=0 --with-hdf5=1 --with-hdf5-lib=/opt/ohpc/pub/libs/gnu8/mpich/hdf5/1.10.5/lib/libhdf5.so --with-hdf5-include=/opt/ohpc/pub/libs/gnu8/mpich/hdf5/1.10.5/include
+Configure options --prefix=/opt/ohpc/pub/libs/gnu8/mpich/petsc/3.12.0 --CFLAGS="-fPIC -DPIC" --CXXFLAGS="-fPIC -DPIC" --FFLAGS=-fPIC --with-blaslapack-lib=/opt/ohpc/pub/libs/gnu8/openblas/0.3.7/lib/libopenblas.so --with-scalapack-dir=/opt/ohpc/pub/libs/gnu8/mpich/scalapack/2.0.2 --with-clanguage=C++ --with-c-support --with-fortran-interfaces=1 --with-debugging=no --with-shared-libraries --with-mpi=1 --with-batch=0 --with-hdf5=1 --with-hdf5-lib=/opt/ohpc/pub/libs/gnu8/mpich/hdf5/1.10.5/lib/libhdf5.so --with-hdf5-include=/opt/ohpc/pub/libs/gnu8/mpich/hdf5/1.10.5/include
+[34]PETSC ERROR: Configure options --prefix=/opt/ohpc/pub/libs/gnu8/mpich/petsc/3.12.0 --CFLAGS="-fPIC -DPIC" --CXXFLAGS="-fPIC -DPIC" --FFLAGS=-fPIC --with-blaslapack-lib=/opt/ohpc/pub/libs/gnu8/openblas/0.3.7/lib/libopenblas.so --with-scalapack-dir=/opt/ohpc/pub/libs/gnu8/mpich/scalapack/2.0.2 --with-clanguage=C++ --with-c-support --with-fortran-interfaces=1 --with-debugging=no --with-shared-libraries --with-mpi=1 --with-batch=0 --with-hdf5=1 --with-hdf5-lib=/opt/ohpc/pub/libs/gnu8/mpich/hdf5/1.10.5/lib/libhdf5.so --with-hdf5-include=/opt/ohpc/pub/libs/gnu8/mpich/hdf5/1.10.5/include
+Configure options --prefix=/opt/ohpc/pub/libs/gnu8/mpich/petsc/3.12.0 --CFLAGS="-fPIC -DPIC" --CXXFLAGS="-fPIC -DPIC" --FFLAGS=-fPIC --with-blaslapack-lib=/opt/ohpc/pub/libs/gnu8/openblas/0.3.7/lib/libopenblas.so --with-scalapack-dir=/opt/ohpc/pub/libs/gnu8/mpich/scalapack/2.0.2 --with-clanguage=C++ --with-c-support --with-fortran-interfaces=1 --with-debugging=no --with-shared-libraries --with-mpi=1 --with-batch=0 --with-hdf5=1 --with-hdf5-lib=/opt/ohpc/pub/libs/gnu8/mpich/hdf5/1.10.5/lib/libhdf5.so --with-hdf5-include=/opt/ohpc/pub/libs/gnu8/mpich/hdf5/1.10.5/include
+Configure options --prefix=/opt/ohpc/pub/libs/gnu8/mpich/petsc/3.12.0 --CFLAGS="-fPIC -DPIC" --CXXFLAGS="-fPIC -DPIC" --FFLAGS=-fPIC --with-blaslapack-lib=/opt/ohpc/pub/libs/gnu8/openblas/0.3.7/lib/libopenblas.so --with-scalapack-dir=/opt/ohpc/pub/libs/gnu8/mpich/scalapack/2.0.2 --with-clanguage=C++ --with-c-support --with-fortran-interfaces=1 --with-debugging=no --with-shared-libraries --with-mpi=1 --with-batch=0 --with-hdf5=1 --with-hdf5-lib=/opt/ohpc/pub/libs/gnu8/mpich/hdf5/1.10.5/lib/libhdf5.so --with-hdf5-include=/opt/ohpc/pub/libs/gnu8/mpich/hdf5/1.10.5/include
+Configure options --prefix=/opt/ohpc/pub/libs/gnu8/mpich/petsc/3.12.0 --CFLAGS="-fPIC -DPIC" --CXXFLAGS="-fPIC -DPIC" --FFLAGS=-fPIC --with-blaslapack-lib=/opt/ohpc/pub/libs/gnu8/openblas/0.3.7/lib/libopenblas.so --with-scalapack-dir=/opt/ohpc/pub/libs/gnu8/mpich/scalapack/2.0.2 --with-clanguage=C++ --with-c-support --with-fortran-interfaces=1 --with-debugging=no --with-shared-libraries --with-mpi=1 --with-batch=0 --with-hdf5=1 --with-hdf5-lib=/opt/ohpc/pub/libs/gnu8/mpich/hdf5/1.10.5/lib/libhdf5.so --with-hdf5-include=/opt/ohpc/pub/libs/gnu8/mpich/hdf5/1.10.5/include
+Configure options --prefix=/opt/ohpc/pub/libs/gnu8/mpich/petsc/3.12.0 --CFLAGS="-fPIC -DPIC" --CXXFLAGS="-fPIC -DPIC" --FFLAGS=-fPIC --with-blaslapack-lib=/opt/ohpc/pub/libs/gnu8/openblas/0.3.7/lib/libopenblas.so --with-scalapack-dir=/opt/ohpc/pub/libs/gnu8/mpich/scalapack/2.0.2 --with-clanguage=C++ --with-c-support --with-fortran-interfaces=1 --with-debugging=no --with-shared-libraries --with-mpi=1 --with-batch=0 --with-hdf5=1 --with-hdf5-lib=/opt/ohpc/pub/libs/gnu8/mpich/hdf5/1.10.5/lib/libhdf5.so --with-hdf5-include=/opt/ohpc/pub/libs/gnu8/mpich/hdf5/1.10.5/include
+Configure options --prefix=/opt/ohpc/pub/libs/gnu8/mpich/petsc/3.12.0 --CFLAGS="-fPIC -DPIC" --CXXFLAGS="-fPIC -DPIC" --FFLAGS=-fPIC --with-blaslapack-lib=/opt/ohpc/pub/libs/gnu8/openblas/0.3.7/lib/libopenblas.so --with-scalapack-dir=/opt/ohpc/pub/libs/gnu8/mpich/scalapack/2.0.2 --with-clanguage=C++ --with-c-support --with-fortran-interfaces=1 --with-debugging=no --with-shared-libraries --with-mpi=1 --with-batch=0 --with-hdf5=1 --with-hdf5-lib=/opt/ohpc/pub/libs/gnu8/mpich/hdf5/1.10.5/lib/libhdf5.so --with-hdf5-include=/opt/ohpc/pub/libs/gnu8/mpich/hdf5/1.10.5/include
+Configure options --prefix=/opt/ohpc/pub/libs/gnu8/mpich/petsc/3.12.0 --CFLAGS="-fPIC -DPIC" --CXXFLAGS="-fPIC -DPIC" --FFLAGS=-fPIC --with-blaslapack-lib=/opt/ohpc/pub/libs/gnu8/openblas/0.3.7/lib/libopenblas.so --with-scalapack-dir=/opt/ohpc/pub/libs/gnu8/mpich/scalapack/2.0.2 --with-clanguage=C++ --with-c-support --with-fortran-interfaces=1 --with-debugging=no --with-shared-libraries --with-mpi=1 --with-batch=0 --with-hdf5=1 --with-hdf5-lib=/opt/ohpc/pub/libs/gnu8/mpich/hdf5/1.10.5/lib/libhdf5.so --with-hdf5-include=/opt/ohpc/pub/libs/gnu8/mpich/hdf5/1.10.5/include
+Configure options --prefix=/opt/ohpc/pub/libs/gnu8/mpich/petsc/3.12.0 --CFLAGS="-fPIC -DPIC" --CXXFLAGS="-fPIC -DPIC" --FFLAGS=-fPIC --with-blaslapack-lib=/opt/ohpc/pub/libs/gnu8/openblas/0.3.7/lib/libopenblas.so --with-scalapack-dir=/opt/ohpc/pub/libs/gnu8/mpich/scalapack/2.0.2 --with-clanguage=C++ --with-c-support --with-fortran-interfaces=1 --with-debugging=no --with-shared-libraries --with-mpi=1 --with-batch=0 --with-hdf5=1 --with-hdf5-lib=/opt/ohpc/pub/libs/gnu8/mpich/hdf5/1.10.5/lib/libhdf5.so --with-hdf5-include=/opt/ohpc/pub/libs/gnu8/mpich/hdf5/1.10.5/include
+[24]PETSC ERROR: [33]PETSC ERROR: #1 User provided function() line 0 in  unknown file
+[27]PETSC ERROR: [25]PETSC ERROR: [26]PETSC ERROR: [28]PETSC ERROR: [31]PETSC ERROR: [32]PETSC ERROR: [30]PETSC ERROR: [29]PETSC ERROR: #1 User provided function() line 0 in  unknown file
+#1 User provided function() line 0 in  unknown file
+application called MPI_Abort(MPI_COMM_WORLD, 59) - process 34
+#1 User provided function() line 0 in  unknown file
+#1 User provided function() line 0 in  unknown file
+#1 User provided function() line 0 in  unknown file
+#1 User provided function() line 0 in  unknown file
+#1 User provided function() line 0 in  unknown file
+#1 User provided function() line 0 in  unknown file
+#1 User provided function() line 0 in  unknown file
+#1 User provided function() line 0 in  unknown file
+application called MPI_Abort(MPI_COMM_WORLD, 59) - process 24
+application called MPI_Abort(MPI_COMM_WORLD, 59) - process 33
+application called MPI_Abort(MPI_COMM_WORLD, 59) - process 27
+application called MPI_Abort(MPI_COMM_WORLD, 59) - process 25
+application called MPI_Abort(MPI_COMM_WORLD, 59) - process 26
+application called MPI_Abort(MPI_COMM_WORLD, 59) - process 28
+application called MPI_Abort(MPI_COMM_WORLD, 59) - process 31
+application called MPI_Abort(MPI_COMM_WORLD, 59) - process 30
+application called MPI_Abort(MPI_COMM_WORLD, 59) - process 29
+srun: Job 719010 step creation temporarily disabled, retrying
+srun: Step created for job 719010
+[30]PETSC ERROR: [35]PETSC ERROR: ------------------------------------------------------------------------
+[35]PETSC ERROR: Caught signal number 11 SEGV: Segmentation Violation, probably memory access out of range
+[24]PETSC ERROR: [33]PETSC ERROR: [34]PETSC ERROR: [27]PETSC ERROR: [26]PETSC ERROR: [25]PETSC ERROR: [28]PETSC ERROR: [31]PETSC ERROR: [32]PETSC ERROR: ------------------------------------------------------------------------
+[29]PETSC ERROR: [35]PETSC ERROR: Try option -start_in_debugger or -on_error_attach_debugger
+[35]PETSC ERROR: or see https://www.mcs.anl.gov/petsc/documentation/faq.html#valgrind
+[35]PETSC ERROR: or try http://valgrind.org on GNU/linux and Apple Mac OS X to find memory corruption errors
+[35]PETSC ERROR: configure using --with-debugging=yes, recompile, link, and run 
+------------------------------------------------------------------------
+------------------------------------------------------------------------
+------------------------------------------------------------------------
+------------------------------------------------------------------------
+------------------------------------------------------------------------
+------------------------------------------------------------------------
+------------------------------------------------------------------------
+------------------------------------------------------------------------
+------------------------------------------------------------------------
+[30]PETSC ERROR: ------------------------------------------------------------------------
+[35]PETSC ERROR: to get more information on the crash.
+[24]PETSC ERROR: [33]PETSC ERROR: [34]PETSC ERROR: [27]PETSC ERROR: [26]PETSC ERROR: [25]PETSC ERROR: [28]PETSC ERROR: [31]PETSC ERROR: [32]PETSC ERROR: Caught signal number 11 SEGV: Segmentation Violation, probably memory access out of range
+[29]PETSC ERROR: [35]PETSC ERROR: --------------------- Error Message --------------------------------------------------------------
+Caught signal number 11 SEGV: Segmentation Violation, probably memory access out of range
+Caught signal number 11 SEGV: Segmentation Violation, probably memory access out of range
+Caught signal number 11 SEGV: Segmentation Violation, probably memory access out of range
+Caught signal number 11 SEGV: Segmentation Violation, probably memory access out of range
+Caught signal number 11 SEGV: Segmentation Violation, probably memory access out of range
+Caught signal number 11 SEGV: Segmentation Violation, probably memory access out of range
+Caught signal number 11 SEGV: Segmentation Violation, probably memory access out of range
+Caught signal number 11 SEGV: Segmentation Violation, probably memory access out of range
+Caught signal number 11 SEGV: Segmentation Violation, probably memory access out of range
+[30]PETSC ERROR: Caught signal number 11 SEGV: Segmentation Violation, probably memory access out of range
+[35]PETSC ERROR: Signal received
+[24]PETSC ERROR: [33]PETSC ERROR: [34]PETSC ERROR: [27]PETSC ERROR: [26]PETSC ERROR: [25]PETSC ERROR: [28]PETSC ERROR: [31]PETSC ERROR: [32]PETSC ERROR: Try option -start_in_debugger or -on_error_attach_debugger
+[29]PETSC ERROR: [35]PETSC ERROR: See https://www.mcs.anl.gov/petsc/documentation/faq.html for trouble shooting.
+Try option -start_in_debugger or -on_error_attach_debugger
+Try option -start_in_debugger or -on_error_attach_debugger
+Try option -start_in_debugger or -on_error_attach_debugger
+Try option -start_in_debugger or -on_error_attach_debugger
+Try option -start_in_debugger or -on_error_attach_debugger
+Try option -start_in_debugger or -on_error_attach_debugger
+Try option -start_in_debugger or -on_error_attach_debugger
+Try option -start_in_debugger or -on_error_attach_debugger
+Try option -start_in_debugger or -on_error_attach_debugger
+[30]PETSC ERROR: Try option -start_in_debugger or -on_error_attach_debugger
+[35]PETSC ERROR: Petsc Release Version 3.12.0, Sep, 29, 2019 
+[24]PETSC ERROR: [33]PETSC ERROR: [34]PETSC ERROR: [27]PETSC ERROR: [26]PETSC ERROR: [25]PETSC ERROR: [28]PETSC ERROR: [31]PETSC ERROR: [32]PETSC ERROR: or see https://www.mcs.anl.gov/petsc/documentation/faq.html#valgrind
+[29]PETSC ERROR: [35]PETSC ERROR: or see https://www.mcs.anl.gov/petsc/documentation/faq.html#valgrind
+or see https://www.mcs.anl.gov/petsc/documentation/faq.html#valgrind
+or see https://www.mcs.anl.gov/petsc/documentation/faq.html#valgrind
+or see https://www.mcs.anl.gov/petsc/documentation/faq.html#valgrind
+or see https://www.mcs.anl.gov/petsc/documentation/faq.html#valgrind
+or see https://www.mcs.anl.gov/petsc/documentation/faq.html#valgrind
+or see https://www.mcs.anl.gov/petsc/documentation/faq.html#valgrind
+or see https://www.mcs.anl.gov/petsc/documentation/faq.html#valgrind
+or see https://www.mcs.anl.gov/petsc/documentation/faq.html#valgrind
+[30]PETSC ERROR: or see https://www.mcs.anl.gov/petsc/documentation/faq.html#valgrind
+../../maddm on a  named node819 by tt73 Fri May 12 16:55:36 2023
+[35]PETSC ERROR: [24]PETSC ERROR: [33]PETSC ERROR: [34]PETSC ERROR: [27]PETSC ERROR: [26]PETSC ERROR: [25]PETSC ERROR: [28]PETSC ERROR: [31]PETSC ERROR: [32]PETSC ERROR: or try http://valgrind.org on GNU/linux and Apple Mac OS X to find memory corruption errors
+[29]PETSC ERROR: Configure options --prefix=/opt/ohpc/pub/libs/gnu8/mpich/petsc/3.12.0 --CFLAGS="-fPIC -DPIC" --CXXFLAGS="-fPIC -DPIC" --FFLAGS=-fPIC --with-blaslapack-lib=/opt/ohpc/pub/libs/gnu8/openblas/0.3.7/lib/libopenblas.so --with-scalapack-dir=/opt/ohpc/pub/libs/gnu8/mpich/scalapack/2.0.2 --with-clanguage=C++ --with-c-support --with-fortran-interfaces=1 --with-debugging=no --with-shared-libraries --with-mpi=1 --with-batch=0 --with-hdf5=1 --with-hdf5-lib=/opt/ohpc/pub/libs/gnu8/mpich/hdf5/1.10.5/lib/libhdf5.so --with-hdf5-include=/opt/ohpc/pub/libs/gnu8/mpich/hdf5/1.10.5/include
+[35]PETSC ERROR: or try http://valgrind.org on GNU/linux and Apple Mac OS X to find memory corruption errors
+or try http://valgrind.org on GNU/linux and Apple Mac OS X to find memory corruption errors
+or try http://valgrind.org on GNU/linux and Apple Mac OS X to find memory corruption errors
+or try http://valgrind.org on GNU/linux and Apple Mac OS X to find memory corruption errors
+or try http://valgrind.org on GNU/linux and Apple Mac OS X to find memory corruption errors
+or try http://valgrind.org on GNU/linux and Apple Mac OS X to find memory corruption errors
+or try http://valgrind.org on GNU/linux and Apple Mac OS X to find memory corruption errors
+or try http://valgrind.org on GNU/linux and Apple Mac OS X to find memory corruption errors
+or try http://valgrind.org on GNU/linux and Apple Mac OS X to find memory corruption errors
+[30]PETSC ERROR: or try http://valgrind.org on GNU/linux and Apple Mac OS X to find memory corruption errors
+#1 User provided function() line 0 in  unknown file
+[24]PETSC ERROR: [33]PETSC ERROR: [34]PETSC ERROR: [27]PETSC ERROR: [26]PETSC ERROR: [25]PETSC ERROR: [28]PETSC ERROR: [31]PETSC ERROR: [32]PETSC ERROR: configure using --with-debugging=yes, recompile, link, and run 
+[29]PETSC ERROR: application called MPI_Abort(MPI_COMM_WORLD, 59) - process 35
+configure using --with-debugging=yes, recompile, link, and run 
+configure using --with-debugging=yes, recompile, link, and run 
+configure using --with-debugging=yes, recompile, link, and run 
+configure using --with-debugging=yes, recompile, link, and run 
+configure using --with-debugging=yes, recompile, link, and run 
+configure using --with-debugging=yes, recompile, link, and run 
+configure using --with-debugging=yes, recompile, link, and run 
+configure using --with-debugging=yes, recompile, link, and run 
+configure using --with-debugging=yes, recompile, link, and run 
+[30]PETSC ERROR: configure using --with-debugging=yes, recompile, link, and run 
+[24]PETSC ERROR: [33]PETSC ERROR: [34]PETSC ERROR: [27]PETSC ERROR: [26]PETSC ERROR: [25]PETSC ERROR: [28]PETSC ERROR: [31]PETSC ERROR: [32]PETSC ERROR: to get more information on the crash.
+[29]PETSC ERROR: to get more information on the crash.
+to get more information on the crash.
+to get more information on the crash.
+to get more information on the crash.
+to get more information on the crash.
+to get more information on the crash.
+to get more information on the crash.
+to get more information on the crash.
+to get more information on the crash.
+[30]PETSC ERROR: to get more information on the crash.
+[24]PETSC ERROR: [33]PETSC ERROR: [34]PETSC ERROR: [27]PETSC ERROR: [26]PETSC ERROR: [25]PETSC ERROR: [28]PETSC ERROR: [31]PETSC ERROR: [32]PETSC ERROR: --------------------- Error Message --------------------------------------------------------------
+[29]PETSC ERROR: --------------------- Error Message --------------------------------------------------------------
+--------------------- Error Message --------------------------------------------------------------
+--------------------- Error Message --------------------------------------------------------------
+--------------------- Error Message --------------------------------------------------------------
+--------------------- Error Message --------------------------------------------------------------
+--------------------- Error Message --------------------------------------------------------------
+--------------------- Error Message --------------------------------------------------------------
+--------------------- Error Message --------------------------------------------------------------
+--------------------- Error Message --------------------------------------------------------------
+[30]PETSC ERROR: --------------------- Error Message --------------------------------------------------------------
+[24]PETSC ERROR: [33]PETSC ERROR: [34]PETSC ERROR: [27]PETSC ERROR: [26]PETSC ERROR: [25]PETSC ERROR: [28]PETSC ERROR: [31]PETSC ERROR: [32]PETSC ERROR: Signal received
+[29]PETSC ERROR: Signal received
+Signal received
+Signal received
+Signal received
+Signal received
+Signal received
+Signal received
+Signal received
+Signal received
+[30]PETSC ERROR: Signal received
+[24]PETSC ERROR: [33]PETSC ERROR: [34]PETSC ERROR: [27]PETSC ERROR: [26]PETSC ERROR: [25]PETSC ERROR: [28]PETSC ERROR: [31]PETSC ERROR: [32]PETSC ERROR: See https://www.mcs.anl.gov/petsc/documentation/faq.html for trouble shooting.
+[29]PETSC ERROR: See https://www.mcs.anl.gov/petsc/documentation/faq.html for trouble shooting.
+See https://www.mcs.anl.gov/petsc/documentation/faq.html for trouble shooting.
+See https://www.mcs.anl.gov/petsc/documentation/faq.html for trouble shooting.
+See https://www.mcs.anl.gov/petsc/documentation/faq.html for trouble shooting.
+See https://www.mcs.anl.gov/petsc/documentation/faq.html for trouble shooting.
+See https://www.mcs.anl.gov/petsc/documentation/faq.html for trouble shooting.
+See https://www.mcs.anl.gov/petsc/documentation/faq.html for trouble shooting.
+See https://www.mcs.anl.gov/petsc/documentation/faq.html for trouble shooting.
+See https://www.mcs.anl.gov/petsc/documentation/faq.html for trouble shooting.
+[30]PETSC ERROR: See https://www.mcs.anl.gov/petsc/documentation/faq.html for trouble shooting.
+[24]PETSC ERROR: [33]PETSC ERROR: [34]PETSC ERROR: [27]PETSC ERROR: [26]PETSC ERROR: [25]PETSC ERROR: [28]PETSC ERROR: [31]PETSC ERROR: [32]PETSC ERROR: Petsc Release Version 3.12.0, Sep, 29, 2019 
+[29]PETSC ERROR: Petsc Release Version 3.12.0, Sep, 29, 2019 
+Petsc Release Version 3.12.0, Sep, 29, 2019 
+Petsc Release Version 3.12.0, Sep, 29, 2019 
+Petsc Release Version 3.12.0, Sep, 29, 2019 
+Petsc Release Version 3.12.0, Sep, 29, 2019 
+Petsc Release Version 3.12.0, Sep, 29, 2019 
+Petsc Release Version 3.12.0, Sep, 29, 2019 
+Petsc Release Version 3.12.0, Sep, 29, 2019 
+Petsc Release Version 3.12.0, Sep, 29, 2019 
+[30]PETSC ERROR: Petsc Release Version 3.12.0, Sep, 29, 2019 
+[24]PETSC ERROR: [33]PETSC ERROR: [34]PETSC ERROR: [27]PETSC ERROR: [26]PETSC ERROR: [25]PETSC ERROR: [28]PETSC ERROR: [31]PETSC ERROR: [32]PETSC ERROR: ../../maddm on a  named node810 by tt73 Fri May 12 16:55:36 2023
+[29]PETSC ERROR: ../../maddm on a  named node677 by tt73 Fri May 12 16:55:36 2023
+../../maddm on a  named node813 by tt73 Fri May 12 16:55:36 2023
+../../maddm on a  named node814 by tt73 Fri May 12 16:55:36 2023
+../../maddm on a  named node710 by tt73 Fri May 12 16:55:36 2023
+../../maddm on a  named node702 by tt73 Fri May 12 16:55:36 2023
+../../maddm on a  named node701 by tt73 Fri May 12 16:55:36 2023
+../../maddm on a  named node711 by tt73 Fri May 12 16:55:36 2023
+../../maddm on a  named node811 by tt73 Fri May 12 16:55:36 2023
+../../maddm on a  named node812 by tt73 Fri May 12 16:55:36 2023
+[30]PETSC ERROR: ../../maddm on a  named node802 by tt73 Fri May 12 16:55:36 2023
+[24]PETSC ERROR: [33]PETSC ERROR: [34]PETSC ERROR: [27]PETSC ERROR: [26]PETSC ERROR: [25]PETSC ERROR: [28]PETSC ERROR: [31]PETSC ERROR: [32]PETSC ERROR: Configure options --prefix=/opt/ohpc/pub/libs/gnu8/mpich/petsc/3.12.0 --CFLAGS="-fPIC -DPIC" --CXXFLAGS="-fPIC -DPIC" --FFLAGS=-fPIC --with-blaslapack-lib=/opt/ohpc/pub/libs/gnu8/openblas/0.3.7/lib/libopenblas.so --with-scalapack-dir=/opt/ohpc/pub/libs/gnu8/mpich/scalapack/2.0.2 --with-clanguage=C++ --with-c-support --with-fortran-interfaces=1 --with-debugging=no --with-shared-libraries --with-mpi=1 --with-batch=0 --with-hdf5=1 --with-hdf5-lib=/opt/ohpc/pub/libs/gnu8/mpich/hdf5/1.10.5/lib/libhdf5.so --with-hdf5-include=/opt/ohpc/pub/libs/gnu8/mpich/hdf5/1.10.5/include
+[29]PETSC ERROR: Configure options --prefix=/opt/ohpc/pub/libs/gnu8/mpich/petsc/3.12.0 --CFLAGS="-fPIC -DPIC" --CXXFLAGS="-fPIC -DPIC" --FFLAGS=-fPIC --with-blaslapack-lib=/opt/ohpc/pub/libs/gnu8/openblas/0.3.7/lib/libopenblas.so --with-scalapack-dir=/opt/ohpc/pub/libs/gnu8/mpich/scalapack/2.0.2 --with-clanguage=C++ --with-c-support --with-fortran-interfaces=1 --with-debugging=no --with-shared-libraries --with-mpi=1 --with-batch=0 --with-hdf5=1 --with-hdf5-lib=/opt/ohpc/pub/libs/gnu8/mpich/hdf5/1.10.5/lib/libhdf5.so --with-hdf5-include=/opt/ohpc/pub/libs/gnu8/mpich/hdf5/1.10.5/include
+Configure options --prefix=/opt/ohpc/pub/libs/gnu8/mpich/petsc/3.12.0 --CFLAGS="-fPIC -DPIC" --CXXFLAGS="-fPIC -DPIC" --FFLAGS=-fPIC --with-blaslapack-lib=/opt/ohpc/pub/libs/gnu8/openblas/0.3.7/lib/libopenblas.so --with-scalapack-dir=/opt/ohpc/pub/libs/gnu8/mpich/scalapack/2.0.2 --with-clanguage=C++ --with-c-support --with-fortran-interfaces=1 --with-debugging=no --with-shared-libraries --with-mpi=1 --with-batch=0 --with-hdf5=1 --with-hdf5-lib=/opt/ohpc/pub/libs/gnu8/mpich/hdf5/1.10.5/lib/libhdf5.so --with-hdf5-include=/opt/ohpc/pub/libs/gnu8/mpich/hdf5/1.10.5/include
+Configure options --prefix=/opt/ohpc/pub/libs/gnu8/mpich/petsc/3.12.0 --CFLAGS="-fPIC -DPIC" --CXXFLAGS="-fPIC -DPIC" --FFLAGS=-fPIC --with-blaslapack-lib=/opt/ohpc/pub/libs/gnu8/openblas/0.3.7/lib/libopenblas.so --with-scalapack-dir=/opt/ohpc/pub/libs/gnu8/mpich/scalapack/2.0.2 --with-clanguage=C++ --with-c-support --with-fortran-interfaces=1 --with-debugging=no --with-shared-libraries --with-mpi=1 --with-batch=0 --with-hdf5=1 --with-hdf5-lib=/opt/ohpc/pub/libs/gnu8/mpich/hdf5/1.10.5/lib/libhdf5.so --with-hdf5-include=/opt/ohpc/pub/libs/gnu8/mpich/hdf5/1.10.5/include
+Configure options --prefix=/opt/ohpc/pub/libs/gnu8/mpich/petsc/3.12.0 --CFLAGS="-fPIC -DPIC" --CXXFLAGS="-fPIC -DPIC" --FFLAGS=-fPIC --with-blaslapack-lib=/opt/ohpc/pub/libs/gnu8/openblas/0.3.7/lib/libopenblas.so --with-scalapack-dir=/opt/ohpc/pub/libs/gnu8/mpich/scalapack/2.0.2 --with-clanguage=C++ --with-c-support --with-fortran-interfaces=1 --with-debugging=no --with-shared-libraries --with-mpi=1 --with-batch=0 --with-hdf5=1 --with-hdf5-lib=/opt/ohpc/pub/libs/gnu8/mpich/hdf5/1.10.5/lib/libhdf5.so --with-hdf5-include=/opt/ohpc/pub/libs/gnu8/mpich/hdf5/1.10.5/include
+Configure options --prefix=/opt/ohpc/pub/libs/gnu8/mpich/petsc/3.12.0 --CFLAGS="-fPIC -DPIC" --CXXFLAGS="-fPIC -DPIC" --FFLAGS=-fPIC --with-blaslapack-lib=/opt/ohpc/pub/libs/gnu8/openblas/0.3.7/lib/libopenblas.so --with-scalapack-dir=/opt/ohpc/pub/libs/gnu8/mpich/scalapack/2.0.2 --with-clanguage=C++ --with-c-support --with-fortran-interfaces=1 --with-debugging=no --with-shared-libraries --with-mpi=1 --with-batch=0 --with-hdf5=1 --with-hdf5-lib=/opt/ohpc/pub/libs/gnu8/mpich/hdf5/1.10.5/lib/libhdf5.so --with-hdf5-include=/opt/ohpc/pub/libs/gnu8/mpich/hdf5/1.10.5/include
+Configure options --prefix=/opt/ohpc/pub/libs/gnu8/mpich/petsc/3.12.0 --CFLAGS="-fPIC -DPIC" --CXXFLAGS="-fPIC -DPIC" --FFLAGS=-fPIC --with-blaslapack-lib=/opt/ohpc/pub/libs/gnu8/openblas/0.3.7/lib/libopenblas.so --with-scalapack-dir=/opt/ohpc/pub/libs/gnu8/mpich/scalapack/2.0.2 --with-clanguage=C++ --with-c-support --with-fortran-interfaces=1 --with-debugging=no --with-shared-libraries --with-mpi=1 --with-batch=0 --with-hdf5=1 --with-hdf5-lib=/opt/ohpc/pub/libs/gnu8/mpich/hdf5/1.10.5/lib/libhdf5.so --with-hdf5-include=/opt/ohpc/pub/libs/gnu8/mpich/hdf5/1.10.5/include
+Configure options --prefix=/opt/ohpc/pub/libs/gnu8/mpich/petsc/3.12.0 --CFLAGS="-fPIC -DPIC" --CXXFLAGS="-fPIC -DPIC" --FFLAGS=-fPIC --with-blaslapack-lib=/opt/ohpc/pub/libs/gnu8/openblas/0.3.7/lib/libopenblas.so --with-scalapack-dir=/opt/ohpc/pub/libs/gnu8/mpich/scalapack/2.0.2 --with-clanguage=C++ --with-c-support --with-fortran-interfaces=1 --with-debugging=no --with-shared-libraries --with-mpi=1 --with-batch=0 --with-hdf5=1 --with-hdf5-lib=/opt/ohpc/pub/libs/gnu8/mpich/hdf5/1.10.5/lib/libhdf5.so --with-hdf5-include=/opt/ohpc/pub/libs/gnu8/mpich/hdf5/1.10.5/include
+Configure options --prefix=/opt/ohpc/pub/libs/gnu8/mpich/petsc/3.12.0 --CFLAGS="-fPIC -DPIC" --CXXFLAGS="-fPIC -DPIC" --FFLAGS=-fPIC --with-blaslapack-lib=/opt/ohpc/pub/libs/gnu8/openblas/0.3.7/lib/libopenblas.so --with-scalapack-dir=/opt/ohpc/pub/libs/gnu8/mpich/scalapack/2.0.2 --with-clanguage=C++ --with-c-support --with-fortran-interfaces=1 --with-debugging=no --with-shared-libraries --with-mpi=1 --with-batch=0 --with-hdf5=1 --with-hdf5-lib=/opt/ohpc/pub/libs/gnu8/mpich/hdf5/1.10.5/lib/libhdf5.so --with-hdf5-include=/opt/ohpc/pub/libs/gnu8/mpich/hdf5/1.10.5/include
+Configure options --prefix=/opt/ohpc/pub/libs/gnu8/mpich/petsc/3.12.0 --CFLAGS="-fPIC -DPIC" --CXXFLAGS="-fPIC -DPIC" --FFLAGS=-fPIC --with-blaslapack-lib=/opt/ohpc/pub/libs/gnu8/openblas/0.3.7/lib/libopenblas.so --with-scalapack-dir=/opt/ohpc/pub/libs/gnu8/mpich/scalapack/2.0.2 --with-clanguage=C++ --with-c-support --with-fortran-interfaces=1 --with-debugging=no --with-shared-libraries --with-mpi=1 --with-batch=0 --with-hdf5=1 --with-hdf5-lib=/opt/ohpc/pub/libs/gnu8/mpich/hdf5/1.10.5/lib/libhdf5.so --with-hdf5-include=/opt/ohpc/pub/libs/gnu8/mpich/hdf5/1.10.5/include
+[30]PETSC ERROR: Configure options --prefix=/opt/ohpc/pub/libs/gnu8/mpich/petsc/3.12.0 --CFLAGS="-fPIC -DPIC" --CXXFLAGS="-fPIC -DPIC" --FFLAGS=-fPIC --with-blaslapack-lib=/opt/ohpc/pub/libs/gnu8/openblas/0.3.7/lib/libopenblas.so --with-scalapack-dir=/opt/ohpc/pub/libs/gnu8/mpich/scalapack/2.0.2 --with-clanguage=C++ --with-c-support --with-fortran-interfaces=1 --with-debugging=no --with-shared-libraries --with-mpi=1 --with-batch=0 --with-hdf5=1 --with-hdf5-lib=/opt/ohpc/pub/libs/gnu8/mpich/hdf5/1.10.5/lib/libhdf5.so --with-hdf5-include=/opt/ohpc/pub/libs/gnu8/mpich/hdf5/1.10.5/include
+[24]PETSC ERROR: [33]PETSC ERROR: [34]PETSC ERROR: [27]PETSC ERROR: [26]PETSC ERROR: [25]PETSC ERROR: [28]PETSC ERROR: [31]PETSC ERROR: [32]PETSC ERROR: #1 User provided function() line 0 in  unknown file
+[29]PETSC ERROR: #1 User provided function() line 0 in  unknown file
+#1 User provided function() line 0 in  unknown file
+#1 User provided function() line 0 in  unknown file
+#1 User provided function() line 0 in  unknown file
+#1 User provided function() line 0 in  unknown file
+#1 User provided function() line 0 in  unknown file
+#1 User provided function() line 0 in  unknown file
+#1 User provided function() line 0 in  unknown file
+#1 User provided function() line 0 in  unknown file
+application called MPI_Abort(MPI_COMM_WORLD, 59) - process 30
+#1 User provided function() line 0 in  unknown file
+application called MPI_Abort(MPI_COMM_WORLD, 59) - process 24
+application called MPI_Abort(MPI_COMM_WORLD, 59) - process 33
+application called MPI_Abort(MPI_COMM_WORLD, 59) - process 34
+application called MPI_Abort(MPI_COMM_WORLD, 59) - process 27
+application called MPI_Abort(MPI_COMM_WORLD, 59) - process 26
+application called MPI_Abort(MPI_COMM_WORLD, 59) - process 25
+application called MPI_Abort(MPI_COMM_WORLD, 59) - process 28
+application called MPI_Abort(MPI_COMM_WORLD, 59) - process 31
+application called MPI_Abort(MPI_COMM_WORLD, 59) - process 29
+application called MPI_Abort(MPI_COMM_WORLD, 59) - process 32
+srun: Job 719010 step creation temporarily disabled, retrying
+srun: Step created for job 719010
+[34]PETSC ERROR: [35]PETSC ERROR: ------------------------------------------------------------------------
+[35]PETSC ERROR: [24]PETSC ERROR: [33]PETSC ERROR: ------------------------------------------------------------------------
+[27]PETSC ERROR: [26]PETSC ERROR: [28]PETSC ERROR: [25]PETSC ERROR: [30]PETSC ERROR: [31]PETSC ERROR: [32]PETSC ERROR: [29]PETSC ERROR: Caught signal number 11 SEGV: Segmentation Violation, probably memory access out of range
+[35]PETSC ERROR: Try option -start_in_debugger or -on_error_attach_debugger
+[35]PETSC ERROR: or see https://www.mcs.anl.gov/petsc/documentation/faq.html#valgrind
+[35]PETSC ERROR: or try http://valgrind.org on GNU/linux and Apple Mac OS X to find memory corruption errors
+[35]PETSC ERROR: ------------------------------------------------------------------------
+------------------------------------------------------------------------
+[34]PETSC ERROR: ------------------------------------------------------------------------
+------------------------------------------------------------------------
+------------------------------------------------------------------------
+------------------------------------------------------------------------
+------------------------------------------------------------------------
+------------------------------------------------------------------------
+------------------------------------------------------------------------
+------------------------------------------------------------------------
+configure using --with-debugging=yes, recompile, link, and run 
+[35]PETSC ERROR: to get more information on the crash.
+[24]PETSC ERROR: [33]PETSC ERROR: Caught signal number 11 SEGV: Segmentation Violation, probably memory access out of range
+[27]PETSC ERROR: [26]PETSC ERROR: [28]PETSC ERROR: [25]PETSC ERROR: [30]PETSC ERROR: [31]PETSC ERROR: [32]PETSC ERROR: [29]PETSC ERROR: [35]PETSC ERROR: --------------------- Error Message --------------------------------------------------------------
+Caught signal number 11 SEGV: Segmentation Violation, probably memory access out of range
+Caught signal number 11 SEGV: Segmentation Violation, probably memory access out of range
+[34]PETSC ERROR: Caught signal number 11 SEGV: Segmentation Violation, probably memory access out of range
+Caught signal number 11 SEGV: Segmentation Violation, probably memory access out of range
+Caught signal number 11 SEGV: Segmentation Violation, probably memory access out of range
+Caught signal number 11 SEGV: Segmentation Violation, probably memory access out of range
+Caught signal number 11 SEGV: Segmentation Violation, probably memory access out of range
+Caught signal number 11 SEGV: Segmentation Violation, probably memory access out of range
+Caught signal number 11 SEGV: Segmentation Violation, probably memory access out of range
+Caught signal number 11 SEGV: Segmentation Violation, probably memory access out of range
+[35]PETSC ERROR: Signal received
+[35]PETSC ERROR: [24]PETSC ERROR: [33]PETSC ERROR: Try option -start_in_debugger or -on_error_attach_debugger
+[27]PETSC ERROR: [26]PETSC ERROR: [28]PETSC ERROR: [25]PETSC ERROR: [30]PETSC ERROR: [31]PETSC ERROR: [32]PETSC ERROR: [29]PETSC ERROR: See https://www.mcs.anl.gov/petsc/documentation/faq.html for trouble shooting.
+[35]PETSC ERROR: Try option -start_in_debugger or -on_error_attach_debugger
+Try option -start_in_debugger or -on_error_attach_debugger
+[34]PETSC ERROR: Try option -start_in_debugger or -on_error_attach_debugger
+Try option -start_in_debugger or -on_error_attach_debugger
+Try option -start_in_debugger or -on_error_attach_debugger
+Try option -start_in_debugger or -on_error_attach_debugger
+Try option -start_in_debugger or -on_error_attach_debugger
+Try option -start_in_debugger or -on_error_attach_debugger
+Try option -start_in_debugger or -on_error_attach_debugger
+Try option -start_in_debugger or -on_error_attach_debugger
+Petsc Release Version 3.12.0, Sep, 29, 2019 
+[35]PETSC ERROR: [24]PETSC ERROR: [33]PETSC ERROR: or see https://www.mcs.anl.gov/petsc/documentation/faq.html#valgrind
+[27]PETSC ERROR: [26]PETSC ERROR: [28]PETSC ERROR: [25]PETSC ERROR: [30]PETSC ERROR: [31]PETSC ERROR: [32]PETSC ERROR: [29]PETSC ERROR: ../../maddm on a  named node819 by tt73 Fri May 12 16:55:39 2023
+[35]PETSC ERROR: or see https://www.mcs.anl.gov/petsc/documentation/faq.html#valgrind
+or see https://www.mcs.anl.gov/petsc/documentation/faq.html#valgrind
+[34]PETSC ERROR: or see https://www.mcs.anl.gov/petsc/documentation/faq.html#valgrind
+or see https://www.mcs.anl.gov/petsc/documentation/faq.html#valgrind
+or see https://www.mcs.anl.gov/petsc/documentation/faq.html#valgrind
+or see https://www.mcs.anl.gov/petsc/documentation/faq.html#valgrind
+or see https://www.mcs.anl.gov/petsc/documentation/faq.html#valgrind
+or see https://www.mcs.anl.gov/petsc/documentation/faq.html#valgrind
+or see https://www.mcs.anl.gov/petsc/documentation/faq.html#valgrind
+or see https://www.mcs.anl.gov/petsc/documentation/faq.html#valgrind
+Configure options --prefix=/opt/ohpc/pub/libs/gnu8/mpich/petsc/3.12.0 --CFLAGS="-fPIC -DPIC" --CXXFLAGS="-fPIC -DPIC" --FFLAGS=-fPIC --with-blaslapack-lib=/opt/ohpc/pub/libs/gnu8/openblas/0.3.7/lib/libopenblas.so --with-scalapack-dir=/opt/ohpc/pub/libs/gnu8/mpich/scalapack/2.0.2 --with-clanguage=C++ --with-c-support --with-fortran-interfaces=1 --with-debugging=no --with-shared-libraries --with-mpi=1 --with-batch=0 --with-hdf5=1 --with-hdf5-lib=/opt/ohpc/pub/libs/gnu8/mpich/hdf5/1.10.5/lib/libhdf5.so --with-hdf5-include=/opt/ohpc/pub/libs/gnu8/mpich/hdf5/1.10.5/include
+[35]PETSC ERROR: #1 User provided function() line 0 in  unknown file
+[24]PETSC ERROR: [33]PETSC ERROR: or try http://valgrind.org on GNU/linux and Apple Mac OS X to find memory corruption errors
+[27]PETSC ERROR: [26]PETSC ERROR: [28]PETSC ERROR: [25]PETSC ERROR: [30]PETSC ERROR: [31]PETSC ERROR: [32]PETSC ERROR: [29]PETSC ERROR: application called MPI_Abort(MPI_COMM_WORLD, 59) - process 35
+or try http://valgrind.org on GNU/linux and Apple Mac OS X to find memory corruption errors
+or try http://valgrind.org on GNU/linux and Apple Mac OS X to find memory corruption errors
+[34]PETSC ERROR: or try http://valgrind.org on GNU/linux and Apple Mac OS X to find memory corruption errors
+or try http://valgrind.org on GNU/linux and Apple Mac OS X to find memory corruption errors
+or try http://valgrind.org on GNU/linux and Apple Mac OS X to find memory corruption errors
+or try http://valgrind.org on GNU/linux and Apple Mac OS X to find memory corruption errors
+or try http://valgrind.org on GNU/linux and Apple Mac OS X to find memory corruption errors
+or try http://valgrind.org on GNU/linux and Apple Mac OS X to find memory corruption errors
+or try http://valgrind.org on GNU/linux and Apple Mac OS X to find memory corruption errors
+or try http://valgrind.org on GNU/linux and Apple Mac OS X to find memory corruption errors
+[24]PETSC ERROR: [33]PETSC ERROR: configure using --with-debugging=yes, recompile, link, and run 
+[27]PETSC ERROR: [26]PETSC ERROR: [28]PETSC ERROR: [25]PETSC ERROR: [30]PETSC ERROR: [31]PETSC ERROR: [32]PETSC ERROR: [29]PETSC ERROR: configure using --with-debugging=yes, recompile, link, and run 
+configure using --with-debugging=yes, recompile, link, and run 
+[34]PETSC ERROR: configure using --with-debugging=yes, recompile, link, and run 
+configure using --with-debugging=yes, recompile, link, and run 
+configure using --with-debugging=yes, recompile, link, and run 
+configure using --with-debugging=yes, recompile, link, and run 
+configure using --with-debugging=yes, recompile, link, and run 
+configure using --with-debugging=yes, recompile, link, and run 
+configure using --with-debugging=yes, recompile, link, and run 
+configure using --with-debugging=yes, recompile, link, and run 
+[24]PETSC ERROR: [33]PETSC ERROR: to get more information on the crash.
+[27]PETSC ERROR: [26]PETSC ERROR: [28]PETSC ERROR: [25]PETSC ERROR: [30]PETSC ERROR: [31]PETSC ERROR: [32]PETSC ERROR: [29]PETSC ERROR: to get more information on the crash.
+to get more information on the crash.
+[34]PETSC ERROR: to get more information on the crash.
+to get more information on the crash.
+to get more information on the crash.
+to get more information on the crash.
+to get more information on the crash.
+to get more information on the crash.
+to get more information on the crash.
+to get more information on the crash.
+[24]PETSC ERROR: [33]PETSC ERROR: --------------------- Error Message --------------------------------------------------------------
+[27]PETSC ERROR: [26]PETSC ERROR: [28]PETSC ERROR: [25]PETSC ERROR: [30]PETSC ERROR: [31]PETSC ERROR: [32]PETSC ERROR: [29]PETSC ERROR: --------------------- Error Message --------------------------------------------------------------
+--------------------- Error Message --------------------------------------------------------------
+[34]PETSC ERROR: --------------------- Error Message --------------------------------------------------------------
+--------------------- Error Message --------------------------------------------------------------
+--------------------- Error Message --------------------------------------------------------------
+--------------------- Error Message --------------------------------------------------------------
+--------------------- Error Message --------------------------------------------------------------
+--------------------- Error Message --------------------------------------------------------------
+--------------------- Error Message --------------------------------------------------------------
+--------------------- Error Message --------------------------------------------------------------
+[24]PETSC ERROR: [33]PETSC ERROR: Signal received
+[27]PETSC ERROR: [26]PETSC ERROR: [28]PETSC ERROR: [25]PETSC ERROR: [30]PETSC ERROR: [31]PETSC ERROR: [32]PETSC ERROR: [29]PETSC ERROR: Signal received
+Signal received
+[34]PETSC ERROR: Signal received
+Signal received
+Signal received
+Signal received
+Signal received
+Signal received
+Signal received
+Signal received
+[24]PETSC ERROR: [33]PETSC ERROR: See https://www.mcs.anl.gov/petsc/documentation/faq.html for trouble shooting.
+[27]PETSC ERROR: [26]PETSC ERROR: [28]PETSC ERROR: [25]PETSC ERROR: [30]PETSC ERROR: [31]PETSC ERROR: [32]PETSC ERROR: [29]PETSC ERROR: See https://www.mcs.anl.gov/petsc/documentation/faq.html for trouble shooting.
+See https://www.mcs.anl.gov/petsc/documentation/faq.html for trouble shooting.
+[34]PETSC ERROR: See https://www.mcs.anl.gov/petsc/documentation/faq.html for trouble shooting.
+See https://www.mcs.anl.gov/petsc/documentation/faq.html for trouble shooting.
+See https://www.mcs.anl.gov/petsc/documentation/faq.html for trouble shooting.
+See https://www.mcs.anl.gov/petsc/documentation/faq.html for trouble shooting.
+See https://www.mcs.anl.gov/petsc/documentation/faq.html for trouble shooting.
+See https://www.mcs.anl.gov/petsc/documentation/faq.html for trouble shooting.
+See https://www.mcs.anl.gov/petsc/documentation/faq.html for trouble shooting.
+See https://www.mcs.anl.gov/petsc/documentation/faq.html for trouble shooting.
+[24]PETSC ERROR: [33]PETSC ERROR: Petsc Release Version 3.12.0, Sep, 29, 2019 
+[27]PETSC ERROR: [26]PETSC ERROR: [28]PETSC ERROR: [25]PETSC ERROR: [30]PETSC ERROR: [31]PETSC ERROR: [32]PETSC ERROR: [29]PETSC ERROR: Petsc Release Version 3.12.0, Sep, 29, 2019 
+Petsc Release Version 3.12.0, Sep, 29, 2019 
+[34]PETSC ERROR: Petsc Release Version 3.12.0, Sep, 29, 2019 
+Petsc Release Version 3.12.0, Sep, 29, 2019 
+Petsc Release Version 3.12.0, Sep, 29, 2019 
+Petsc Release Version 3.12.0, Sep, 29, 2019 
+Petsc Release Version 3.12.0, Sep, 29, 2019 
+Petsc Release Version 3.12.0, Sep, 29, 2019 
+Petsc Release Version 3.12.0, Sep, 29, 2019 
+Petsc Release Version 3.12.0, Sep, 29, 2019 
+[24]PETSC ERROR: [33]PETSC ERROR: ../../maddm on a  named node814 by tt73 Fri May 12 16:55:39 2023
+[27]PETSC ERROR: [26]PETSC ERROR: [28]PETSC ERROR: [25]PETSC ERROR: [30]PETSC ERROR: [31]PETSC ERROR: [32]PETSC ERROR: [29]PETSC ERROR: ../../maddm on a  named node677 by tt73 Fri May 12 16:55:39 2023
+../../maddm on a  named node813 by tt73 Fri May 12 16:55:39 2023
+[34]PETSC ERROR: ../../maddm on a  named node710 by tt73 Fri May 12 16:55:39 2023
+../../maddm on a  named node702 by tt73 Fri May 12 16:55:39 2023
+../../maddm on a  named node711 by tt73 Fri May 12 16:55:39 2023
+../../maddm on a  named node701 by tt73 Fri May 12 16:55:39 2023
+../../maddm on a  named node810 by tt73 Fri May 12 16:55:39 2023
+../../maddm on a  named node811 by tt73 Fri May 12 16:55:39 2023
+../../maddm on a  named node812 by tt73 Fri May 12 16:55:39 2023
+../../maddm on a  named node802 by tt73 Fri May 12 16:55:39 2023
+[24]PETSC ERROR: [33]PETSC ERROR: Configure options --prefix=/opt/ohpc/pub/libs/gnu8/mpich/petsc/3.12.0 --CFLAGS="-fPIC -DPIC" --CXXFLAGS="-fPIC -DPIC" --FFLAGS=-fPIC --with-blaslapack-lib=/opt/ohpc/pub/libs/gnu8/openblas/0.3.7/lib/libopenblas.so --with-scalapack-dir=/opt/ohpc/pub/libs/gnu8/mpich/scalapack/2.0.2 --with-clanguage=C++ --with-c-support --with-fortran-interfaces=1 --with-debugging=no --with-shared-libraries --with-mpi=1 --with-batch=0 --with-hdf5=1 --with-hdf5-lib=/opt/ohpc/pub/libs/gnu8/mpich/hdf5/1.10.5/lib/libhdf5.so --with-hdf5-include=/opt/ohpc/pub/libs/gnu8/mpich/hdf5/1.10.5/include
+[27]PETSC ERROR: [26]PETSC ERROR: [28]PETSC ERROR: [25]PETSC ERROR: [30]PETSC ERROR: [31]PETSC ERROR: [32]PETSC ERROR: [29]PETSC ERROR: Configure options --prefix=/opt/ohpc/pub/libs/gnu8/mpich/petsc/3.12.0 --CFLAGS="-fPIC -DPIC" --CXXFLAGS="-fPIC -DPIC" --FFLAGS=-fPIC --with-blaslapack-lib=/opt/ohpc/pub/libs/gnu8/openblas/0.3.7/lib/libopenblas.so --with-scalapack-dir=/opt/ohpc/pub/libs/gnu8/mpich/scalapack/2.0.2 --with-clanguage=C++ --with-c-support --with-fortran-interfaces=1 --with-debugging=no --with-shared-libraries --with-mpi=1 --with-batch=0 --with-hdf5=1 --with-hdf5-lib=/opt/ohpc/pub/libs/gnu8/mpich/hdf5/1.10.5/lib/libhdf5.so --with-hdf5-include=/opt/ohpc/pub/libs/gnu8/mpich/hdf5/1.10.5/include
+Configure options --prefix=/opt/ohpc/pub/libs/gnu8/mpich/petsc/3.12.0 --CFLAGS="-fPIC -DPIC" --CXXFLAGS="-fPIC -DPIC" --FFLAGS=-fPIC --with-blaslapack-lib=/opt/ohpc/pub/libs/gnu8/openblas/0.3.7/lib/libopenblas.so --with-scalapack-dir=/opt/ohpc/pub/libs/gnu8/mpich/scalapack/2.0.2 --with-clanguage=C++ --with-c-support --with-fortran-interfaces=1 --with-debugging=no --with-shared-libraries --with-mpi=1 --with-batch=0 --with-hdf5=1 --with-hdf5-lib=/opt/ohpc/pub/libs/gnu8/mpich/hdf5/1.10.5/lib/libhdf5.so --with-hdf5-include=/opt/ohpc/pub/libs/gnu8/mpich/hdf5/1.10.5/include
+[34]PETSC ERROR: Configure options --prefix=/opt/ohpc/pub/libs/gnu8/mpich/petsc/3.12.0 --CFLAGS="-fPIC -DPIC" --CXXFLAGS="-fPIC -DPIC" --FFLAGS=-fPIC --with-blaslapack-lib=/opt/ohpc/pub/libs/gnu8/openblas/0.3.7/lib/libopenblas.so --with-scalapack-dir=/opt/ohpc/pub/libs/gnu8/mpich/scalapack/2.0.2 --with-clanguage=C++ --with-c-support --with-fortran-interfaces=1 --with-debugging=no --with-shared-libraries --with-mpi=1 --with-batch=0 --with-hdf5=1 --with-hdf5-lib=/opt/ohpc/pub/libs/gnu8/mpich/hdf5/1.10.5/lib/libhdf5.so --with-hdf5-include=/opt/ohpc/pub/libs/gnu8/mpich/hdf5/1.10.5/include
+Configure options --prefix=/opt/ohpc/pub/libs/gnu8/mpich/petsc/3.12.0 --CFLAGS="-fPIC -DPIC" --CXXFLAGS="-fPIC -DPIC" --FFLAGS=-fPIC --with-blaslapack-lib=/opt/ohpc/pub/libs/gnu8/openblas/0.3.7/lib/libopenblas.so --with-scalapack-dir=/opt/ohpc/pub/libs/gnu8/mpich/scalapack/2.0.2 --with-clanguage=C++ --with-c-support --with-fortran-interfaces=1 --with-debugging=no --with-shared-libraries --with-mpi=1 --with-batch=0 --with-hdf5=1 --with-hdf5-lib=/opt/ohpc/pub/libs/gnu8/mpich/hdf5/1.10.5/lib/libhdf5.so --with-hdf5-include=/opt/ohpc/pub/libs/gnu8/mpich/hdf5/1.10.5/include
+Configure options --prefix=/opt/ohpc/pub/libs/gnu8/mpich/petsc/3.12.0 --CFLAGS="-fPIC -DPIC" --CXXFLAGS="-fPIC -DPIC" --FFLAGS=-fPIC --with-blaslapack-lib=/opt/ohpc/pub/libs/gnu8/openblas/0.3.7/lib/libopenblas.so --with-scalapack-dir=/opt/ohpc/pub/libs/gnu8/mpich/scalapack/2.0.2 --with-clanguage=C++ --with-c-support --with-fortran-interfaces=1 --with-debugging=no --with-shared-libraries --with-mpi=1 --with-batch=0 --with-hdf5=1 --with-hdf5-lib=/opt/ohpc/pub/libs/gnu8/mpich/hdf5/1.10.5/lib/libhdf5.so --with-hdf5-include=/opt/ohpc/pub/libs/gnu8/mpich/hdf5/1.10.5/include
+Configure options --prefix=/opt/ohpc/pub/libs/gnu8/mpich/petsc/3.12.0 --CFLAGS="-fPIC -DPIC" --CXXFLAGS="-fPIC -DPIC" --FFLAGS=-fPIC --with-blaslapack-lib=/opt/ohpc/pub/libs/gnu8/openblas/0.3.7/lib/libopenblas.so --with-scalapack-dir=/opt/ohpc/pub/libs/gnu8/mpich/scalapack/2.0.2 --with-clanguage=C++ --with-c-support --with-fortran-interfaces=1 --with-debugging=no --with-shared-libraries --with-mpi=1 --with-batch=0 --with-hdf5=1 --with-hdf5-lib=/opt/ohpc/pub/libs/gnu8/mpich/hdf5/1.10.5/lib/libhdf5.so --with-hdf5-include=/opt/ohpc/pub/libs/gnu8/mpich/hdf5/1.10.5/include
+Configure options --prefix=/opt/ohpc/pub/libs/gnu8/mpich/petsc/3.12.0 --CFLAGS="-fPIC -DPIC" --CXXFLAGS="-fPIC -DPIC" --FFLAGS=-fPIC --with-blaslapack-lib=/opt/ohpc/pub/libs/gnu8/openblas/0.3.7/lib/libopenblas.so --with-scalapack-dir=/opt/ohpc/pub/libs/gnu8/mpich/scalapack/2.0.2 --with-clanguage=C++ --with-c-support --with-fortran-interfaces=1 --with-debugging=no --with-shared-libraries --with-mpi=1 --with-batch=0 --with-hdf5=1 --with-hdf5-lib=/opt/ohpc/pub/libs/gnu8/mpich/hdf5/1.10.5/lib/libhdf5.so --with-hdf5-include=/opt/ohpc/pub/libs/gnu8/mpich/hdf5/1.10.5/include
+Configure options --prefix=/opt/ohpc/pub/libs/gnu8/mpich/petsc/3.12.0 --CFLAGS="-fPIC -DPIC" --CXXFLAGS="-fPIC -DPIC" --FFLAGS=-fPIC --with-blaslapack-lib=/opt/ohpc/pub/libs/gnu8/openblas/0.3.7/lib/libopenblas.so --with-scalapack-dir=/opt/ohpc/pub/libs/gnu8/mpich/scalapack/2.0.2 --with-clanguage=C++ --with-c-support --with-fortran-interfaces=1 --with-debugging=no --with-shared-libraries --with-mpi=1 --with-batch=0 --with-hdf5=1 --with-hdf5-lib=/opt/ohpc/pub/libs/gnu8/mpich/hdf5/1.10.5/lib/libhdf5.so --with-hdf5-include=/opt/ohpc/pub/libs/gnu8/mpich/hdf5/1.10.5/include
+Configure options --prefix=/opt/ohpc/pub/libs/gnu8/mpich/petsc/3.12.0 --CFLAGS="-fPIC -DPIC" --CXXFLAGS="-fPIC -DPIC" --FFLAGS=-fPIC --with-blaslapack-lib=/opt/ohpc/pub/libs/gnu8/openblas/0.3.7/lib/libopenblas.so --with-scalapack-dir=/opt/ohpc/pub/libs/gnu8/mpich/scalapack/2.0.2 --with-clanguage=C++ --with-c-support --with-fortran-interfaces=1 --with-debugging=no --with-shared-libraries --with-mpi=1 --with-batch=0 --with-hdf5=1 --with-hdf5-lib=/opt/ohpc/pub/libs/gnu8/mpich/hdf5/1.10.5/lib/libhdf5.so --with-hdf5-include=/opt/ohpc/pub/libs/gnu8/mpich/hdf5/1.10.5/include
+Configure options --prefix=/opt/ohpc/pub/libs/gnu8/mpich/petsc/3.12.0 --CFLAGS="-fPIC -DPIC" --CXXFLAGS="-fPIC -DPIC" --FFLAGS=-fPIC --with-blaslapack-lib=/opt/ohpc/pub/libs/gnu8/openblas/0.3.7/lib/libopenblas.so --with-scalapack-dir=/opt/ohpc/pub/libs/gnu8/mpich/scalapack/2.0.2 --with-clanguage=C++ --with-c-support --with-fortran-interfaces=1 --with-debugging=no --with-shared-libraries --with-mpi=1 --with-batch=0 --with-hdf5=1 --with-hdf5-lib=/opt/ohpc/pub/libs/gnu8/mpich/hdf5/1.10.5/lib/libhdf5.so --with-hdf5-include=/opt/ohpc/pub/libs/gnu8/mpich/hdf5/1.10.5/include
+[24]PETSC ERROR: [33]PETSC ERROR: #1 User provided function() line 0 in  unknown file
+[27]PETSC ERROR: [26]PETSC ERROR: [28]PETSC ERROR: [25]PETSC ERROR: [30]PETSC ERROR: [31]PETSC ERROR: [32]PETSC ERROR: [29]PETSC ERROR: #1 User provided function() line 0 in  unknown file
+#1 User provided function() line 0 in  unknown file
+application called MPI_Abort(MPI_COMM_WORLD, 59) - process 34
+#1 User provided function() line 0 in  unknown file
+#1 User provided function() line 0 in  unknown file
+#1 User provided function() line 0 in  unknown file
+#1 User provided function() line 0 in  unknown file
+#1 User provided function() line 0 in  unknown file
+#1 User provided function() line 0 in  unknown file
+#1 User provided function() line 0 in  unknown file
+#1 User provided function() line 0 in  unknown file
+application called MPI_Abort(MPI_COMM_WORLD, 59) - process 24
+application called MPI_Abort(MPI_COMM_WORLD, 59) - process 33
+application called MPI_Abort(MPI_COMM_WORLD, 59) - process 27
+application called MPI_Abort(MPI_COMM_WORLD, 59) - process 26
+application called MPI_Abort(MPI_COMM_WORLD, 59) - process 28
+application called MPI_Abort(MPI_COMM_WORLD, 59) - process 25
+application called MPI_Abort(MPI_COMM_WORLD, 59) - process 30
+application called MPI_Abort(MPI_COMM_WORLD, 59) - process 31
+application called MPI_Abort(MPI_COMM_WORLD, 59) - process 32
+application called MPI_Abort(MPI_COMM_WORLD, 59) - process 29
+srun: Job 719010 step creation temporarily disabled, retrying
+srun: Step created for job 719010
+[35]PETSC ERROR: ------------------------------------------------------------------------
+[35]PETSC ERROR: Caught signal number 11 SEGV: Segmentation Violation, probably memory access out of range
+[26]PETSC ERROR: [31]PETSC ERROR: [30]PETSC ERROR: [35]PETSC ERROR: Try option -start_in_debugger or -on_error_attach_debugger
+[35]PETSC ERROR: or see https://www.mcs.anl.gov/petsc/documentation/faq.html#valgrind
+[35]PETSC ERROR: or try http://valgrind.org on GNU/linux and Apple Mac OS X to find memory corruption errors
+[35]PETSC ERROR: [24]PETSC ERROR: [33]PETSC ERROR: [34]PETSC ERROR: [27]PETSC ERROR: [25]PETSC ERROR: ------------------------------------------------------------------------
+[28]PETSC ERROR: ------------------------------------------------------------------------
+[32]PETSC ERROR: ------------------------------------------------------------------------
+[29]PETSC ERROR: configure using --with-debugging=yes, recompile, link, and run 
+[35]PETSC ERROR: to get more information on the crash.
+------------------------------------------------------------------------
+------------------------------------------------------------------------
+------------------------------------------------------------------------
+------------------------------------------------------------------------
+------------------------------------------------------------------------
+[26]PETSC ERROR: ------------------------------------------------------------------------
+[31]PETSC ERROR: ------------------------------------------------------------------------
+[30]PETSC ERROR: ------------------------------------------------------------------------
+[35]PETSC ERROR: --------------------- Error Message --------------------------------------------------------------
+[35]PETSC ERROR: [24]PETSC ERROR: [33]PETSC ERROR: [34]PETSC ERROR: [27]PETSC ERROR: [25]PETSC ERROR: Caught signal number 11 SEGV: Segmentation Violation, probably memory access out of range
+[28]PETSC ERROR: Caught signal number 11 SEGV: Segmentation Violation, probably memory access out of range
+[32]PETSC ERROR: Caught signal number 11 SEGV: Segmentation Violation, probably memory access out of range
+[29]PETSC ERROR: Signal received
+[35]PETSC ERROR: Caught signal number 11 SEGV: Segmentation Violation, probably memory access out of range
+Caught signal number 11 SEGV: Segmentation Violation, probably memory access out of range
+Caught signal number 11 SEGV: Segmentation Violation, probably memory access out of range
+Caught signal number 11 SEGV: Segmentation Violation, probably memory access out of range
+Caught signal number 11 SEGV: Segmentation Violation, probably memory access out of range
+[26]PETSC ERROR: Caught signal number 11 SEGV: Segmentation Violation, probably memory access out of range
+[31]PETSC ERROR: Caught signal number 11 SEGV: Segmentation Violation, probably memory access out of range
+[30]PETSC ERROR: Caught signal number 11 SEGV: Segmentation Violation, probably memory access out of range
+See https://www.mcs.anl.gov/petsc/documentation/faq.html for trouble shooting.
+[35]PETSC ERROR: [24]PETSC ERROR: [33]PETSC ERROR: [34]PETSC ERROR: [27]PETSC ERROR: [25]PETSC ERROR: Try option -start_in_debugger or -on_error_attach_debugger
+[28]PETSC ERROR: Try option -start_in_debugger or -on_error_attach_debugger
+[32]PETSC ERROR: Try option -start_in_debugger or -on_error_attach_debugger
+[29]PETSC ERROR: Petsc Release Version 3.12.0, Sep, 29, 2019 
+[35]PETSC ERROR: Try option -start_in_debugger or -on_error_attach_debugger
+Try option -start_in_debugger or -on_error_attach_debugger
+Try option -start_in_debugger or -on_error_attach_debugger
+Try option -start_in_debugger or -on_error_attach_debugger
+Try option -start_in_debugger or -on_error_attach_debugger
+[26]PETSC ERROR: Try option -start_in_debugger or -on_error_attach_debugger
+[31]PETSC ERROR: Try option -start_in_debugger or -on_error_attach_debugger
+[30]PETSC ERROR: Try option -start_in_debugger or -on_error_attach_debugger
+../../maddm on a  named node819 by tt73 Fri May 12 16:55:47 2023
+[35]PETSC ERROR: [24]PETSC ERROR: [33]PETSC ERROR: [34]PETSC ERROR: [27]PETSC ERROR: [25]PETSC ERROR: or see https://www.mcs.anl.gov/petsc/documentation/faq.html#valgrind
+[28]PETSC ERROR: or see https://www.mcs.anl.gov/petsc/documentation/faq.html#valgrind
+[32]PETSC ERROR: or see https://www.mcs.anl.gov/petsc/documentation/faq.html#valgrind
+[29]PETSC ERROR: Configure options --prefix=/opt/ohpc/pub/libs/gnu8/mpich/petsc/3.12.0 --CFLAGS="-fPIC -DPIC" --CXXFLAGS="-fPIC -DPIC" --FFLAGS=-fPIC --with-blaslapack-lib=/opt/ohpc/pub/libs/gnu8/openblas/0.3.7/lib/libopenblas.so --with-scalapack-dir=/opt/ohpc/pub/libs/gnu8/mpich/scalapack/2.0.2 --with-clanguage=C++ --with-c-support --with-fortran-interfaces=1 --with-debugging=no --with-shared-libraries --with-mpi=1 --with-batch=0 --with-hdf5=1 --with-hdf5-lib=/opt/ohpc/pub/libs/gnu8/mpich/hdf5/1.10.5/lib/libhdf5.so --with-hdf5-include=/opt/ohpc/pub/libs/gnu8/mpich/hdf5/1.10.5/include
+[35]PETSC ERROR: #1 User provided function() line 0 in  unknown file
+or see https://www.mcs.anl.gov/petsc/documentation/faq.html#valgrind
+or see https://www.mcs.anl.gov/petsc/documentation/faq.html#valgrind
+or see https://www.mcs.anl.gov/petsc/documentation/faq.html#valgrind
+or see https://www.mcs.anl.gov/petsc/documentation/faq.html#valgrind
+or see https://www.mcs.anl.gov/petsc/documentation/faq.html#valgrind
+[26]PETSC ERROR: or see https://www.mcs.anl.gov/petsc/documentation/faq.html#valgrind
+[31]PETSC ERROR: or see https://www.mcs.anl.gov/petsc/documentation/faq.html#valgrind
+[30]PETSC ERROR: or see https://www.mcs.anl.gov/petsc/documentation/faq.html#valgrind
+application called MPI_Abort(MPI_COMM_WORLD, 59) - process 35
+[24]PETSC ERROR: [33]PETSC ERROR: [34]PETSC ERROR: [27]PETSC ERROR: [25]PETSC ERROR: or try http://valgrind.org on GNU/linux and Apple Mac OS X to find memory corruption errors
+[28]PETSC ERROR: or try http://valgrind.org on GNU/linux and Apple Mac OS X to find memory corruption errors
+[32]PETSC ERROR: or try http://valgrind.org on GNU/linux and Apple Mac OS X to find memory corruption errors
+[29]PETSC ERROR: or try http://valgrind.org on GNU/linux and Apple Mac OS X to find memory corruption errors
+or try http://valgrind.org on GNU/linux and Apple Mac OS X to find memory corruption errors
+or try http://valgrind.org on GNU/linux and Apple Mac OS X to find memory corruption errors
+or try http://valgrind.org on GNU/linux and Apple Mac OS X to find memory corruption errors
+or try http://valgrind.org on GNU/linux and Apple Mac OS X to find memory corruption errors
+[26]PETSC ERROR: or try http://valgrind.org on GNU/linux and Apple Mac OS X to find memory corruption errors
+[31]PETSC ERROR: or try http://valgrind.org on GNU/linux and Apple Mac OS X to find memory corruption errors
+[30]PETSC ERROR: or try http://valgrind.org on GNU/linux and Apple Mac OS X to find memory corruption errors
+[24]PETSC ERROR: [33]PETSC ERROR: [34]PETSC ERROR: [27]PETSC ERROR: [25]PETSC ERROR: configure using --with-debugging=yes, recompile, link, and run 
+[28]PETSC ERROR: configure using --with-debugging=yes, recompile, link, and run 
+[32]PETSC ERROR: configure using --with-debugging=yes, recompile, link, and run 
+[29]PETSC ERROR: configure using --with-debugging=yes, recompile, link, and run 
+configure using --with-debugging=yes, recompile, link, and run 
+configure using --with-debugging=yes, recompile, link, and run 
+configure using --with-debugging=yes, recompile, link, and run 
+configure using --with-debugging=yes, recompile, link, and run 
+[26]PETSC ERROR: configure using --with-debugging=yes, recompile, link, and run 
+[31]PETSC ERROR: configure using --with-debugging=yes, recompile, link, and run 
+[30]PETSC ERROR: configure using --with-debugging=yes, recompile, link, and run 
+[24]PETSC ERROR: [33]PETSC ERROR: [34]PETSC ERROR: [27]PETSC ERROR: [25]PETSC ERROR: to get more information on the crash.
+[28]PETSC ERROR: to get more information on the crash.
+[32]PETSC ERROR: to get more information on the crash.
+[29]PETSC ERROR: to get more information on the crash.
+to get more information on the crash.
+to get more information on the crash.
+to get more information on the crash.
+to get more information on the crash.
+[26]PETSC ERROR: to get more information on the crash.
+[31]PETSC ERROR: to get more information on the crash.
+[30]PETSC ERROR: to get more information on the crash.
+[24]PETSC ERROR: [33]PETSC ERROR: [34]PETSC ERROR: [27]PETSC ERROR: [25]PETSC ERROR: --------------------- Error Message --------------------------------------------------------------
+[28]PETSC ERROR: --------------------- Error Message --------------------------------------------------------------
+[32]PETSC ERROR: --------------------- Error Message --------------------------------------------------------------
+[29]PETSC ERROR: --------------------- Error Message --------------------------------------------------------------
+--------------------- Error Message --------------------------------------------------------------
+--------------------- Error Message --------------------------------------------------------------
+--------------------- Error Message --------------------------------------------------------------
+--------------------- Error Message --------------------------------------------------------------
+[26]PETSC ERROR: --------------------- Error Message --------------------------------------------------------------
+[31]PETSC ERROR: --------------------- Error Message --------------------------------------------------------------
+[30]PETSC ERROR: --------------------- Error Message --------------------------------------------------------------
+[24]PETSC ERROR: [33]PETSC ERROR: [34]PETSC ERROR: [27]PETSC ERROR: [25]PETSC ERROR: Signal received
+[28]PETSC ERROR: Signal received
+[32]PETSC ERROR: Signal received
+[29]PETSC ERROR: Signal received
+Signal received
+Signal received
+Signal received
+Signal received
+[26]PETSC ERROR: Signal received
+[31]PETSC ERROR: Signal received
+[30]PETSC ERROR: Signal received
+[24]PETSC ERROR: [33]PETSC ERROR: [34]PETSC ERROR: [27]PETSC ERROR: [25]PETSC ERROR: See https://www.mcs.anl.gov/petsc/documentation/faq.html for trouble shooting.
+[28]PETSC ERROR: See https://www.mcs.anl.gov/petsc/documentation/faq.html for trouble shooting.
+[32]PETSC ERROR: See https://www.mcs.anl.gov/petsc/documentation/faq.html for trouble shooting.
+[29]PETSC ERROR: See https://www.mcs.anl.gov/petsc/documentation/faq.html for trouble shooting.
+See https://www.mcs.anl.gov/petsc/documentation/faq.html for trouble shooting.
+See https://www.mcs.anl.gov/petsc/documentation/faq.html for trouble shooting.
+See https://www.mcs.anl.gov/petsc/documentation/faq.html for trouble shooting.
+See https://www.mcs.anl.gov/petsc/documentation/faq.html for trouble shooting.
+[26]PETSC ERROR: See https://www.mcs.anl.gov/petsc/documentation/faq.html for trouble shooting.
+[31]PETSC ERROR: See https://www.mcs.anl.gov/petsc/documentation/faq.html for trouble shooting.
+[30]PETSC ERROR: See https://www.mcs.anl.gov/petsc/documentation/faq.html for trouble shooting.
+[24]PETSC ERROR: [33]PETSC ERROR: [34]PETSC ERROR: [27]PETSC ERROR: [25]PETSC ERROR: Petsc Release Version 3.12.0, Sep, 29, 2019 
+[28]PETSC ERROR: Petsc Release Version 3.12.0, Sep, 29, 2019 
+[32]PETSC ERROR: Petsc Release Version 3.12.0, Sep, 29, 2019 
+[29]PETSC ERROR: Petsc Release Version 3.12.0, Sep, 29, 2019 
+Petsc Release Version 3.12.0, Sep, 29, 2019 
+Petsc Release Version 3.12.0, Sep, 29, 2019 
+Petsc Release Version 3.12.0, Sep, 29, 2019 
+Petsc Release Version 3.12.0, Sep, 29, 2019 
+[26]PETSC ERROR: Petsc Release Version 3.12.0, Sep, 29, 2019 
+[31]PETSC ERROR: Petsc Release Version 3.12.0, Sep, 29, 2019 
+[30]PETSC ERROR: Petsc Release Version 3.12.0, Sep, 29, 2019 
+[24]PETSC ERROR: [33]PETSC ERROR: [34]PETSC ERROR: [27]PETSC ERROR: [25]PETSC ERROR: ../../maddm on a  named node702 by tt73 Fri May 12 16:55:47 2023
+[28]PETSC ERROR: ../../maddm on a  named node811 by tt73 Fri May 12 16:55:47 2023
+[32]PETSC ERROR: ../../maddm on a  named node810 by tt73 Fri May 12 16:55:47 2023
+[29]PETSC ERROR: ../../maddm on a  named node677 by tt73 Fri May 12 16:55:47 2023
+../../maddm on a  named node813 by tt73 Fri May 12 16:55:47 2023
+../../maddm on a  named node814 by tt73 Fri May 12 16:55:47 2023
+../../maddm on a  named node710 by tt73 Fri May 12 16:55:47 2023
+../../maddm on a  named node701 by tt73 Fri May 12 16:55:47 2023
+[26]PETSC ERROR: ../../maddm on a  named node711 by tt73 Fri May 12 16:55:47 2023
+[31]PETSC ERROR: ../../maddm on a  named node812 by tt73 Fri May 12 16:55:47 2023
+[30]PETSC ERROR: ../../maddm on a  named node802 by tt73 Fri May 12 16:55:47 2023
+[24]PETSC ERROR: [33]PETSC ERROR: [34]PETSC ERROR: [27]PETSC ERROR: [25]PETSC ERROR: Configure options --prefix=/opt/ohpc/pub/libs/gnu8/mpich/petsc/3.12.0 --CFLAGS="-fPIC -DPIC" --CXXFLAGS="-fPIC -DPIC" --FFLAGS=-fPIC --with-blaslapack-lib=/opt/ohpc/pub/libs/gnu8/openblas/0.3.7/lib/libopenblas.so --with-scalapack-dir=/opt/ohpc/pub/libs/gnu8/mpich/scalapack/2.0.2 --with-clanguage=C++ --with-c-support --with-fortran-interfaces=1 --with-debugging=no --with-shared-libraries --with-mpi=1 --with-batch=0 --with-hdf5=1 --with-hdf5-lib=/opt/ohpc/pub/libs/gnu8/mpich/hdf5/1.10.5/lib/libhdf5.so --with-hdf5-include=/opt/ohpc/pub/libs/gnu8/mpich/hdf5/1.10.5/include
+[28]PETSC ERROR: Configure options --prefix=/opt/ohpc/pub/libs/gnu8/mpich/petsc/3.12.0 --CFLAGS="-fPIC -DPIC" --CXXFLAGS="-fPIC -DPIC" --FFLAGS=-fPIC --with-blaslapack-lib=/opt/ohpc/pub/libs/gnu8/openblas/0.3.7/lib/libopenblas.so --with-scalapack-dir=/opt/ohpc/pub/libs/gnu8/mpich/scalapack/2.0.2 --with-clanguage=C++ --with-c-support --with-fortran-interfaces=1 --with-debugging=no --with-shared-libraries --with-mpi=1 --with-batch=0 --with-hdf5=1 --with-hdf5-lib=/opt/ohpc/pub/libs/gnu8/mpich/hdf5/1.10.5/lib/libhdf5.so --with-hdf5-include=/opt/ohpc/pub/libs/gnu8/mpich/hdf5/1.10.5/include
+[32]PETSC ERROR: Configure options --prefix=/opt/ohpc/pub/libs/gnu8/mpich/petsc/3.12.0 --CFLAGS="-fPIC -DPIC" --CXXFLAGS="-fPIC -DPIC" --FFLAGS=-fPIC --with-blaslapack-lib=/opt/ohpc/pub/libs/gnu8/openblas/0.3.7/lib/libopenblas.so --with-scalapack-dir=/opt/ohpc/pub/libs/gnu8/mpich/scalapack/2.0.2 --with-clanguage=C++ --with-c-support --with-fortran-interfaces=1 --with-debugging=no --with-shared-libraries --with-mpi=1 --with-batch=0 --with-hdf5=1 --with-hdf5-lib=/opt/ohpc/pub/libs/gnu8/mpich/hdf5/1.10.5/lib/libhdf5.so --with-hdf5-include=/opt/ohpc/pub/libs/gnu8/mpich/hdf5/1.10.5/include
+[29]PETSC ERROR: Configure options --prefix=/opt/ohpc/pub/libs/gnu8/mpich/petsc/3.12.0 --CFLAGS="-fPIC -DPIC" --CXXFLAGS="-fPIC -DPIC" --FFLAGS=-fPIC --with-blaslapack-lib=/opt/ohpc/pub/libs/gnu8/openblas/0.3.7/lib/libopenblas.so --with-scalapack-dir=/opt/ohpc/pub/libs/gnu8/mpich/scalapack/2.0.2 --with-clanguage=C++ --with-c-support --with-fortran-interfaces=1 --with-debugging=no --with-shared-libraries --with-mpi=1 --with-batch=0 --with-hdf5=1 --with-hdf5-lib=/opt/ohpc/pub/libs/gnu8/mpich/hdf5/1.10.5/lib/libhdf5.so --with-hdf5-include=/opt/ohpc/pub/libs/gnu8/mpich/hdf5/1.10.5/include
+Configure options --prefix=/opt/ohpc/pub/libs/gnu8/mpich/petsc/3.12.0 --CFLAGS="-fPIC -DPIC" --CXXFLAGS="-fPIC -DPIC" --FFLAGS=-fPIC --with-blaslapack-lib=/opt/ohpc/pub/libs/gnu8/openblas/0.3.7/lib/libopenblas.so --with-scalapack-dir=/opt/ohpc/pub/libs/gnu8/mpich/scalapack/2.0.2 --with-clanguage=C++ --with-c-support --with-fortran-interfaces=1 --with-debugging=no --with-shared-libraries --with-mpi=1 --with-batch=0 --with-hdf5=1 --with-hdf5-lib=/opt/ohpc/pub/libs/gnu8/mpich/hdf5/1.10.5/lib/libhdf5.so --with-hdf5-include=/opt/ohpc/pub/libs/gnu8/mpich/hdf5/1.10.5/include
+Configure options --prefix=/opt/ohpc/pub/libs/gnu8/mpich/petsc/3.12.0 --CFLAGS="-fPIC -DPIC" --CXXFLAGS="-fPIC -DPIC" --FFLAGS=-fPIC --with-blaslapack-lib=/opt/ohpc/pub/libs/gnu8/openblas/0.3.7/lib/libopenblas.so --with-scalapack-dir=/opt/ohpc/pub/libs/gnu8/mpich/scalapack/2.0.2 --with-clanguage=C++ --with-c-support --with-fortran-interfaces=1 --with-debugging=no --with-shared-libraries --with-mpi=1 --with-batch=0 --with-hdf5=1 --with-hdf5-lib=/opt/ohpc/pub/libs/gnu8/mpich/hdf5/1.10.5/lib/libhdf5.so --with-hdf5-include=/opt/ohpc/pub/libs/gnu8/mpich/hdf5/1.10.5/include
+Configure options --prefix=/opt/ohpc/pub/libs/gnu8/mpich/petsc/3.12.0 --CFLAGS="-fPIC -DPIC" --CXXFLAGS="-fPIC -DPIC" --FFLAGS=-fPIC --with-blaslapack-lib=/opt/ohpc/pub/libs/gnu8/openblas/0.3.7/lib/libopenblas.so --with-scalapack-dir=/opt/ohpc/pub/libs/gnu8/mpich/scalapack/2.0.2 --with-clanguage=C++ --with-c-support --with-fortran-interfaces=1 --with-debugging=no --with-shared-libraries --with-mpi=1 --with-batch=0 --with-hdf5=1 --with-hdf5-lib=/opt/ohpc/pub/libs/gnu8/mpich/hdf5/1.10.5/lib/libhdf5.so --with-hdf5-include=/opt/ohpc/pub/libs/gnu8/mpich/hdf5/1.10.5/include
+Configure options --prefix=/opt/ohpc/pub/libs/gnu8/mpich/petsc/3.12.0 --CFLAGS="-fPIC -DPIC" --CXXFLAGS="-fPIC -DPIC" --FFLAGS=-fPIC --with-blaslapack-lib=/opt/ohpc/pub/libs/gnu8/openblas/0.3.7/lib/libopenblas.so --with-scalapack-dir=/opt/ohpc/pub/libs/gnu8/mpich/scalapack/2.0.2 --with-clanguage=C++ --with-c-support --with-fortran-interfaces=1 --with-debugging=no --with-shared-libraries --with-mpi=1 --with-batch=0 --with-hdf5=1 --with-hdf5-lib=/opt/ohpc/pub/libs/gnu8/mpich/hdf5/1.10.5/lib/libhdf5.so --with-hdf5-include=/opt/ohpc/pub/libs/gnu8/mpich/hdf5/1.10.5/include
+[26]PETSC ERROR: Configure options --prefix=/opt/ohpc/pub/libs/gnu8/mpich/petsc/3.12.0 --CFLAGS="-fPIC -DPIC" --CXXFLAGS="-fPIC -DPIC" --FFLAGS=-fPIC --with-blaslapack-lib=/opt/ohpc/pub/libs/gnu8/openblas/0.3.7/lib/libopenblas.so --with-scalapack-dir=/opt/ohpc/pub/libs/gnu8/mpich/scalapack/2.0.2 --with-clanguage=C++ --with-c-support --with-fortran-interfaces=1 --with-debugging=no --with-shared-libraries --with-mpi=1 --with-batch=0 --with-hdf5=1 --with-hdf5-lib=/opt/ohpc/pub/libs/gnu8/mpich/hdf5/1.10.5/lib/libhdf5.so --with-hdf5-include=/opt/ohpc/pub/libs/gnu8/mpich/hdf5/1.10.5/include
+[31]PETSC ERROR: Configure options --prefix=/opt/ohpc/pub/libs/gnu8/mpich/petsc/3.12.0 --CFLAGS="-fPIC -DPIC" --CXXFLAGS="-fPIC -DPIC" --FFLAGS=-fPIC --with-blaslapack-lib=/opt/ohpc/pub/libs/gnu8/openblas/0.3.7/lib/libopenblas.so --with-scalapack-dir=/opt/ohpc/pub/libs/gnu8/mpich/scalapack/2.0.2 --with-clanguage=C++ --with-c-support --with-fortran-interfaces=1 --with-debugging=no --with-shared-libraries --with-mpi=1 --with-batch=0 --with-hdf5=1 --with-hdf5-lib=/opt/ohpc/pub/libs/gnu8/mpich/hdf5/1.10.5/lib/libhdf5.so --with-hdf5-include=/opt/ohpc/pub/libs/gnu8/mpich/hdf5/1.10.5/include
+[30]PETSC ERROR: Configure options --prefix=/opt/ohpc/pub/libs/gnu8/mpich/petsc/3.12.0 --CFLAGS="-fPIC -DPIC" --CXXFLAGS="-fPIC -DPIC" --FFLAGS=-fPIC --with-blaslapack-lib=/opt/ohpc/pub/libs/gnu8/openblas/0.3.7/lib/libopenblas.so --with-scalapack-dir=/opt/ohpc/pub/libs/gnu8/mpich/scalapack/2.0.2 --with-clanguage=C++ --with-c-support --with-fortran-interfaces=1 --with-debugging=no --with-shared-libraries --with-mpi=1 --with-batch=0 --with-hdf5=1 --with-hdf5-lib=/opt/ohpc/pub/libs/gnu8/mpich/hdf5/1.10.5/lib/libhdf5.so --with-hdf5-include=/opt/ohpc/pub/libs/gnu8/mpich/hdf5/1.10.5/include
+[24]PETSC ERROR: [33]PETSC ERROR: [34]PETSC ERROR: [27]PETSC ERROR: [25]PETSC ERROR: #1 User provided function() line 0 in  unknown file
+[28]PETSC ERROR: #1 User provided function() line 0 in  unknown file
+[32]PETSC ERROR: #1 User provided function() line 0 in  unknown file
+[29]PETSC ERROR: #1 User provided function() line 0 in  unknown file
+#1 User provided function() line 0 in  unknown file
+#1 User provided function() line 0 in  unknown file
+#1 User provided function() line 0 in  unknown file
+#1 User provided function() line 0 in  unknown file
+application called MPI_Abort(MPI_COMM_WORLD, 59) - process 26
+#1 User provided function() line 0 in  unknown file
+application called MPI_Abort(MPI_COMM_WORLD, 59) - process 31
+#1 User provided function() line 0 in  unknown file
+application called MPI_Abort(MPI_COMM_WORLD, 59) - process 30
+#1 User provided function() line 0 in  unknown file
+application called MPI_Abort(MPI_COMM_WORLD, 59) - process 24
+application called MPI_Abort(MPI_COMM_WORLD, 59) - process 33
+application called MPI_Abort(MPI_COMM_WORLD, 59) - process 34
+application called MPI_Abort(MPI_COMM_WORLD, 59) - process 27
+application called MPI_Abort(MPI_COMM_WORLD, 59) - process 25
+application called MPI_Abort(MPI_COMM_WORLD, 59) - process 28
+application called MPI_Abort(MPI_COMM_WORLD, 59) - process 32
+application called MPI_Abort(MPI_COMM_WORLD, 59) - process 29
+srun: Job 719010 step creation temporarily disabled, retrying
+srun: Step created for job 719010
+[34]PETSC ERROR: [35]PETSC ERROR: ------------------------------------------------------------------------
+[35]PETSC ERROR: Caught signal number 11 SEGV: Segmentation Violation, probably memory access out of range
+[24]PETSC ERROR: [33]PETSC ERROR: ------------------------------------------------------------------------
+[27]PETSC ERROR: [25]PETSC ERROR: [28]PETSC ERROR: [26]PETSC ERROR: [31]PETSC ERROR: [30]PETSC ERROR: [32]PETSC ERROR: [29]PETSC ERROR: [35]PETSC ERROR: Try option -start_in_debugger or -on_error_attach_debugger
+[35]PETSC ERROR: or see https://www.mcs.anl.gov/petsc/documentation/faq.html#valgrind
+[35]PETSC ERROR: or try http://valgrind.org on GNU/linux and Apple Mac OS X to find memory corruption errors
+[35]PETSC ERROR: configure using --with-debugging=yes, recompile, link, and run 
+------------------------------------------------------------------------
+------------------------------------------------------------------------
+[34]PETSC ERROR: ------------------------------------------------------------------------
+------------------------------------------------------------------------
+------------------------------------------------------------------------
+------------------------------------------------------------------------
+------------------------------------------------------------------------
+------------------------------------------------------------------------
+------------------------------------------------------------------------
+------------------------------------------------------------------------
+[35]PETSC ERROR: to get more information on the crash.
+[24]PETSC ERROR: [33]PETSC ERROR: Caught signal number 11 SEGV: Segmentation Violation, probably memory access out of range
+[27]PETSC ERROR: [25]PETSC ERROR: [28]PETSC ERROR: [26]PETSC ERROR: [31]PETSC ERROR: [30]PETSC ERROR: [32]PETSC ERROR: [29]PETSC ERROR: [35]PETSC ERROR: --------------------- Error Message --------------------------------------------------------------
+[35]PETSC ERROR: Caught signal number 11 SEGV: Segmentation Violation, probably memory access out of range
+Caught signal number 11 SEGV: Segmentation Violation, probably memory access out of range
+[34]PETSC ERROR: Caught signal number 11 SEGV: Segmentation Violation, probably memory access out of range
+Caught signal number 11 SEGV: Segmentation Violation, probably memory access out of range
+Caught signal number 11 SEGV: Segmentation Violation, probably memory access out of range
+Caught signal number 11 SEGV: Segmentation Violation, probably memory access out of range
+Caught signal number 11 SEGV: Segmentation Violation, probably memory access out of range
+Caught signal number 11 SEGV: Segmentation Violation, probably memory access out of range
+Caught signal number 11 SEGV: Segmentation Violation, probably memory access out of range
+Caught signal number 11 SEGV: Segmentation Violation, probably memory access out of range
+Signal received
+[35]PETSC ERROR: [24]PETSC ERROR: [33]PETSC ERROR: Try option -start_in_debugger or -on_error_attach_debugger
+[27]PETSC ERROR: [25]PETSC ERROR: [28]PETSC ERROR: [26]PETSC ERROR: [31]PETSC ERROR: [30]PETSC ERROR: [32]PETSC ERROR: [29]PETSC ERROR: See https://www.mcs.anl.gov/petsc/documentation/faq.html for trouble shooting.
+[35]PETSC ERROR: Try option -start_in_debugger or -on_error_attach_debugger
+Try option -start_in_debugger or -on_error_attach_debugger
+[34]PETSC ERROR: Try option -start_in_debugger or -on_error_attach_debugger
+Try option -start_in_debugger or -on_error_attach_debugger
+Try option -start_in_debugger or -on_error_attach_debugger
+Try option -start_in_debugger or -on_error_attach_debugger
+Try option -start_in_debugger or -on_error_attach_debugger
+Try option -start_in_debugger or -on_error_attach_debugger
+Try option -start_in_debugger or -on_error_attach_debugger
+Try option -start_in_debugger or -on_error_attach_debugger
+Petsc Release Version 3.12.0, Sep, 29, 2019 
+[35]PETSC ERROR: [24]PETSC ERROR: [33]PETSC ERROR: or see https://www.mcs.anl.gov/petsc/documentation/faq.html#valgrind
+[27]PETSC ERROR: [25]PETSC ERROR: [28]PETSC ERROR: [26]PETSC ERROR: [31]PETSC ERROR: [30]PETSC ERROR: [32]PETSC ERROR: [29]PETSC ERROR: ../../maddm on a  named node819 by tt73 Fri May 12 16:55:51 2023
+[35]PETSC ERROR: or see https://www.mcs.anl.gov/petsc/documentation/faq.html#valgrind
+or see https://www.mcs.anl.gov/petsc/documentation/faq.html#valgrind
+[34]PETSC ERROR: or see https://www.mcs.anl.gov/petsc/documentation/faq.html#valgrind
+or see https://www.mcs.anl.gov/petsc/documentation/faq.html#valgrind
+or see https://www.mcs.anl.gov/petsc/documentation/faq.html#valgrind
+or see https://www.mcs.anl.gov/petsc/documentation/faq.html#valgrind
+or see https://www.mcs.anl.gov/petsc/documentation/faq.html#valgrind
+or see https://www.mcs.anl.gov/petsc/documentation/faq.html#valgrind
+or see https://www.mcs.anl.gov/petsc/documentation/faq.html#valgrind
+or see https://www.mcs.anl.gov/petsc/documentation/faq.html#valgrind
+Configure options --prefix=/opt/ohpc/pub/libs/gnu8/mpich/petsc/3.12.0 --CFLAGS="-fPIC -DPIC" --CXXFLAGS="-fPIC -DPIC" --FFLAGS=-fPIC --with-blaslapack-lib=/opt/ohpc/pub/libs/gnu8/openblas/0.3.7/lib/libopenblas.so --with-scalapack-dir=/opt/ohpc/pub/libs/gnu8/mpich/scalapack/2.0.2 --with-clanguage=C++ --with-c-support --with-fortran-interfaces=1 --with-debugging=no --with-shared-libraries --with-mpi=1 --with-batch=0 --with-hdf5=1 --with-hdf5-lib=/opt/ohpc/pub/libs/gnu8/mpich/hdf5/1.10.5/lib/libhdf5.so --with-hdf5-include=/opt/ohpc/pub/libs/gnu8/mpich/hdf5/1.10.5/include
+[35]PETSC ERROR: #1 User provided function() line 0 in  unknown file
+[24]PETSC ERROR: [33]PETSC ERROR: or try http://valgrind.org on GNU/linux and Apple Mac OS X to find memory corruption errors
+[27]PETSC ERROR: [25]PETSC ERROR: [28]PETSC ERROR: [26]PETSC ERROR: [31]PETSC ERROR: [30]PETSC ERROR: [32]PETSC ERROR: [29]PETSC ERROR: application called MPI_Abort(MPI_COMM_WORLD, 59) - process 35
+or try http://valgrind.org on GNU/linux and Apple Mac OS X to find memory corruption errors
+or try http://valgrind.org on GNU/linux and Apple Mac OS X to find memory corruption errors
+[34]PETSC ERROR: or try http://valgrind.org on GNU/linux and Apple Mac OS X to find memory corruption errors
+or try http://valgrind.org on GNU/linux and Apple Mac OS X to find memory corruption errors
+or try http://valgrind.org on GNU/linux and Apple Mac OS X to find memory corruption errors
+or try http://valgrind.org on GNU/linux and Apple Mac OS X to find memory corruption errors
+or try http://valgrind.org on GNU/linux and Apple Mac OS X to find memory corruption errors
+or try http://valgrind.org on GNU/linux and Apple Mac OS X to find memory corruption errors
+or try http://valgrind.org on GNU/linux and Apple Mac OS X to find memory corruption errors
+or try http://valgrind.org on GNU/linux and Apple Mac OS X to find memory corruption errors
+[24]PETSC ERROR: [33]PETSC ERROR: configure using --with-debugging=yes, recompile, link, and run 
+[27]PETSC ERROR: [25]PETSC ERROR: [28]PETSC ERROR: [26]PETSC ERROR: [31]PETSC ERROR: [30]PETSC ERROR: [32]PETSC ERROR: [29]PETSC ERROR: configure using --with-debugging=yes, recompile, link, and run 
+configure using --with-debugging=yes, recompile, link, and run 
+[34]PETSC ERROR: configure using --with-debugging=yes, recompile, link, and run 
+configure using --with-debugging=yes, recompile, link, and run 
+configure using --with-debugging=yes, recompile, link, and run 
+configure using --with-debugging=yes, recompile, link, and run 
+configure using --with-debugging=yes, recompile, link, and run 
+configure using --with-debugging=yes, recompile, link, and run 
+configure using --with-debugging=yes, recompile, link, and run 
+configure using --with-debugging=yes, recompile, link, and run 
+[24]PETSC ERROR: [33]PETSC ERROR: to get more information on the crash.
+[27]PETSC ERROR: [25]PETSC ERROR: [28]PETSC ERROR: [26]PETSC ERROR: [31]PETSC ERROR: [30]PETSC ERROR: [32]PETSC ERROR: [29]PETSC ERROR: to get more information on the crash.
+to get more information on the crash.
+[34]PETSC ERROR: to get more information on the crash.
+to get more information on the crash.
+to get more information on the crash.
+to get more information on the crash.
+to get more information on the crash.
+to get more information on the crash.
+to get more information on the crash.
+to get more information on the crash.
+[24]PETSC ERROR: [33]PETSC ERROR: --------------------- Error Message --------------------------------------------------------------
+[27]PETSC ERROR: [25]PETSC ERROR: [28]PETSC ERROR: [26]PETSC ERROR: [31]PETSC ERROR: [30]PETSC ERROR: [32]PETSC ERROR: [29]PETSC ERROR: --------------------- Error Message --------------------------------------------------------------
+--------------------- Error Message --------------------------------------------------------------
+[34]PETSC ERROR: --------------------- Error Message --------------------------------------------------------------
+--------------------- Error Message --------------------------------------------------------------
+--------------------- Error Message --------------------------------------------------------------
+--------------------- Error Message --------------------------------------------------------------
+--------------------- Error Message --------------------------------------------------------------
+--------------------- Error Message --------------------------------------------------------------
+--------------------- Error Message --------------------------------------------------------------
+--------------------- Error Message --------------------------------------------------------------
+[24]PETSC ERROR: [33]PETSC ERROR: Signal received
+[27]PETSC ERROR: [25]PETSC ERROR: [28]PETSC ERROR: [26]PETSC ERROR: [31]PETSC ERROR: [30]PETSC ERROR: [32]PETSC ERROR: [29]PETSC ERROR: Signal received
+Signal received
+[34]PETSC ERROR: Signal received
+Signal received
+Signal received
+Signal received
+Signal received
+Signal received
+Signal received
+Signal received
+[24]PETSC ERROR: [33]PETSC ERROR: See https://www.mcs.anl.gov/petsc/documentation/faq.html for trouble shooting.
+[27]PETSC ERROR: [25]PETSC ERROR: [28]PETSC ERROR: [26]PETSC ERROR: [31]PETSC ERROR: [30]PETSC ERROR: [32]PETSC ERROR: [29]PETSC ERROR: See https://www.mcs.anl.gov/petsc/documentation/faq.html for trouble shooting.
+See https://www.mcs.anl.gov/petsc/documentation/faq.html for trouble shooting.
+[34]PETSC ERROR: See https://www.mcs.anl.gov/petsc/documentation/faq.html for trouble shooting.
+See https://www.mcs.anl.gov/petsc/documentation/faq.html for trouble shooting.
+See https://www.mcs.anl.gov/petsc/documentation/faq.html for trouble shooting.
+See https://www.mcs.anl.gov/petsc/documentation/faq.html for trouble shooting.
+See https://www.mcs.anl.gov/petsc/documentation/faq.html for trouble shooting.
+See https://www.mcs.anl.gov/petsc/documentation/faq.html for trouble shooting.
+See https://www.mcs.anl.gov/petsc/documentation/faq.html for trouble shooting.
+See https://www.mcs.anl.gov/petsc/documentation/faq.html for trouble shooting.
+[24]PETSC ERROR: [33]PETSC ERROR: Petsc Release Version 3.12.0, Sep, 29, 2019 
+[27]PETSC ERROR: [25]PETSC ERROR: [28]PETSC ERROR: [26]PETSC ERROR: [31]PETSC ERROR: [30]PETSC ERROR: [32]PETSC ERROR: [29]PETSC ERROR: Petsc Release Version 3.12.0, Sep, 29, 2019 
+Petsc Release Version 3.12.0, Sep, 29, 2019 
+[34]PETSC ERROR: Petsc Release Version 3.12.0, Sep, 29, 2019 
+Petsc Release Version 3.12.0, Sep, 29, 2019 
+Petsc Release Version 3.12.0, Sep, 29, 2019 
+Petsc Release Version 3.12.0, Sep, 29, 2019 
+Petsc Release Version 3.12.0, Sep, 29, 2019 
+Petsc Release Version 3.12.0, Sep, 29, 2019 
+Petsc Release Version 3.12.0, Sep, 29, 2019 
+Petsc Release Version 3.12.0, Sep, 29, 2019 
+[24]PETSC ERROR: [33]PETSC ERROR: ../../maddm on a  named node814 by tt73 Fri May 12 16:55:51 2023
+[27]PETSC ERROR: [25]PETSC ERROR: [28]PETSC ERROR: [26]PETSC ERROR: [31]PETSC ERROR: [30]PETSC ERROR: [32]PETSC ERROR: [29]PETSC ERROR: ../../maddm on a  named node677 by tt73 Fri May 12 16:55:51 2023
+../../maddm on a  named node813 by tt73 Fri May 12 16:55:51 2023
+[34]PETSC ERROR: ../../maddm on a  named node710 by tt73 Fri May 12 16:55:51 2023
+../../maddm on a  named node701 by tt73 Fri May 12 16:55:51 2023
+../../maddm on a  named node711 by tt73 Fri May 12 16:55:51 2023
+../../maddm on a  named node702 by tt73 Fri May 12 16:55:51 2023
+../../maddm on a  named node811 by tt73 Fri May 12 16:55:51 2023
+../../maddm on a  named node810 by tt73 Fri May 12 16:55:51 2023
+../../maddm on a  named node812 by tt73 Fri May 12 16:55:51 2023
+../../maddm on a  named node802 by tt73 Fri May 12 16:55:51 2023
+[24]PETSC ERROR: [33]PETSC ERROR: Configure options --prefix=/opt/ohpc/pub/libs/gnu8/mpich/petsc/3.12.0 --CFLAGS="-fPIC -DPIC" --CXXFLAGS="-fPIC -DPIC" --FFLAGS=-fPIC --with-blaslapack-lib=/opt/ohpc/pub/libs/gnu8/openblas/0.3.7/lib/libopenblas.so --with-scalapack-dir=/opt/ohpc/pub/libs/gnu8/mpich/scalapack/2.0.2 --with-clanguage=C++ --with-c-support --with-fortran-interfaces=1 --with-debugging=no --with-shared-libraries --with-mpi=1 --with-batch=0 --with-hdf5=1 --with-hdf5-lib=/opt/ohpc/pub/libs/gnu8/mpich/hdf5/1.10.5/lib/libhdf5.so --with-hdf5-include=/opt/ohpc/pub/libs/gnu8/mpich/hdf5/1.10.5/include
+[27]PETSC ERROR: [25]PETSC ERROR: [28]PETSC ERROR: [26]PETSC ERROR: [31]PETSC ERROR: [30]PETSC ERROR: [32]PETSC ERROR: [29]PETSC ERROR: Configure options --prefix=/opt/ohpc/pub/libs/gnu8/mpich/petsc/3.12.0 --CFLAGS="-fPIC -DPIC" --CXXFLAGS="-fPIC -DPIC" --FFLAGS=-fPIC --with-blaslapack-lib=/opt/ohpc/pub/libs/gnu8/openblas/0.3.7/lib/libopenblas.so --with-scalapack-dir=/opt/ohpc/pub/libs/gnu8/mpich/scalapack/2.0.2 --with-clanguage=C++ --with-c-support --with-fortran-interfaces=1 --with-debugging=no --with-shared-libraries --with-mpi=1 --with-batch=0 --with-hdf5=1 --with-hdf5-lib=/opt/ohpc/pub/libs/gnu8/mpich/hdf5/1.10.5/lib/libhdf5.so --with-hdf5-include=/opt/ohpc/pub/libs/gnu8/mpich/hdf5/1.10.5/include
+Configure options --prefix=/opt/ohpc/pub/libs/gnu8/mpich/petsc/3.12.0 --CFLAGS="-fPIC -DPIC" --CXXFLAGS="-fPIC -DPIC" --FFLAGS=-fPIC --with-blaslapack-lib=/opt/ohpc/pub/libs/gnu8/openblas/0.3.7/lib/libopenblas.so --with-scalapack-dir=/opt/ohpc/pub/libs/gnu8/mpich/scalapack/2.0.2 --with-clanguage=C++ --with-c-support --with-fortran-interfaces=1 --with-debugging=no --with-shared-libraries --with-mpi=1 --with-batch=0 --with-hdf5=1 --with-hdf5-lib=/opt/ohpc/pub/libs/gnu8/mpich/hdf5/1.10.5/lib/libhdf5.so --with-hdf5-include=/opt/ohpc/pub/libs/gnu8/mpich/hdf5/1.10.5/include
+[34]PETSC ERROR: Configure options --prefix=/opt/ohpc/pub/libs/gnu8/mpich/petsc/3.12.0 --CFLAGS="-fPIC -DPIC" --CXXFLAGS="-fPIC -DPIC" --FFLAGS=-fPIC --with-blaslapack-lib=/opt/ohpc/pub/libs/gnu8/openblas/0.3.7/lib/libopenblas.so --with-scalapack-dir=/opt/ohpc/pub/libs/gnu8/mpich/scalapack/2.0.2 --with-clanguage=C++ --with-c-support --with-fortran-interfaces=1 --with-debugging=no --with-shared-libraries --with-mpi=1 --with-batch=0 --with-hdf5=1 --with-hdf5-lib=/opt/ohpc/pub/libs/gnu8/mpich/hdf5/1.10.5/lib/libhdf5.so --with-hdf5-include=/opt/ohpc/pub/libs/gnu8/mpich/hdf5/1.10.5/include
+Configure options --prefix=/opt/ohpc/pub/libs/gnu8/mpich/petsc/3.12.0 --CFLAGS="-fPIC -DPIC" --CXXFLAGS="-fPIC -DPIC" --FFLAGS=-fPIC --with-blaslapack-lib=/opt/ohpc/pub/libs/gnu8/openblas/0.3.7/lib/libopenblas.so --with-scalapack-dir=/opt/ohpc/pub/libs/gnu8/mpich/scalapack/2.0.2 --with-clanguage=C++ --with-c-support --with-fortran-interfaces=1 --with-debugging=no --with-shared-libraries --with-mpi=1 --with-batch=0 --with-hdf5=1 --with-hdf5-lib=/opt/ohpc/pub/libs/gnu8/mpich/hdf5/1.10.5/lib/libhdf5.so --with-hdf5-include=/opt/ohpc/pub/libs/gnu8/mpich/hdf5/1.10.5/include
+Configure options --prefix=/opt/ohpc/pub/libs/gnu8/mpich/petsc/3.12.0 --CFLAGS="-fPIC -DPIC" --CXXFLAGS="-fPIC -DPIC" --FFLAGS=-fPIC --with-blaslapack-lib=/opt/ohpc/pub/libs/gnu8/openblas/0.3.7/lib/libopenblas.so --with-scalapack-dir=/opt/ohpc/pub/libs/gnu8/mpich/scalapack/2.0.2 --with-clanguage=C++ --with-c-support --with-fortran-interfaces=1 --with-debugging=no --with-shared-libraries --with-mpi=1 --with-batch=0 --with-hdf5=1 --with-hdf5-lib=/opt/ohpc/pub/libs/gnu8/mpich/hdf5/1.10.5/lib/libhdf5.so --with-hdf5-include=/opt/ohpc/pub/libs/gnu8/mpich/hdf5/1.10.5/include
+Configure options --prefix=/opt/ohpc/pub/libs/gnu8/mpich/petsc/3.12.0 --CFLAGS="-fPIC -DPIC" --CXXFLAGS="-fPIC -DPIC" --FFLAGS=-fPIC --with-blaslapack-lib=/opt/ohpc/pub/libs/gnu8/openblas/0.3.7/lib/libopenblas.so --with-scalapack-dir=/opt/ohpc/pub/libs/gnu8/mpich/scalapack/2.0.2 --with-clanguage=C++ --with-c-support --with-fortran-interfaces=1 --with-debugging=no --with-shared-libraries --with-mpi=1 --with-batch=0 --with-hdf5=1 --with-hdf5-lib=/opt/ohpc/pub/libs/gnu8/mpich/hdf5/1.10.5/lib/libhdf5.so --with-hdf5-include=/opt/ohpc/pub/libs/gnu8/mpich/hdf5/1.10.5/include
+Configure options --prefix=/opt/ohpc/pub/libs/gnu8/mpich/petsc/3.12.0 --CFLAGS="-fPIC -DPIC" --CXXFLAGS="-fPIC -DPIC" --FFLAGS=-fPIC --with-blaslapack-lib=/opt/ohpc/pub/libs/gnu8/openblas/0.3.7/lib/libopenblas.so --with-scalapack-dir=/opt/ohpc/pub/libs/gnu8/mpich/scalapack/2.0.2 --with-clanguage=C++ --with-c-support --with-fortran-interfaces=1 --with-debugging=no --with-shared-libraries --with-mpi=1 --with-batch=0 --with-hdf5=1 --with-hdf5-lib=/opt/ohpc/pub/libs/gnu8/mpich/hdf5/1.10.5/lib/libhdf5.so --with-hdf5-include=/opt/ohpc/pub/libs/gnu8/mpich/hdf5/1.10.5/include
+Configure options --prefix=/opt/ohpc/pub/libs/gnu8/mpich/petsc/3.12.0 --CFLAGS="-fPIC -DPIC" --CXXFLAGS="-fPIC -DPIC" --FFLAGS=-fPIC --with-blaslapack-lib=/opt/ohpc/pub/libs/gnu8/openblas/0.3.7/lib/libopenblas.so --with-scalapack-dir=/opt/ohpc/pub/libs/gnu8/mpich/scalapack/2.0.2 --with-clanguage=C++ --with-c-support --with-fortran-interfaces=1 --with-debugging=no --with-shared-libraries --with-mpi=1 --with-batch=0 --with-hdf5=1 --with-hdf5-lib=/opt/ohpc/pub/libs/gnu8/mpich/hdf5/1.10.5/lib/libhdf5.so --with-hdf5-include=/opt/ohpc/pub/libs/gnu8/mpich/hdf5/1.10.5/include
+Configure options --prefix=/opt/ohpc/pub/libs/gnu8/mpich/petsc/3.12.0 --CFLAGS="-fPIC -DPIC" --CXXFLAGS="-fPIC -DPIC" --FFLAGS=-fPIC --with-blaslapack-lib=/opt/ohpc/pub/libs/gnu8/openblas/0.3.7/lib/libopenblas.so --with-scalapack-dir=/opt/ohpc/pub/libs/gnu8/mpich/scalapack/2.0.2 --with-clanguage=C++ --with-c-support --with-fortran-interfaces=1 --with-debugging=no --with-shared-libraries --with-mpi=1 --with-batch=0 --with-hdf5=1 --with-hdf5-lib=/opt/ohpc/pub/libs/gnu8/mpich/hdf5/1.10.5/lib/libhdf5.so --with-hdf5-include=/opt/ohpc/pub/libs/gnu8/mpich/hdf5/1.10.5/include
+Configure options --prefix=/opt/ohpc/pub/libs/gnu8/mpich/petsc/3.12.0 --CFLAGS="-fPIC -DPIC" --CXXFLAGS="-fPIC -DPIC" --FFLAGS=-fPIC --with-blaslapack-lib=/opt/ohpc/pub/libs/gnu8/openblas/0.3.7/lib/libopenblas.so --with-scalapack-dir=/opt/ohpc/pub/libs/gnu8/mpich/scalapack/2.0.2 --with-clanguage=C++ --with-c-support --with-fortran-interfaces=1 --with-debugging=no --with-shared-libraries --with-mpi=1 --with-batch=0 --with-hdf5=1 --with-hdf5-lib=/opt/ohpc/pub/libs/gnu8/mpich/hdf5/1.10.5/lib/libhdf5.so --with-hdf5-include=/opt/ohpc/pub/libs/gnu8/mpich/hdf5/1.10.5/include
+[24]PETSC ERROR: [33]PETSC ERROR: #1 User provided function() line 0 in  unknown file
+[27]PETSC ERROR: [25]PETSC ERROR: [28]PETSC ERROR: [26]PETSC ERROR: [31]PETSC ERROR: [30]PETSC ERROR: [32]PETSC ERROR: [29]PETSC ERROR: #1 User provided function() line 0 in  unknown file
+#1 User provided function() line 0 in  unknown file
+application called MPI_Abort(MPI_COMM_WORLD, 59) - process 34
+#1 User provided function() line 0 in  unknown file
+#1 User provided function() line 0 in  unknown file
+#1 User provided function() line 0 in  unknown file
+#1 User provided function() line 0 in  unknown file
+#1 User provided function() line 0 in  unknown file
+#1 User provided function() line 0 in  unknown file
+#1 User provided function() line 0 in  unknown file
+#1 User provided function() line 0 in  unknown file
+application called MPI_Abort(MPI_COMM_WORLD, 59) - process 24
+application called MPI_Abort(MPI_COMM_WORLD, 59) - process 33
+application called MPI_Abort(MPI_COMM_WORLD, 59) - process 27
+application called MPI_Abort(MPI_COMM_WORLD, 59) - process 25
+application called MPI_Abort(MPI_COMM_WORLD, 59) - process 28
+application called MPI_Abort(MPI_COMM_WORLD, 59) - process 26
+application called MPI_Abort(MPI_COMM_WORLD, 59) - process 31
+application called MPI_Abort(MPI_COMM_WORLD, 59) - process 30
+application called MPI_Abort(MPI_COMM_WORLD, 59) - process 32
+application called MPI_Abort(MPI_COMM_WORLD, 59) - process 29
+srun: Job 719010 step creation temporarily disabled, retrying
+srun: Step created for job 719010
+[34]PETSC ERROR: [35]PETSC ERROR: ------------------------------------------------------------------------
+[35]PETSC ERROR: Caught signal number 11 SEGV: Segmentation Violation, probably memory access out of range
+[24]PETSC ERROR: [27]PETSC ERROR: ------------------------------------------------------------------------
+[25]PETSC ERROR: [33]PETSC ERROR: [26]PETSC ERROR: [28]PETSC ERROR: [32]PETSC ERROR: [31]PETSC ERROR: [30]PETSC ERROR: [29]PETSC ERROR: [35]PETSC ERROR: Try option -start_in_debugger or -on_error_attach_debugger
+[35]PETSC ERROR: or see https://www.mcs.anl.gov/petsc/documentation/faq.html#valgrind
+[35]PETSC ERROR: or try http://valgrind.org on GNU/linux and Apple Mac OS X to find memory corruption errors
+[35]PETSC ERROR: configure using --with-debugging=yes, recompile, link, and run 
+------------------------------------------------------------------------
+------------------------------------------------------------------------
+[34]PETSC ERROR: ------------------------------------------------------------------------
+------------------------------------------------------------------------
+------------------------------------------------------------------------
+------------------------------------------------------------------------
+------------------------------------------------------------------------
+------------------------------------------------------------------------
+------------------------------------------------------------------------
+------------------------------------------------------------------------
+[35]PETSC ERROR: to get more information on the crash.
+[24]PETSC ERROR: [27]PETSC ERROR: Caught signal number 11 SEGV: Segmentation Violation, probably memory access out of range
+[25]PETSC ERROR: [33]PETSC ERROR: [26]PETSC ERROR: [28]PETSC ERROR: [32]PETSC ERROR: [31]PETSC ERROR: [30]PETSC ERROR: [29]PETSC ERROR: [35]PETSC ERROR: --------------------- Error Message --------------------------------------------------------------
+[35]PETSC ERROR: Caught signal number 11 SEGV: Segmentation Violation, probably memory access out of range
+Caught signal number 11 SEGV: Segmentation Violation, probably memory access out of range
+[34]PETSC ERROR: Caught signal number 11 SEGV: Segmentation Violation, probably memory access out of range
+Caught signal number 11 SEGV: Segmentation Violation, probably memory access out of range
+Caught signal number 11 SEGV: Segmentation Violation, probably memory access out of range
+Caught signal number 11 SEGV: Segmentation Violation, probably memory access out of range
+Caught signal number 11 SEGV: Segmentation Violation, probably memory access out of range
+Caught signal number 11 SEGV: Segmentation Violation, probably memory access out of range
+Caught signal number 11 SEGV: Segmentation Violation, probably memory access out of range
+Caught signal number 11 SEGV: Segmentation Violation, probably memory access out of range
+Signal received
+[35]PETSC ERROR: [24]PETSC ERROR: [27]PETSC ERROR: Try option -start_in_debugger or -on_error_attach_debugger
+[25]PETSC ERROR: [33]PETSC ERROR: [26]PETSC ERROR: [28]PETSC ERROR: [32]PETSC ERROR: [31]PETSC ERROR: [30]PETSC ERROR: [29]PETSC ERROR: See https://www.mcs.anl.gov/petsc/documentation/faq.html for trouble shooting.
+[35]PETSC ERROR: Try option -start_in_debugger or -on_error_attach_debugger
+Try option -start_in_debugger or -on_error_attach_debugger
+[34]PETSC ERROR: Try option -start_in_debugger or -on_error_attach_debugger
+Try option -start_in_debugger or -on_error_attach_debugger
+Try option -start_in_debugger or -on_error_attach_debugger
+Try option -start_in_debugger or -on_error_attach_debugger
+Try option -start_in_debugger or -on_error_attach_debugger
+Try option -start_in_debugger or -on_error_attach_debugger
+Try option -start_in_debugger or -on_error_attach_debugger
+Try option -start_in_debugger or -on_error_attach_debugger
+Petsc Release Version 3.12.0, Sep, 29, 2019 
+[35]PETSC ERROR: [24]PETSC ERROR: [27]PETSC ERROR: or see https://www.mcs.anl.gov/petsc/documentation/faq.html#valgrind
+[25]PETSC ERROR: [33]PETSC ERROR: [26]PETSC ERROR: [28]PETSC ERROR: [32]PETSC ERROR: [31]PETSC ERROR: [30]PETSC ERROR: [29]PETSC ERROR: ../../maddm on a  named node819 by tt73 Fri May 12 16:55:59 2023
+[35]PETSC ERROR: or see https://www.mcs.anl.gov/petsc/documentation/faq.html#valgrind
+or see https://www.mcs.anl.gov/petsc/documentation/faq.html#valgrind
+[34]PETSC ERROR: or see https://www.mcs.anl.gov/petsc/documentation/faq.html#valgrind
+or see https://www.mcs.anl.gov/petsc/documentation/faq.html#valgrind
+or see https://www.mcs.anl.gov/petsc/documentation/faq.html#valgrind
+or see https://www.mcs.anl.gov/petsc/documentation/faq.html#valgrind
+or see https://www.mcs.anl.gov/petsc/documentation/faq.html#valgrind
+or see https://www.mcs.anl.gov/petsc/documentation/faq.html#valgrind
+or see https://www.mcs.anl.gov/petsc/documentation/faq.html#valgrind
+or see https://www.mcs.anl.gov/petsc/documentation/faq.html#valgrind
+Configure options --prefix=/opt/ohpc/pub/libs/gnu8/mpich/petsc/3.12.0 --CFLAGS="-fPIC -DPIC" --CXXFLAGS="-fPIC -DPIC" --FFLAGS=-fPIC --with-blaslapack-lib=/opt/ohpc/pub/libs/gnu8/openblas/0.3.7/lib/libopenblas.so --with-scalapack-dir=/opt/ohpc/pub/libs/gnu8/mpich/scalapack/2.0.2 --with-clanguage=C++ --with-c-support --with-fortran-interfaces=1 --with-debugging=no --with-shared-libraries --with-mpi=1 --with-batch=0 --with-hdf5=1 --with-hdf5-lib=/opt/ohpc/pub/libs/gnu8/mpich/hdf5/1.10.5/lib/libhdf5.so --with-hdf5-include=/opt/ohpc/pub/libs/gnu8/mpich/hdf5/1.10.5/include
+[35]PETSC ERROR: #1 User provided function() line 0 in  unknown file
+[24]PETSC ERROR: [27]PETSC ERROR: or try http://valgrind.org on GNU/linux and Apple Mac OS X to find memory corruption errors
+[25]PETSC ERROR: [33]PETSC ERROR: [26]PETSC ERROR: [28]PETSC ERROR: [32]PETSC ERROR: [31]PETSC ERROR: [30]PETSC ERROR: [29]PETSC ERROR: application called MPI_Abort(MPI_COMM_WORLD, 59) - process 35
+or try http://valgrind.org on GNU/linux and Apple Mac OS X to find memory corruption errors
+or try http://valgrind.org on GNU/linux and Apple Mac OS X to find memory corruption errors
+[34]PETSC ERROR: or try http://valgrind.org on GNU/linux and Apple Mac OS X to find memory corruption errors
+or try http://valgrind.org on GNU/linux and Apple Mac OS X to find memory corruption errors
+or try http://valgrind.org on GNU/linux and Apple Mac OS X to find memory corruption errors
+or try http://valgrind.org on GNU/linux and Apple Mac OS X to find memory corruption errors
+or try http://valgrind.org on GNU/linux and Apple Mac OS X to find memory corruption errors
+or try http://valgrind.org on GNU/linux and Apple Mac OS X to find memory corruption errors
+or try http://valgrind.org on GNU/linux and Apple Mac OS X to find memory corruption errors
+or try http://valgrind.org on GNU/linux and Apple Mac OS X to find memory corruption errors
+[24]PETSC ERROR: [27]PETSC ERROR: configure using --with-debugging=yes, recompile, link, and run 
+[25]PETSC ERROR: [33]PETSC ERROR: [26]PETSC ERROR: [28]PETSC ERROR: [32]PETSC ERROR: [31]PETSC ERROR: [30]PETSC ERROR: [29]PETSC ERROR: configure using --with-debugging=yes, recompile, link, and run 
+configure using --with-debugging=yes, recompile, link, and run 
+[34]PETSC ERROR: configure using --with-debugging=yes, recompile, link, and run 
+configure using --with-debugging=yes, recompile, link, and run 
+configure using --with-debugging=yes, recompile, link, and run 
+configure using --with-debugging=yes, recompile, link, and run 
+configure using --with-debugging=yes, recompile, link, and run 
+configure using --with-debugging=yes, recompile, link, and run 
+configure using --with-debugging=yes, recompile, link, and run 
+configure using --with-debugging=yes, recompile, link, and run 
+[24]PETSC ERROR: [27]PETSC ERROR: to get more information on the crash.
+[25]PETSC ERROR: [33]PETSC ERROR: [26]PETSC ERROR: [28]PETSC ERROR: [32]PETSC ERROR: [31]PETSC ERROR: [30]PETSC ERROR: [29]PETSC ERROR: to get more information on the crash.
+to get more information on the crash.
+[34]PETSC ERROR: to get more information on the crash.
+to get more information on the crash.
+to get more information on the crash.
+to get more information on the crash.
+to get more information on the crash.
+to get more information on the crash.
+to get more information on the crash.
+to get more information on the crash.
+[24]PETSC ERROR: [27]PETSC ERROR: --------------------- Error Message --------------------------------------------------------------
+[25]PETSC ERROR: [33]PETSC ERROR: [26]PETSC ERROR: [28]PETSC ERROR: [32]PETSC ERROR: [31]PETSC ERROR: [30]PETSC ERROR: [29]PETSC ERROR: --------------------- Error Message --------------------------------------------------------------
+--------------------- Error Message --------------------------------------------------------------
+[34]PETSC ERROR: --------------------- Error Message --------------------------------------------------------------
+--------------------- Error Message --------------------------------------------------------------
+--------------------- Error Message --------------------------------------------------------------
+--------------------- Error Message --------------------------------------------------------------
+--------------------- Error Message --------------------------------------------------------------
+--------------------- Error Message --------------------------------------------------------------
+--------------------- Error Message --------------------------------------------------------------
+--------------------- Error Message --------------------------------------------------------------
+[24]PETSC ERROR: [27]PETSC ERROR: Signal received
+[25]PETSC ERROR: [33]PETSC ERROR: [26]PETSC ERROR: [28]PETSC ERROR: [32]PETSC ERROR: [31]PETSC ERROR: [30]PETSC ERROR: [29]PETSC ERROR: Signal received
+Signal received
+[34]PETSC ERROR: Signal received
+Signal received
+Signal received
+Signal received
+Signal received
+Signal received
+Signal received
+Signal received
+[24]PETSC ERROR: [27]PETSC ERROR: See https://www.mcs.anl.gov/petsc/documentation/faq.html for trouble shooting.
+[25]PETSC ERROR: [33]PETSC ERROR: [26]PETSC ERROR: [28]PETSC ERROR: [32]PETSC ERROR: [31]PETSC ERROR: [30]PETSC ERROR: [29]PETSC ERROR: See https://www.mcs.anl.gov/petsc/documentation/faq.html for trouble shooting.
+See https://www.mcs.anl.gov/petsc/documentation/faq.html for trouble shooting.
+[34]PETSC ERROR: See https://www.mcs.anl.gov/petsc/documentation/faq.html for trouble shooting.
+See https://www.mcs.anl.gov/petsc/documentation/faq.html for trouble shooting.
+See https://www.mcs.anl.gov/petsc/documentation/faq.html for trouble shooting.
+See https://www.mcs.anl.gov/petsc/documentation/faq.html for trouble shooting.
+See https://www.mcs.anl.gov/petsc/documentation/faq.html for trouble shooting.
+See https://www.mcs.anl.gov/petsc/documentation/faq.html for trouble shooting.
+See https://www.mcs.anl.gov/petsc/documentation/faq.html for trouble shooting.
+See https://www.mcs.anl.gov/petsc/documentation/faq.html for trouble shooting.
+[24]PETSC ERROR: [27]PETSC ERROR: Petsc Release Version 3.12.0, Sep, 29, 2019 
+[25]PETSC ERROR: [33]PETSC ERROR: [26]PETSC ERROR: [28]PETSC ERROR: [32]PETSC ERROR: [31]PETSC ERROR: [30]PETSC ERROR: [29]PETSC ERROR: Petsc Release Version 3.12.0, Sep, 29, 2019 
+Petsc Release Version 3.12.0, Sep, 29, 2019 
+[34]PETSC ERROR: Petsc Release Version 3.12.0, Sep, 29, 2019 
+Petsc Release Version 3.12.0, Sep, 29, 2019 
+Petsc Release Version 3.12.0, Sep, 29, 2019 
+Petsc Release Version 3.12.0, Sep, 29, 2019 
+Petsc Release Version 3.12.0, Sep, 29, 2019 
+Petsc Release Version 3.12.0, Sep, 29, 2019 
+Petsc Release Version 3.12.0, Sep, 29, 2019 
+Petsc Release Version 3.12.0, Sep, 29, 2019 
+[24]PETSC ERROR: [27]PETSC ERROR: ../../maddm on a  named node814 by tt73 Fri May 12 16:55:59 2023
+[25]PETSC ERROR: [33]PETSC ERROR: [26]PETSC ERROR: [28]PETSC ERROR: [32]PETSC ERROR: [31]PETSC ERROR: [30]PETSC ERROR: [29]PETSC ERROR: ../../maddm on a  named node677 by tt73 Fri May 12 16:55:59 2023
+../../maddm on a  named node710 by tt73 Fri May 12 16:55:59 2023
+[34]PETSC ERROR: ../../maddm on a  named node701 by tt73 Fri May 12 16:55:59 2023
+../../maddm on a  named node813 by tt73 Fri May 12 16:55:59 2023
+../../maddm on a  named node702 by tt73 Fri May 12 16:55:59 2023
+../../maddm on a  named node711 by tt73 Fri May 12 16:55:59 2023
+../../maddm on a  named node812 by tt73 Fri May 12 16:55:59 2023
+../../maddm on a  named node811 by tt73 Fri May 12 16:55:59 2023
+../../maddm on a  named node810 by tt73 Fri May 12 16:55:59 2023
+../../maddm on a  named node802 by tt73 Fri May 12 16:55:59 2023
+[24]PETSC ERROR: [27]PETSC ERROR: Configure options --prefix=/opt/ohpc/pub/libs/gnu8/mpich/petsc/3.12.0 --CFLAGS="-fPIC -DPIC" --CXXFLAGS="-fPIC -DPIC" --FFLAGS=-fPIC --with-blaslapack-lib=/opt/ohpc/pub/libs/gnu8/openblas/0.3.7/lib/libopenblas.so --with-scalapack-dir=/opt/ohpc/pub/libs/gnu8/mpich/scalapack/2.0.2 --with-clanguage=C++ --with-c-support --with-fortran-interfaces=1 --with-debugging=no --with-shared-libraries --with-mpi=1 --with-batch=0 --with-hdf5=1 --with-hdf5-lib=/opt/ohpc/pub/libs/gnu8/mpich/hdf5/1.10.5/lib/libhdf5.so --with-hdf5-include=/opt/ohpc/pub/libs/gnu8/mpich/hdf5/1.10.5/include
+[25]PETSC ERROR: [33]PETSC ERROR: [26]PETSC ERROR: [28]PETSC ERROR: [32]PETSC ERROR: [31]PETSC ERROR: [30]PETSC ERROR: [29]PETSC ERROR: Configure options --prefix=/opt/ohpc/pub/libs/gnu8/mpich/petsc/3.12.0 --CFLAGS="-fPIC -DPIC" --CXXFLAGS="-fPIC -DPIC" --FFLAGS=-fPIC --with-blaslapack-lib=/opt/ohpc/pub/libs/gnu8/openblas/0.3.7/lib/libopenblas.so --with-scalapack-dir=/opt/ohpc/pub/libs/gnu8/mpich/scalapack/2.0.2 --with-clanguage=C++ --with-c-support --with-fortran-interfaces=1 --with-debugging=no --with-shared-libraries --with-mpi=1 --with-batch=0 --with-hdf5=1 --with-hdf5-lib=/opt/ohpc/pub/libs/gnu8/mpich/hdf5/1.10.5/lib/libhdf5.so --with-hdf5-include=/opt/ohpc/pub/libs/gnu8/mpich/hdf5/1.10.5/include
+Configure options --prefix=/opt/ohpc/pub/libs/gnu8/mpich/petsc/3.12.0 --CFLAGS="-fPIC -DPIC" --CXXFLAGS="-fPIC -DPIC" --FFLAGS=-fPIC --with-blaslapack-lib=/opt/ohpc/pub/libs/gnu8/openblas/0.3.7/lib/libopenblas.so --with-scalapack-dir=/opt/ohpc/pub/libs/gnu8/mpich/scalapack/2.0.2 --with-clanguage=C++ --with-c-support --with-fortran-interfaces=1 --with-debugging=no --with-shared-libraries --with-mpi=1 --with-batch=0 --with-hdf5=1 --with-hdf5-lib=/opt/ohpc/pub/libs/gnu8/mpich/hdf5/1.10.5/lib/libhdf5.so --with-hdf5-include=/opt/ohpc/pub/libs/gnu8/mpich/hdf5/1.10.5/include
+[34]PETSC ERROR: Configure options --prefix=/opt/ohpc/pub/libs/gnu8/mpich/petsc/3.12.0 --CFLAGS="-fPIC -DPIC" --CXXFLAGS="-fPIC -DPIC" --FFLAGS=-fPIC --with-blaslapack-lib=/opt/ohpc/pub/libs/gnu8/openblas/0.3.7/lib/libopenblas.so --with-scalapack-dir=/opt/ohpc/pub/libs/gnu8/mpich/scalapack/2.0.2 --with-clanguage=C++ --with-c-support --with-fortran-interfaces=1 --with-debugging=no --with-shared-libraries --with-mpi=1 --with-batch=0 --with-hdf5=1 --with-hdf5-lib=/opt/ohpc/pub/libs/gnu8/mpich/hdf5/1.10.5/lib/libhdf5.so --with-hdf5-include=/opt/ohpc/pub/libs/gnu8/mpich/hdf5/1.10.5/include
+Configure options --prefix=/opt/ohpc/pub/libs/gnu8/mpich/petsc/3.12.0 --CFLAGS="-fPIC -DPIC" --CXXFLAGS="-fPIC -DPIC" --FFLAGS=-fPIC --with-blaslapack-lib=/opt/ohpc/pub/libs/gnu8/openblas/0.3.7/lib/libopenblas.so --with-scalapack-dir=/opt/ohpc/pub/libs/gnu8/mpich/scalapack/2.0.2 --with-clanguage=C++ --with-c-support --with-fortran-interfaces=1 --with-debugging=no --with-shared-libraries --with-mpi=1 --with-batch=0 --with-hdf5=1 --with-hdf5-lib=/opt/ohpc/pub/libs/gnu8/mpich/hdf5/1.10.5/lib/libhdf5.so --with-hdf5-include=/opt/ohpc/pub/libs/gnu8/mpich/hdf5/1.10.5/include
+Configure options --prefix=/opt/ohpc/pub/libs/gnu8/mpich/petsc/3.12.0 --CFLAGS="-fPIC -DPIC" --CXXFLAGS="-fPIC -DPIC" --FFLAGS=-fPIC --with-blaslapack-lib=/opt/ohpc/pub/libs/gnu8/openblas/0.3.7/lib/libopenblas.so --with-scalapack-dir=/opt/ohpc/pub/libs/gnu8/mpich/scalapack/2.0.2 --with-clanguage=C++ --with-c-support --with-fortran-interfaces=1 --with-debugging=no --with-shared-libraries --with-mpi=1 --with-batch=0 --with-hdf5=1 --with-hdf5-lib=/opt/ohpc/pub/libs/gnu8/mpich/hdf5/1.10.5/lib/libhdf5.so --with-hdf5-include=/opt/ohpc/pub/libs/gnu8/mpich/hdf5/1.10.5/include
+Configure options --prefix=/opt/ohpc/pub/libs/gnu8/mpich/petsc/3.12.0 --CFLAGS="-fPIC -DPIC" --CXXFLAGS="-fPIC -DPIC" --FFLAGS=-fPIC --with-blaslapack-lib=/opt/ohpc/pub/libs/gnu8/openblas/0.3.7/lib/libopenblas.so --with-scalapack-dir=/opt/ohpc/pub/libs/gnu8/mpich/scalapack/2.0.2 --with-clanguage=C++ --with-c-support --with-fortran-interfaces=1 --with-debugging=no --with-shared-libraries --with-mpi=1 --with-batch=0 --with-hdf5=1 --with-hdf5-lib=/opt/ohpc/pub/libs/gnu8/mpich/hdf5/1.10.5/lib/libhdf5.so --with-hdf5-include=/opt/ohpc/pub/libs/gnu8/mpich/hdf5/1.10.5/include
+Configure options --prefix=/opt/ohpc/pub/libs/gnu8/mpich/petsc/3.12.0 --CFLAGS="-fPIC -DPIC" --CXXFLAGS="-fPIC -DPIC" --FFLAGS=-fPIC --with-blaslapack-lib=/opt/ohpc/pub/libs/gnu8/openblas/0.3.7/lib/libopenblas.so --with-scalapack-dir=/opt/ohpc/pub/libs/gnu8/mpich/scalapack/2.0.2 --with-clanguage=C++ --with-c-support --with-fortran-interfaces=1 --with-debugging=no --with-shared-libraries --with-mpi=1 --with-batch=0 --with-hdf5=1 --with-hdf5-lib=/opt/ohpc/pub/libs/gnu8/mpich/hdf5/1.10.5/lib/libhdf5.so --with-hdf5-include=/opt/ohpc/pub/libs/gnu8/mpich/hdf5/1.10.5/include
+Configure options --prefix=/opt/ohpc/pub/libs/gnu8/mpich/petsc/3.12.0 --CFLAGS="-fPIC -DPIC" --CXXFLAGS="-fPIC -DPIC" --FFLAGS=-fPIC --with-blaslapack-lib=/opt/ohpc/pub/libs/gnu8/openblas/0.3.7/lib/libopenblas.so --with-scalapack-dir=/opt/ohpc/pub/libs/gnu8/mpich/scalapack/2.0.2 --with-clanguage=C++ --with-c-support --with-fortran-interfaces=1 --with-debugging=no --with-shared-libraries --with-mpi=1 --with-batch=0 --with-hdf5=1 --with-hdf5-lib=/opt/ohpc/pub/libs/gnu8/mpich/hdf5/1.10.5/lib/libhdf5.so --with-hdf5-include=/opt/ohpc/pub/libs/gnu8/mpich/hdf5/1.10.5/include
+Configure options --prefix=/opt/ohpc/pub/libs/gnu8/mpich/petsc/3.12.0 --CFLAGS="-fPIC -DPIC" --CXXFLAGS="-fPIC -DPIC" --FFLAGS=-fPIC --with-blaslapack-lib=/opt/ohpc/pub/libs/gnu8/openblas/0.3.7/lib/libopenblas.so --with-scalapack-dir=/opt/ohpc/pub/libs/gnu8/mpich/scalapack/2.0.2 --with-clanguage=C++ --with-c-support --with-fortran-interfaces=1 --with-debugging=no --with-shared-libraries --with-mpi=1 --with-batch=0 --with-hdf5=1 --with-hdf5-lib=/opt/ohpc/pub/libs/gnu8/mpich/hdf5/1.10.5/lib/libhdf5.so --with-hdf5-include=/opt/ohpc/pub/libs/gnu8/mpich/hdf5/1.10.5/include
+Configure options --prefix=/opt/ohpc/pub/libs/gnu8/mpich/petsc/3.12.0 --CFLAGS="-fPIC -DPIC" --CXXFLAGS="-fPIC -DPIC" --FFLAGS=-fPIC --with-blaslapack-lib=/opt/ohpc/pub/libs/gnu8/openblas/0.3.7/lib/libopenblas.so --with-scalapack-dir=/opt/ohpc/pub/libs/gnu8/mpich/scalapack/2.0.2 --with-clanguage=C++ --with-c-support --with-fortran-interfaces=1 --with-debugging=no --with-shared-libraries --with-mpi=1 --with-batch=0 --with-hdf5=1 --with-hdf5-lib=/opt/ohpc/pub/libs/gnu8/mpich/hdf5/1.10.5/lib/libhdf5.so --with-hdf5-include=/opt/ohpc/pub/libs/gnu8/mpich/hdf5/1.10.5/include
+[24]PETSC ERROR: [27]PETSC ERROR: #1 User provided function() line 0 in  unknown file
+[25]PETSC ERROR: [33]PETSC ERROR: [26]PETSC ERROR: [28]PETSC ERROR: [32]PETSC ERROR: [31]PETSC ERROR: [30]PETSC ERROR: [29]PETSC ERROR: #1 User provided function() line 0 in  unknown file
+#1 User provided function() line 0 in  unknown file
+application called MPI_Abort(MPI_COMM_WORLD, 59) - process 34
+#1 User provided function() line 0 in  unknown file
+#1 User provided function() line 0 in  unknown file
+#1 User provided function() line 0 in  unknown file
+#1 User provided function() line 0 in  unknown file
+#1 User provided function() line 0 in  unknown file
+#1 User provided function() line 0 in  unknown file
+#1 User provided function() line 0 in  unknown file
+#1 User provided function() line 0 in  unknown file
+application called MPI_Abort(MPI_COMM_WORLD, 59) - process 24
+application called MPI_Abort(MPI_COMM_WORLD, 59) - process 27
+application called MPI_Abort(MPI_COMM_WORLD, 59) - process 25
+application called MPI_Abort(MPI_COMM_WORLD, 59) - process 33
+application called MPI_Abort(MPI_COMM_WORLD, 59) - process 26
+application called MPI_Abort(MPI_COMM_WORLD, 59) - process 28
+application called MPI_Abort(MPI_COMM_WORLD, 59) - process 32
+application called MPI_Abort(MPI_COMM_WORLD, 59) - process 31
+application called MPI_Abort(MPI_COMM_WORLD, 59) - process 30
+application called MPI_Abort(MPI_COMM_WORLD, 59) - process 29
+srun: Job 719010 step creation temporarily disabled, retrying
+srun: Step created for job 719010
+[26]PETSC ERROR: [24]PETSC ERROR: [35]PETSC ERROR: ------------------------------------------------------------------------
+[35]PETSC ERROR: Caught signal number 11 SEGV: Segmentation Violation, probably memory access out of range
+[34]PETSC ERROR: [33]PETSC ERROR: [25]PETSC ERROR: [27]PETSC ERROR: ------------------------------------------------------------------------
+[28]PETSC ERROR: [31]PETSC ERROR: [30]PETSC ERROR: [32]PETSC ERROR: [29]PETSC ERROR: ------------------------------------------------------------------------
+[35]PETSC ERROR: Try option -start_in_debugger or -on_error_attach_debugger
+[35]PETSC ERROR: or see https://www.mcs.anl.gov/petsc/documentation/faq.html#valgrind
+[35]PETSC ERROR: or try http://valgrind.org on GNU/linux and Apple Mac OS X to find memory corruption errors
+[35]PETSC ERROR: configure using --with-debugging=yes, recompile, link, and run 
+------------------------------------------------------------------------
+------------------------------------------------------------------------
+------------------------------------------------------------------------
+------------------------------------------------------------------------
+[26]PETSC ERROR: ------------------------------------------------------------------------
+------------------------------------------------------------------------
+------------------------------------------------------------------------
+------------------------------------------------------------------------
+------------------------------------------------------------------------
+[24]PETSC ERROR: [35]PETSC ERROR: to get more information on the crash.
+[34]PETSC ERROR: [33]PETSC ERROR: [25]PETSC ERROR: [27]PETSC ERROR: Caught signal number 11 SEGV: Segmentation Violation, probably memory access out of range
+[28]PETSC ERROR: [31]PETSC ERROR: [30]PETSC ERROR: [32]PETSC ERROR: [29]PETSC ERROR: Caught signal number 11 SEGV: Segmentation Violation, probably memory access out of range
+[35]PETSC ERROR: --------------------- Error Message --------------------------------------------------------------
+[35]PETSC ERROR: Caught signal number 11 SEGV: Segmentation Violation, probably memory access out of range
+Caught signal number 11 SEGV: Segmentation Violation, probably memory access out of range
+Caught signal number 11 SEGV: Segmentation Violation, probably memory access out of range
+Caught signal number 11 SEGV: Segmentation Violation, probably memory access out of range
+[26]PETSC ERROR: Caught signal number 11 SEGV: Segmentation Violation, probably memory access out of range
+Caught signal number 11 SEGV: Segmentation Violation, probably memory access out of range
+Caught signal number 11 SEGV: Segmentation Violation, probably memory access out of range
+Caught signal number 11 SEGV: Segmentation Violation, probably memory access out of range
+Caught signal number 11 SEGV: Segmentation Violation, probably memory access out of range
+[24]PETSC ERROR: Signal received
+[35]PETSC ERROR: [34]PETSC ERROR: [33]PETSC ERROR: [25]PETSC ERROR: [27]PETSC ERROR: Try option -start_in_debugger or -on_error_attach_debugger
+[28]PETSC ERROR: [31]PETSC ERROR: [30]PETSC ERROR: [32]PETSC ERROR: [29]PETSC ERROR: Try option -start_in_debugger or -on_error_attach_debugger
+See https://www.mcs.anl.gov/petsc/documentation/faq.html for trouble shooting.
+[35]PETSC ERROR: Try option -start_in_debugger or -on_error_attach_debugger
+Try option -start_in_debugger or -on_error_attach_debugger
+Try option -start_in_debugger or -on_error_attach_debugger
+Try option -start_in_debugger or -on_error_attach_debugger
+[26]PETSC ERROR: Try option -start_in_debugger or -on_error_attach_debugger
+Try option -start_in_debugger or -on_error_attach_debugger
+Try option -start_in_debugger or -on_error_attach_debugger
+Try option -start_in_debugger or -on_error_attach_debugger
+Try option -start_in_debugger or -on_error_attach_debugger
+[24]PETSC ERROR: Petsc Release Version 3.12.0, Sep, 29, 2019 
+[35]PETSC ERROR: [34]PETSC ERROR: [33]PETSC ERROR: [25]PETSC ERROR: [27]PETSC ERROR: or see https://www.mcs.anl.gov/petsc/documentation/faq.html#valgrind
+[28]PETSC ERROR: [31]PETSC ERROR: [30]PETSC ERROR: [32]PETSC ERROR: [29]PETSC ERROR: or see https://www.mcs.anl.gov/petsc/documentation/faq.html#valgrind
+../../maddm on a  named node819 by tt73 Fri May 12 16:56:02 2023
+[35]PETSC ERROR: or see https://www.mcs.anl.gov/petsc/documentation/faq.html#valgrind
+or see https://www.mcs.anl.gov/petsc/documentation/faq.html#valgrind
+or see https://www.mcs.anl.gov/petsc/documentation/faq.html#valgrind
+or see https://www.mcs.anl.gov/petsc/documentation/faq.html#valgrind
+[26]PETSC ERROR: or see https://www.mcs.anl.gov/petsc/documentation/faq.html#valgrind
+or see https://www.mcs.anl.gov/petsc/documentation/faq.html#valgrind
+or see https://www.mcs.anl.gov/petsc/documentation/faq.html#valgrind
+or see https://www.mcs.anl.gov/petsc/documentation/faq.html#valgrind
+or see https://www.mcs.anl.gov/petsc/documentation/faq.html#valgrind
+[24]PETSC ERROR: Configure options --prefix=/opt/ohpc/pub/libs/gnu8/mpich/petsc/3.12.0 --CFLAGS="-fPIC -DPIC" --CXXFLAGS="-fPIC -DPIC" --FFLAGS=-fPIC --with-blaslapack-lib=/opt/ohpc/pub/libs/gnu8/openblas/0.3.7/lib/libopenblas.so --with-scalapack-dir=/opt/ohpc/pub/libs/gnu8/mpich/scalapack/2.0.2 --with-clanguage=C++ --with-c-support --with-fortran-interfaces=1 --with-debugging=no --with-shared-libraries --with-mpi=1 --with-batch=0 --with-hdf5=1 --with-hdf5-lib=/opt/ohpc/pub/libs/gnu8/mpich/hdf5/1.10.5/lib/libhdf5.so --with-hdf5-include=/opt/ohpc/pub/libs/gnu8/mpich/hdf5/1.10.5/include
+[35]PETSC ERROR: #1 User provided function() line 0 in  unknown file
+[34]PETSC ERROR: [33]PETSC ERROR: [25]PETSC ERROR: [27]PETSC ERROR: or try http://valgrind.org on GNU/linux and Apple Mac OS X to find memory corruption errors
+[28]PETSC ERROR: [31]PETSC ERROR: [30]PETSC ERROR: [32]PETSC ERROR: [29]PETSC ERROR: or try http://valgrind.org on GNU/linux and Apple Mac OS X to find memory corruption errors
+application called MPI_Abort(MPI_COMM_WORLD, 59) - process 35
+or try http://valgrind.org on GNU/linux and Apple Mac OS X to find memory corruption errors
+or try http://valgrind.org on GNU/linux and Apple Mac OS X to find memory corruption errors
+or try http://valgrind.org on GNU/linux and Apple Mac OS X to find memory corruption errors
+or try http://valgrind.org on GNU/linux and Apple Mac OS X to find memory corruption errors
+[26]PETSC ERROR: or try http://valgrind.org on GNU/linux and Apple Mac OS X to find memory corruption errors
+or try http://valgrind.org on GNU/linux and Apple Mac OS X to find memory corruption errors
+or try http://valgrind.org on GNU/linux and Apple Mac OS X to find memory corruption errors
+or try http://valgrind.org on GNU/linux and Apple Mac OS X to find memory corruption errors
+or try http://valgrind.org on GNU/linux and Apple Mac OS X to find memory corruption errors
+[24]PETSC ERROR: configure using --with-debugging=yes, recompile, link, and run 
+[34]PETSC ERROR: [33]PETSC ERROR: [25]PETSC ERROR: [27]PETSC ERROR: configure using --with-debugging=yes, recompile, link, and run 
+[28]PETSC ERROR: [31]PETSC ERROR: [30]PETSC ERROR: [32]PETSC ERROR: [29]PETSC ERROR: [24]PETSC ERROR: configure using --with-debugging=yes, recompile, link, and run 
+configure using --with-debugging=yes, recompile, link, and run 
+configure using --with-debugging=yes, recompile, link, and run 
+configure using --with-debugging=yes, recompile, link, and run 
+[26]PETSC ERROR: configure using --with-debugging=yes, recompile, link, and run 
+configure using --with-debugging=yes, recompile, link, and run 
+configure using --with-debugging=yes, recompile, link, and run 
+configure using --with-debugging=yes, recompile, link, and run 
+configure using --with-debugging=yes, recompile, link, and run 
+to get more information on the crash.
+[34]PETSC ERROR: [33]PETSC ERROR: [25]PETSC ERROR: [27]PETSC ERROR: to get more information on the crash.
+[28]PETSC ERROR: [31]PETSC ERROR: [30]PETSC ERROR: [32]PETSC ERROR: [29]PETSC ERROR: [24]PETSC ERROR: to get more information on the crash.
+to get more information on the crash.
+to get more information on the crash.
+to get more information on the crash.
+[26]PETSC ERROR: to get more information on the crash.
+to get more information on the crash.
+to get more information on the crash.
+to get more information on the crash.
+to get more information on the crash.
+--------------------- Error Message --------------------------------------------------------------
+[34]PETSC ERROR: [33]PETSC ERROR: [25]PETSC ERROR: [27]PETSC ERROR: --------------------- Error Message --------------------------------------------------------------
+[28]PETSC ERROR: [31]PETSC ERROR: [30]PETSC ERROR: [32]PETSC ERROR: [29]PETSC ERROR: [24]PETSC ERROR: --------------------- Error Message --------------------------------------------------------------
+--------------------- Error Message --------------------------------------------------------------
+--------------------- Error Message --------------------------------------------------------------
+--------------------- Error Message --------------------------------------------------------------
+[26]PETSC ERROR: --------------------- Error Message --------------------------------------------------------------
+--------------------- Error Message --------------------------------------------------------------
+--------------------- Error Message --------------------------------------------------------------
+--------------------- Error Message --------------------------------------------------------------
+--------------------- Error Message --------------------------------------------------------------
+Signal received
+[34]PETSC ERROR: [33]PETSC ERROR: [25]PETSC ERROR: [27]PETSC ERROR: Signal received
+[28]PETSC ERROR: [31]PETSC ERROR: [30]PETSC ERROR: [32]PETSC ERROR: [29]PETSC ERROR: [24]PETSC ERROR: Signal received
+Signal received
+Signal received
+Signal received
+[26]PETSC ERROR: Signal received
+Signal received
+Signal received
+Signal received
+Signal received
+See https://www.mcs.anl.gov/petsc/documentation/faq.html for trouble shooting.
+[34]PETSC ERROR: [33]PETSC ERROR: [25]PETSC ERROR: [27]PETSC ERROR: See https://www.mcs.anl.gov/petsc/documentation/faq.html for trouble shooting.
+[28]PETSC ERROR: [31]PETSC ERROR: [30]PETSC ERROR: [32]PETSC ERROR: [29]PETSC ERROR: [24]PETSC ERROR: See https://www.mcs.anl.gov/petsc/documentation/faq.html for trouble shooting.
+See https://www.mcs.anl.gov/petsc/documentation/faq.html for trouble shooting.
+See https://www.mcs.anl.gov/petsc/documentation/faq.html for trouble shooting.
+See https://www.mcs.anl.gov/petsc/documentation/faq.html for trouble shooting.
+[26]PETSC ERROR: See https://www.mcs.anl.gov/petsc/documentation/faq.html for trouble shooting.
+See https://www.mcs.anl.gov/petsc/documentation/faq.html for trouble shooting.
+See https://www.mcs.anl.gov/petsc/documentation/faq.html for trouble shooting.
+See https://www.mcs.anl.gov/petsc/documentation/faq.html for trouble shooting.
+See https://www.mcs.anl.gov/petsc/documentation/faq.html for trouble shooting.
+Petsc Release Version 3.12.0, Sep, 29, 2019 
+[34]PETSC ERROR: [33]PETSC ERROR: [25]PETSC ERROR: [27]PETSC ERROR: Petsc Release Version 3.12.0, Sep, 29, 2019 
+[28]PETSC ERROR: [31]PETSC ERROR: [30]PETSC ERROR: [32]PETSC ERROR: [29]PETSC ERROR: [24]PETSC ERROR: Petsc Release Version 3.12.0, Sep, 29, 2019 
+Petsc Release Version 3.12.0, Sep, 29, 2019 
+Petsc Release Version 3.12.0, Sep, 29, 2019 
+Petsc Release Version 3.12.0, Sep, 29, 2019 
+[26]PETSC ERROR: Petsc Release Version 3.12.0, Sep, 29, 2019 
+Petsc Release Version 3.12.0, Sep, 29, 2019 
+Petsc Release Version 3.12.0, Sep, 29, 2019 
+Petsc Release Version 3.12.0, Sep, 29, 2019 
+Petsc Release Version 3.12.0, Sep, 29, 2019 
+../../maddm on a  named node677 by tt73 Fri May 12 16:56:02 2023
+[34]PETSC ERROR: [33]PETSC ERROR: [25]PETSC ERROR: [27]PETSC ERROR: ../../maddm on a  named node702 by tt73 Fri May 12 16:56:02 2023
+[28]PETSC ERROR: [31]PETSC ERROR: [30]PETSC ERROR: [32]PETSC ERROR: [29]PETSC ERROR: [24]PETSC ERROR: ../../maddm on a  named node814 by tt73 Fri May 12 16:56:02 2023
+../../maddm on a  named node813 by tt73 Fri May 12 16:56:02 2023
+../../maddm on a  named node701 by tt73 Fri May 12 16:56:02 2023
+../../maddm on a  named node710 by tt73 Fri May 12 16:56:02 2023
+[26]PETSC ERROR: ../../maddm on a  named node711 by tt73 Fri May 12 16:56:02 2023
+../../maddm on a  named node811 by tt73 Fri May 12 16:56:02 2023
+../../maddm on a  named node810 by tt73 Fri May 12 16:56:02 2023
+../../maddm on a  named node812 by tt73 Fri May 12 16:56:02 2023
+../../maddm on a  named node802 by tt73 Fri May 12 16:56:02 2023
+Configure options --prefix=/opt/ohpc/pub/libs/gnu8/mpich/petsc/3.12.0 --CFLAGS="-fPIC -DPIC" --CXXFLAGS="-fPIC -DPIC" --FFLAGS=-fPIC --with-blaslapack-lib=/opt/ohpc/pub/libs/gnu8/openblas/0.3.7/lib/libopenblas.so --with-scalapack-dir=/opt/ohpc/pub/libs/gnu8/mpich/scalapack/2.0.2 --with-clanguage=C++ --with-c-support --with-fortran-interfaces=1 --with-debugging=no --with-shared-libraries --with-mpi=1 --with-batch=0 --with-hdf5=1 --with-hdf5-lib=/opt/ohpc/pub/libs/gnu8/mpich/hdf5/1.10.5/lib/libhdf5.so --with-hdf5-include=/opt/ohpc/pub/libs/gnu8/mpich/hdf5/1.10.5/include
+[34]PETSC ERROR: [33]PETSC ERROR: [25]PETSC ERROR: [27]PETSC ERROR: Configure options --prefix=/opt/ohpc/pub/libs/gnu8/mpich/petsc/3.12.0 --CFLAGS="-fPIC -DPIC" --CXXFLAGS="-fPIC -DPIC" --FFLAGS=-fPIC --with-blaslapack-lib=/opt/ohpc/pub/libs/gnu8/openblas/0.3.7/lib/libopenblas.so --with-scalapack-dir=/opt/ohpc/pub/libs/gnu8/mpich/scalapack/2.0.2 --with-clanguage=C++ --with-c-support --with-fortran-interfaces=1 --with-debugging=no --with-shared-libraries --with-mpi=1 --with-batch=0 --with-hdf5=1 --with-hdf5-lib=/opt/ohpc/pub/libs/gnu8/mpich/hdf5/1.10.5/lib/libhdf5.so --with-hdf5-include=/opt/ohpc/pub/libs/gnu8/mpich/hdf5/1.10.5/include
+[28]PETSC ERROR: [31]PETSC ERROR: [30]PETSC ERROR: [32]PETSC ERROR: [29]PETSC ERROR: [24]PETSC ERROR: Configure options --prefix=/opt/ohpc/pub/libs/gnu8/mpich/petsc/3.12.0 --CFLAGS="-fPIC -DPIC" --CXXFLAGS="-fPIC -DPIC" --FFLAGS=-fPIC --with-blaslapack-lib=/opt/ohpc/pub/libs/gnu8/openblas/0.3.7/lib/libopenblas.so --with-scalapack-dir=/opt/ohpc/pub/libs/gnu8/mpich/scalapack/2.0.2 --with-clanguage=C++ --with-c-support --with-fortran-interfaces=1 --with-debugging=no --with-shared-libraries --with-mpi=1 --with-batch=0 --with-hdf5=1 --with-hdf5-lib=/opt/ohpc/pub/libs/gnu8/mpich/hdf5/1.10.5/lib/libhdf5.so --with-hdf5-include=/opt/ohpc/pub/libs/gnu8/mpich/hdf5/1.10.5/include
+Configure options --prefix=/opt/ohpc/pub/libs/gnu8/mpich/petsc/3.12.0 --CFLAGS="-fPIC -DPIC" --CXXFLAGS="-fPIC -DPIC" --FFLAGS=-fPIC --with-blaslapack-lib=/opt/ohpc/pub/libs/gnu8/openblas/0.3.7/lib/libopenblas.so --with-scalapack-dir=/opt/ohpc/pub/libs/gnu8/mpich/scalapack/2.0.2 --with-clanguage=C++ --with-c-support --with-fortran-interfaces=1 --with-debugging=no --with-shared-libraries --with-mpi=1 --with-batch=0 --with-hdf5=1 --with-hdf5-lib=/opt/ohpc/pub/libs/gnu8/mpich/hdf5/1.10.5/lib/libhdf5.so --with-hdf5-include=/opt/ohpc/pub/libs/gnu8/mpich/hdf5/1.10.5/include
+Configure options --prefix=/opt/ohpc/pub/libs/gnu8/mpich/petsc/3.12.0 --CFLAGS="-fPIC -DPIC" --CXXFLAGS="-fPIC -DPIC" --FFLAGS=-fPIC --with-blaslapack-lib=/opt/ohpc/pub/libs/gnu8/openblas/0.3.7/lib/libopenblas.so --with-scalapack-dir=/opt/ohpc/pub/libs/gnu8/mpich/scalapack/2.0.2 --with-clanguage=C++ --with-c-support --with-fortran-interfaces=1 --with-debugging=no --with-shared-libraries --with-mpi=1 --with-batch=0 --with-hdf5=1 --with-hdf5-lib=/opt/ohpc/pub/libs/gnu8/mpich/hdf5/1.10.5/lib/libhdf5.so --with-hdf5-include=/opt/ohpc/pub/libs/gnu8/mpich/hdf5/1.10.5/include
+Configure options --prefix=/opt/ohpc/pub/libs/gnu8/mpich/petsc/3.12.0 --CFLAGS="-fPIC -DPIC" --CXXFLAGS="-fPIC -DPIC" --FFLAGS=-fPIC --with-blaslapack-lib=/opt/ohpc/pub/libs/gnu8/openblas/0.3.7/lib/libopenblas.so --with-scalapack-dir=/opt/ohpc/pub/libs/gnu8/mpich/scalapack/2.0.2 --with-clanguage=C++ --with-c-support --with-fortran-interfaces=1 --with-debugging=no --with-shared-libraries --with-mpi=1 --with-batch=0 --with-hdf5=1 --with-hdf5-lib=/opt/ohpc/pub/libs/gnu8/mpich/hdf5/1.10.5/lib/libhdf5.so --with-hdf5-include=/opt/ohpc/pub/libs/gnu8/mpich/hdf5/1.10.5/include
+[26]PETSC ERROR: Configure options --prefix=/opt/ohpc/pub/libs/gnu8/mpich/petsc/3.12.0 --CFLAGS="-fPIC -DPIC" --CXXFLAGS="-fPIC -DPIC" --FFLAGS=-fPIC --with-blaslapack-lib=/opt/ohpc/pub/libs/gnu8/openblas/0.3.7/lib/libopenblas.so --with-scalapack-dir=/opt/ohpc/pub/libs/gnu8/mpich/scalapack/2.0.2 --with-clanguage=C++ --with-c-support --with-fortran-interfaces=1 --with-debugging=no --with-shared-libraries --with-mpi=1 --with-batch=0 --with-hdf5=1 --with-hdf5-lib=/opt/ohpc/pub/libs/gnu8/mpich/hdf5/1.10.5/lib/libhdf5.so --with-hdf5-include=/opt/ohpc/pub/libs/gnu8/mpich/hdf5/1.10.5/include
+Configure options --prefix=/opt/ohpc/pub/libs/gnu8/mpich/petsc/3.12.0 --CFLAGS="-fPIC -DPIC" --CXXFLAGS="-fPIC -DPIC" --FFLAGS=-fPIC --with-blaslapack-lib=/opt/ohpc/pub/libs/gnu8/openblas/0.3.7/lib/libopenblas.so --with-scalapack-dir=/opt/ohpc/pub/libs/gnu8/mpich/scalapack/2.0.2 --with-clanguage=C++ --with-c-support --with-fortran-interfaces=1 --with-debugging=no --with-shared-libraries --with-mpi=1 --with-batch=0 --with-hdf5=1 --with-hdf5-lib=/opt/ohpc/pub/libs/gnu8/mpich/hdf5/1.10.5/lib/libhdf5.so --with-hdf5-include=/opt/ohpc/pub/libs/gnu8/mpich/hdf5/1.10.5/include
+Configure options --prefix=/opt/ohpc/pub/libs/gnu8/mpich/petsc/3.12.0 --CFLAGS="-fPIC -DPIC" --CXXFLAGS="-fPIC -DPIC" --FFLAGS=-fPIC --with-blaslapack-lib=/opt/ohpc/pub/libs/gnu8/openblas/0.3.7/lib/libopenblas.so --with-scalapack-dir=/opt/ohpc/pub/libs/gnu8/mpich/scalapack/2.0.2 --with-clanguage=C++ --with-c-support --with-fortran-interfaces=1 --with-debugging=no --with-shared-libraries --with-mpi=1 --with-batch=0 --with-hdf5=1 --with-hdf5-lib=/opt/ohpc/pub/libs/gnu8/mpich/hdf5/1.10.5/lib/libhdf5.so --with-hdf5-include=/opt/ohpc/pub/libs/gnu8/mpich/hdf5/1.10.5/include
+Configure options --prefix=/opt/ohpc/pub/libs/gnu8/mpich/petsc/3.12.0 --CFLAGS="-fPIC -DPIC" --CXXFLAGS="-fPIC -DPIC" --FFLAGS=-fPIC --with-blaslapack-lib=/opt/ohpc/pub/libs/gnu8/openblas/0.3.7/lib/libopenblas.so --with-scalapack-dir=/opt/ohpc/pub/libs/gnu8/mpich/scalapack/2.0.2 --with-clanguage=C++ --with-c-support --with-fortran-interfaces=1 --with-debugging=no --with-shared-libraries --with-mpi=1 --with-batch=0 --with-hdf5=1 --with-hdf5-lib=/opt/ohpc/pub/libs/gnu8/mpich/hdf5/1.10.5/lib/libhdf5.so --with-hdf5-include=/opt/ohpc/pub/libs/gnu8/mpich/hdf5/1.10.5/include
+Configure options --prefix=/opt/ohpc/pub/libs/gnu8/mpich/petsc/3.12.0 --CFLAGS="-fPIC -DPIC" --CXXFLAGS="-fPIC -DPIC" --FFLAGS=-fPIC --with-blaslapack-lib=/opt/ohpc/pub/libs/gnu8/openblas/0.3.7/lib/libopenblas.so --with-scalapack-dir=/opt/ohpc/pub/libs/gnu8/mpich/scalapack/2.0.2 --with-clanguage=C++ --with-c-support --with-fortran-interfaces=1 --with-debugging=no --with-shared-libraries --with-mpi=1 --with-batch=0 --with-hdf5=1 --with-hdf5-lib=/opt/ohpc/pub/libs/gnu8/mpich/hdf5/1.10.5/lib/libhdf5.so --with-hdf5-include=/opt/ohpc/pub/libs/gnu8/mpich/hdf5/1.10.5/include
+#1 User provided function() line 0 in  unknown file
+[34]PETSC ERROR: [33]PETSC ERROR: [25]PETSC ERROR: [27]PETSC ERROR: #1 User provided function() line 0 in  unknown file
+[28]PETSC ERROR: [31]PETSC ERROR: [30]PETSC ERROR: [32]PETSC ERROR: [29]PETSC ERROR: application called MPI_Abort(MPI_COMM_WORLD, 59) - process 24
+#1 User provided function() line 0 in  unknown file
+#1 User provided function() line 0 in  unknown file
+#1 User provided function() line 0 in  unknown file
+#1 User provided function() line 0 in  unknown file
+application called MPI_Abort(MPI_COMM_WORLD, 59) - process 26
+#1 User provided function() line 0 in  unknown file
+#1 User provided function() line 0 in  unknown file
+#1 User provided function() line 0 in  unknown file
+#1 User provided function() line 0 in  unknown file
+#1 User provided function() line 0 in  unknown file
+application called MPI_Abort(MPI_COMM_WORLD, 59) - process 34
+application called MPI_Abort(MPI_COMM_WORLD, 59) - process 33
+application called MPI_Abort(MPI_COMM_WORLD, 59) - process 25
+application called MPI_Abort(MPI_COMM_WORLD, 59) - process 27
+application called MPI_Abort(MPI_COMM_WORLD, 59) - process 28
+application called MPI_Abort(MPI_COMM_WORLD, 59) - process 31
+application called MPI_Abort(MPI_COMM_WORLD, 59) - process 30
+application called MPI_Abort(MPI_COMM_WORLD, 59) - process 32
+application called MPI_Abort(MPI_COMM_WORLD, 59) - process 29
+srun: Job 719010 step creation temporarily disabled, retrying
+srun: Step created for job 719010
+[26]PETSC ERROR: [35]PETSC ERROR: ------------------------------------------------------------------------
+[35]PETSC ERROR: Caught signal number 11 SEGV: Segmentation Violation, probably memory access out of range
+[24]PETSC ERROR: [33]PETSC ERROR: [34]PETSC ERROR: [27]PETSC ERROR: ------------------------------------------------------------------------
+[25]PETSC ERROR: [28]PETSC ERROR: [32]PETSC ERROR: [31]PETSC ERROR: [30]PETSC ERROR: [29]PETSC ERROR: [35]PETSC ERROR: Try option -start_in_debugger or -on_error_attach_debugger
+[35]PETSC ERROR: or see https://www.mcs.anl.gov/petsc/documentation/faq.html#valgrind
+[35]PETSC ERROR: or try http://valgrind.org on GNU/linux and Apple Mac OS X to find memory corruption errors
+[35]PETSC ERROR: configure using --with-debugging=yes, recompile, link, and run 
+[35]PETSC ERROR: ------------------------------------------------------------------------
+------------------------------------------------------------------------
+------------------------------------------------------------------------
+------------------------------------------------------------------------
+[26]PETSC ERROR: ------------------------------------------------------------------------
+------------------------------------------------------------------------
+------------------------------------------------------------------------
+------------------------------------------------------------------------
+------------------------------------------------------------------------
+------------------------------------------------------------------------
+to get more information on the crash.
+[24]PETSC ERROR: [33]PETSC ERROR: [34]PETSC ERROR: [27]PETSC ERROR: Caught signal number 11 SEGV: Segmentation Violation, probably memory access out of range
+[25]PETSC ERROR: [28]PETSC ERROR: [32]PETSC ERROR: [31]PETSC ERROR: [30]PETSC ERROR: [29]PETSC ERROR: [35]PETSC ERROR: --------------------- Error Message --------------------------------------------------------------
+[35]PETSC ERROR: Caught signal number 11 SEGV: Segmentation Violation, probably memory access out of range
+Caught signal number 11 SEGV: Segmentation Violation, probably memory access out of range
+Caught signal number 11 SEGV: Segmentation Violation, probably memory access out of range
+Caught signal number 11 SEGV: Segmentation Violation, probably memory access out of range
+[26]PETSC ERROR: Caught signal number 11 SEGV: Segmentation Violation, probably memory access out of range
+Caught signal number 11 SEGV: Segmentation Violation, probably memory access out of range
+Caught signal number 11 SEGV: Segmentation Violation, probably memory access out of range
+Caught signal number 11 SEGV: Segmentation Violation, probably memory access out of range
+Caught signal number 11 SEGV: Segmentation Violation, probably memory access out of range
+Caught signal number 11 SEGV: Segmentation Violation, probably memory access out of range
+Signal received
+[35]PETSC ERROR: [24]PETSC ERROR: [33]PETSC ERROR: [34]PETSC ERROR: [27]PETSC ERROR: Try option -start_in_debugger or -on_error_attach_debugger
+[25]PETSC ERROR: [28]PETSC ERROR: [32]PETSC ERROR: [31]PETSC ERROR: [30]PETSC ERROR: [29]PETSC ERROR: See https://www.mcs.anl.gov/petsc/documentation/faq.html for trouble shooting.
+[35]PETSC ERROR: Try option -start_in_debugger or -on_error_attach_debugger
+Try option -start_in_debugger or -on_error_attach_debugger
+Try option -start_in_debugger or -on_error_attach_debugger
+Try option -start_in_debugger or -on_error_attach_debugger
+[26]PETSC ERROR: Try option -start_in_debugger or -on_error_attach_debugger
+Try option -start_in_debugger or -on_error_attach_debugger
+Try option -start_in_debugger or -on_error_attach_debugger
+Try option -start_in_debugger or -on_error_attach_debugger
+Try option -start_in_debugger or -on_error_attach_debugger
+Try option -start_in_debugger or -on_error_attach_debugger
+Petsc Release Version 3.12.0, Sep, 29, 2019 
+[35]PETSC ERROR: [24]PETSC ERROR: [33]PETSC ERROR: [34]PETSC ERROR: [27]PETSC ERROR: or see https://www.mcs.anl.gov/petsc/documentation/faq.html#valgrind
+[25]PETSC ERROR: [28]PETSC ERROR: [32]PETSC ERROR: [31]PETSC ERROR: [30]PETSC ERROR: [29]PETSC ERROR: ../../maddm on a  named node819 by tt73 Fri May 12 16:56:10 2023
+[35]PETSC ERROR: or see https://www.mcs.anl.gov/petsc/documentation/faq.html#valgrind
+or see https://www.mcs.anl.gov/petsc/documentation/faq.html#valgrind
+or see https://www.mcs.anl.gov/petsc/documentation/faq.html#valgrind
+or see https://www.mcs.anl.gov/petsc/documentation/faq.html#valgrind
+[26]PETSC ERROR: or see https://www.mcs.anl.gov/petsc/documentation/faq.html#valgrind
+or see https://www.mcs.anl.gov/petsc/documentation/faq.html#valgrind
+or see https://www.mcs.anl.gov/petsc/documentation/faq.html#valgrind
+or see https://www.mcs.anl.gov/petsc/documentation/faq.html#valgrind
+or see https://www.mcs.anl.gov/petsc/documentation/faq.html#valgrind
+or see https://www.mcs.anl.gov/petsc/documentation/faq.html#valgrind
+Configure options --prefix=/opt/ohpc/pub/libs/gnu8/mpich/petsc/3.12.0 --CFLAGS="-fPIC -DPIC" --CXXFLAGS="-fPIC -DPIC" --FFLAGS=-fPIC --with-blaslapack-lib=/opt/ohpc/pub/libs/gnu8/openblas/0.3.7/lib/libopenblas.so --with-scalapack-dir=/opt/ohpc/pub/libs/gnu8/mpich/scalapack/2.0.2 --with-clanguage=C++ --with-c-support --with-fortran-interfaces=1 --with-debugging=no --with-shared-libraries --with-mpi=1 --with-batch=0 --with-hdf5=1 --with-hdf5-lib=/opt/ohpc/pub/libs/gnu8/mpich/hdf5/1.10.5/lib/libhdf5.so --with-hdf5-include=/opt/ohpc/pub/libs/gnu8/mpich/hdf5/1.10.5/include
+[35]PETSC ERROR: #1 User provided function() line 0 in  unknown file
+[24]PETSC ERROR: [33]PETSC ERROR: [34]PETSC ERROR: [27]PETSC ERROR: or try http://valgrind.org on GNU/linux and Apple Mac OS X to find memory corruption errors
+[25]PETSC ERROR: [28]PETSC ERROR: [32]PETSC ERROR: [31]PETSC ERROR: [30]PETSC ERROR: [29]PETSC ERROR: application called MPI_Abort(MPI_COMM_WORLD, 59) - process 35
+or try http://valgrind.org on GNU/linux and Apple Mac OS X to find memory corruption errors
+or try http://valgrind.org on GNU/linux and Apple Mac OS X to find memory corruption errors
+or try http://valgrind.org on GNU/linux and Apple Mac OS X to find memory corruption errors
+or try http://valgrind.org on GNU/linux and Apple Mac OS X to find memory corruption errors
+[26]PETSC ERROR: or try http://valgrind.org on GNU/linux and Apple Mac OS X to find memory corruption errors
+or try http://valgrind.org on GNU/linux and Apple Mac OS X to find memory corruption errors
+or try http://valgrind.org on GNU/linux and Apple Mac OS X to find memory corruption errors
+or try http://valgrind.org on GNU/linux and Apple Mac OS X to find memory corruption errors
+or try http://valgrind.org on GNU/linux and Apple Mac OS X to find memory corruption errors
+or try http://valgrind.org on GNU/linux and Apple Mac OS X to find memory corruption errors
+[24]PETSC ERROR: [33]PETSC ERROR: [34]PETSC ERROR: [27]PETSC ERROR: configure using --with-debugging=yes, recompile, link, and run 
+[25]PETSC ERROR: [28]PETSC ERROR: [32]PETSC ERROR: [31]PETSC ERROR: [30]PETSC ERROR: [29]PETSC ERROR: configure using --with-debugging=yes, recompile, link, and run 
+configure using --with-debugging=yes, recompile, link, and run 
+configure using --with-debugging=yes, recompile, link, and run 
+configure using --with-debugging=yes, recompile, link, and run 
+[26]PETSC ERROR: configure using --with-debugging=yes, recompile, link, and run 
+configure using --with-debugging=yes, recompile, link, and run 
+configure using --with-debugging=yes, recompile, link, and run 
+configure using --with-debugging=yes, recompile, link, and run 
+configure using --with-debugging=yes, recompile, link, and run 
+configure using --with-debugging=yes, recompile, link, and run 
+[24]PETSC ERROR: [33]PETSC ERROR: [34]PETSC ERROR: [27]PETSC ERROR: to get more information on the crash.
+[25]PETSC ERROR: [28]PETSC ERROR: [32]PETSC ERROR: [31]PETSC ERROR: [30]PETSC ERROR: [29]PETSC ERROR: to get more information on the crash.
+to get more information on the crash.
+to get more information on the crash.
+to get more information on the crash.
+[26]PETSC ERROR: to get more information on the crash.
+to get more information on the crash.
+to get more information on the crash.
+to get more information on the crash.
+to get more information on the crash.
+to get more information on the crash.
+[24]PETSC ERROR: [33]PETSC ERROR: [34]PETSC ERROR: [27]PETSC ERROR: --------------------- Error Message --------------------------------------------------------------
+[25]PETSC ERROR: [28]PETSC ERROR: [32]PETSC ERROR: [31]PETSC ERROR: [30]PETSC ERROR: [29]PETSC ERROR: --------------------- Error Message --------------------------------------------------------------
+--------------------- Error Message --------------------------------------------------------------
+--------------------- Error Message --------------------------------------------------------------
+--------------------- Error Message --------------------------------------------------------------
+[26]PETSC ERROR: --------------------- Error Message --------------------------------------------------------------
+--------------------- Error Message --------------------------------------------------------------
+--------------------- Error Message --------------------------------------------------------------
+--------------------- Error Message --------------------------------------------------------------
+--------------------- Error Message --------------------------------------------------------------
+--------------------- Error Message --------------------------------------------------------------
+[24]PETSC ERROR: [33]PETSC ERROR: [34]PETSC ERROR: [27]PETSC ERROR: Signal received
+[25]PETSC ERROR: [28]PETSC ERROR: [32]PETSC ERROR: [31]PETSC ERROR: [30]PETSC ERROR: [29]PETSC ERROR: Signal received
+Signal received
+Signal received
+Signal received
+[26]PETSC ERROR: Signal received
+Signal received
+Signal received
+Signal received
+Signal received
+Signal received
+[24]PETSC ERROR: [33]PETSC ERROR: [34]PETSC ERROR: [27]PETSC ERROR: See https://www.mcs.anl.gov/petsc/documentation/faq.html for trouble shooting.
+[25]PETSC ERROR: [28]PETSC ERROR: [32]PETSC ERROR: [31]PETSC ERROR: [30]PETSC ERROR: [29]PETSC ERROR: See https://www.mcs.anl.gov/petsc/documentation/faq.html for trouble shooting.
+See https://www.mcs.anl.gov/petsc/documentation/faq.html for trouble shooting.
+See https://www.mcs.anl.gov/petsc/documentation/faq.html for trouble shooting.
+See https://www.mcs.anl.gov/petsc/documentation/faq.html for trouble shooting.
+[26]PETSC ERROR: See https://www.mcs.anl.gov/petsc/documentation/faq.html for trouble shooting.
+See https://www.mcs.anl.gov/petsc/documentation/faq.html for trouble shooting.
+See https://www.mcs.anl.gov/petsc/documentation/faq.html for trouble shooting.
+See https://www.mcs.anl.gov/petsc/documentation/faq.html for trouble shooting.
+See https://www.mcs.anl.gov/petsc/documentation/faq.html for trouble shooting.
+See https://www.mcs.anl.gov/petsc/documentation/faq.html for trouble shooting.
+[24]PETSC ERROR: [33]PETSC ERROR: [34]PETSC ERROR: [27]PETSC ERROR: Petsc Release Version 3.12.0, Sep, 29, 2019 
+[25]PETSC ERROR: [28]PETSC ERROR: [32]PETSC ERROR: [31]PETSC ERROR: [30]PETSC ERROR: [29]PETSC ERROR: Petsc Release Version 3.12.0, Sep, 29, 2019 
+Petsc Release Version 3.12.0, Sep, 29, 2019 
+Petsc Release Version 3.12.0, Sep, 29, 2019 
+Petsc Release Version 3.12.0, Sep, 29, 2019 
+[26]PETSC ERROR: Petsc Release Version 3.12.0, Sep, 29, 2019 
+Petsc Release Version 3.12.0, Sep, 29, 2019 
+Petsc Release Version 3.12.0, Sep, 29, 2019 
+Petsc Release Version 3.12.0, Sep, 29, 2019 
+Petsc Release Version 3.12.0, Sep, 29, 2019 
+Petsc Release Version 3.12.0, Sep, 29, 2019 
+[24]PETSC ERROR: [33]PETSC ERROR: [34]PETSC ERROR: [27]PETSC ERROR: ../../maddm on a  named node702 by tt73 Fri May 12 16:56:10 2023
+[25]PETSC ERROR: [28]PETSC ERROR: [32]PETSC ERROR: [31]PETSC ERROR: [30]PETSC ERROR: [29]PETSC ERROR: ../../maddm on a  named node677 by tt73 Fri May 12 16:56:10 2023
+../../maddm on a  named node813 by tt73 Fri May 12 16:56:10 2023
+../../maddm on a  named node814 by tt73 Fri May 12 16:56:10 2023
+../../maddm on a  named node710 by tt73 Fri May 12 16:56:10 2023
+[26]PETSC ERROR: ../../maddm on a  named node701 by tt73 Fri May 12 16:56:10 2023
+../../maddm on a  named node711 by tt73 Fri May 12 16:56:10 2023
+../../maddm on a  named node812 by tt73 Fri May 12 16:56:10 2023
+../../maddm on a  named node811 by tt73 Fri May 12 16:56:10 2023
+../../maddm on a  named node810 by tt73 Fri May 12 16:56:10 2023
+../../maddm on a  named node802 by tt73 Fri May 12 16:56:10 2023
+[24]PETSC ERROR: [33]PETSC ERROR: [34]PETSC ERROR: [27]PETSC ERROR: Configure options --prefix=/opt/ohpc/pub/libs/gnu8/mpich/petsc/3.12.0 --CFLAGS="-fPIC -DPIC" --CXXFLAGS="-fPIC -DPIC" --FFLAGS=-fPIC --with-blaslapack-lib=/opt/ohpc/pub/libs/gnu8/openblas/0.3.7/lib/libopenblas.so --with-scalapack-dir=/opt/ohpc/pub/libs/gnu8/mpich/scalapack/2.0.2 --with-clanguage=C++ --with-c-support --with-fortran-interfaces=1 --with-debugging=no --with-shared-libraries --with-mpi=1 --with-batch=0 --with-hdf5=1 --with-hdf5-lib=/opt/ohpc/pub/libs/gnu8/mpich/hdf5/1.10.5/lib/libhdf5.so --with-hdf5-include=/opt/ohpc/pub/libs/gnu8/mpich/hdf5/1.10.5/include
+[25]PETSC ERROR: [28]PETSC ERROR: [32]PETSC ERROR: [31]PETSC ERROR: [30]PETSC ERROR: [29]PETSC ERROR: Configure options --prefix=/opt/ohpc/pub/libs/gnu8/mpich/petsc/3.12.0 --CFLAGS="-fPIC -DPIC" --CXXFLAGS="-fPIC -DPIC" --FFLAGS=-fPIC --with-blaslapack-lib=/opt/ohpc/pub/libs/gnu8/openblas/0.3.7/lib/libopenblas.so --with-scalapack-dir=/opt/ohpc/pub/libs/gnu8/mpich/scalapack/2.0.2 --with-clanguage=C++ --with-c-support --with-fortran-interfaces=1 --with-debugging=no --with-shared-libraries --with-mpi=1 --with-batch=0 --with-hdf5=1 --with-hdf5-lib=/opt/ohpc/pub/libs/gnu8/mpich/hdf5/1.10.5/lib/libhdf5.so --with-hdf5-include=/opt/ohpc/pub/libs/gnu8/mpich/hdf5/1.10.5/include
+Configure options --prefix=/opt/ohpc/pub/libs/gnu8/mpich/petsc/3.12.0 --CFLAGS="-fPIC -DPIC" --CXXFLAGS="-fPIC -DPIC" --FFLAGS=-fPIC --with-blaslapack-lib=/opt/ohpc/pub/libs/gnu8/openblas/0.3.7/lib/libopenblas.so --with-scalapack-dir=/opt/ohpc/pub/libs/gnu8/mpich/scalapack/2.0.2 --with-clanguage=C++ --with-c-support --with-fortran-interfaces=1 --with-debugging=no --with-shared-libraries --with-mpi=1 --with-batch=0 --with-hdf5=1 --with-hdf5-lib=/opt/ohpc/pub/libs/gnu8/mpich/hdf5/1.10.5/lib/libhdf5.so --with-hdf5-include=/opt/ohpc/pub/libs/gnu8/mpich/hdf5/1.10.5/include
+Configure options --prefix=/opt/ohpc/pub/libs/gnu8/mpich/petsc/3.12.0 --CFLAGS="-fPIC -DPIC" --CXXFLAGS="-fPIC -DPIC" --FFLAGS=-fPIC --with-blaslapack-lib=/opt/ohpc/pub/libs/gnu8/openblas/0.3.7/lib/libopenblas.so --with-scalapack-dir=/opt/ohpc/pub/libs/gnu8/mpich/scalapack/2.0.2 --with-clanguage=C++ --with-c-support --with-fortran-interfaces=1 --with-debugging=no --with-shared-libraries --with-mpi=1 --with-batch=0 --with-hdf5=1 --with-hdf5-lib=/opt/ohpc/pub/libs/gnu8/mpich/hdf5/1.10.5/lib/libhdf5.so --with-hdf5-include=/opt/ohpc/pub/libs/gnu8/mpich/hdf5/1.10.5/include
+Configure options --prefix=/opt/ohpc/pub/libs/gnu8/mpich/petsc/3.12.0 --CFLAGS="-fPIC -DPIC" --CXXFLAGS="-fPIC -DPIC" --FFLAGS=-fPIC --with-blaslapack-lib=/opt/ohpc/pub/libs/gnu8/openblas/0.3.7/lib/libopenblas.so --with-scalapack-dir=/opt/ohpc/pub/libs/gnu8/mpich/scalapack/2.0.2 --with-clanguage=C++ --with-c-support --with-fortran-interfaces=1 --with-debugging=no --with-shared-libraries --with-mpi=1 --with-batch=0 --with-hdf5=1 --with-hdf5-lib=/opt/ohpc/pub/libs/gnu8/mpich/hdf5/1.10.5/lib/libhdf5.so --with-hdf5-include=/opt/ohpc/pub/libs/gnu8/mpich/hdf5/1.10.5/include
+[26]PETSC ERROR: Configure options --prefix=/opt/ohpc/pub/libs/gnu8/mpich/petsc/3.12.0 --CFLAGS="-fPIC -DPIC" --CXXFLAGS="-fPIC -DPIC" --FFLAGS=-fPIC --with-blaslapack-lib=/opt/ohpc/pub/libs/gnu8/openblas/0.3.7/lib/libopenblas.so --with-scalapack-dir=/opt/ohpc/pub/libs/gnu8/mpich/scalapack/2.0.2 --with-clanguage=C++ --with-c-support --with-fortran-interfaces=1 --with-debugging=no --with-shared-libraries --with-mpi=1 --with-batch=0 --with-hdf5=1 --with-hdf5-lib=/opt/ohpc/pub/libs/gnu8/mpich/hdf5/1.10.5/lib/libhdf5.so --with-hdf5-include=/opt/ohpc/pub/libs/gnu8/mpich/hdf5/1.10.5/include
+Configure options --prefix=/opt/ohpc/pub/libs/gnu8/mpich/petsc/3.12.0 --CFLAGS="-fPIC -DPIC" --CXXFLAGS="-fPIC -DPIC" --FFLAGS=-fPIC --with-blaslapack-lib=/opt/ohpc/pub/libs/gnu8/openblas/0.3.7/lib/libopenblas.so --with-scalapack-dir=/opt/ohpc/pub/libs/gnu8/mpich/scalapack/2.0.2 --with-clanguage=C++ --with-c-support --with-fortran-interfaces=1 --with-debugging=no --with-shared-libraries --with-mpi=1 --with-batch=0 --with-hdf5=1 --with-hdf5-lib=/opt/ohpc/pub/libs/gnu8/mpich/hdf5/1.10.5/lib/libhdf5.so --with-hdf5-include=/opt/ohpc/pub/libs/gnu8/mpich/hdf5/1.10.5/include
+Configure options --prefix=/opt/ohpc/pub/libs/gnu8/mpich/petsc/3.12.0 --CFLAGS="-fPIC -DPIC" --CXXFLAGS="-fPIC -DPIC" --FFLAGS=-fPIC --with-blaslapack-lib=/opt/ohpc/pub/libs/gnu8/openblas/0.3.7/lib/libopenblas.so --with-scalapack-dir=/opt/ohpc/pub/libs/gnu8/mpich/scalapack/2.0.2 --with-clanguage=C++ --with-c-support --with-fortran-interfaces=1 --with-debugging=no --with-shared-libraries --with-mpi=1 --with-batch=0 --with-hdf5=1 --with-hdf5-lib=/opt/ohpc/pub/libs/gnu8/mpich/hdf5/1.10.5/lib/libhdf5.so --with-hdf5-include=/opt/ohpc/pub/libs/gnu8/mpich/hdf5/1.10.5/include
+Configure options --prefix=/opt/ohpc/pub/libs/gnu8/mpich/petsc/3.12.0 --CFLAGS="-fPIC -DPIC" --CXXFLAGS="-fPIC -DPIC" --FFLAGS=-fPIC --with-blaslapack-lib=/opt/ohpc/pub/libs/gnu8/openblas/0.3.7/lib/libopenblas.so --with-scalapack-dir=/opt/ohpc/pub/libs/gnu8/mpich/scalapack/2.0.2 --with-clanguage=C++ --with-c-support --with-fortran-interfaces=1 --with-debugging=no --with-shared-libraries --with-mpi=1 --with-batch=0 --with-hdf5=1 --with-hdf5-lib=/opt/ohpc/pub/libs/gnu8/mpich/hdf5/1.10.5/lib/libhdf5.so --with-hdf5-include=/opt/ohpc/pub/libs/gnu8/mpich/hdf5/1.10.5/include
+Configure options --prefix=/opt/ohpc/pub/libs/gnu8/mpich/petsc/3.12.0 --CFLAGS="-fPIC -DPIC" --CXXFLAGS="-fPIC -DPIC" --FFLAGS=-fPIC --with-blaslapack-lib=/opt/ohpc/pub/libs/gnu8/openblas/0.3.7/lib/libopenblas.so --with-scalapack-dir=/opt/ohpc/pub/libs/gnu8/mpich/scalapack/2.0.2 --with-clanguage=C++ --with-c-support --with-fortran-interfaces=1 --with-debugging=no --with-shared-libraries --with-mpi=1 --with-batch=0 --with-hdf5=1 --with-hdf5-lib=/opt/ohpc/pub/libs/gnu8/mpich/hdf5/1.10.5/lib/libhdf5.so --with-hdf5-include=/opt/ohpc/pub/libs/gnu8/mpich/hdf5/1.10.5/include
+Configure options --prefix=/opt/ohpc/pub/libs/gnu8/mpich/petsc/3.12.0 --CFLAGS="-fPIC -DPIC" --CXXFLAGS="-fPIC -DPIC" --FFLAGS=-fPIC --with-blaslapack-lib=/opt/ohpc/pub/libs/gnu8/openblas/0.3.7/lib/libopenblas.so --with-scalapack-dir=/opt/ohpc/pub/libs/gnu8/mpich/scalapack/2.0.2 --with-clanguage=C++ --with-c-support --with-fortran-interfaces=1 --with-debugging=no --with-shared-libraries --with-mpi=1 --with-batch=0 --with-hdf5=1 --with-hdf5-lib=/opt/ohpc/pub/libs/gnu8/mpich/hdf5/1.10.5/lib/libhdf5.so --with-hdf5-include=/opt/ohpc/pub/libs/gnu8/mpich/hdf5/1.10.5/include
+[24]PETSC ERROR: [33]PETSC ERROR: [34]PETSC ERROR: [27]PETSC ERROR: #1 User provided function() line 0 in  unknown file
+[25]PETSC ERROR: [28]PETSC ERROR: [32]PETSC ERROR: [31]PETSC ERROR: [30]PETSC ERROR: [29]PETSC ERROR: #1 User provided function() line 0 in  unknown file
+#1 User provided function() line 0 in  unknown file
+#1 User provided function() line 0 in  unknown file
+#1 User provided function() line 0 in  unknown file
+application called MPI_Abort(MPI_COMM_WORLD, 59) - process 26
+#1 User provided function() line 0 in  unknown file
+#1 User provided function() line 0 in  unknown file
+#1 User provided function() line 0 in  unknown file
+#1 User provided function() line 0 in  unknown file
+#1 User provided function() line 0 in  unknown file
+#1 User provided function() line 0 in  unknown file
+application called MPI_Abort(MPI_COMM_WORLD, 59) - process 24
+application called MPI_Abort(MPI_COMM_WORLD, 59) - process 33
+application called MPI_Abort(MPI_COMM_WORLD, 59) - process 34
+application called MPI_Abort(MPI_COMM_WORLD, 59) - process 27
+application called MPI_Abort(MPI_COMM_WORLD, 59) - process 25
+application called MPI_Abort(MPI_COMM_WORLD, 59) - process 28
+application called MPI_Abort(MPI_COMM_WORLD, 59) - process 32
+application called MPI_Abort(MPI_COMM_WORLD, 59) - process 31
+application called MPI_Abort(MPI_COMM_WORLD, 59) - process 30
+application called MPI_Abort(MPI_COMM_WORLD, 59) - process 29

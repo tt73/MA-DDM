@@ -1,0 +1,18 @@
+#!/bin/bash -l
+#SBATCH -J j25
+#SBATCH -o slurmout25
+#SBATCH -p lowpriority
+#SBATCH --constraint=avx512
+#SBATCH -A tt73
+#SBATCH -t 8:0:0
+#SBATCH --mem=0G
+#SBATCH --nodes 25
+#SBATCH --ntasks 25
+#SBATCH --ntasks-per-node 1
+module load gnu8 mpich petsc/3.12.0
+N=401
+for op in {0.1,0.2,0.3,0.4}
+do
+   mpirun ../../maddm -N $N -problem ex1 -xmin -2.0 -xmax 2.0 -ymin -2.0 -ymax 2.0 -init_type coarse -coarseness 4 -snes_converged_reason -op $op >> out25
+   mpirun ../../maddm -N $N -problem ex5 -xmin -2.0 -xmax 2.0 -ymin -2.0 -ymax 2.0 -init_type coarse -coarseness 4 -snes_converged_reason -op $op >> out25
+done
